@@ -74,17 +74,21 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray={"5 5"} stroke={CARTESIAN_GRID_COLOR} vertical={false}/>
+        <CartesianGrid
+          strokeDasharray={"5 5"}
+          stroke={CARTESIAN_GRID_COLOR}
+          vertical={false}
+        />
         <XAxis
           dataKey={"xLabel"}
           angle={-30}
           textAnchor="end"
           height={70}
-          tick={{ stroke: TICK_COLOR }}
+          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
         />
         <YAxis
           tickFormatter={(value) => numberToMillionsString(value as number)}
-          tick={{ stroke: TICK_COLOR }}
+          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
         />
         <Legend verticalAlign="top" height={46} />
         <Tooltip />
