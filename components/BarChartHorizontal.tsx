@@ -73,14 +73,18 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
         margin={{
           top: 5,
           right: 30,
-          left: 120,
+          left: 65,
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray={"3 4"} stroke={CARTESIAN_GRID_COLOR} />
+        <CartesianGrid
+          strokeDasharray={"3 4"}
+          stroke={CARTESIAN_GRID_COLOR}
+          horizontal={false}
+        />
         <XAxis
           type="number"
-          tick={{ stroke: TICK_COLOR }}
+          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
           tickLine={false}
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
@@ -88,9 +92,9 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           type="category"
           minTickGap={1}
           dataKey={option.dataKey}
-          tick={{ stroke: TICK_COLOR }}
+          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
         />
-        {option?.legendName ?? <Legend name={option.legendName}/>}
+        {option?.legendName ?? <Legend name={option.legendName} />}
         <Tooltip />
         <Bar
           dataKey={option.valueKey}

@@ -5,6 +5,12 @@ import PageHeader from "@/components/PageHeader";
 import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClientTurnoverSummary";
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Daily Trade Performance - LBSL",
+  description: "daily trading performance analytics dashboards",
+};
 
 export default function DailyTradePerformance() {
   const turnoverChartData = [
@@ -221,10 +227,11 @@ export default function DailyTradePerformance() {
   };
 
   return (
-    <>
+    <div className="mx-4">
       <PageHeader name="Daily Trade Performance" />
-      <div className="grid grid-cols-1 gap-2 xl:grid-cols-3 mx-4 mt-2">
+      <div className="grid grid-cols-6 gap-2 xl:grid-cols-6 mt-2">
         <CardBoard
+          className="col-span-6 xl:col-span-2"
           title="Summary"
           subtitle="shows margin code summary"
           children={
@@ -234,22 +241,22 @@ export default function DailyTradePerformance() {
           }
         />
         <CardBoard
+          className="col-span-6 xl:col-span-2"
           title="Cash Code Status"
           subtitle="shows cash code summary"
           children={<StatisticsCashCodeSummary data={cashCodeSummaryData} />}
         />
         <CardBoard
+          className="col-span-6 xl:col-span-2"
           title="Margin Code Status"
           subtitle="shows margin code summary"
           children={
             <StatisticsMarginCodeSummary data={marginCodeSummaryData} />
           }
         />
-      </div>
-      <div className="grid grid-cols-1 gap-2 xl:grid-cols-4 mx-4 mt-2">
         {/* Turnover Performance Chart */}
         <CardBoard
-          className="col-span-2"
+          className="col-span-6 xl:col-span-3"
           title={"Turnover Performance"}
           subtitle="Shows a analytics of turnover performance of last 7 days."
           children={
@@ -260,7 +267,7 @@ export default function DailyTradePerformance() {
           }
         />
         <CardBoard
-          className="col-span-2"
+          className="col-span-6 xl:col-span-3"
           title={"Daily Margin Loan Usage"}
           subtitle="Shows a analytics of turnover performance of last 7 days."
           children={
@@ -271,7 +278,7 @@ export default function DailyTradePerformance() {
           }
         />
         <CardBoard
-          className="row-span-2 col-span-2"
+          className="col-span-6 row-span-2 xl:col-span-3"
           title="Sector Exposure Margin Code"
           subtitle="Shows analytics of marginal performance for comodities"
           children={
@@ -283,7 +290,7 @@ export default function DailyTradePerformance() {
         />
 
         <CardBoard
-          className="row-span-2 col-span-2"
+          className="col-span-6 row-span-2 xl:col-span-3"
           title="Sector Exposure Cash Code"
           subtitle="Shows analytics of marginal performance for comodities"
           children={
@@ -294,6 +301,6 @@ export default function DailyTradePerformance() {
           }
         />
       </div>
-    </>
+    </div>
   );
 }
