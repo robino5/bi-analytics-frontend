@@ -18,10 +18,10 @@ const numberFormatter = (num: number) => {
  * @returns A string representation of the number, with millions abbreviated as "M" if applicable.
  */
 export function numberToMillionsString(num: number): string {
-  if (num >= 1000000) {
-      const millions = num / 1000000;
-      return `${millions.toFixed(0)}M`;
+  if (Math.abs(num) >= 1000000) {
+    const millions = num / 1000000;
+    return `${millions.toFixed(0)}M`;
   } else {
-      return numberFormatter(num);
+    return numberFormatter(num);
   }
 }
