@@ -77,7 +77,11 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray={"3 4"} stroke={CARTESIAN_GRID_COLOR} />
+        <CartesianGrid
+          strokeDasharray={"3 4"}
+          stroke={CARTESIAN_GRID_COLOR}
+          horizontal={false}
+        />
         <XAxis
           type="number"
           tick={{ stroke: TICK_COLOR }}
@@ -90,7 +94,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           dataKey={option.dataKey}
           tick={{ stroke: TICK_COLOR }}
         />
-        {option?.legendName ?? <Legend name={option.legendName}/>}
+        {option?.legendName ?? <Legend name={option.legendName} />}
         <Tooltip />
         <Bar
           dataKey={option.valueKey}
