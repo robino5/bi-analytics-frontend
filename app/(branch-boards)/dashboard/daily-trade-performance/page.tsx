@@ -5,6 +5,12 @@ import PageHeader from "@/components/PageHeader";
 import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClientTurnoverSummary";
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Daily Trade Performance - LBSL",
+  description: "daily trading performance analytics dashboards",
+};
 
 export default function DailyTradePerformance() {
   const turnoverChartData = [
