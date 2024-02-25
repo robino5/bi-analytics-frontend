@@ -1,8 +1,7 @@
 "use client";
 
 import { cn, numberToMillionsString } from "@/lib/utils";
-import { CellContext, ColumnDef } from "@tanstack/react-table";
-import { FC } from "react";
+import { ColumnDef } from "@tanstack/react-table";
 
 export type PortfolioMangementStatusDataType = {
   name: string;
@@ -30,7 +29,6 @@ export type ClientTurnoverBiAxial = {
   client: number;
   turnover: number;
 };
-
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
