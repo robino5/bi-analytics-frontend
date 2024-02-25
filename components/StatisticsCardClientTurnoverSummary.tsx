@@ -1,8 +1,6 @@
-import { Separator } from "@/components/ui/separator";
 import Statistics from "./ui/statistics";
 import { FC } from "react";
 import { LovResultType } from "@/lib/types";
-
 
 interface ClientTurnoverProps {
   totalClient: LovResultType;

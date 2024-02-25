@@ -8,7 +8,6 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Legend,
   ReferenceLine,
   Bar,
   Rectangle,
