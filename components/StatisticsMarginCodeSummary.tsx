@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui/separator";
 import Statistics from "./ui/statistics";
 import { LovResultType } from "@/lib/types";
 import { FC } from "react";
