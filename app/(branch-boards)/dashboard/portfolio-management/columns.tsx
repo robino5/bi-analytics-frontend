@@ -23,6 +23,14 @@ export type DailyNetFundFlowDataType = {
   tradingDate: string;
   amount: number;
 };
+export type ClientTurnoverBiAxial = {
+  branchCode?: number | null;
+  branchName?: string | null;
+  date: string;
+  client: number;
+  turnover: number;
+};
+
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));

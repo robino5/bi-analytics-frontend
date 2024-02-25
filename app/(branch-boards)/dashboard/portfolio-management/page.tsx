@@ -1,14 +1,24 @@
 import CardBoard from "@/components/CardBoard";
 import PageHeader from "@/components/PageHeader";
 import {
+  ClientTurnoverBiAxial,
   DailyNetFundFlowDataType,
   NewAccountOrTurnoverPerformanceDataType,
   PortfolioMangementStatusDataType,
   newAccountFundCollectionColumns,
   portfolioMangementStatusColumns,
 } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/ui/data-table";
 import BarChartPositiveNegative from "@/components/BarChartPositiveNegative";
+import BarChartBiAxis from "@/components/BarChartBiAxis";
+
+import { Metadata } from "next";
+
+
+export const metadata: Metadata = {
+  title: "Portfolio Management - LBSL",
+  description: "analytics for portfolio management"
+}
 
 function formatDate(date: Date): string {
   const months = [
@@ -183,29 +193,140 @@ async function fetchDailyNetFundFlowChartData(): Promise<
       branchCode: null,
       branchName: null,
       tradingDate: "2024-02-18T00:00:00",
-      amount: 79814.27,
+      amount: 11179814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      tradingDate: "2024-02-21T00:00:00",
+      amount: 223179814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      tradingDate: "2024-02-24T00:00:00",
+      amount: 23279814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      tradingDate: "2024-02-27T00:00:00",
+      amount: 32879814.27,
+    },
+  ];
+}
+async function fetchClientTurnoverBiAxialChartData(): Promise<
+  ClientTurnoverBiAxial[]
+> {
+  return [
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-08T00:00:00",
+      client: 3000,
+      turnover: 14986205.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-11T00:00:00",
+      client: 5999,
+      turnover: 212165360.8,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-12T00:00:00",
+      client: 8337,
+      turnover: 11727915,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-13T00:00:00",
+      client: 1273,
+      turnover: 49016691.88,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-14T00:00:00",
+      client: 1373,
+      turnover: 277878345.84,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-15T00:00:00",
+      client: 2234,
+      turnover: 17878345.84,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-18T00:00:00",
+      client: 9383,
+      turnover: 9979814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-21T00:00:00",
+      client: 8382,
+      turnover: 19979814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-23T00:00:00",
+      client: 23341,
+      turnover: 33979814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-26T00:00:00",
+      client: 3444,
+      turnover: 99979814.27,
+    },
+    {
+      branchCode: null,
+      branchName: null,
+      date: "2024-02-28T00:00:00",
+      client: 5999,
+      turnover: 19979814.27,
     },
   ];
 }
 
 export default async function PortfolioManagement() {
-  const portfolioManagementJson = await fetchPortfolioMangementData();
-  const newAccountFundCollectionJson =
-    await fetchNewAccountOrFundCollectionData();
-  const turnoverPerformanceJson = await fetchTurnoverPerformanceData();
-  const dailyNetFundFlowJson = await fetchDailyNetFundFlowChartData();
   const dailyNetFundFlowOption = {
     dataKey: "name",
     valueKey: "value",
     fill: "#ff3355",
     stroke: "#c3ce",
   };
+  const biaxialChartOption = {
+    dataKey: "date",
+    valueKeyA: "client",
+    valueKeyB: "turnover",
+    fill: "#ff3355",
+    stroke: "#c3ce",
+  };
+  const portfolioManagementJson = await fetchPortfolioMangementData();
+  const newAccountFundCollectionJson =
+    await fetchNewAccountOrFundCollectionData();
+  const turnoverPerformanceJson = await fetchTurnoverPerformanceData();
+  const dailyNetFundFlowJson = await fetchDailyNetFundFlowChartData();
+  const clientTurnoverBiAxialJson = await fetchClientTurnoverBiAxialChartData();
+
   const formattedNetFundFlowdata = convertToBarData(dailyNetFundFlowJson);
 
   return (
     <div className="mx-4">
       <PageHeader name="Portfolio Management" />
       <div className="grid grid-cols-6 gap-2 xl:grid-cols-6 mt-2">
+        {/* Daily Net Fund Flow Chart */}
         <CardBoard
           className="col-span-3"
           title="Daily Net Fund Flow"
@@ -217,7 +338,21 @@ export default async function PortfolioManagement() {
             />
           }
         />
-        <CardBoard className="col-span-3" title="" children={<></>} />
+
+        {/* Client Trade vs Turnover Chart */}
+        <CardBoard
+          className="col-span-3"
+          title="Clients Trade vs Turnover"
+          subtitle="analysis of total clients traded vs lsbl turnover"
+          children={
+            <BarChartBiAxis
+              data={clientTurnoverBiAxialJson}
+              options={biaxialChartOption}
+            />
+          }
+        />
+
+        {/* Portfolio Mangement Status Data Table */}
         <CardBoard
           className="col-span-6 row-start-3"
           title="Portfolio Management Status"
@@ -229,6 +364,8 @@ export default async function PortfolioManagement() {
             />
           }
         />
+
+        {/* New Account Opening & Function Collection Data Table */}
         <CardBoard
           className="col-span-3"
           title="New Account Opening & Fund Collection"
@@ -240,6 +377,8 @@ export default async function PortfolioManagement() {
             />
           }
         />
+        
+        {/* Turnover Performance Data Table */}
         <CardBoard
           className="col-span-3"
           title="Turnover Performance"
