@@ -198,7 +198,7 @@ export default async function MarginLoanUsage() {
   return (
     <div className="mx-4">
       <PageHeader name="Margin Loan Usage" />
-      <div className="grid grid-cols-1 gap-2 mt-2 lg:grid-cols-6">
+      <div className="grid grid-cols-1 gap-3 my-2 lg:grid-cols-6">
         <CardBoard
           className="lg:col-span-3"
           title="Margin Loan Allocation & Uses"
@@ -219,7 +219,7 @@ export default async function MarginLoanUsage() {
             />
           }
         />
-        <Card className="col-span-1 lg:col-span-6 w-full my-2 shadow-xl">
+        <Card className="col-span-1 lg:col-span-6 w-full mb-2 bg-gradient-to-br from-gray-50 to-slate-100 shadow-xl">
           <CardHeader>
             <CardTitle>RM Wise Net Trade</CardTitle>
             <CardDescription>Net Trade for Regional Managers</CardDescription>
