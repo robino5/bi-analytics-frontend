@@ -13,12 +13,14 @@ import BarChartPositiveNegative from "@/components/BarChartPositiveNegative";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
 
 import { Metadata } from "next";
-
+import NewAccountOpeningDataTable from "./_new_account_datatable";
+import TurnoverPerformanceDataTable from "./_turnover_performance_datatable";
+import PortfolioManagementStatusDataTable from "./_portfolio_management_status_datatable";
 
 export const metadata: Metadata = {
   title: "Portfolio Management - LBSL",
-  description: "analytics for portfolio management"
-}
+  description: "analytics for portfolio management",
+};
 
 function formatDate(date: Date): string {
   const months = [
@@ -328,7 +330,7 @@ export default async function PortfolioManagement() {
       <div className="grid grid-cols-6 gap-2 xl:grid-cols-6 mt-2">
         {/* Daily Net Fund Flow Chart */}
         <CardBoard
-          className="col-span-3"
+          className="lg:col-span-3"
           title="Daily Net Fund Flow"
           subtitle="short summary of the portfolio"
           children={
@@ -341,7 +343,7 @@ export default async function PortfolioManagement() {
 
         {/* Client Trade vs Turnover Chart */}
         <CardBoard
-          className="col-span-3"
+          className="lg:col-span-3"
           title="Clients Trade vs Turnover"
           subtitle="analysis of total clients traded vs lsbl turnover"
           children={
@@ -351,45 +353,12 @@ export default async function PortfolioManagement() {
             />
           }
         />
-
-        {/* Portfolio Mangement Status Data Table */}
-        <CardBoard
-          className="col-span-6 row-start-3"
-          title="Portfolio Management Status"
-          subtitle="short summary of the portfolio"
-          children={
-            <DataTable
-              columns={portfolioMangementStatusColumns}
-              data={portfolioManagementJson}
-            />
-          }
-        />
-
-        {/* New Account Opening & Function Collection Data Table */}
-        <CardBoard
-          className="col-span-3"
-          title="New Account Opening & Fund Collection"
-          subtitle="short summary of the portfolio"
-          children={
-            <DataTable
-              columns={newAccountFundCollectionColumns}
-              data={newAccountFundCollectionJson}
-            />
-          }
-        />
-        
         {/* Turnover Performance Data Table */}
-        <CardBoard
-          className="col-span-3"
-          title="Turnover Performance"
-          subtitle="short summary of the portfolio"
-          children={
-            <DataTable
-              columns={newAccountFundCollectionColumns}
-              data={turnoverPerformanceJson}
-            />
-          }
-        />
+        <TurnoverPerformanceDataTable records={turnoverPerformanceJson} />
+        {/* New Account Opening & Function Collection Data Table */}
+        <NewAccountOpeningDataTable accounts={newAccountFundCollectionJson} />
+        {/* Portfolio Mangement Status Data Table */}
+        <PortfolioManagementStatusDataTable records={portfolioManagementJson} />
       </div>
     </div>
   );

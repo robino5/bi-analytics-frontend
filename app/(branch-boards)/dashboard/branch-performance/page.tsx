@@ -6,13 +6,54 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import BranchWiseMarginDataTable, {
+  MarginTableDataType,
+} from "./_branchwise_margin_datatable";
+import BranchWiseExposureDataTable, {
+  BranchWiseExposureTableDataType,
+} from "./_branchwise_exposure_datatable";
+import BranchWiseTurnoverDataTable, {
+  BranchWiseTurnoverDataType,
+} from "./_branchwise_turnover_datatable";
 
-export default function BranchPerformance() {
+import { branchWiseMarginData } from "./data/branchWiseMarginData";
+import { branchWiseExposureData } from "./data/branchWiseExposureData";
+import { branchWiseTurnoverData } from "./data/branchWiseTurnoverData";
+import { branchwiseFundData } from "./data/branchwiseFundData";
+import BranchWiseFundDataTable, {
+  BranchWiseFundDataType,
+} from "./_branchwise_fund_datatable";
+
+async function fetchBranchWiseMarginStatus(): Promise<MarginTableDataType[]> {
+  return branchWiseMarginData;
+}
+
+async function fetchBranchWiseExposureStatus(): Promise<
+  BranchWiseExposureTableDataType[]
+> {
+  return branchWiseExposureData;
+}
+async function fetchBranchWiseTurnoverStatus(): Promise<
+  BranchWiseTurnoverDataType[]
+> {
+  return branchWiseTurnoverData;
+}
+
+async function fetchBranchWiseFundStatus(): Promise<BranchWiseFundDataType[]> {
+  return branchwiseFundData;
+}
+
+export default async function BranchPerformance() {
+  const branchWiseTurnoverStatusJson = await fetchBranchWiseTurnoverStatus();
+  const branchWiseMarginStatusJson = await fetchBranchWiseMarginStatus();
+  const branchWiseExposureStatusJson = await fetchBranchWiseExposureStatus();
+  const branchWiseFundStatusJson = await fetchBranchWiseFundStatus();
+
   return (
     <div className="mx-4">
       <PageHeader name="Branch Performance" />
-      <div className="grid grid-cols-1 gap-2 mt-2 lg:grid-cols-4">
-        <Card className="col-span-1 lg:col-span-2 lg:row-span-2 max-h-[300px] overflow-y-auto bg-gradient-to-tl from-gray-50 to-slate-100">
+      <div className="grid grid-cols-1 gap-4 mt-2 lg:grid-cols-4">
+        <Card className="col-span-1 max-h-[700px] overflow-y-auto lg:col-span-2 lg:row-span-2 bg-gradient-to-tl from-gray-50 to-slate-100">
           <CardHeader>
             <CardTitle>Branch Wise Turnover Status</CardTitle>
             <CardDescription>
@@ -20,143 +61,41 @@ export default function BranchPerformance() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Branch
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Daily
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Weekly
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Monthly
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Yearly
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Apple MacBook Pro 17"
-                  </th>
-                  <td className="px-6 py-2">Silver</td>
-                  <td className="px-6 py-2">Laptop</td>
-                  <td className="px-6 py-2">$2999</td>
-                  <td className="px-6 py-2">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Microsoft Surface Pro
-                  </th>
-                  <td className="px-6 py-2">White</td>
-                  <td className="px-6 py-2">Laptop PC</td>
-                  <td className="px-6 py-2">$1999</td>
-                  <td className="px-6 py-2">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Magic Mouse 2
-                  </th>
-                  <td className="px-6 py-2">Black</td>
-                  <td className="px-6 py-2">Accessories</td>
-                  <td className="px-6 py-2">$99</td>
-                  <td className="px-6 py-2">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Google Pixel Phone
-                  </th>
-                  <td className="px-6 py-2">Gray</td>
-                  <td className="px-6 py-2">Phone</td>
-                  <td className="px-6 py-2">$799</td>
-                  <td className="px-6 py-2">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <th
-                    scope="row"
-                    className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    Apple Watch 5
-                  </th>
-                  <td className="px-6 py-2">Red</td>
-                  <td className="px-6 py-2">Wearables</td>
-                  <td className="px-6 py-2">$999</td>
-                  <td className="px-6 py-2">
-                    <a
-                      href="#"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <BranchWiseTurnoverDataTable
+              records={branchWiseTurnoverStatusJson}
+            />
           </CardContent>
         </Card>
-        <Card className="col-span-1 lg:col-span-2 shadow-md">
+        <Card className="col-span-1 max-h-[340px] overflow-y-auto bg-gradient-to-tl from-gray-50 to-slate-100 lg:col-span-2 shadow-md">
           <CardHeader>
             <CardTitle>Branch Wise Margin Status</CardTitle>
+            <CardDescription>shows the grid for margin status</CardDescription>
           </CardHeader>
-          <CardContent>Something</CardContent>
+          <CardContent>
+            <BranchWiseMarginDataTable records={branchWiseMarginStatusJson} />
+          </CardContent>
         </Card>
-        <Card className="col-span-1 lg:col-span-2 shadow-md">
+        <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md bg-gradient-to-tl from-gray-50 to-slate-100 lg:col-span-2">
           <CardHeader>
             <CardTitle>Branch Wise Exposure Status</CardTitle>
+            <CardDescription>
+              shows the grid for exposure status
+            </CardDescription>
           </CardHeader>
-          <CardContent>Something</CardContent>
+          <CardContent>
+            <BranchWiseExposureDataTable
+              records={branchWiseExposureStatusJson}
+            />
+          </CardContent>
         </Card>
-        <Card className="col-span-4 shadow-md">
+
+        <Card className="col-span-4 max-h-[380px] overflow-auto shadow-md bg-gradient-to-tl from-gray-50 to-slate-100">
           <CardHeader>
             <CardTitle>Branch Wise Fund Status(Till Today)</CardTitle>
           </CardHeader>
-          <CardContent>Something</CardContent>
+          <CardContent>
+            <BranchWiseFundDataTable records={branchWiseFundStatusJson} />
+          </CardContent>
         </Card>
       </div>
     </div>

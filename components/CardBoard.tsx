@@ -26,8 +26,8 @@ const CardBoard: React.FC<CardBoardProps> = ({
       className={cn("bg-gradient-to-br from-gray-50 to-slate-100", className)}
     >
       <CardHeader>
-        <CardTitle className="text-gray-400">{title}</CardTitle>
-        <CardDescription className="text-neutral-300">
+        <CardTitle className="text-slate-600">{title}</CardTitle>
+        <CardDescription className="text-slate-500">
           {subtitle ?? ""}
         </CardDescription>
       </CardHeader>

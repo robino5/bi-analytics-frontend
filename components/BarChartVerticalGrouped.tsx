@@ -12,6 +12,13 @@ import {
   Rectangle,
 } from "recharts";
 
+import {
+  LABEL_COLOR,
+  TICK_COLOR,
+  CARTESIAN_GRID_COLOR,
+  LABEL_TICK_FONT_SIZE,
+} from "./ui/utils/constants";
+
 import { numberToMillionsString } from "@/lib/utils";
 
 interface BarData {
@@ -42,7 +49,7 @@ interface CustomizedLabelProps {
 const CustomizedLabel: FC<CustomizedLabelProps> = ({
   x = 0,
   y = 0,
-  fill = "#C6C6C6",
+  fill = LABEL_COLOR,
   value = 0,
 }) => {
   return (
@@ -50,7 +57,7 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
       x={x}
       y={y}
       dy={-4}
-      fontSize="16"
+      fontSize={LABEL_TICK_FONT_SIZE}
       fontFamily="sans-serif"
       fill={fill}
       textAnchor="middle"
@@ -61,8 +68,6 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
 };
 
 const BarChart: FC<BarChartProps> = ({ data, options }) => {
-  const TICK_COLOR = "#C7C7C7";
-  const CARTESIAN_GRID_COLOR = "#565656";
   return (
     <ResponsiveContainer height={300} width="100%">
       <RechartsBarChart
@@ -84,11 +89,19 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
           angle={-30}
           textAnchor="end"
           height={70}
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: LABEL_TICK_FONT_SIZE,
+          }}
         />
         <YAxis
           tickFormatter={(value) => numberToMillionsString(value as number)}
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: LABEL_TICK_FONT_SIZE,
+          }}
         />
         <Legend verticalAlign="top" height={46} />
         <Tooltip />

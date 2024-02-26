@@ -18,6 +18,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import MarginLoanAllocationDataTable from "./_margin_loan_allocation_datatable";
+import ExposureControllingDataTable from "./_exposure_controlling_datatable";
+import { NetTradeRMWiseData } from "./data/datatables";
 
 export const metadata: Metadata = {
   title: "Margin Loan Usage - LBSL",
@@ -82,112 +85,7 @@ async function fetchExposureControllingData(): Promise<
 }
 
 async function fetchNetTradeRMWise(): Promise<NetTradeRmWiseDataType[]> {
-  return [
-    {
-      branch: "Uttara",
-      code: "H5758",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Sultan Mahmud",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-    {
-      branch: "Chawkbazar",
-      code: "290114",
-      openingBalance: 0,
-      endingBalance: 0,
-      netTrade: 0,
-      rmName: "Md. Nooruddin Sikder",
-    },
-  ];
+  return NetTradeRMWiseData;
 }
 
 export default async function MarginLoanUsage() {
@@ -199,38 +97,24 @@ export default async function MarginLoanUsage() {
     <div className="mx-4">
       <PageHeader name="Margin Loan Usage" />
       <div className="grid grid-cols-1 gap-3 my-2 lg:grid-cols-6">
-        <CardBoard
-          className="lg:col-span-3"
-          title="Margin Loan Allocation & Uses"
-          children={
-            <DataTable
-              data={marginLoanAllocationJson}
-              columns={marginLoanAllocationColumns}
-            />
-          }
+        <MarginLoanAllocationDataTable
+          className="col-span-3"
+          records={marginLoanAllocationJson}
         />
-        <CardBoard
-          className="lg:col-span-3"
-          title="Exposure Controlling & Management (exclude: Neg Equity Client)"
-          children={
-            <DataTable
-              data={exposureControllingJson}
-              columns={exposureControllingColumns}
-            />
-          }
+        <ExposureControllingDataTable
+          className="col-span-3"
+          records={exposureControllingJson}
         />
-        <Card className="col-span-1 lg:col-span-6 w-full mb-2 bg-gradient-to-br from-gray-50 to-slate-100 shadow-xl">
+        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-gradient-to-br from-gray-50 to-slate-100">
           <CardHeader>
             <CardTitle>RM Wise Net Trade</CardTitle>
             <CardDescription>Net Trade for Regional Managers</CardDescription>
           </CardHeader>
           <CardContent>
-            <div>
-              <NetTradeTable
-                data={netTradeRmWiseJson}
-                columns={netTradeRmWiseColumns}
-              />
-            </div>
+            <NetTradeTable
+              data={netTradeRmWiseJson}
+              columns={netTradeRmWiseColumns}
+            />
           </CardContent>
         </Card>
       </div>
