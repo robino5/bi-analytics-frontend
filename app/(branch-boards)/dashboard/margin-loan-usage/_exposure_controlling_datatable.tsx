@@ -8,6 +8,7 @@ import {
 
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { MarkedTradersZoneWise } from "./_marked_traders_modal";
 
 interface PerticularTypes {
   exposure: string;
@@ -53,6 +54,7 @@ export default function ExposureControllingDataTable({
               <th scope="col" className="px-6 py-3">
                 Loan Amount
               </th>
+              <th scope="col" className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -80,6 +82,11 @@ export default function ExposureControllingDataTable({
                   })}
                 >
                   {numberToMillionsString(record.loanAmount)}
+                </td>
+                <td className="px-6 py-2">
+                  <div className="cursor-pointer flex justify-center items-center h-[28px] w-[28px] rounded-full">
+                    <MarkedTradersZoneWise name={record.exposure}/>
+                  </div>
                 </td>
               </tr>
             ))}
