@@ -10,35 +10,30 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ArchiveIcon } from "lucide-react";
+import MarkedTraderDataTable, {
+  MarkedTraderPayloadType,
+} from "./_marked_traders_datatable";
 
-async function fetchMarkedTraders() {
-  return [];
+interface MarkedTraderProps {
+  name: keyof MarkedTraderPayloadType;
 }
 
-export async function MarkedTradersZoneWise(props: any) {
-  const exposureName: string = props.name;
-  const traders = await fetchMarkedTraders();
-
+export async function MarkedTradersZoneWise({ name }: MarkedTraderProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button size="icon" variant="outline" className="rounded-full p-2">
-          <ArchiveIcon className="h-4 w-6"/>
+          <ArchiveIcon className="h-4 w-6" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[600px] overflow-auto">
         <DialogHeader>
-          <DialogTitle>{exposureName.toUpperCase()}</DialogTitle>
+          <DialogTitle>{`${name.toUpperCase()} TRADERS`}</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            {`all the ${name} traders list.`}
           </DialogDescription>
         </DialogHeader>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod
-          doloremque facilis aliquid eligendi eveniet? Aliquid quibusdam sit
-          magnam, quod minima aperiam excepturi sapiente? Ratione, cupiditate
-          provident! Amet necessitatibus quis atque.
-        </p>
+        <MarkedTraderDataTable kind={name} />
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="secondary">
