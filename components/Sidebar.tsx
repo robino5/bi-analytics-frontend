@@ -3,7 +3,7 @@ import UserSummary from "./UserSummary";
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col w-[300px] min-w-[300px] border-r min-h-screen p-4 gap-4">
+    <div className="fixed flex flex-col w-[300px] min-w-[300px] gap-4 p-4 min-h-screen">
       <div>
         <UserSummary />
       </div>
