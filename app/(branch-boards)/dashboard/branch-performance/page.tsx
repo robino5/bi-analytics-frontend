@@ -12,17 +12,15 @@ import BranchWiseMarginDataTable, {
 import BranchWiseExposureDataTable, {
   BranchWiseExposureTableDataType,
 } from "./_branchwise_exposure_datatable";
-import BranchWiseTurnoverDataTable, {
-  BranchWiseTurnoverDataType,
-} from "./_branchwise_turnover_datatable";
+import { BranchWiseTurnoverDataType } from "./_branchwise_turnover_datatable";
 
 import { branchWiseMarginData } from "./data/branchWiseMarginData";
 import { branchWiseExposureData } from "./data/branchWiseExposureData";
 import { branchWiseTurnoverData } from "./data/branchWiseTurnoverData";
 import { branchwiseFundData } from "./data/branchwiseFundData";
-import BranchWiseFundDataTable, {
-  BranchWiseFundDataType,
-} from "./_branchwise_fund_datatable";
+import { BranchWiseFundDataType } from "./_branchwise_fund_datatable";
+import { DataTableCard } from "./data-table";
+import { branchWiseFundColumns, branchWiseTurnoverColumns } from "./columns";
 
 async function fetchBranchWiseMarginStatus(): Promise<MarginTableDataType[]> {
   return branchWiseMarginData;
@@ -53,19 +51,16 @@ export default async function BranchPerformance() {
     <div className="mx-4">
       <PageHeader name="Branch Performance" />
       <div className="grid grid-cols-1 gap-4 mt-2 lg:grid-cols-4">
-        <Card className="col-span-1 max-h-[700px] overflow-y-auto lg:col-span-2 lg:row-span-2 bg-gradient-to-tl from-gray-50 to-slate-100">
-          <CardHeader>
-            <CardTitle>Branch Wise Turnover Status</CardTitle>
-            <CardDescription>
-              show data for branch wise turnover
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <BranchWiseTurnoverDataTable
-              records={branchWiseTurnoverStatusJson}
-            />
-          </CardContent>
-        </Card>
+        {/* Branch Wise Turnover Status */}
+        <DataTableCard
+          title="Branch Wise Turnover Status"
+          subtitle="show data for branch wise turnover"
+          className="col-span1 max-h[700px] overflow-y-auto lg:col-span-2 lg:row-span-2"
+          columns={branchWiseTurnoverColumns}
+          data={branchWiseTurnoverStatusJson}
+        />
+
+        {/* Branch Wise Margin Status */}
         <Card className="col-span-1 max-h-[340px] overflow-y-auto bg-gradient-to-tl from-gray-50 to-slate-100 lg:col-span-2 shadow-md">
           <CardHeader>
             <CardTitle>Branch Wise Margin Status</CardTitle>
@@ -75,6 +70,8 @@ export default async function BranchPerformance() {
             <BranchWiseMarginDataTable records={branchWiseMarginStatusJson} />
           </CardContent>
         </Card>
+
+        {/* Branch Wise Exposure Status */}
         <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md bg-gradient-to-tl from-gray-50 to-slate-100 lg:col-span-2">
           <CardHeader>
             <CardTitle>Branch Wise Exposure Status</CardTitle>
@@ -89,14 +86,14 @@ export default async function BranchPerformance() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-4 max-h-[380px] overflow-auto shadow-md bg-gradient-to-tl from-gray-50 to-slate-100">
-          <CardHeader>
-            <CardTitle>Branch Wise Fund Status(Till Today)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <BranchWiseFundDataTable records={branchWiseFundStatusJson} />
-          </CardContent>
-        </Card>
+        {/* Branch Wise Fund Status */}
+        <DataTableCard
+          className="col-span-4 mb-2"
+          title="Branch Wise Fund Status(Till Today)"
+          subtitle="summary of fund status branch wise"
+          columns={branchWiseFundColumns}
+          data={branchWiseFundStatusJson}
+        />
       </div>
     </div>
   );
