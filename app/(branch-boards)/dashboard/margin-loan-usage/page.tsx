@@ -1,15 +1,11 @@
-import CardBoard from "@/components/CardBoard";
 import PageHeader from "@/components/PageHeader";
 import { Metadata } from "next";
 import {
   ExposureControllingDataType,
   MarginLoanAllocationDataType,
   NetTradeRmWiseDataType,
-  exposureControllingColumns,
-  marginLoanAllocationColumns,
   netTradeRmWiseColumns,
 } from "./columns";
-import { DataTable } from "@/components/ui/data-table";
 import { DataTable as NetTradeTable } from "./data-table";
 import {
   Card,
