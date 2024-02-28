@@ -40,7 +40,6 @@ export default function ExposureControllingDataTable({
   records,
   className,
 }: Props) {
-  console.log(records);
   return (
     <Card
       className={cn(
