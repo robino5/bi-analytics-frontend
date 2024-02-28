@@ -9,6 +9,7 @@ import {
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { MarkedTradersZoneWise } from "./_marked_traders_modal";
+import { MarkedTraderPayloadType } from "./_marked_traders_datatable";
 
 interface PerticularTypes {
   exposure: string;
@@ -21,10 +22,25 @@ interface Props {
   className?: string;
 }
 
+const keywordMatcher = (text: string) => {
+  if (text.includes("Green")) {
+    return "green";
+  }
+
+  if (text.includes("Red")) {
+    return "red";
+  }
+
+  if (text.includes("Yellow")) {
+    return "yellow";
+  }
+};
+
 export default function ExposureControllingDataTable({
   records,
   className,
 }: Props) {
+  console.log(records);
   return (
     <Card
       className={cn(
@@ -33,13 +49,8 @@ export default function ExposureControllingDataTable({
       )}
     >
       <CardHeader>
-        <CardTitle>
-          Exposure Controlling & Management (exclude: Neg Equity Client)
-        </CardTitle>
-        <CardDescription>
-          short summary of the exposure controlling & management with negative
-          equity client
-        </CardDescription>
+        <CardTitle>Exposure Controlling & Management</CardTitle>
+        <CardDescription>excluding negative equity clients</CardDescription>
       </CardHeader>
       <CardContent>
         <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
@@ -85,7 +96,13 @@ export default function ExposureControllingDataTable({
                 </td>
                 <td className="px-6 py-2">
                   <div className="cursor-pointer flex justify-center items-center h-[28px] w-[28px] rounded-full">
-                    <MarkedTradersZoneWise name={record.exposure}/>
+                    <MarkedTradersZoneWise
+                      name={
+                        keywordMatcher(
+                          record.exposure
+                        ) as keyof MarkedTraderPayloadType
+                      }
+                    />
                   </div>
                 </td>
               </tr>
