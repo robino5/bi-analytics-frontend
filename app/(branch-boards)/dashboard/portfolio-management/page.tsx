@@ -5,10 +5,7 @@ import {
   DailyNetFundFlowDataType,
   NewAccountOrTurnoverPerformanceDataType,
   PortfolioMangementStatusDataType,
-  newAccountFundCollectionColumns,
-  portfolioMangementStatusColumns,
 } from "./columns";
-import { DataTable } from "@/components/ui/data-table";
 import BarChartPositiveNegative from "@/components/BarChartPositiveNegative";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
 

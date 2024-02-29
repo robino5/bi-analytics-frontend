@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
 
 export default async function Home() {
-  const session = await auth()
+  const session = await auth();
   return (
     <div>
-      {JSON.stringify(session)}
+      <pre>{JSON.stringify(session)}</pre>
     </div>
   );
 }
