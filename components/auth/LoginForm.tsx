@@ -23,7 +23,6 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/app/actions/login";
 
-
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
 
@@ -86,13 +85,13 @@ const LoginForm = () => {
               <FormError message="" />
               <FormSuccess message="" />
               {isPending ? (
-                  <Button className="float-right" disabled>
-                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait
-                  </Button>
+                <Button className="float-right" disabled>
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
               ) : (
                 <Button className="float-right" type="submit">
-                 <PaperPlaneIcon className="h-4 w-4 mr-2"/> Login
+                  <PaperPlaneIcon className="h-4 w-4 mr-2" /> Login
                 </Button>
               )}
             </form>

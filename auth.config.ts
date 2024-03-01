@@ -2,7 +2,21 @@ import type { NextAuthConfig } from "next-auth";
 import CredendialProvider from "next-auth/providers/credentials";
 import { LoginSchema } from "@/app/schemas";
 
-const loginWithApi = async (username: string, password: string) => {
+
+type LoginResponse = {
+  status: string;
+  message: string | null;
+  errors: string[];
+  data: {
+    id: string;
+    username: string;
+    designation: string;
+    phoneNumber: string;
+    email: string;
+  };
+};
+
+const loginWithApi = async (username: string, password: string): Promise<LoginResponse> => {
   return {
     status: "200",
     message: null,
@@ -34,11 +48,10 @@ const credentialProvider = CredendialProvider({
     if (validatedFormFields.success) {
       const { username, password } = validatedFormFields.data;
       const response = await loginWithApi(username, password);
-
       if (Number.parseInt(response.status) !== 200) {
-        return response.data;
+        return null;
       }
-      return null;
+      return response.data;
     }
     return null;
   },

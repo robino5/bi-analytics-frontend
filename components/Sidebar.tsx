@@ -1,5 +1,6 @@
 import DashboardMenus from "./DashboardMenus";
 import UserSummary from "./UserSummary";
+import Logout from "./logout";
 
 const Sidebar = () => {
   return (
@@ -10,7 +11,9 @@ const Sidebar = () => {
       <div className="grow">
         <DashboardMenus />
       </div>
-      <div>Settings</div>
+      <div>
+        <Logout />
+      </div>
     </div>
   );
 };

@@ -11,10 +11,6 @@ import { AuthError } from "next-auth";
 export const login = async (payload: z.infer<typeof LoginSchema>) => {
   const validatedFormFields = LoginSchema.safeParse(payload);
 
-  // setTimeout(() => {
-  //   console.log(validatedFormFields);
-  // }, 10000);
-
   if (!validatedFormFields.success) {
     return { error: "invalid payload !" };
   }
@@ -22,7 +18,7 @@ export const login = async (payload: z.infer<typeof LoginSchema>) => {
   const { username, password } = validatedFormFields.data;
 
   try {
-    await signIn("credential", {
+    await signIn("credentials", {
       username,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
