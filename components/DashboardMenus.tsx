@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Command,
@@ -70,14 +70,14 @@ export default function DashboardMenus() {
           id: 2,
           codeName: "rm_performance",
           viewName: "RM Performance",
-          urlPath: "/dashboard/rm-performance",
+          urlPath: "/dashboard/rm/rm-performance",
           icon: <BarChart4Icon />,
         },
         {
           id: 3,
           codeName: "rm_portfolio",
           viewName: "RM Portfolio",
-          urlPath: "/dashboard/rm-portfolio",
+          urlPath: "/dashboard/rm/rm-portfolio",
           icon: <BarChart4Icon />,
         },
       ],
