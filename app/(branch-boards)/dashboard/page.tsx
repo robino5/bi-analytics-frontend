@@ -1,5 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function Dashboard() {
-  return (
-    <div>Dashboard [Index]</div>
-  )
+  redirect("/dashboard/daily-trade-performance");
 }

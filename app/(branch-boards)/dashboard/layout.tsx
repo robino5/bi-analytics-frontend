@@ -1,7 +1,7 @@
 import React from "react";
-import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Sidebar from "@/components/Sidebar";
 
 export const fontSans = Inter({
   subsets: ["latin"],
@@ -10,10 +10,10 @@ export const fontSans = Inter({
 
 export const metadata: Metadata = {
   title: "BI Analytics - LBSL",
-  description: "Custom Analytics Application for LBSL",
+  description: "Analytics Application for LBSL",
 };
 
-export default function AuthLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -21,9 +21,12 @@ export default function AuthLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontSans.className} bg-gradient-to-tl from-slate-300 to-slate-400 via-transparent`}
+        className={`${fontSans.className} flex items-start justify-between`}
       >
-        <div>{children}</div>
+        <div className="min-w-[300px] border-r min-h-screen shadow-sm">
+          <Sidebar />
+        </div>
+        <div className="w-full h-full">{children}</div>
       </body>
     </html>
   );
