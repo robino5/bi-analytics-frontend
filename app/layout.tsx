@@ -23,7 +23,7 @@ export default function AuthLayout({
       <body
         className={`${fontSans.className} bg-gradient-to-tl from-slate-300 to-slate-400 via-transparent`}
       >
-        <div>{children}</div>
+        <main>{children}</main>
       </body>
     </html>
   );

@@ -21,7 +21,6 @@ interface IconBaseProps extends React.SVGAttributes<SVGElement> {
   color?: string;
   title?: string;
 }
-type IconType = (props: IconBaseProps) => JSX.Element;
 
 const CustomHeaderGroup = (props: { icon: ReactNode; name: string }) => {
   const { icon, name } = props;
@@ -114,7 +113,6 @@ export default function DashboardMenus() {
         {menuList.map((menu) => {
           return (
             <div key={menu.id}>
-              {/* <CommandGroup value={menu.codeName} heading={`${menu.viewName}`}> */}
               <CommandGroup
                 value={menu.codeName}
                 heading={

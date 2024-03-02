@@ -26,7 +26,7 @@ export default function RootLayout({
         <div className="min-w-[300px] border-r min-h-screen shadow-sm">
           <Sidebar />
         </div>
-        <div className="w-full h-full">{children}</div>
+        <main className="w-full h-full">{children}</main>
       </body>
     </html>
   );

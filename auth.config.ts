@@ -41,7 +41,6 @@ const credentialProvider = CredendialProvider({
     },
     password: { label: "Password", type: "password", required: true },
   },
-
   async authorize(credentials, req) {
     const validatedFormFields = LoginSchema.safeParse(credentials);
 
