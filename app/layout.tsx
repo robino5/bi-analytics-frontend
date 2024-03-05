@@ -1,9 +1,10 @@
 import React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
+import { cn } from "@/lib/utils";
 
-export const fontSans = Inter({
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -19,11 +20,14 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body
-        className={`${fontSans.className} bg-gradient-to-tl from-slate-300 to-slate-400 via-transparent`}
+        className={cn(
+          "bg-gradient-to-tl from-slate-300 to-slate-400 via-transparent",
+          fontSans.variable
+        )}
       >
-        <main>{children}</main>
+        <div>{children}</div>
       </body>
     </html>
   );

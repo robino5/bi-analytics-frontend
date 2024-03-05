@@ -1,9 +1,11 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import Sidebar from "@/components/Sidebar";
 
-export const fontSans = Inter({
+import { cn } from "@/lib/utils";
+
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -13,7 +15,7 @@ export const metadata: Metadata = {
   description: "Analytics Application for LBSL",
 };
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -21,12 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontSans.className} flex items-start justify-between`}
+        className={cn("flex items-start justify-between", fontSans.variable)}
       >
         <div className="min-w-[300px] border-r min-h-screen shadow-sm">
           <Sidebar />
         </div>
-        <main className="w-full h-full">{children}</main>
+        <div className="w-full h-full">{children}</div>
       </body>
     </html>
   );

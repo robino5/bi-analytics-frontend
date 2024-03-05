@@ -11,16 +11,11 @@ import { cn } from "@/lib/utils";
 import { GrBraille, GrBarChart } from "react-icons/gr";
 import { DiGoogleAnalytics } from "react-icons/di";
 import { BiBarChartAlt2 } from "react-icons/bi";
+import { HiAdjustmentsHorizontal } from "react-icons/hi2";
 
 import { useRouter, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
-interface IconBaseProps extends React.SVGAttributes<SVGElement> {
-  children?: React.ReactNode;
-  size?: string | number;
-  color?: string;
-  title?: string;
-}
 
 const CustomHeaderGroup = (props: { icon: ReactNode; name: string }) => {
   const { icon, name } = props;
@@ -71,6 +66,14 @@ export default function DashboardMenus() {
           urlPath: "/dashboard/branch-performance",
           icon: <GrBarChart className="h-4 w-4" />,
         },
+        {
+          id: 5,
+          codeName: "active_trading_codes",
+          viewName: "Active Trading Codes",
+          urlPath: "/dashboard/active-trading-codes",
+          icon: <GrBarChart className="h-4 w-4" />,
+        },
+
       ],
     },
     {
@@ -102,6 +105,13 @@ export default function DashboardMenus() {
         },
       ],
     },
+    {
+      id: 3,
+      codeName: "settings",
+      viewName: "Settings",
+      icon: <HiAdjustmentsHorizontal className="h-4 w-4"/>,
+      subMenus: []
+    }
   ];
 
   const visitUrl = (url: string) => {
