@@ -8,6 +8,7 @@ import {
   Pie,
   Sector,
   Cell,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -26,6 +27,49 @@ type PropType = {
   data: IDataType[];
 };
 
+interface IActiveShape {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  startAngle?: number;
+  endAngle?: number;
+  fill?: string;
+  payload: IDataType;
+  percent: number;
+  value: number;
+  index: number;
+}
+
+const RADIAN = Math.PI / 180;
+
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}: IActiveShape) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="#023047"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${percent * 100}%`}
+    </text>
+  );
+};
+
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;
   const {
@@ -40,7 +84,7 @@ const renderActiveShape = (props: any) => {
     payload,
     percent,
     value,
-  } = props;
+  }: IActiveShape = props;
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -93,7 +137,7 @@ const renderActiveShape = (props: any) => {
         textAnchor={textAnchor}
         fill="#999"
       >
-        {`(${(percent * 100).toFixed(2)}%)`}
+        {`(${Math.round(percent * 100)}%)`}
       </text>
     </g>
   );
@@ -122,6 +166,8 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
               cy="50%"
               innerRadius={60}
               outerRadius={80}
+              // labelLine={false}
+              // label={renderCustomizedLabel}
               fill="#8884d8"
               dataKey={dataKey}
               onMouseEnter={onPieEnter}
@@ -133,6 +179,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
                 />
               ))}
             </Pie>
+            {/* <Legend /> */}
           </PieChartRechart>
         </ResponsiveContainer>
       </CardContent>
