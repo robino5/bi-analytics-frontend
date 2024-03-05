@@ -11,11 +11,11 @@ import { cn } from "@/lib/utils";
 import { GrBraille, GrBarChart } from "react-icons/gr";
 import { DiGoogleAnalytics } from "react-icons/di";
 import { BiBarChartAlt2 } from "react-icons/bi";
-import { HiAdjustmentsHorizontal } from "react-icons/hi2";
-
+import { CgUserList } from "react-icons/cg";
+import { FaGear } from "react-icons/fa6";
+import { BsWrenchAdjustableCircle } from "react-icons/bs";
 import { useRouter, usePathname } from "next/navigation";
 import { ReactNode } from "react";
-
 
 const CustomHeaderGroup = (props: { icon: ReactNode; name: string }) => {
   const { icon, name } = props;
@@ -73,7 +73,6 @@ export default function DashboardMenus() {
           urlPath: "/dashboard/active-trading-codes",
           icon: <GrBarChart className="h-4 w-4" />,
         },
-
       ],
     },
     {
@@ -109,9 +108,24 @@ export default function DashboardMenus() {
       id: 3,
       codeName: "settings",
       viewName: "Settings",
-      icon: <HiAdjustmentsHorizontal className="h-4 w-4"/>,
-      subMenus: []
-    }
+      icon: <FaGear className="h-4 w-4" />,
+      subMenus: [
+        {
+          id: 1,
+          codeName: "users",
+          viewName: "Users",
+          urlPath: "/users",
+          icon: <CgUserList className="h-4 w-4" />,
+        },
+        {
+          id: 2,
+          codeName: "auth_controls",
+          viewName: "Role & Permissions",
+          urlPath: "/auths",
+          icon: <BsWrenchAdjustableCircle className="h-4 w-4" />,
+        },
+      ],
+    },
   ];
 
   const visitUrl = (url: string) => {
