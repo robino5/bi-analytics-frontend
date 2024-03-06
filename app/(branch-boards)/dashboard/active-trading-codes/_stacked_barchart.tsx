@@ -13,57 +13,83 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+import { FC } from "react";
+import { numberToMillionsString } from "@/lib/utils";
 
 type StackChartPropType = {
   title: string;
+  xDataKey: string;
+  dataKeyA: string;
+  dataKeyB: string;
+  data: any[];
 };
 
-const StackBarChart = ({ title }: StackChartPropType) => {
+interface CustomizedLabelProps {
+  x?: number;
+  y?: number;
+  fill?: string;
+  value?: number;
+}
+
+const CustomizedLabel: FC<CustomizedLabelProps> = ({
+  x = 0,
+  y = 0,
+  fill = "#C6C6C6",
+  value = 0,
+}) => {
+  return (
+    <text
+      x={x}
+      y={y}
+      dy={-4}
+      fontSize="16"
+      fontFamily="sans-serif"
+      fill={fill}
+      textAnchor="middle"
+    >
+      {numberToMillionsString(value)}
+    </text>
+  );
+};
+
+type Props = {
+  x: number;
+  y: number;
+  stroke: string;
+  payload: CustomizedLabelProps
+}
+
+const CustomizedAxisTick = ({ x, y, stroke, payload }: Props) => {
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={16}
+        textAnchor="end"
+        fill="#666"
+        transform="rotate(-35)"
+        fontSize={12}
+      >
+        {payload.value}
+      </text>
+    </g>
+  );
+};
+
+const customLegendFormatter = (value: string) => {
+  return value.toUpperCase()
+}
+
+const StackBarChart = ({
+  title,
+  xDataKey,
+  dataKeyA,
+  dataKeyB,
+  data,
+}: StackChartPropType) => {
+  const TICK_COLOR = "#C7C7C7";
   return (
     <Card className="bg-gradient-to-tl from-gray-50 to-slate-100">
       <CardHeader>
@@ -73,15 +99,26 @@ const StackBarChart = ({ title }: StackChartPropType) => {
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis
+              dataKey={xDataKey}
+              angle={-30}
+              textAnchor="end"
+              height={70}
+              tick={<CustomizedAxisTick />}
+              tickLine={true}
+            />
+            <YAxis
+              tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+              tickLine={true}
+              type="number"
+            />
             <Tooltip />
-            <Legend />
-            <Bar dataKey="pv" stackId="a" fill="#8884d8">
-              <LabelList dataKey="pv" position="insidemiddle" />
+            <Legend formatter={customLegendFormatter}/>
+            <Bar dataKey={dataKeyA} stackId="a" fill="#8884d8">
+              <LabelList dataKey={dataKeyA} position="insideStart" />
             </Bar>
-            <Bar dataKey="uv" stackId="a" fill="#82ca9d">
-              <LabelList dataKey="uv" position="insideTop" />
+            <Bar dataKey={dataKeyB} stackId="a" fill="#82ca9d">
+              <LabelList dataKey={dataKeyB} position="insideTop" />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
