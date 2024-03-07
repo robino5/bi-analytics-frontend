@@ -4,8 +4,10 @@ export const CARTESIAN_GRID_COLOR = "#9999";
 export const LABEL_TICK_FONT_SIZE = 12;
 
 export const BarColors = {
-  primary: "#0088FE",
-  secondary: "#00C49F",
-  terniary: "#FFBB28",
-  forthiary: "#FF8042",
+  blue: "#0088FE",
+  green: "#00C49F",
+  yellow: "#ffbc0a",
+  orange: "#fc2f00",
+  red: "#EC0868",
+  purple: "#c200fb"
 };

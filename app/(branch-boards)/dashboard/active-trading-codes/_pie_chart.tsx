@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  BarColors,
   LABEL_TICK_FONT_SIZE,
   TICK_COLOR,
 } from "@/components/ui/utils/constants";
@@ -16,7 +17,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = [BarColors.red, BarColors.green];
 
 interface IDataType {
   name: string;

@@ -84,3 +84,58 @@ export const dayWiseStatistics = [
     totalTurnover: 373.05756,
   },
 ];
+
+
+export const monthWiseClientStatistics = [
+  {
+    tradingDate: "01,Jan 24",
+    dt: 32535,
+    internet: 53035
+  },
+  {
+    tradingDate: "02,Feb 24",
+    dt: 48835,
+    internet: 71656
+  },
+  {
+    tradingDate: "03,Mar 24",
+    dt: 6041,
+    internet: 11656
+  }
+]
+
+export const monthWiseTradeStatistics = [
+  {
+    "tradingDate": "01,Jan 24",
+    "dt": 290509,
+    "internet": 344670
+  },
+  {
+    "tradingDate": "02,Feb 24",
+    "dt": 408579,
+    "internet": 473886
+  },
+  {
+    "tradingDate": "03,Mar 24",
+    "dt": 58326,
+    "internet": 71290
+  }
+]
+
+export const monthWiseTurnoverStatistics = [
+  {
+    "tradingDate": "01,Jan 24",
+    "dt": 12978.80566,
+    "internet": 7321.14722
+  },
+  {
+    "tradingDate": "02,Feb 24",
+    "dt": 20636.58511,
+    "internet": 11368.49828
+  },
+  {
+    "tradingDate": "03,Mar 24",
+    "dt": 2626.11225,
+    "internet": 1626.34516
+  }
+]

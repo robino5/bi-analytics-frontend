@@ -3,7 +3,12 @@ import { Metadata } from "next";
 import ClientTradesDataTable from "./_client_trades_datatable";
 import PieChart from "./_pie_chart";
 import StackBarChart from "./_stacked_barchart";
-import { dayWiseStatistics } from "./data";
+import {
+  dayWiseStatistics,
+  monthWiseClientStatistics,
+  monthWiseTradeStatistics,
+  monthWiseTurnoverStatistics,
+} from "./data";
 
 export const metadata: Metadata = {
   title: "Active Trading Codes - LBSL",
@@ -55,8 +60,21 @@ const getDayWiseStatistics = async () => {
   return dayWiseStatistics;
 };
 
+const getMonthWiseClientStatistics = async () => {
+  return monthWiseClientStatistics;
+};
+
+const getMonthWiseTradeStatistics = async () => {
+  return monthWiseTradeStatistics;
+};
+
+const getMonthWiseTurnoverStatistics = async () => {
+  return monthWiseTurnoverStatistics;
+};
+
 const transformData = (
-  data: StatisticsPayloadType[]
+  data: StatisticsPayloadType[],
+  key: string
 ): TransformedDataItem[] => {
   const transformedData: TransformedDataItem[] = data.reduce(
     (acc: TransformedDataItem[], curr: StatisticsPayloadType) => {
@@ -65,14 +83,16 @@ const transformData = (
       );
       if (existingItemIndex !== -1) {
         // @ts-ignore
-        acc[existingItemIndex][curr.channel.toLowerCase()] = curr.totalClients;
+        acc[existingItemIndex][curr.channel.toLowerCase()] = curr[key];
       } else {
         acc.push({
           tradingDate: curr.tradingDate,
-          [curr.channel.toLowerCase()]: curr.totalClients,
-          dt: curr.channel.toLowerCase() === "dt" ? curr.totalClients : 0,
-          internet:
-            curr.channel.toLowerCase() === "internet" ? curr.totalClients : 0,
+          // @ts-ignore
+          [curr.channel.toLowerCase()]: curr[key],
+          // @ts-ignore
+          dt: curr.channel.toLowerCase() === "dt" ? curr[key] : 0,
+          // @ts-ignore
+          internet: curr.channel.toLowerCase() === "internet" ? curr[key] : 0,
         });
       }
       return acc;
@@ -83,38 +103,46 @@ const transformData = (
   return transformedData;
 };
 
+const ratioMaker = (data: TransformedDataItem[]) => {
+  return data.map((d) => {
+    const total = d.dt + d.internet;
+    return {
+      ...d,
+      dtRatio: Math.round((d.dt / total) * 100),
+      internetRatio: Math.round((d.internet / total) * 100),
+    };
+  });
+};
+
 const ActiveTradingCodesBoard = async () => {
   const dayWiseSummary = await getClientTradeSummaryOfToday();
   const dayWiseData = await getDayWiseStatistics();
+  const monthWiseClients = await getMonthWiseClientStatistics();
+  const monthWiseTrades = await getMonthWiseTradeStatistics();
+  const monthWiseTurnover = await getMonthWiseTurnoverStatistics();
 
   const sanitizedDayWiseSummary = removeKeyFromObjects(
     dayWiseSummary,
     "TOTAL(DT + INTERNET)"
   );
 
-  const transformDataa = transformData(dayWiseData);
+  const dayWiseClients = transformData(dayWiseData, "totalClients");
+  const dayWiseTrades = transformData(dayWiseData, "totalTrades");
+  const dayWiseTurnover = transformData(dayWiseData, "totalTurnover");
 
-  const totalDt = transformDataa.reduce((sum, item) => sum + item.dt, 0);
-  const totalInternet = transformDataa.reduce(
-    (sum, item) => sum + item.internet,
-    0
-  );
+  const transformedClients = ratioMaker(dayWiseClients);
+  const transformedTrades = ratioMaker(dayWiseTrades);
+  const transformedTurnover = ratioMaker(dayWiseTurnover);
 
-  const percentages = transformDataa.map((item) => ({
-    tradingDate: item.tradingDate,
-    dt: item.dt,
-    internet: item.internet,
-    dtRatio: Math.round((item.dt / totalDt) * 100),
-    internetRatio: Math.round((item.internet / totalInternet) * 100),
-  }));
+  const transformedMonthWiseClients = ratioMaker(monthWiseClients);
+  const transformedMonthWiseTrades = ratioMaker(monthWiseTrades);
+  const transformedMonthWiseTurnover = ratioMaker(monthWiseTurnover);
 
-  const yAxisValueSet = new Set();
-
-  percentages.forEach((item) => {
-    yAxisValueSet.add(item.dtRatio);
-    yAxisValueSet.add(item.internetRatio);
-  });
-
+  const fixedProps = {
+    xDataKey: "tradingDate",
+    dataKeyA: "dtRatio",
+    dataKeyB: "internetRatio",
+  };
   return (
     <div className="mx-4">
       <PageHeader name="Active Trading Codes" showFilters={false} />
@@ -149,33 +177,50 @@ const ActiveTradingCodesBoard = async () => {
         {/* clients day wise */}
         <div className="rounded-md xl:col-span-3">
           <StackBarChart
-            xDataKey="tradingDate"
-            yDataKey="dtRatio"
-            dataKeyA="dt"
-            dataKeyB="internet"
-            data={percentages}
+            {...fixedProps}
+            data={transformedClients}
             title="Clients (Day Wise)"
           />
         </div>
         {/* clients month wise */}
         <div className="rounded-md xl:col-span-3">
-          {/* <StackBarChart title="Clients (Month Wise)" /> */}
+          <StackBarChart
+            {...fixedProps}
+            data={transformedMonthWiseClients}
+            title="Clients (Month Wise)"
+          />
         </div>
         {/* trades day wise */}
         <div className="rounded-md xl:col-span-3">
-          {/* <StackBarChart title="Trades (Day Wise)" /> */}
+          <StackBarChart
+            {...fixedProps}
+            data={transformedTrades}
+            title="Trades (Day Wise)"
+          />
         </div>
         {/* trades month wise */}
         <div className="rounded-md xl:col-span-3">
-          {/* <StackBarChart title="Trades (Month Wise)" /> */}
+          <StackBarChart
+            {...fixedProps}
+            data={transformedMonthWiseTrades}
+            title="Trades (Month Wise)"
+          />
         </div>
         {/* turnover  day wise */}
         <div className="rounded-md xl:col-span-3">
-          {/* <StackBarChart title="Turnover (Day Wise)" /> */}
+          <StackBarChart
+            {...fixedProps}
+            data={transformedTurnover}
+            title="Turnover (Day Wise)"
+          />
         </div>
         {/* turnover month wise */}
         <div className="rounded-md xl:col-span-3">
-          {/* <StackBarChart title="Turnover (Month Wise)" /> */}
+          <StackBarChart
+            {...fixedProps}
+            data={transformedMonthWiseTurnover}
+            title="Turnover (Month Wise)"
+          />
         </div>
       </div>
     </div>

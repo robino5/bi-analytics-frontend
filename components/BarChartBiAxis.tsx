@@ -15,6 +15,7 @@ import {
 } from "recharts";
 
 import { formatDate, numberToMillionsString } from "@/lib/utils";
+import { BarColors } from "./ui/utils/constants";
 
 interface BarData {
   date: string;
@@ -73,9 +74,9 @@ const tickDateFormatter = (date: string) => {
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
   const TICK_COLOR = "#C7C7C7";
   const CARTESIAN_GRID_COLOR = "#565656";
-  
-  const FILL_COLOR_1 = "#D52941"
-  const FILL_COLOR_2 = "#FCD581"
+
+  const FILL_COLOR_1 = "#D52941";
+  const FILL_COLOR_2 = "#FCD581";
 
   return (
     <ResponsiveContainer height={option?.height ?? 300} width="100%">
@@ -123,7 +124,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           name="Client"
           dataKey={option.valueKeyA}
           yAxisId={"left"}
-          fill={FILL_COLOR_1}
+          fill={BarColors.red}
           legendType="line"
           label={option?.barLabel ? <CustomizedLabel /> : ""}
           activeBar={<Rectangle fill={FILL_COLOR_1} stroke={option.stroke} />}
@@ -132,7 +133,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           name="Turnover"
           dataKey={option.valueKeyB}
           yAxisId={"right"}
-          fill={FILL_COLOR_2}
+          fill={BarColors.green}
           legendType="line"
           label={option?.barLabel ? <CustomizedLabel /> : ""}
           activeBar={<Rectangle fill={FILL_COLOR_2} stroke={option.stroke} />}

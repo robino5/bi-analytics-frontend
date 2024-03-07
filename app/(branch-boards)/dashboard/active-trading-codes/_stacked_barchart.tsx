@@ -14,6 +14,7 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  BarColors,
   LABEL_TICK_FONT_SIZE,
   TICK_COLOR,
 } from "@/components/ui/utils/constants";
@@ -21,7 +22,6 @@ import {
 type StackChartPropType = {
   title: string;
   xDataKey: string;
-  yDataKey: string;
   dataKeyA: string;
   dataKeyB: string;
   data: any[];
@@ -67,7 +67,6 @@ const customLegendFormatter = (value: string) => {
 const StackBarChart = ({
   title,
   xDataKey,
-  yDataKey,
   dataKeyA,
   dataKeyB,
   data,
@@ -96,24 +95,37 @@ const StackBarChart = ({
                 strokeOpacity: 0.1,
                 fontSize: LABEL_TICK_FONT_SIZE,
               }}
-              dataKey={yDataKey}
               tickFormatter={(value) => `${value}%`}
               domain={[0, 100]}
             />
             <Tooltip />
             <Legend formatter={customLegendFormatter} />
-            <Bar dataKey={dataKeyA} stackId="a" fill="#8884d8">
+            <Bar
+              dataKey={dataKeyA}
+              stackId="a"
+              fill={BarColors.red}
+              name={"DT"}
+            >
               <LabelList
+                fill="#fff"
                 dataKey={dataKeyA}
+                style={{ fontSize: "12px" }}
                 position="insideStart"
-                // formatter={(value: number) => `${value}%`}
+                formatter={(value: number) => `${value}%`}
               />
             </Bar>
-            <Bar dataKey={dataKeyB} stackId="a" fill="#82ca9d">
+            <Bar
+              dataKey={dataKeyB}
+              stackId="a"
+              fill={BarColors.green}
+              name={"INTERNET"}
+            >
               <LabelList
+                fill="#fff"
+                style={{ fontSize: "12px" }}
                 dataKey={dataKeyB}
-                position="insideTop"
-                // formatter={(value: number) => `${value}%`}
+                position="insideStart"
+                formatter={(value: number) => `${value}%`}
               />
             </Bar>
           </BarChart>

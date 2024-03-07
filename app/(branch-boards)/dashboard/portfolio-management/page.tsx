@@ -13,6 +13,7 @@ import { Metadata } from "next";
 import NewAccountOpeningDataTable from "./_new_account_datatable";
 import TurnoverPerformanceDataTable from "./_turnover_performance_datatable";
 import PortfolioManagementStatusDataTable from "./_portfolio_management_status_datatable";
+import { BarColors } from "@/components/ui/utils/constants";
 
 export const metadata: Metadata = {
   title: "Portfolio Management - LBSL",
@@ -302,7 +303,7 @@ export default async function PortfolioManagement() {
   const dailyNetFundFlowOption = {
     dataKey: "name",
     valueKey: "value",
-    fill: "#ff3355",
+    fill: BarColors.orange,
     stroke: "#c3ce",
   };
   const biaxialChartOption = {
