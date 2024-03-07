@@ -1,6 +1,10 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  LABEL_TICK_FONT_SIZE,
+  TICK_COLOR,
+} from "@/components/ui/utils/constants";
 import { numberToMillionsString } from "@/lib/utils";
 import { useState } from "react";
 import {
@@ -97,7 +101,7 @@ const renderActiveShape = (props: any) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={12}>
         {payload.name}
       </text>
       <Sector
@@ -129,13 +133,15 @@ const renderActiveShape = (props: any) => {
         y={ey}
         textAnchor={textAnchor}
         fill="#333"
+        fontSize={LABEL_TICK_FONT_SIZE}
       >{`${numberToMillionsString(value)}`}</text>
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         dy={18}
         textAnchor={textAnchor}
-        fill="#999"
+        fill={TICK_COLOR}
+        fontSize={11}
       >
         {`(${Math.round(percent * 100)}%)`}
       </text>
@@ -156,16 +162,16 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={260}>
-          <PieChartRechart>
+        <ResponsiveContainer width="100%" height={220}>
+          <PieChartRechart height={100} width={100}>
             <Pie
               activeIndex={activeIndex}
               activeShape={renderActiveShape}
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={80}
+              innerRadius={40}
+              outerRadius={60}
               // labelLine={false}
               // label={renderCustomizedLabel}
               fill="#8884d8"

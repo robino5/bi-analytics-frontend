@@ -92,7 +92,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
         <Tooltip />
-        <ReferenceLine y={0} stroke="#C6C6C6" />
+        <ReferenceLine y={0} stroke="#C9C9C9" />
         <Bar
           dataKey={option.valueKey}
           fill={option.fill}

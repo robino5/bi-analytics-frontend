@@ -13,7 +13,7 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-const TICK_COLOR = "#C7C7C7";
+import { LABEL_TICK_FONT_SIZE, TICK_COLOR } from "@/components/ui/utils/constants";
 
 type StackChartPropType = {
   title: string;
@@ -88,7 +88,7 @@ const StackBarChart = ({
               tickLine={true}
             />
             <YAxis
-              tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+              tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: LABEL_TICK_FONT_SIZE }}
               dataKey={yDataKey}
               tickFormatter={(value) => `${value}%`}
               domain={[0, 100]}

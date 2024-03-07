@@ -7,6 +7,8 @@ import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
 import type { Metadata } from "next";
 
+import { BarColors } from "@/components/ui/utils/constants";
+
 export const metadata: Metadata = {
   title: "Daily Trade Performance - LBSL",
   description: "daily trading performance analytics dashboards",
@@ -163,7 +165,17 @@ export default function DailyTradePerformance() {
     legendName: "Quantity",
     dataKey: "name",
     valueKey: "value",
-    fill: "#82ca9d",
+    fill: BarColors.secondary,
+    stroke: "purple",
+    height: 700,
+    barLabel: false,
+  };
+
+  const sectorCashCodeExposureOption = {
+    legendName: "Quantity",
+    dataKey: "name",
+    valueKey: "value",
+    fill: BarColors.terniary,
     stroke: "purple",
     height: 700,
     barLabel: false,
@@ -296,7 +308,7 @@ export default function DailyTradePerformance() {
           children={
             <BarChartHorizontal
               data={marginChartData}
-              options={marginChartOption}
+              options={sectorCashCodeExposureOption}
             />
           }
         />

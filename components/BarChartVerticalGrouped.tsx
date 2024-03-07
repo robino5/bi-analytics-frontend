@@ -80,7 +80,7 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
         }}
       >
         <CartesianGrid
-          strokeDasharray={"5 5"}
+          strokeDasharray={"3 3"}
           stroke={CARTESIAN_GRID_COLOR}
           vertical={false}
         />
