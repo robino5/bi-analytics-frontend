@@ -55,25 +55,33 @@ const getDayWiseStatistics = async () => {
   return dayWiseStatistics;
 };
 
-const transformData = (data: StatisticsPayloadType[]): TransformedDataItem[] => {
-  const transformedData: TransformedDataItem[] = data.reduce((acc: TransformedDataItem[], curr: StatisticsPayloadType) => {
-    const existingItemIndex = acc.findIndex(item => item.tradingDate === curr.tradingDate);
-    if (existingItemIndex !== -1) {
-      acc[existingItemIndex][curr.channel.toLowerCase()] = curr.totalClients;
-    } else {
-      acc.push({
-        tradingDate: curr.tradingDate,
-        [curr.channel.toLowerCase()]: curr.totalClients,
-        dt: curr.channel.toLowerCase() === 'dt' ? curr.totalClients : 0,
-        internet: curr.channel.toLowerCase() === 'internet' ? curr.totalClients : 0,
-      });
-    }
-    return acc;
-  }, []);
+const transformData = (
+  data: StatisticsPayloadType[]
+): TransformedDataItem[] => {
+  const transformedData: TransformedDataItem[] = data.reduce(
+    (acc: TransformedDataItem[], curr: StatisticsPayloadType) => {
+      const existingItemIndex = acc.findIndex(
+        (item) => item.tradingDate === curr.tradingDate
+      );
+      if (existingItemIndex !== -1) {
+        // @ts-ignore
+        acc[existingItemIndex][curr.channel.toLowerCase()] = curr.totalClients;
+      } else {
+        acc.push({
+          tradingDate: curr.tradingDate,
+          [curr.channel.toLowerCase()]: curr.totalClients,
+          dt: curr.channel.toLowerCase() === "dt" ? curr.totalClients : 0,
+          internet:
+            curr.channel.toLowerCase() === "internet" ? curr.totalClients : 0,
+        });
+      }
+      return acc;
+    },
+    []
+  );
 
   return transformedData;
 };
-
 
 const ActiveTradingCodesBoard = async () => {
   const dayWiseSummary = await getClientTradeSummaryOfToday();
@@ -84,9 +92,29 @@ const ActiveTradingCodesBoard = async () => {
     "TOTAL(DT + INTERNET)"
   );
 
-
   const transformDataa = transformData(dayWiseData);
-  
+
+  const totalDt = transformDataa.reduce((sum, item) => sum + item.dt, 0);
+  const totalInternet = transformDataa.reduce(
+    (sum, item) => sum + item.internet,
+    0
+  );
+
+  const percentages = transformDataa.map((item) => ({
+    tradingDate: item.tradingDate,
+    dt: item.dt,
+    internet: item.internet,
+    dtRatio: Math.round((item.dt / totalDt) * 100),
+    internetRatio: Math.round((item.internet / totalInternet) * 100),
+  }));
+
+  const yAxisValueSet = new Set();
+
+  percentages.forEach((item) => {
+    yAxisValueSet.add(item.dtRatio);
+    yAxisValueSet.add(item.internetRatio);
+  });
+
   return (
     <div className="mx-4">
       <PageHeader name="Active Trading Codes" showFilters={false} />
@@ -96,21 +124,21 @@ const ActiveTradingCodesBoard = async () => {
         </div>
 
         {/* client  */}
-        <div className="rounded-md xl:col-span-2">
+        <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
           <PieChart
             title="Clients (Today)"
             dataKey="totalClient"
             data={sanitizedDayWiseSummary}
           />
         </div>
-        <div className="rounded-md xl:col-span-2">
+        <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
           <PieChart
             title="Trades (Today)"
             dataKey="totalTrade"
             data={sanitizedDayWiseSummary}
           />
         </div>
-        <div className="rounded-md xl:col-span-2">
+        <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
           <PieChart
             title="Turnover (Today)"
             dataKey="totalTurnover"
@@ -122,9 +150,10 @@ const ActiveTradingCodesBoard = async () => {
         <div className="rounded-md xl:col-span-3">
           <StackBarChart
             xDataKey="tradingDate"
+            yDataKey="dtRatio"
             dataKeyA="dt"
             dataKeyB="internet"
-            data={transformDataa}
+            data={percentages}
             title="Clients (Day Wise)"
           />
         </div>

@@ -10,7 +10,9 @@
     "es2021": true
   },
   "extends": [
-    "next"
+    "next",
+    "next/babel",
+    "next/core-web-vitals"
   ],
   "parserOptions": {
     "ecmaVersion": "latest",

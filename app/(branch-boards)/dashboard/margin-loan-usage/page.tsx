@@ -101,7 +101,7 @@ export default async function MarginLoanUsage() {
           className="col-span-3"
           records={exposureControllingJson}
         />
-        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-gradient-to-br from-gray-50 to-slate-100">
+        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-gradient-to-br from-gray-50 to-slate-200">
           <CardHeader>
             <CardTitle>RM Wise Net Trade</CardTitle>
             <CardDescription>Net Trade for Regional Managers</CardDescription>

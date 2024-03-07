@@ -26,7 +26,7 @@ export async function MarkedTradersZoneWise({ name }: MarkedTraderProps) {
           <ArchiveIcon className="h-4 w-6" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[600px] overflow-auto">
+      <DialogContent className="sm:max-w-[700px] max-h-[600px] overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
         <DialogHeader>
           <DialogTitle>{`${name.toUpperCase()} TRADERS`}</DialogTitle>
           <DialogDescription>

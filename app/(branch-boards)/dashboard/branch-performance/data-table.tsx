@@ -85,7 +85,7 @@ export function DataTableCard<TData, TValue>({
   return (
     <Card
       className={cn(
-        "w-full shadow-xl bg-gradient-to-br from-gray-50 to-slate-100",
+        "w-full shadow-md bg-gradient-to-br from-gray-50 to-slate-200",
         className
       )}
     >

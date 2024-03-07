@@ -25,7 +25,7 @@ export default function ClientTradesDataTable({ records, className }: Props) {
   return (
     <Card
       className={cn(
-        "overflow-auto bg-gradient-to-tl from-gray-50 to-slate-100",
+        "overflow-auto bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md",
         className
       )}
     >

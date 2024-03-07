@@ -13,12 +13,12 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FC } from "react";
-import { numberToMillionsString } from "@/lib/utils";
+const TICK_COLOR = "#C7C7C7";
 
 type StackChartPropType = {
   title: string;
   xDataKey: string;
+  yDataKey: string;
   dataKeyA: string;
   dataKeyB: string;
   data: any[];
@@ -31,36 +31,14 @@ interface CustomizedLabelProps {
   value?: number;
 }
 
-const CustomizedLabel: FC<CustomizedLabelProps> = ({
-  x = 0,
-  y = 0,
-  fill = "#C6C6C6",
-  value = 0,
-}) => {
-  return (
-    <text
-      x={x}
-      y={y}
-      dy={-4}
-      fontSize="16"
-      fontFamily="sans-serif"
-      fill={fill}
-      textAnchor="middle"
-    >
-      {numberToMillionsString(value)}
-    </text>
-  );
-};
-
 type Props = {
   x: number;
   y: number;
   stroke: string;
-  payload: CustomizedLabelProps
-}
+  payload: CustomizedLabelProps;
+};
 
 const CustomizedAxisTick = ({ x, y, stroke, payload }: Props) => {
-
   return (
     <g transform={`translate(${x},${y})`}>
       <text
@@ -68,9 +46,10 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }: Props) => {
         y={0}
         dy={16}
         textAnchor="end"
-        fill="#666"
+        fill="#999"
         transform="rotate(-35)"
         fontSize={12}
+        opacity={1}
       >
         {payload.value}
       </text>
@@ -79,19 +58,19 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }: Props) => {
 };
 
 const customLegendFormatter = (value: string) => {
-  return value.toUpperCase()
-}
+  return value.toUpperCase();
+};
 
 const StackBarChart = ({
   title,
   xDataKey,
+  yDataKey,
   dataKeyA,
   dataKeyB,
   data,
 }: StackChartPropType) => {
-  const TICK_COLOR = "#C7C7C7";
   return (
-    <Card className="bg-gradient-to-tl from-gray-50 to-slate-100">
+    <Card className="bg-gradient-to-tr from-gray-50 to-slate-200">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
@@ -104,21 +83,31 @@ const StackBarChart = ({
               angle={-30}
               textAnchor="end"
               height={70}
+              // @ts-ignore
               tick={<CustomizedAxisTick />}
               tickLine={true}
             />
             <YAxis
               tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
-              tickLine={true}
-              type="number"
+              dataKey={yDataKey}
+              tickFormatter={(value) => `${value}%`}
+              domain={[0, 100]}
             />
             <Tooltip />
-            <Legend formatter={customLegendFormatter}/>
+            <Legend formatter={customLegendFormatter} />
             <Bar dataKey={dataKeyA} stackId="a" fill="#8884d8">
-              <LabelList dataKey={dataKeyA} position="insideStart" />
+              <LabelList
+                dataKey={dataKeyA}
+                position="insideStart"
+                // formatter={(value: number) => `${value}%`}
+              />
             </Bar>
             <Bar dataKey={dataKeyB} stackId="a" fill="#82ca9d">
-              <LabelList dataKey={dataKeyB} position="insideTop" />
+              <LabelList
+                dataKey={dataKeyB}
+                position="insideTop"
+                // formatter={(value: number) => `${value}%`}
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

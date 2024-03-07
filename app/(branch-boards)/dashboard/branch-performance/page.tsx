@@ -61,7 +61,7 @@ export default async function BranchPerformance() {
         />
 
         {/* Branch Wise Margin Status */}
-        <Card className="col-span-1 max-h-[340px] overflow-y-auto bg-gradient-to-tl from-gray-50 to-slate-100 lg:col-span-2 shadow-md">
+        <Card className="col-span-1 max-h-[340px] overflow-y-auto bg-gradient-to-tr from-gray-50 to-slate-200 lg:col-span-2 shadow-md">
           <CardHeader>
             <CardTitle>Branch Wise Margin Status</CardTitle>
             <CardDescription>shows the grid for margin status</CardDescription>
@@ -72,7 +72,7 @@ export default async function BranchPerformance() {
         </Card>
 
         {/* Branch Wise Exposure Status */}
-        <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md bg-gradient-to-tl from-gray-50 to-slate-100 lg:col-span-2">
+        <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md bg-gradient-to-tr from-gray-50 to-slate-200 lg:col-span-2">
           <CardHeader>
             <CardTitle>Branch Wise Exposure Status</CardTitle>
             <CardDescription>

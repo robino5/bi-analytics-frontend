@@ -151,7 +151,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
   };
 
   return (
-    <Card className="bg-gradient-to-tl from-gray-50 to-slate-100">
+    <Card className="bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>

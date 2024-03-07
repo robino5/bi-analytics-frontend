@@ -26,7 +26,7 @@ export default function MarginLoanAllocationDataTable({
   return (
     <Card
       className={cn(
-        "overflow-auto bg-gradient-to-tl from-gray-50 to-slate-100",
+        "overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200",
         className
       )}
     >
