@@ -25,7 +25,9 @@ export default function NewAccountOpeningDataTable({ accounts }: Props) {
   return (
     <Card className="col-span-2 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
       <CardHeader>
-        <CardTitle>New Account Opening & Fund Collection</CardTitle>
+        <CardTitle className="text-slate-600">
+          New Account Opening & Fund Collection
+        </CardTitle>
         <CardDescription>short summary of the portfolio</CardDescription>
       </CardHeader>
       <CardContent>

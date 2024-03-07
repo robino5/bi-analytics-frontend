@@ -118,7 +118,7 @@ const ActiveTradingCodesBoard = async () => {
   return (
     <div className="mx-4">
       <PageHeader name="Active Trading Codes" showFilters={false} />
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-6 mt-2">
+      <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-2">
         <div className="rounded-md xl:col-span-6">
           <ClientTradesDataTable records={dayWiseSummary} />
         </div>

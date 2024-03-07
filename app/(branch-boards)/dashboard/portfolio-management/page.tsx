@@ -324,7 +324,7 @@ export default async function PortfolioManagement() {
   return (
     <div className="mx-4">
       <PageHeader name="Portfolio Management" />
-      <div className="grid grid-cols-6 gap-2 xl:grid-cols-6 mt-2">
+      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {/* Daily Net Fund Flow Chart */}
         <CardBoard
           className="lg:col-span-3"

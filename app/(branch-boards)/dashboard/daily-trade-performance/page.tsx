@@ -241,7 +241,7 @@ export default function DailyTradePerformance() {
   return (
     <div className="mx-4">
       <PageHeader name="Daily Trade Performance" />
-      <div className="grid grid-cols-6 gap-2 xl:grid-cols-6 mt-2">
+      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         <CardBoard
           className="col-span-6 xl:col-span-2"
           title="Summary"

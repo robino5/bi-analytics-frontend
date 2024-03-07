@@ -50,7 +50,7 @@ export default async function BranchPerformance() {
   return (
     <div className="mx-4">
       <PageHeader name="Branch Performance" />
-      <div className="grid grid-cols-1 gap-4 mt-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
         {/* Branch Wise Turnover Status */}
         <DataTableCard
           title="Branch Wise Turnover Status"
@@ -63,7 +63,9 @@ export default async function BranchPerformance() {
         {/* Branch Wise Margin Status */}
         <Card className="col-span-1 max-h-[340px] overflow-y-auto bg-gradient-to-tr from-gray-50 to-slate-200 lg:col-span-2 shadow-md">
           <CardHeader>
-            <CardTitle>Branch Wise Margin Status</CardTitle>
+            <CardTitle className="text-slate-600">
+              Branch Wise Margin Status
+            </CardTitle>
             <CardDescription>shows the grid for margin status</CardDescription>
           </CardHeader>
           <CardContent>
@@ -74,7 +76,9 @@ export default async function BranchPerformance() {
         {/* Branch Wise Exposure Status */}
         <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md bg-gradient-to-tr from-gray-50 to-slate-200 lg:col-span-2">
           <CardHeader>
-            <CardTitle>Branch Wise Exposure Status</CardTitle>
+            <CardTitle className="text-slate-600">
+              Branch Wise Exposure Status
+            </CardTitle>
             <CardDescription>
               shows the grid for exposure status
             </CardDescription>

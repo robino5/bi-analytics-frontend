@@ -13,7 +13,10 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LABEL_TICK_FONT_SIZE, TICK_COLOR } from "@/components/ui/utils/constants";
+import {
+  LABEL_TICK_FONT_SIZE,
+  TICK_COLOR,
+} from "@/components/ui/utils/constants";
 
 type StackChartPropType = {
   title: string;
@@ -72,7 +75,7 @@ const StackBarChart = ({
   return (
     <Card className="bg-gradient-to-tr from-gray-50 to-slate-200">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-slate-600">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={260}>
@@ -88,7 +91,11 @@ const StackBarChart = ({
               tickLine={true}
             />
             <YAxis
-              tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: LABEL_TICK_FONT_SIZE }}
+              tick={{
+                stroke: TICK_COLOR,
+                strokeOpacity: 0.1,
+                fontSize: LABEL_TICK_FONT_SIZE,
+              }}
               dataKey={yDataKey}
               tickFormatter={(value) => `${value}%`}
               domain={[0, 100]}

@@ -31,7 +31,9 @@ export default function MarginLoanAllocationDataTable({
       )}
     >
       <CardHeader>
-        <CardTitle>Margin Loan Allocation & Usage</CardTitle>
+        <CardTitle className="text-slate-600">
+          Margin Loan Allocation & Usage
+        </CardTitle>
         <CardDescription>
           short summary of the margin loan allocation & usage
         </CardDescription>

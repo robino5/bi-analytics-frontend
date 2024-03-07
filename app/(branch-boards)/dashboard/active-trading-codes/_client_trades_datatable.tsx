@@ -30,7 +30,9 @@ export default function ClientTradesDataTable({ records, className }: Props) {
       )}
     >
       <CardHeader>
-        <CardTitle>Channel Wise Clients & Trades (Today)</CardTitle>
+        <CardTitle className="text-slate-600">
+          Channel Wise Clients & Trades (Today)
+        </CardTitle>
         <CardDescription>
           short summary of todays clients and trades
         </CardDescription>

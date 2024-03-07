@@ -159,7 +159,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
   return (
     <Card className="bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-slate-600">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={220}>

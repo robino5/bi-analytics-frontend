@@ -90,7 +90,7 @@ export function DataTableCard<TData, TValue>({
       )}
     >
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-slate-600">{title}</CardTitle>
         <CardDescription>{subtitle}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -124,7 +124,10 @@ export function DataTableCard<TData, TValue>({
                       data-state={row.getIsSelected() && "selected"}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <TableCell className="py-1 px-4 text-start text-[0.8rem]" key={cell.id}>
+                        <TableCell
+                          className="py-1 px-4 text-start text-[0.8rem]"
+                          key={cell.id}
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()

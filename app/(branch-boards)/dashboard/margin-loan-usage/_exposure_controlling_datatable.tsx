@@ -48,7 +48,9 @@ export default function ExposureControllingDataTable({
       )}
     >
       <CardHeader>
-        <CardTitle>Exposure Controlling & Management</CardTitle>
+        <CardTitle className="text-slate-600">
+          Exposure Controlling & Management
+        </CardTitle>
         <CardDescription>excluding negative equity clients</CardDescription>
       </CardHeader>
       <CardContent>

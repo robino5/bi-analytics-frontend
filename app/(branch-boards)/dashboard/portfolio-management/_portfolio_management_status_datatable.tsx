@@ -22,7 +22,9 @@ export default function PortfolioManagementStatusDataTable({ records }: Props) {
   return (
     <Card className="col-span-2 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
       <CardHeader>
-        <CardTitle>Portfolio Management Status</CardTitle>
+        <CardTitle className="text-slate-600">
+          Portfolio Management Status
+        </CardTitle>
         <CardDescription>short summary of the portfolio</CardDescription>
       </CardHeader>
       <CardContent>
