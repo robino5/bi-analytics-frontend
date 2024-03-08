@@ -14,6 +14,11 @@ import {
 } from "recharts";
 
 import { numberToMillionsString } from "@/lib/utils";
+import {
+  BarColors,
+  CARTESIAN_GRID_COLOR,
+  TICK_COLOR,
+} from "./ui/utils/constants";
 
 interface BarData {
   name: string;
@@ -64,8 +69,10 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
 };
 
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
-  const TICK_COLOR = "#C7C7C7";
-  const CARTESIAN_GRID_COLOR = "#565656";
+  const getFillColor = (value: number): string => {
+    return value >= 0 ? BarColors.green : BarColors.red;
+  };
+
   return (
     <ResponsiveContainer height={option?.height ?? 300} width="100%">
       <RechartsBarChart
@@ -77,7 +84,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray={"1 3"} stroke={CARTESIAN_GRID_COLOR} />
+        <CartesianGrid strokeDasharray={"3 3"} stroke={CARTESIAN_GRID_COLOR} />
         <XAxis
           dataKey={option.dataKey}
           angle={-30}
@@ -95,7 +102,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
         <ReferenceLine y={0} stroke="#C9C9C9" />
         <Bar
           dataKey={option.valueKey}
-          fill={option.fill}
+          fill={BarColors.green}
           legendType="line"
           barSize={15}
           label={option?.barLabel ? <CustomizedLabel /> : ""}
