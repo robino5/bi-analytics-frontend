@@ -6,11 +6,11 @@ const nextConfig = {
         ignoreDuringBuilds: true,
 
     },
-    logging: {
-        fetches: {
-            fullUrl: true,
-        },
-    },
+    // logging: {
+    //     fetches: {
+    //         fullUrl: true,
+    //     },
+    // },
 };
 
 export default nextConfig;

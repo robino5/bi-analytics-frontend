@@ -10,6 +10,7 @@ type LoginResponse = {
   data: {
     id: string;
     username: string;
+    name?: string;
     designation: string;
     phoneNumber: string;
     email: string;
@@ -24,6 +25,7 @@ const loginWithApi = async (username: string, password: string): Promise<LoginRe
     data: {
       id: "1",
       username: username,
+      name: "K.M. Jiaul Islam Jibon",
       designation: "Senior Asst. Director",
       phoneNumber: "01778625131",
       email: "jiaulislam.ict.bd@gmail.com",
@@ -41,7 +43,7 @@ const credentialProvider = CredendialProvider({
     },
     password: { label: "Password", type: "password", required: true },
   },
-  async authorize(credentials, req) {
+  async authorize(credentials, _) {
     const validatedFormFields = LoginSchema.safeParse(credentials);
 
     if (validatedFormFields.success) {

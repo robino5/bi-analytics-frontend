@@ -6,6 +6,7 @@ import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClie
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
 import type { Metadata } from "next";
+import { auth } from "@/auth";
 
 import { BarColors } from "@/components/ui/utils/constants";
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   description: "daily trading performance analytics dashboards",
 };
 
-export default function DailyTradePerformance() {
+export default async function DailyTradePerformance() {
   const turnoverChartData = [
     {
       xLabel: "08-Feb-24",
@@ -237,6 +238,8 @@ export default function DailyTradePerformance() {
       value: 2909090,
     },
   };
+
+  const currentUser = await auth();
 
   return (
     <div className="mx-4">
