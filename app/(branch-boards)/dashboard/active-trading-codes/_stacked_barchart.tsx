@@ -95,7 +95,6 @@ const RATIO_TO_DATA_MAP: Record<string, string> = {
 
 const CustomTooltip = ({ active, payload, ...rest }: CustomTooltipProps) => {
   if (active && payload && payload.length > 0) {
-    console.log(rest);
     return (
       <div
         style={{

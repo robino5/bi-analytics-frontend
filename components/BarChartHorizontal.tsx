@@ -12,7 +12,9 @@ import {
   Rectangle,
 } from "recharts";
 
-import { numberToMillionsString } from "@/lib/utils";
+import { numberFormatter, numberToMillionsString } from "@/lib/utils";
+import { TOOLTIP_BACKGROUND } from "./ui/utils/constants";
+import { Separator } from "./ui/separator";
 
 interface BarData {
   name: string;
@@ -60,6 +62,59 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
     </text>
   );
 };
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: PayloadType[];
+  label?: number;
+}
+
+type PayloadType = {
+  value: string | number;
+  name: string;
+  payload: BarData;
+  color: string;
+  dataKey: string;
+};
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  if (active && payload && payload.length > 0) {
+    return (
+      <div
+        style={{
+          backgroundColor: TOOLTIP_BACKGROUND,
+          padding: "10px",
+          borderRadius: "10px",
+          boxShadow: "1px 2px 10px -2px #7873ffb1",
+        }}
+      >
+        <p>{label}</p>
+        <Separator className="border-gray-500"/>
+        {payload.map((pld: PayloadType) => {
+          const innerPayload = pld.payload;
+          return (
+            <>
+              <p
+                key={pld.name}
+                style={{
+                  borderStyle: "solid 1px",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  fontFamily: "sans-serif",
+                  color: pld.color,
+                }}
+              >
+                {`${pld.name} : ${numberFormatter(
+                  innerPayload.value as number
+                )}`}
+              </p>
+            </>
+          );
+        })}
+      </div>
+    );
+  }
+  return null;
+};
 
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
   const TICK_COLOR = "#C7C7C7";
@@ -78,9 +133,10 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
         }}
       >
         <CartesianGrid
-          strokeDasharray={"3 4"}
+          strokeDasharray={"3 3"}
           stroke={CARTESIAN_GRID_COLOR}
           horizontal={false}
+          opacity={0.3}
         />
         <XAxis
           type="number"
@@ -95,7 +151,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
         />
         {option?.legendName ?? <Legend name={option.legendName} />}
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         <Bar
           dataKey={option.valueKey}
           fill={option.fill}

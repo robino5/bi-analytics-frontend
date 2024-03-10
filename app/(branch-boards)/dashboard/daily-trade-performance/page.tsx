@@ -18,37 +18,37 @@ export const metadata: Metadata = {
 export default async function DailyTradePerformance() {
   const turnoverChartData = [
     {
-      xLabel: "08-Feb-24",
+      label: "08-Feb-24",
       generated: 2733124262.3,
       target: 913500000,
     },
     {
-      xLabel: "11-Feb-24",
+      label: "11-Feb-24",
       generated: 2715647013.4,
       target: 913500000,
     },
     {
-      xLabel: "12-Feb-24",
+      label: "12-Feb-24",
       generated: 2244503832.4,
       target: 913500000,
     },
     {
-      xLabel: "13-Feb-24",
+      label: "13-Feb-24",
       generated: 2296593846.3,
       target: 913500000,
     },
     {
-      xLabel: "14-Feb-24",
+      label: "14-Feb-24",
       generated: 1733089432.4,
       target: 913500000,
     },
     {
-      xLabel: "15-Feb-24",
+      label: "15-Feb-24",
       generated: 1555119428.8,
       target: 893500000,
     },
     {
-      xLabel: "18-Feb-24",
+      label: "18-Feb-24",
       generated: 1224945129.1,
       target: 913500000,
     },
@@ -238,8 +238,6 @@ export default async function DailyTradePerformance() {
       value: 2909090,
     },
   };
-
-  const currentUser = await auth();
 
   return (
     <div className="mx-4">

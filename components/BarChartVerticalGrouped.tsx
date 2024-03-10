@@ -1,5 +1,6 @@
 "use client";
-import { FC } from "react";
+
+import { FC, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart as RechartsBarChart,
@@ -17,13 +18,16 @@ import {
   TICK_COLOR,
   CARTESIAN_GRID_COLOR,
   LABEL_TICK_FONT_SIZE,
+  TOOLTIP_BACKGROUND,
 } from "./ui/utils/constants";
 
-import { numberToMillionsString } from "@/lib/utils";
+import { numberFormatter, numberToMillionsString } from "@/lib/utils";
+import { Separator } from "./ui/separator";
 
 interface BarData {
-  xLabel: string;
-  [key: string]: number | string;
+  label: string;
+  generated: number | string;
+  target: number | string;
 }
 
 interface BarOption {
@@ -46,6 +50,7 @@ interface CustomizedLabelProps {
   value?: number;
 }
 
+
 const CustomizedLabel: FC<CustomizedLabelProps> = ({
   x = 0,
   y = 0,
@@ -67,6 +72,60 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
   );
 };
 
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: PayloadType[];
+  label?: number;
+}
+
+type PayloadType = {
+  value: string | number;
+  name: string;
+  payload: BarData;
+  color: string;
+  dataKey: string;
+};
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  if (active && payload && payload.length > 0) {
+    return (
+      <div
+        style={{
+          backgroundColor: TOOLTIP_BACKGROUND,
+          padding: "10px",
+          borderRadius: "10px",
+          boxShadow: "1px 2px 10px -2px #7873ffb1",
+        }}
+      >
+        <p>{label}</p>
+        <Separator className="border-gray-500" />
+        {payload.map((pld: PayloadType) => {
+          const innerPayload = pld.payload;
+          return (
+            <>
+              <p
+                key={pld.name}
+                style={{
+                  borderStyle: "solid 1px",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  fontFamily: "sans-serif",
+                  color: pld.color,
+                }}
+              >
+                {`${pld.name} : ${numberFormatter(
+                  innerPayload[pld.dataKey as keyof BarData] as number
+                )}`}
+              </p>
+            </>
+          );
+        })}
+      </div>
+    );
+  }
+  return null;
+};
+
 const BarChart: FC<BarChartProps> = ({ data, options }) => {
   return (
     <ResponsiveContainer height={300} width="100%">
@@ -85,7 +144,7 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
           vertical={false}
         />
         <XAxis
-          dataKey={"xLabel"}
+          dataKey={"label"}
           angle={-30}
           textAnchor="end"
           height={70}
@@ -104,7 +163,7 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
           }}
         />
         <Legend verticalAlign="top" height={46} />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         {options.map((option, index) => (
           <Bar
             key={index}

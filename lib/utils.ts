@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const numberFormatter = (num: number) => {
+export const numberFormatter = (num: number) => {
   return new Intl.NumberFormat().format(Math.round(num));
 };
 

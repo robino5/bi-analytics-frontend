@@ -11,9 +11,9 @@ type LoginResponse = {
     id: string;
     username: string;
     name?: string;
-    designation: string;
-    phoneNumber: string;
-    email: string;
+    designation?: string;
+    phoneNumber?: string;
+    email?: string;
   };
 };
 
