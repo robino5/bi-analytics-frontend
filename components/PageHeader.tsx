@@ -11,7 +11,7 @@ interface PageHeaderProps {
 
 const PageHeader: FC<PageHeaderProps> = ({ name, showFilters = true }) => {
   return (
-    <Card className="mt-2 flex justify-center items-center bg-gradient-to-br from-gray-50 to-slate-100 shadow-md">
+    <Card className="mt-2 flex justify-center items-center bg-gradient-to-br bg-transparent from-slate-100 to-slate-500 via-slate-300 shadow-md">
       <CardContent className="w-full p-4">
         <div
           className={cn("flex", {

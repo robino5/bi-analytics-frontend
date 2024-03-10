@@ -6,7 +6,6 @@ import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClie
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
 import type { Metadata } from "next";
-import { auth } from "@/auth";
 
 import { BarColors } from "@/components/ui/utils/constants";
 

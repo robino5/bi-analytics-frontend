@@ -18,6 +18,8 @@ export const {
         session.user.username = token?.me?.username
         // @ts-ignore
         session.user.designation = token?.me?.designation
+        // @ts-ignore
+        session.user.role = token?.me?.group
       }
       return session
     },

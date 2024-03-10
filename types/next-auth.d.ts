@@ -4,7 +4,7 @@ import { DefaultJWT } from "@auth/core/jwt";
 export type ExtendedUser = DefaultSession["user"] & {
     username: string;
     designation: string;
-    role?: string;
+    role: "ADMIN" | "BRANCH_MANAGER" | "RM" | "CLUSTER_MANAGER";
 }
 
 declare module "next-auth" {

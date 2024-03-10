@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
@@ -17,37 +16,206 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useState } from "react";
 
 const regionalMangers = [
   {
-    value: "user1",
-    label: "User 1",
+    value: "abdus.sobhan",
+    name: "Abdus Sobhan",
   },
   {
-    value: "user2",
-    label: "User 2",
+    value: "abu.zahid",
+    name: "Abu Zahid Md Zakaria",
   },
   {
-    value: "user3",
-    label: "User 3",
+    value: "ac_ho",
+    name: "ac_ho",
   },
   {
-    value: "user4",
-    label: "User 4",
+    value: "adnan.hassan",
+    name: "Adnan Hassan",
   },
   {
-    value: "user5",
-    label: "User 5",
+    value: "arif.khan",
+    name: "Ariful Islam Khan",
   },
   {
-    value: "user6",
-    label: "User 6",
+    value: "bashed",
+    name: "Bashed ",
+  },
+  {
+    value: "demouser1",
+    name: "demouser1",
+  },
+  {
+    value: "demouser2",
+    name: "demouser2",
+  },
+  {
+    value: "demouser3",
+    name: "demouser3",
+  },
+  {
+    value: "dewan.mushfiqur",
+    name: "Dewan Mushfiqur Rahman",
+  },
+  {
+    value: "faraan.muhammad",
+    name: "Faraan Muhammad",
+  },
+  {
+    value: "gautam.kumar",
+    name: "Gautam Kumar Datta Majumder",
+  },
+  {
+    value: "hasnain.ahamed",
+    name: "Hasnain Ahamed Ripon",
+  },
+  {
+    value: "kamal.chandra",
+    name: "Kamal Chandra Gosh",
+  },
+  {
+    value: "lbsdealer",
+    name: "lbsdealer",
+  },
+  {
+    value: "mazharul.islam",
+    name: "Mazharul Islam",
+  },
+  {
+    value: "tariqul.alam",
+    name: "Md Tariqul Alam",
+  },
+  {
+    value: "md.karim",
+    name: "Md. Abdul Karim",
+  },
+  {
+    value: "rashad.remo",
+    name: "Md. Afanoor Rashad Remo",
+  },
+  {
+    value: "alauddin",
+    name: "Md. Alauddin Khondker",
+  },
+  {
+    value: "allama",
+    name: "Md. Allama Iqbal",
+  },
+  {
+    value: "amdadul.shaikat",
+    name: "Md. Amdadul Haque Shaikat",
+  },
+  {
+    value: "arifhossain",
+    name: "Md. Arif Hossain",
+  },
+  {
+    value: "islam.fakhrul",
+    name: "Md. Fakhrul Islam",
+  },
+  {
+    value: "mahmud.hossain1",
+    name: "Md. Mahmud Hossain",
+  },
+  {
+    value: "md.mosarraf",
+    name: "Md. Mosarraf Hossain",
+  },
+  {
+    value: "nabil.ibrahim",
+    name: "Md. Nabil Ibrahim",
+  },
+  {
+    value: "md.sabbir",
+    name: "Md. Sabbir Mia",
+  },
+  {
+    value: "sazzad.hossain",
+    name: "Md. Sazzad Hossain",
+  },
+  {
+    value: "reza",
+    name: "Md. Shahin Reza",
+  },
+  {
+    value: "touhid",
+    name: "MD. TOUHIDUR RAHMAN MIAD",
+  },
+  {
+    value: "md.yeasin",
+    name: "Md. Yeasin",
+  },
+  {
+    value: "mostafizur",
+    name: "Md.Mostafizur rahman",
+  },
+  {
+    value: "tanver.kabir",
+    name: "Md.Tanver Kabir",
+  },
+  {
+    value: "mohammad.shamim",
+    name: "Mohammad Shamim",
+  },
+  {
+    value: "hashem.khan",
+    name: "Mohammed Abul Hashem Khan",
+  },
+  {
+    value: "elahi",
+    name: "MOHD. MAHMUD ELAHI",
+  },
+  {
+    value: "muhammad.arafat",
+    name: "Muhammad Arafat Hossain",
+  },
+  {
+    value: "partho.shekhar",
+    name: "Partho Shekhar Podder",
+  },
+  {
+    value: "reg_south",
+    name: "reg_south",
+  },
+  {
+    value: "tanveer.hasan",
+    name: "S. M. Tanveer Hasan",
+  },
+  {
+    value: "sharif.quamrul",
+    name: "Sharif Mohammad Quamrul Hasan Masum",
+  },
+  {
+    value: "sheikh.sajjad",
+    name: "Sheikh Sajjad Hossain",
+  },
+  {
+    value: "surajit.ghosh",
+    name: "Surajit Ghosh Durjoy",
+  },
+  {
+    value: "syed.rezaul",
+    name: "Syed Rezaul Karim",
+  },
+  {
+    value: "saifur",
+    name: "Syed Saifur Rahman",
+  },
+  {
+    value: "taj.shahriar",
+    name: "taj shahriar",
+  },
+  {
+    value: "umama.arafa",
+    name: "Umama Arafa Arabi",
   },
 ];
 
 export default function RMFilter() {
-  const [open, setOpen] = React.useState(false);
-  const [manager, setManager] = React.useState("");
+  const [open, setOpen] = useState(false);
+  const [manager, setManager] = useState("");
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -58,7 +226,7 @@ export default function RMFilter() {
           className="w-[200px] justify-between"
         >
           {manager
-            ? regionalMangers.find((rm) => rm.value === manager)?.label
+            ? regionalMangers.find((rm) => rm.value === manager)?.name
             : "Select RM..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -77,7 +245,7 @@ export default function RMFilter() {
                   setOpen(false);
                 }}
               >
-                {rm.label}
+                {rm.name}
                 <CheckIcon
                   className={cn(
                     "ml-auto h-4 w-4",

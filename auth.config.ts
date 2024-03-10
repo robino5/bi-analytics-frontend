@@ -14,6 +14,7 @@ type LoginResponse = {
     designation?: string;
     phoneNumber?: string;
     email?: string;
+    group: string;
   };
 };
 
@@ -29,6 +30,7 @@ const loginWithApi = async (username: string, password: string): Promise<LoginRe
       designation: "Senior Asst. Director",
       phoneNumber: "01778625131",
       email: "jiaulislam.ict.bd@gmail.com",
+      group: "ADMIN"
     },
   };
 };
