@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/popover";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface IBranchLov {
   id: string;
@@ -64,11 +64,14 @@ const branchesList: IBranchLov[] = [
   },
 ];
 
-export default function BranchFilter() {
+interface IBranchFilterProps {
+  onChange: (branch: string) => void;
+}
+
+export default function BranchFilter({ onChange }: IBranchFilterProps) {
   const { data } = useSession();
   const [open, setOpen] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState("");
-  const [branches, setBranch] = useState<IBranchLov[]>([]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -79,8 +82,8 @@ export default function BranchFilter() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {branchesList
-            ? branches.find((branch) => branch.id == selectedBranch)?.name
+          {selectedBranch
+            ? branchesList.find((branch) => branch.id === selectedBranch)?.name
             : "Select Branch"}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -90,16 +93,13 @@ export default function BranchFilter() {
           <CommandInput placeholder="search branch" className="h-9" />
           <CommandEmpty>No branch found.</CommandEmpty>
           <CommandGroup>
-            {branches.map((branch) => (
+            {branchesList.map((branch) => (
               <CommandItem
-                key={branch.name}
+                key={branch.id}
                 value={branch.id}
                 onSelect={(currentBranch) => {
-                  setSelectedBranch(
-                    currentBranch === selectedBranch
-                      ? selectedBranch
-                      : currentBranch
-                  );
+                  setSelectedBranch(currentBranch);
+                  onChange(currentBranch);
                   setOpen(false);
                 }}
               >
