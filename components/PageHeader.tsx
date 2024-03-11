@@ -6,30 +6,31 @@ import { cn } from "@/lib/utils";
 
 interface PageHeaderProps {
   name: string;
-  showFilters?: boolean;
+  branchFilter?: boolean;
+  rmFilter?: boolean;
 }
 
-const PageHeader: FC<PageHeaderProps> = ({ name, showFilters = true }) => {
+const PageHeader: FC<PageHeaderProps> = ({
+  name,
+  branchFilter = true,
+  rmFilter = true,
+}) => {
   return (
-    <Card className="mt-2 flex justify-center items-center bg-gradient-to-br bg-transparent from-slate-100 to-slate-500 via-slate-300 shadow-md">
+    <Card className="mt-2 flex justify-center items-center bg-gradient-to-br from-gray-50 to-slate-200 shadow-md">
       <CardContent className="w-full p-4">
         <div
           className={cn("flex", {
-            "justify-between items-center gap-4": showFilters,
+            "justify-between items-center gap-4": branchFilter || rmFilter,
           })}
         >
-          {showFilters && (
-            <div className="flex gap-2">
-              <BranchFilter />
-              <RMFilter />
-            </div>
-          )}
+          <div className="flex gap-2">
+            {branchFilter && <BranchFilter />} {rmFilter && <RMFilter />}
+          </div>
           <div
             className={cn(
-              "ml-10 text-3xl font-bold text-neutral-600 flex-2 w-full",
+              "ml-10 text-3xl text-center font-bold text-neutral-600 flex-2 w-full",
               {
-                "text-center": !showFilters,
-                "text-start": showFilters,
+                "text-start": branchFilter || rmFilter,
               }
             )}
           >

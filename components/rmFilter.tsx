@@ -241,7 +241,7 @@ export default function RMFilter() {
                 key={rm.value}
                 value={rm.value}
                 onSelect={(currentValue) => {
-                  setManager(currentValue === manager ? "" : currentValue);
+                  setManager(currentValue === manager ? manager : currentValue);
                   setOpen(false);
                 }}
               >
