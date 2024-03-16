@@ -236,7 +236,6 @@ export default function DailyTradePerformance() {
       value: 2909090,
     },
   };
-
   const [branch, setBranch] = useState<string>("");
 
   const traceBranchChange = async (branchId: string) => {
@@ -276,6 +275,7 @@ export default function DailyTradePerformance() {
             />
           }
         />
+
         <CardBoard
           className="col-span-6 xl:col-span-2"
           title="Cash Code Status"

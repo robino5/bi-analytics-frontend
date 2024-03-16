@@ -19,7 +19,9 @@ export const {
         // @ts-ignore
         session.user.designation = token?.me?.designation
         // @ts-ignore
-        session.user.role = token?.me?.group
+        session.user.role = token?.me?.role
+        // @ts-ignore
+        session.user.accessToken = token?.me?.accessToken
       }
       return session
     },
