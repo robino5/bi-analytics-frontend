@@ -50,7 +50,7 @@ export default function BranchFilter({ onChange }: IBranchFilterProps) {
       </SelectTrigger>
       <SelectContent>
         {branchesList.map((lov) => (
-          <SelectItem value={lov.branchCode}>{lov.branchName}</SelectItem>
+          <SelectItem key={lov.branchCode} value={lov.branchCode}>{lov.branchName}</SelectItem>
         ))}
       </SelectContent>
     </Select>

@@ -21,15 +21,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={cn("flex items-start justify-between", fontSans.variable)}
-      >
-        <div className="min-w-[300px] border-r min-h-screen shadow-sm">
-          <Sidebar />
-        </div>
-        <div className="w-full h-full">{children}</div>
-      </body>
-    </html>
+    <section
+      className={cn("flex items-start justify-between", fontSans.variable)}
+    >
+      <div className="min-w-[300px] border-r min-h-screen shadow-sm">
+        <Sidebar />
+      </div>
+      <div className="w-full h-full">{children}</div>
+    </section>
   );
 }

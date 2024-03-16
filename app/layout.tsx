@@ -21,7 +21,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en">
       <body
         className={cn(
           "bg-gradient-to-tl from-slate-300 to-slate-400 via-transparent",

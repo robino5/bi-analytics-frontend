@@ -256,11 +256,6 @@ export default function DailyTradePerformance() {
     <div className="mx-4">
       {/* state for dropdowns */}
       {/* if change state then re-render the dashboards */}
-      <title>Daily Trade Performance - LBSL</title>
-      <meta
-        name="description"
-        content="daily trading performance analytics dashboards"
-      />
       <PageHeader name="Daily Trade Performance">
         <BranchFilter onChange={traceBranchChange} />
       </PageHeader>
@@ -275,7 +270,6 @@ export default function DailyTradePerformance() {
             />
           }
         />
-
         <CardBoard
           className="col-span-6 xl:col-span-2"
           title="Cash Code Status"

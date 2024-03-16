@@ -43,6 +43,7 @@ const LoginForm = () => {
       <div className="h-full w-full grid place-items-center">
         <Image
           src="/business_analytics.svg"
+          priority={true}
           height={500}
           width={400}
           alt="analytics-img"
