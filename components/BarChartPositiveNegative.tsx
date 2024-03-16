@@ -102,7 +102,6 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;
           return (
-            <>
               <p
                 key={pld.name}
                 style={{
@@ -117,7 +116,6 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
                   innerPayload[pld.dataKey as keyof BarData] as number
                 )}`}
               </p>
-            </>
           );
         })}
       </div>

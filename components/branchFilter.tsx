@@ -1,120 +1,58 @@
 "use client";
 
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { successResponse } from "@/lib/utils";
 
-import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-interface IBranchLov {
-  id: string;
-  name: string;
+export interface IBranchLov {
+  branchCode: string;
+  branchName: string;
 }
 
-const branchesList: IBranchLov[] = [
-  {
-    id: "1",
-    name: "Principal",
-  },
-  {
-    id: "2",
-    name: "Agrabad",
-  },
-  {
-    id: "3",
-    name: "Khatungonj",
-  },
-  {
-    id: "4",
-    name: "Sylhet",
-  },
-  {
-    id: "5",
-    name: "Banani",
-  },
-  {
-    id: "6",
-    name: "Dhanmondi",
-  },
-  {
-    id: "7",
-    name: "Nasirabad",
-  },
-  {
-    id: "8",
-    name: "Comilla",
-  },
-  {
-    id: "9",
-    name: "Narayangonj",
-  },
-];
+interface IBranchFilterProps {
+  onChange: (branch: string) => void;
+}
 
-export default function BranchFilter() {
-  const { data } = useSession();
-  const [open, setOpen] = useState(false);
-  const [selectedBranch, setSelectedBranch] = useState("");
-  const [branches, setBranch] = useState<IBranchLov[]>([]);
-
+export default function BranchFilter({ onChange }: IBranchFilterProps) {
+  const [branchesList, setBranchesList] = useState<IBranchLov[]>([]);
+  useEffect(() => {
+    const fetchBranches = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_V1_APIURL}/lov/branches/`, {
+          headers: {
+            Authorization: `Bearer ${session?.user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        const result = (await response.json()) as IResponse<IBranchLov>;
+        if (successResponse(result.status)) {
+          setBranchesList(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+    fetchBranches();
+  }, []);
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {branchesList
-            ? branches.find((branch) => branch.id == selectedBranch)?.name
-            : "Select Branch"}
-          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="search branch" className="h-9" />
-          <CommandEmpty>No branch found.</CommandEmpty>
-          <CommandGroup>
-            {branches.map((branch) => (
-              <CommandItem
-                key={branch.name}
-                value={branch.id}
-                onSelect={(currentBranch) => {
-                  setSelectedBranch(
-                    currentBranch === selectedBranch
-                      ? selectedBranch
-                      : currentBranch
-                  );
-                  setOpen(false);
-                }}
-              >
-                {branch.name}
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    selectedBranch === branch.id ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <Select onValueChange={onChange}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a branch" />
+      </SelectTrigger>
+      <SelectContent>
+        {branchesList.map((lov) => (
+          <SelectItem key={lov.branchCode} value={lov.branchCode}>{lov.branchName}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

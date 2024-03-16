@@ -1,3 +1,5 @@
+"use client";
+
 import BarChartHorizontal from "@/components/BarChartHorizontal";
 import BarChartVerticalGrouped from "@/components/BarChartVerticalGrouped";
 import CardBoard from "@/components/CardBoard";
@@ -5,16 +7,13 @@ import PageHeader from "@/components/PageHeader";
 import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClientTurnoverSummary";
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
-import type { Metadata } from "next";
 
 import { BarColors } from "@/components/ui/utils/constants";
+import BranchFilter from "@/components/branchFilter";
+import { getSummary } from "@/app/actions/dashboard";
+import { useEffect, useState } from "react";
 
-export const metadata: Metadata = {
-  title: "Daily Trade Performance - LBSL",
-  description: "daily trading performance analytics dashboards",
-};
-
-export default async function DailyTradePerformance() {
+export default function DailyTradePerformance() {
   const turnoverChartData = [
     {
       label: "08-Feb-24",
@@ -237,12 +236,29 @@ export default async function DailyTradePerformance() {
       value: 2909090,
     },
   };
+  const [branch, setBranch] = useState<string>("");
+
+  const traceBranchChange = async (branchId: string) => {
+    setBranch(branchId);
+  };
+
+  useEffect(() => {
+    if (branch) {
+      const fetchData = async () => {
+        const data = await getSummary(branch);
+        console.log(data);
+      };
+      fetchData();
+    }
+  }, [branch]);
 
   return (
     <div className="mx-4">
       {/* state for dropdowns */}
       {/* if change state then re-render the dashboards */}
-      <PageHeader name="Daily Trade Performance" rmFilter={false}/>
+      <PageHeader name="Daily Trade Performance">
+        <BranchFilter onChange={traceBranchChange} />
+      </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         <CardBoard
           className="col-span-6 xl:col-span-2"

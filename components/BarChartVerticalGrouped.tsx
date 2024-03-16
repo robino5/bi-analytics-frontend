@@ -50,7 +50,6 @@ interface CustomizedLabelProps {
   value?: number;
 }
 
-
 const CustomizedLabel: FC<CustomizedLabelProps> = ({
   x = 0,
   y = 0,
@@ -102,22 +101,20 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;
           return (
-            <>
-              <p
-                key={pld.name}
-                style={{
-                  borderStyle: "solid 1px",
-                  fontSize: "12px",
-                  fontWeight: "600",
-                  fontFamily: "sans-serif",
-                  color: pld.color,
-                }}
-              >
-                {`${pld.name} : ${numberFormatter(
-                  innerPayload[pld.dataKey as keyof BarData] as number
-                )}`}
-              </p>
-            </>
+            <p
+              key={pld.name}
+              style={{
+                borderStyle: "solid 1px",
+                fontSize: "12px",
+                fontWeight: "600",
+                fontFamily: "sans-serif",
+                color: pld.color,
+              }}
+            >
+              {`${pld.name} : ${numberFormatter(
+                innerPayload[pld.dataKey as keyof BarData] as number
+              )}`}
+            </p>
           );
         })}
       </div>

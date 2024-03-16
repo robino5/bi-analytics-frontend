@@ -88,26 +88,22 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         }}
       >
         <p>{label}</p>
-        <Separator className="border-gray-500"/>
+        <Separator className="border-gray-500" />
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;
           return (
-            <>
-              <p
-                key={pld.name}
-                style={{
-                  borderStyle: "solid 1px",
-                  fontSize: "12px",
-                  fontWeight: "600",
-                  fontFamily: "sans-serif",
-                  color: pld.color,
-                }}
-              >
-                {`${pld.name} : ${numberFormatter(
-                  innerPayload.value as number
-                )}`}
-              </p>
-            </>
+            <p
+              key={pld.name}
+              style={{
+                borderStyle: "solid 1px",
+                fontSize: "12px",
+                fontWeight: "600",
+                fontFamily: "sans-serif",
+                color: pld.color,
+              }}
+            >
+              {`${pld.name} : ${numberFormatter(innerPayload.value as number)}`}
+            </p>
           );
         })}
       </div>

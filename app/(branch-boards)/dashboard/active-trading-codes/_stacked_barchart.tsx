@@ -109,22 +109,20 @@ const CustomTooltip = ({ active, payload, ...rest }: CustomTooltipProps) => {
           const innerPayload = pld.payload;
           const tooltipPayloadKey = RATIO_TO_DATA_MAP[pld.dataKey];
           return (
-            <>
-              <p
-                key={pld.name}
-                style={{
-                  borderStyle: "solid 1px",
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  fontFamily: "sans-serif",
-                  color: pld.color,
-                }}
-              >
-                {`${pld.name} : ${numberToMillionsString(
-                  innerPayload[tooltipPayloadKey as keyof DataType] as number
-                )}`}
-              </p>
-            </>
+            <p
+              key={pld.name}
+              style={{
+                borderStyle: "solid 1px",
+                fontSize: "13px",
+                fontWeight: "600",
+                fontFamily: "sans-serif",
+                color: pld.color,
+              }}
+            >
+              {`${pld.name} : ${numberToMillionsString(
+                innerPayload[tooltipPayloadKey as keyof DataType] as number
+              )}`}
+            </p>
           );
         })}
       </div>

@@ -44,3 +44,8 @@ export function numberToMillionsString(num: number): string {
     return numberFormatter(num);
   }
 }
+
+
+export function successResponse(key: string): boolean {
+  return key === "success"
+}
