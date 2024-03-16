@@ -13,7 +13,7 @@ type LoginResponse = {
     designation?: string;
     phoneNumber?: string;
     email?: string;
-    group: string;
+    role: string;
   };
 };
 
