@@ -199,15 +199,34 @@ export default function DailyTradePerformance() {
     setBranch(branchId);
   };
 
-  // useEffect(() => {
-  //   if (branch) {
-  //     const fetchData = async () => {
-  //       const data = await getSummary(branch);
-  //       console.log(data);
-  //     };
-  //     fetchData();
-  //   }
-  // }, [branch]);
+  useEffect(() => {
+    if (branch) {
+      const fetchSummaryWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/basic-summaries/${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<ISummaryDetails>;
+          if (successResponse(result.status)) {
+            setSummary(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Summary for BranchId=${branchId}`,
+            error
+          );
+        }
+      };
+      fetchSummaryWithBranchId(Number.parseInt(branch));
+    }
+  }, [branch]);
 
   useEffect(() => {
     const fetchSummary = async () => {
