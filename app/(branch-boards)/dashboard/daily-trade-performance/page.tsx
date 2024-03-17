@@ -10,10 +10,22 @@ import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummar
 
 import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
-import { getSummary } from "@/app/actions/dashboard";
 import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import { ISummaryDetails } from "@/types/dailyTurnoverPerformance";
+import { successResponse } from "@/lib/utils";
+import SummarySkeletonCard from "@/components/skeletonCard";
 
 export default function DailyTradePerformance() {
+  // Override console.error
+  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+  // @link https://github.com/recharts/recharts/issues/3615
+  const error = console.error;
+  console.error = (...args: any) => {
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
+  };
+  // ===========================================
   const turnoverChartData = [
     {
       label: "08-Feb-24",
@@ -180,63 +192,8 @@ export default function DailyTradePerformance() {
     barLabel: false,
   };
 
-  const clientTurnoverSummaryData = {
-    totalClient: {
-      name: "Total Client",
-      value: 2240,
-    },
-    activeClient: {
-      name: "Active Client",
-      value: 1149,
-    },
-    turnover: {
-      name: "Turnover",
-      value: 334049049.3094,
-    },
-    netBuySell: {
-      name: "Net Buy/Sell",
-      value: 390939.33,
-    },
-  };
-
-  const cashCodeSummaryData = {
-    cashBalance: {
-      name: "Cash Balance",
-      value: 498893434,
-    },
-    stockBalance: {
-      name: "Stock Value",
-      value: 2323210,
-    },
-    dailyTurnover: {
-      name: "Daily Turnover",
-      value: 309393,
-    },
-    activeClient: {
-      name: "Active Client",
-      value: 2909090,
-    },
-  };
-
-  const marginCodeSummaryData = {
-    loanBalance: {
-      name: "Loan Balance",
-      value: 498893434,
-    },
-    stockBalance: {
-      name: "Stock Value",
-      value: 2323210,
-    },
-    dailyTurnover: {
-      name: "Daily Turnover",
-      value: 309393,
-    },
-    activeClient: {
-      name: "Active Client",
-      value: 2909090,
-    },
-  };
   const [branch, setBranch] = useState<string>("");
+  const [summary, setSummary] = useState<ISummaryDetails | null>(null);
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -244,46 +201,101 @@ export default function DailyTradePerformance() {
 
   useEffect(() => {
     if (branch) {
-      const fetchData = async () => {
-        const data = await getSummary(branch);
-        console.log(data);
+      const fetchSummaryWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/basic-summaries/${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<ISummaryDetails>;
+          if (successResponse(result.status)) {
+            setSummary(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Summary for BranchId=${branchId}`,
+            error
+          );
+        }
       };
-      fetchData();
+      fetchSummaryWithBranchId(Number.parseInt(branch));
     }
   }, [branch]);
 
+  useEffect(() => {
+    const fetchSummary = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/basic-summaries/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ISummaryDetails>;
+        if (successResponse(result.status)) {
+          setSummary(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+    fetchSummary();
+  }, []);
+
   return (
     <div className="mx-4">
-      {/* state for dropdowns */}
-      {/* if change state then re-render the dashboards */}
       <PageHeader name="Daily Trade Performance">
         <BranchFilter onChange={traceBranchChange} />
       </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
-        <CardBoard
-          className="col-span-6 xl:col-span-2"
-          title="Summary"
-          subtitle="shows margin code summary"
-          children={
-            <StatisticsCardClientTurnoverSummary
-              data={clientTurnoverSummaryData}
-            />
-          }
-        />
-        <CardBoard
-          className="col-span-6 xl:col-span-2"
-          title="Cash Code Status"
-          subtitle="shows cash code summary"
-          children={<StatisticsCashCodeSummary data={cashCodeSummaryData} />}
-        />
-        <CardBoard
-          className="col-span-6 xl:col-span-2"
-          title="Margin Code Status"
-          subtitle="shows margin code summary"
-          children={
-            <StatisticsMarginCodeSummary data={marginCodeSummaryData} />
-          }
-        />
+        {summary?.shortSummary ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-2"
+            title="Summary"
+            subtitle="shows overall short summary"
+            children={
+              <StatisticsCardClientTurnoverSummary
+                data={summary.shortSummary}
+              />
+            }
+          />
+        ) : (
+          <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
+        )}
+        {summary?.cashCodeSummary ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-2"
+            title="Cash Code Status"
+            subtitle="shows cash code summary"
+            children={
+              <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
+            }
+          />
+        ) : (
+          <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
+        )}
+        {summary?.marginCodeSummary ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-2"
+            title="Margin Code Status"
+            subtitle="shows margin code summary"
+            children={
+              <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
+            }
+          />
+        ) : (
+          <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
+        )}
         {/* Turnover Performance Chart */}
         <CardBoard
           className="col-span-6 xl:col-span-3"
