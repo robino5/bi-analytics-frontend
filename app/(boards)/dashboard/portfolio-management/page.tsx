@@ -1,3 +1,5 @@
+"use client";
+
 import CardBoard from "@/components/CardBoard";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -9,16 +11,11 @@ import {
 import BarChartPositiveNegative from "@/components/BarChartPositiveNegative";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
 
-import { Metadata } from "next";
 import NewAccountOpeningDataTable from "./_new_account_datatable";
 import TurnoverPerformanceDataTable from "./_turnover_performance_datatable";
 import PortfolioManagementStatusDataTable from "./_portfolio_management_status_datatable";
 import { BarColors } from "@/components/ui/utils/constants";
-
-export const metadata: Metadata = {
-  title: "Portfolio Management - LBSL",
-  description: "analytics for portfolio management",
-};
+import { useState } from "react";
 
 function formatDate(date: Date): string {
   const months = [
@@ -299,7 +296,7 @@ async function fetchClientTurnoverBiAxialChartData(): Promise<
   ];
 }
 
-export default async function PortfolioManagement() {
+export default function PortfolioManagement() {
   const dailyNetFundFlowOption = {
     dataKey: "name",
     valueKey: "value",
@@ -313,14 +310,10 @@ export default async function PortfolioManagement() {
     fill: "#ff3355",
     stroke: "#c3ce",
   };
-  const portfolioManagementJson = await fetchPortfolioMangementData();
-  const newAccountFundCollectionJson =
-    await fetchNewAccountOrFundCollectionData();
-  const turnoverPerformanceJson = await fetchTurnoverPerformanceData();
-  const dailyNetFundFlowJson = await fetchDailyNetFundFlowChartData();
-  const clientTurnoverBiAxialJson = await fetchClientTurnoverBiAxialChartData();
 
-  const formattedNetFundFlowdata = convertToBarData(dailyNetFundFlowJson);
+  const [branch, setBranch] = useState("");
+  const [netFundFlow, setNetFundFlow] = useState(null);
+  const [tradeVsturnover, setTradeVsTurnover] = useState(null);
 
   return (
     <div className="mx-4">
@@ -333,7 +326,7 @@ export default async function PortfolioManagement() {
           subtitle="short summary of the portfolio"
           children={
             <BarChartPositiveNegative
-              data={formattedNetFundFlowdata}
+              data={[]}
               options={dailyNetFundFlowOption}
             />
           }
@@ -344,19 +337,14 @@ export default async function PortfolioManagement() {
           className="lg:col-span-3"
           title="Clients Trade vs Turnover"
           subtitle="analysis of total clients traded vs lsbl turnover"
-          children={
-            <BarChartBiAxis
-              data={clientTurnoverBiAxialJson}
-              options={biaxialChartOption}
-            />
-          }
+          children={<BarChartBiAxis data={[]} options={biaxialChartOption} />}
         />
         {/* Turnover Performance Data Table */}
-        <TurnoverPerformanceDataTable records={turnoverPerformanceJson} />
+        <TurnoverPerformanceDataTable records={[]} />
         {/* New Account Opening & Function Collection Data Table */}
-        <NewAccountOpeningDataTable accounts={newAccountFundCollectionJson} />
+        <NewAccountOpeningDataTable accounts={[]} />
         {/* Portfolio Mangement Status Data Table */}
-        <PortfolioManagementStatusDataTable records={portfolioManagementJson} />
+        <PortfolioManagementStatusDataTable records={[]} />
       </div>
     </div>
   );
