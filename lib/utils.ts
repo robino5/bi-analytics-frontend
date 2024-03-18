@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const numberFormatter = (num: number) => {
-  return new Intl.NumberFormat().format(Math.round(num));
+  return new Intl.NumberFormat().format(num);
 };
 
 export function formatDate(date: Date): string {
@@ -39,7 +39,7 @@ export function formatDate(date: Date): string {
 export function numberToMillionsString(num: number): string {
   if (Math.abs(num) >= 1000000) {
     const millions = num / 1000000;
-    return `${millions.toFixed(0)}M`;
+    return `${millions.toFixed(1)}M`;
   } else {
     return numberFormatter(num);
   }
