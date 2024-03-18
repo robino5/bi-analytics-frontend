@@ -364,6 +364,8 @@ export default function DailyTradePerformance() {
 
   return (
     <div className="mx-4">
+      <title>Daily Trade Performance | LBSL</title>
+      <meta name="description" content="Showing a daily trade performance analytics" />
       <PageHeader name="Daily Trade Performance">
         <BranchFilter onChange={traceBranchChange} />
       </PageHeader>
