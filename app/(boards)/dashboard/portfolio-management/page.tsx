@@ -15,7 +15,16 @@ import NewAccountOpeningDataTable from "./_new_account_datatable";
 import TurnoverPerformanceDataTable from "./_turnover_performance_datatable";
 import PortfolioManagementStatusDataTable from "./_portfolio_management_status_datatable";
 import { BarColors } from "@/components/ui/utils/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import BranchFilter from "@/components/branchFilter";
+import { successResponse } from "@/lib/utils";
+
+import { getSession } from "next-auth/react";
+import {
+  INetFundFlow,
+  ITradeVsClients,
+  ITurnoverPerformance,
+} from "@/types/portfolioManagement";
 
 function formatDate(date: Date): string {
   const months = [
@@ -297,50 +306,246 @@ async function fetchClientTurnoverBiAxialChartData(): Promise<
 }
 
 export default function PortfolioManagement() {
+  // Override console.error
+  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+  // @link https://github.com/recharts/recharts/issues/3615
+  const error = console.error;
+  console.error = (...args: any) => {
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
+  };
+  // ===========================================
   const dailyNetFundFlowOption = {
-    dataKey: "name",
-    valueKey: "value",
+    dataKey: "tradingDate",
+    valueKey: "amount",
     fill: BarColors.orange,
     stroke: "#c3ce",
+    barLabel: true,
   };
   const biaxialChartOption = {
-    dataKey: "date",
-    valueKeyA: "client",
+    dataKey: "tradingDate",
+    valueKeyA: "activeClients",
     valueKeyB: "turnover",
     fill: "#ff3355",
     stroke: "#c3ce",
   };
 
   const [branch, setBranch] = useState("");
-  const [netFundFlow, setNetFundFlow] = useState(null);
-  const [tradeVsturnover, setTradeVsTurnover] = useState(null);
+  const [netFundFlow, setNetFundFlow] = useState<INetFundFlow[] | null>(null);
+  const [tradeVsturnover, setTradeVsTurnover] = useState<
+    ITradeVsClients[] | null
+  >(null);
+  const [turnover, setTurnover] = useState<ITurnoverPerformance[] | null>(null);
+
+  const handleBranchChange = (branchId: string) => {
+    setBranch(branchId);
+  };
+
+  // on page load
+  useEffect(() => {
+    // Daily Net Fund Flow
+    const fetchDailyNetFundFlow = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<INetFundFlow[]>;
+        if (successResponse(result.status)) {
+          setNetFundFlow(result.data);
+        }
+      } catch (error) {
+        console.error(
+          `Error Happened while fetching daily net fund flow`,
+          error
+        );
+      }
+    };
+    // Trade Vs Clients Statistics
+    const fetchTradeVsClients = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ITradeVsClients[]>;
+        if (successResponse(result.status)) {
+          setTradeVsTurnover(result.data);
+        }
+      } catch (error) {
+        console.error(
+          `Error Happened while fetching daily net fund flow`,
+          error
+        );
+      }
+    };
+    // Turnover Performance Statistics
+    const fetchTurnoverPerformance = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+          ITurnoverPerformance[]
+        >;
+        if (successResponse(result.status)) {
+          setTurnover(result.data);
+        }
+      } catch (error) {
+        console.error(
+          `Error Happened while fetching daily net fund flow`,
+          error
+        );
+      }
+    };
+    fetchDailyNetFundFlow();
+    fetchTradeVsClients();
+    fetchTurnoverPerformance();
+  }, []);
+
+  // on branch change
+  useEffect(() => {
+    if (branch) {
+      const fetchNetFundFlowWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<INetFundFlow[]>;
+          if (successResponse(result.status)) {
+            setNetFundFlow(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching daily net fund flow with branchId = ${branchId}`,
+            error
+          );
+        }
+      };
+
+      // Trade Vs Clients Statistics
+      const fetchTradeVsClientsWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ITradeVsClients[]
+          >;
+          if (successResponse(result.status)) {
+            setTradeVsTurnover(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching trade vs clients with branchId=${branchId}`,
+            error
+          );
+        }
+      };
+
+      // Turnover Performance Statistics
+      const fetchTurnoverPerformanceWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ITurnoverPerformance[]
+          >;
+          if (successResponse(result.status)) {
+            setTurnover(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching daily net fund flow`,
+            error
+          );
+        }
+      };
+      const branchId = Number.parseInt(branch);
+      fetchNetFundFlowWithBranchId(branchId);
+      fetchTradeVsClientsWithBranchId(branchId);
+      fetchTurnoverPerformanceWithBranchId(branchId);
+    }
+  }, [branch]);
 
   return (
     <div className="mx-4">
-      <PageHeader name="Portfolio Management" />
+      <PageHeader name="Portfolio Management">
+        <BranchFilter onChange={handleBranchChange} />
+      </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {/* Daily Net Fund Flow Chart */}
-        <CardBoard
-          className="lg:col-span-3"
-          title="Daily Net Fund Flow"
-          subtitle="short summary of the portfolio"
-          children={
-            <BarChartPositiveNegative
-              data={[]}
-              options={dailyNetFundFlowOption}
-            />
-          }
-        />
+        {netFundFlow ? (
+          <CardBoard
+            className="lg:col-span-3"
+            title="Daily Net Fund Flow"
+            subtitle="short summary of the portfolio"
+            children={
+              <BarChartPositiveNegative
+                data={netFundFlow as any}
+                options={dailyNetFundFlowOption}
+              />
+            }
+          />
+        ) : null}
 
         {/* Client Trade vs Turnover Chart */}
         <CardBoard
           className="lg:col-span-3"
           title="Clients Trade vs Turnover"
           subtitle="analysis of total clients traded vs lsbl turnover"
-          children={<BarChartBiAxis data={[]} options={biaxialChartOption} />}
+          children={
+            <BarChartBiAxis
+              data={tradeVsturnover as any}
+              options={biaxialChartOption}
+            />
+          }
         />
         {/* Turnover Performance Data Table */}
-        <TurnoverPerformanceDataTable records={[]} />
+        {turnover ? (
+          <TurnoverPerformanceDataTable records={turnover as any} />
+        ) : null}
         {/* New Account Opening & Function Collection Data Table */}
         <NewAccountOpeningDataTable accounts={[]} />
         {/* Portfolio Mangement Status Data Table */}
