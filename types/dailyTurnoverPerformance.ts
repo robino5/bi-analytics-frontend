@@ -29,3 +29,20 @@ export interface ISummaryDetails {
     cashCodeSummary: ICashCodeSummary;
     marginCodeSummary: IMarginCodeSummary;
 }
+
+
+export interface ITargetGenerated {
+    label: string;
+    generated: number;
+    target: number;
+}
+export interface IMarginLoanUsage {
+    label: string;
+    totalAllocated: number;
+    dailyUsage: number;
+}
+
+export interface ISectorExposure {
+    name: string;
+    value: number;
+}

@@ -15,6 +15,7 @@ import {
 import { numberFormatter, numberToMillionsString } from "@/lib/utils";
 import { TOOLTIP_BACKGROUND } from "./ui/utils/constants";
 import { Separator } from "./ui/separator";
+import { AiTwotoneAlert } from "react-icons/ai";
 
 interface BarData {
   name: string;
@@ -168,7 +169,13 @@ interface BarCharHorizonalProps {
 }
 
 const BarChartHorizontal: FC<BarCharHorizonalProps> = ({ data, options }) => {
-  return <BarChart data={data} option={options} />;
+  return data.length ? (
+    <BarChart data={data} option={options} />
+  ) : (
+    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
+      <AiTwotoneAlert className="mr-2 h-6 w-5"/> No data available
+    </div>
+  );
 };
 
 export default BarChartHorizontal;
