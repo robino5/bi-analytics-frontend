@@ -67,7 +67,7 @@ export default function DailyTradePerformance() {
     },
   ];
 
-  const marginChartOption = {
+  const sectorMarginCodeExposureOption = {
     legendName: "Quantity",
     dataKey: "name",
     valueKey: "value",
@@ -78,13 +78,8 @@ export default function DailyTradePerformance() {
   };
 
   const sectorCashCodeExposureOption = {
-    legendName: "Quantity",
-    dataKey: "name",
-    valueKey: "value",
-    fill: BarColors.purple,
-    stroke: "purple",
-    height: 700,
-    barLabel: false,
+    ...sectorMarginCodeExposureOption,
+    fill: BarColors.purple
   };
 
   const [branch, setBranch] = useState<string>("");
@@ -445,7 +440,7 @@ export default function DailyTradePerformance() {
             children={
               <BarChartHorizontal
                 data={marginCodeExposure}
-                options={marginChartOption}
+                options={sectorMarginCodeExposureOption}
               />
             }
           />
