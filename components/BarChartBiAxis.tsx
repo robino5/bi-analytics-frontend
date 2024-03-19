@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
   Legend,
+  Brush,
   Bar,
   Rectangle,
   Label,
@@ -120,8 +121,9 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
         />
         <Legend />
         <Tooltip />
+        <Brush dataKey={option.valueKeyA} height={30} stroke="#8884d8" />
         <Bar
-          name="Client"
+          name="Clients"
           dataKey={option.valueKeyA}
           yAxisId={"left"}
           fill={BarColors.red}

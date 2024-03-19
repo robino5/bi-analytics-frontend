@@ -8,6 +8,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Label,
   ReferenceLine,
   Bar,
   Cell,
@@ -60,17 +61,17 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
     <text
       x={x}
       y={y}
-      dy={-4}
-      fontSize="16"
+      dy={10}
+      fontSize="14"
+      fontWeight={600}
       fontFamily="sans-serif"
-      fill={fill}
-      textAnchor="middle"
+      fill="#6d6d6d"
+      textAnchor="top"
     >
       {numberToMillionsString(value)}
     </text>
   );
 };
-
 
 interface CustomTooltipProps {
   active?: boolean;
@@ -102,20 +103,20 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;
           return (
-              <p
-                key={pld.name}
-                style={{
-                  borderStyle: "solid 1px",
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  fontFamily: "sans-serif",
-                  color: pld.color,
-                }}
-              >
-                {`${pld.name} : ${numberFormatter(
-                  innerPayload[pld.dataKey as keyof BarData] as number
-                )}`}
-              </p>
+            <p
+              key={pld.name}
+              style={{
+                borderStyle: "solid 1px",
+                fontSize: "13px",
+                fontWeight: "600",
+                fontFamily: "sans-serif",
+                color: pld.color,
+              }}
+            >
+              {`${pld.name} : ${numberFormatter(
+                innerPayload[pld.dataKey as keyof BarData] as number
+              )}`}
+            </p>
           );
         })}
       </div>
@@ -125,10 +126,6 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 };
 
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
-  const getFillColor = (value: number): string => {
-    return value >= 0 ? BarColors.green : BarColors.red;
-  };
-
   return (
     <ResponsiveContainer height={option?.height ?? 300} width="100%">
       <RechartsBarChart
@@ -154,7 +151,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
-        <Tooltip content={<CustomTooltip />}/>
+        <Tooltip content={<CustomTooltip />} />
         <ReferenceLine y={0} stroke="#C9C9C9" />
         <Bar
           dataKey={option.valueKey}
