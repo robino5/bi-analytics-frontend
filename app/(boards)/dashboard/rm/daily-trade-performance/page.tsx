@@ -1,3 +1,5 @@
+"use client";
+
 import BarChartHorizontal from "@/components/BarChartHorizontal";
 import BarChartVerticalGrouped from "@/components/BarChartVerticalGrouped";
 import CardBoard from "@/components/CardBoard";
@@ -5,301 +7,537 @@ import PageHeader from "@/components/PageHeader";
 import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClientTurnoverSummary";
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Daily Trade Performance - LBSL",
-  description: "daily trading performance analytics dashboards",
-};
+import { BarColors } from "@/components/ui/utils/constants";
+import BranchFilter from "@/components/branchFilter";
+import { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import {
+  ITargetGenerated,
+  ISummaryDetails,
+  ISectorExposure,
+} from "@/types/dailyTurnoverPerformance";
+import { successResponse } from "@/lib/utils";
+import SummarySkeletonCard, {
+  SkeletonStatistics,
+} from "@/components/skeletonCard";
+import TraderFilter, { ITrader } from "@/components/traderFilter";
 
 export default function DailyTradePerformance() {
-  const turnoverChartData = [
-    {
-      xLabel: "08-Feb-24",
-      generated: 2733124262.3,
-      target: 913500000,
-    },
-    {
-      xLabel: "11-Feb-24",
-      generated: 2715647013.4,
-      target: 913500000,
-    },
-    {
-      xLabel: "12-Feb-24",
-      generated: 2244503832.4,
-      target: 913500000,
-    },
-    {
-      xLabel: "13-Feb-24",
-      generated: 2296593846.3,
-      target: 913500000,
-    },
-    {
-      xLabel: "14-Feb-24",
-      generated: 1733089432.4,
-      target: 913500000,
-    },
-    {
-      xLabel: "15-Feb-24",
-      generated: 1555119428.8,
-      target: 893500000,
-    },
-    {
-      xLabel: "18-Feb-24",
-      generated: 1224945129.1,
-      target: 913500000,
-    },
-  ];
-
-  const marginChartData = [
-    {
-      name: "BANK",
-      value: 605841433,
-    },
-    {
-      name: "TEXTILE",
-      value: 175277852,
-    },
-    {
-      name: "MUTUAL FUNDS",
-      value: 153784619,
-    },
-    {
-      name: "ENGINEERING",
-      value: 149737394,
-    },
-    {
-      name: "OPEN ENDED MUTUAL FUNDS",
-      value: 138891146,
-    },
-    {
-      name: "NBFI",
-      value: 105384912,
-    },
-    {
-      name: "PHARMACEUTICALS CHEMICAL",
-      value: 87827209,
-    },
-    {
-      name: "MISCELLANEOUS",
-      value: 69445434,
-    },
-    {
-      name: "FUEL POWER",
-      value: 57753913,
-    },
-    {
-      name: "INSURANCE",
-      value: 56962752,
-    },
-    {
-      name: "CEMENT",
-      value: 23757412,
-    },
-    {
-      name: "FOOD ALLIED",
-      value: 23659696,
-    },
-    {
-      name: "TELECOMMUNICATION",
-      value: 22722181,
-    },
-    {
-      name: "TRAVEL LEISURE",
-      value: 20534358,
-    },
-    {
-      name: "IT",
-      value: 15876224,
-    },
-    {
-      name: "SERVICES REAL ESTATE",
-      value: 13410278,
-    },
-    {
-      name: "CERAMICS",
-      value: 9741429,
-    },
-    {
-      name: "TREASURY BOND",
-      value: 6533000,
-    },
-    {
-      name: "PAPER PRINTING",
-      value: 4266293,
-    },
-    {
-      name: "TANNERY",
-      value: 1862018,
-    },
-    {
-      name: "JUTE",
-      value: 143743,
-    },
-    {
-      name: "CORPORATE BOND",
-      value: 24082,
-    },
-  ];
+  // Override console.error
+  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+  // @link https://github.com/recharts/recharts/issues/3615
+  const error = console.error;
+  console.error = (...args: any) => {
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
+  };
+  // ===========================================
 
   const turnoverChartOptions = [
     {
       name: "Target",
       dataKey: "target",
-      fill: "#8884d8",
+      fill: BarColors.red,
       stroke: "blue",
       barLabel: false,
     },
     {
       name: "Generated",
       dataKey: "generated",
-      fill: "#82ca9d",
+      fill: BarColors.green,
       stroke: "purple",
       barLabel: true,
     },
   ];
 
-  const marginChartOption = {
+  const sectorMarginCodeExposureOption = {
     legendName: "Quantity",
     dataKey: "name",
     valueKey: "value",
-    fill: "#82ca9d",
+    fill: BarColors.blue,
     stroke: "purple",
     height: 700,
     barLabel: false,
   };
 
-  const clientTurnoverSummaryData = {
-    totalClient: {
-      name: "Total Client",
-      value: 2240,
-    },
-    activeClient: {
-      name: "Active Client",
-      value: 1149,
-    },
-    turnover: {
-      name: "Turnover",
-      value: 334049049.3094,
-    },
-    netBuySell: {
-      name: "Net Buy/Sell",
-      value: 390939.33,
-    },
+  const sectorCashCodeExposureOption = {
+    ...sectorMarginCodeExposureOption,
+    fill: BarColors.purple,
   };
 
-  const cashCodeSummaryData = {
-    cashBalance: {
-      name: "Cash Balance",
-      value: 498893434,
-    },
-    stockBalance: {
-      name: "Stock Value",
-      value: 2323210,
-    },
-    dailyTurnover: {
-      name: "Daily Turnover",
-      value: 309393,
-    },
-    activeClient: {
-      name: "Active Client",
-      value: 2909090,
-    },
+  const [branch, setBranch] = useState<string>("");
+  const [traders, setTraders] = useState<ITrader[]>([]);
+  const [trader, setTrader] = useState<string>("");
+
+  const [summary, setSummary] = useState<ISummaryDetails | null>(null);
+  const [turnoverPerformance, setTurnoverPerformance] = useState<
+    ITargetGenerated[]
+  >([]);
+  const [cashCodeExposure, setCashCodeExposure] = useState<ISectorExposure[]>(
+    []
+  );
+  const [marginCodeExposure, setMarginCodeExposure] = useState<
+    ISectorExposure[]
+  >([]);
+
+  const traceBranchChange = async (branchId: string) => {
+    setBranch(branchId);
+    setTrader("");
   };
 
-  const marginCodeSummaryData = {
-    loanBalance: {
-      name: "Loan Balance",
-      value: 498893434,
-    },
-    stockBalance: {
-      name: "Stock Value",
-      value: 2323210,
-    },
-    dailyTurnover: {
-      name: "Daily Turnover",
-      value: 309393,
-    },
-    activeClient: {
-      name: "Active Client",
-      value: 2909090,
-    },
+  const handleTraderChange = async (value: string) => {
+    setTrader(value);
   };
 
+  //effect on trader change
+  useEffect(() => {
+    if (trader) {
+      // Fetch Summary for Branch
+      const fetchSummaryWithTraderId = async (
+        branchId: number,
+        traderId: string
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/?branch=${branchId}&trader=${traderId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<ISummaryDetails>;
+          if (successResponse(result.status)) {
+            setSummary(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Summary for BranchId=${branchId}`,
+            error
+          );
+        }
+      };
+      // daily turnover performance
+      const fetchDailyTurnoverPerformanceWithTraderId = async (
+        branchId: number,
+        traderId: string
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/?branch=${branchId}&trader=${traderId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ITargetGenerated[]
+          >;
+          if (successResponse(result.status)) {
+            setTurnoverPerformance(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Summary for BranchId=${branchId}`,
+            error
+          );
+        }
+      };
+      // Sector Exposure Cash Code
+      const fetchCashCodeSectorExposureWithTraderId = async (
+        branchId: number,
+        traderId: string
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/?branch=${branchId}&trader=${traderId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ISectorExposure[]
+          >;
+          if (successResponse(result.status)) {
+            setCashCodeExposure(result.data);
+          }
+        } catch (error) {
+          console.error(`Error Happened while fetching Summary`, error);
+        }
+      };
+      // Sector Exposure Margin Code
+      const fetchMarginCodeSectorExposureWithTraderId = async (
+        branchId: number,
+        traderId: string
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/?branch=${branchId}&trader=${traderId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ISectorExposure[]
+          >;
+          if (successResponse(result.status)) {
+            setMarginCodeExposure(result.data);
+          }
+        } catch (error) {
+          console.error(`Error Happened while fetching Summary`, error);
+        }
+      };
+      const branchId = Number.parseInt(branch);
+      fetchSummaryWithTraderId(branchId, trader);
+      fetchDailyTurnoverPerformanceWithTraderId(branchId, trader);
+      fetchCashCodeSectorExposureWithTraderId(branchId, trader);
+      fetchMarginCodeSectorExposureWithTraderId(branchId, trader);
+    }
+  }, [trader]);
+
+  // effect on branch change
+  useEffect(() => {
+    if (branch) {
+      // Fetch Traders
+      const fetchTraderWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branchId}/`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const result = (await response.json()) as IResponse<ITrader[]>;
+          if (successResponse(result.status)) {
+            setTraders(result.data);
+          }
+        } catch (error) {}
+      };
+      // Fetch Summary for Branch
+      const fetchSummaryWithBranchId = async (branchId: number) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<ISummaryDetails>;
+          if (successResponse(result.status)) {
+            setSummary(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Summary for BranchId=${branchId}`,
+            error
+          );
+        }
+      };
+      // daily turnover performance
+      const fetchDailyTurnoverPerformanceWithBranchId = async (
+        branchId: number
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ITargetGenerated[]
+          >;
+          if (successResponse(result.status)) {
+            setTurnoverPerformance(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Summary for BranchId=${branchId}`,
+            error
+          );
+        }
+      };
+
+      // Sector Exposure Cash Code
+      const fetchCashCodeSectorExposureWithBranchId = async (
+        branchId: number
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ISectorExposure[]
+          >;
+          if (successResponse(result.status)) {
+            setCashCodeExposure(result.data);
+          }
+        } catch (error) {
+          console.error(`Error Happened while fetching Summary`, error);
+        }
+      };
+      // Sector Exposure Margin Code
+      const fetchMarginCodeSectorExposureWithBranchId = async (
+        branchId: number
+      ) => {
+        const session = await getSession();
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ISectorExposure[]
+          >;
+          if (successResponse(result.status)) {
+            setMarginCodeExposure(result.data);
+          }
+        } catch (error) {
+          console.error(`Error Happened while fetching Summary`, error);
+        }
+      };
+
+      const branchId = Number.parseInt(branch);
+      fetchTraderWithBranchId(branchId);
+      fetchSummaryWithBranchId(branchId);
+      fetchDailyTurnoverPerformanceWithBranchId(branchId);
+      fetchMarginCodeSectorExposureWithBranchId(branchId);
+      fetchCashCodeSectorExposureWithBranchId(branchId);
+    }
+  }, [branch]);
+
+  // effect  on the page load
+  useEffect(() => {
+    const fetchSummary = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ISummaryDetails>;
+        if (successResponse(result.status)) {
+          setSummary(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+    // Daily Trade Performance
+    const fetchDailyTurnoverPerformance = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ITargetGenerated[]>;
+        if (successResponse(result.status)) {
+          setTurnoverPerformance(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+
+    // Sector Exposure Cash Code
+    const fetchCashCodeSectorExposure = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ISectorExposure[]>;
+        if (successResponse(result.status)) {
+          setCashCodeExposure(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+    // Sector Exposure Margin Code
+    const fetchMarginCodeSectorExposure = async () => {
+      const session = await getSession();
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ISectorExposure[]>;
+        if (successResponse(result.status)) {
+          setMarginCodeExposure(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+
+    fetchSummary();
+    fetchDailyTurnoverPerformance();
+    fetchMarginCodeSectorExposure();
+    fetchCashCodeSectorExposure();
+  }, []);
   return (
     <div className="mx-4">
-      <PageHeader name="Daily Trade Performance" />
-      <div className="grid grid-cols-6 gap-2 xl:grid-cols-6 mt-2">
-        <CardBoard
-          className="col-span-6 xl:col-span-2"
-          title="Summary"
-          subtitle="shows margin code summary"
-          children={
-            <StatisticsCardClientTurnoverSummary
-              data={clientTurnoverSummaryData}
-            />
-          }
+      <title>Daily Trade Performance | LBSL</title>
+      <meta
+        name="description"
+        content="Showing a daily trade performance analytics"
+      />
+      <PageHeader name="Daily Trade Performance">
+        <BranchFilter onChange={traceBranchChange} />
+        <TraderFilter
+          currentTrader={trader}
+          traders={traders}
+          onChange={handleTraderChange}
         />
-        <CardBoard
-          className="col-span-6 xl:col-span-2"
-          title="Cash Code Status"
-          subtitle="shows cash code summary"
-          children={<StatisticsCashCodeSummary data={cashCodeSummaryData} />}
-        />
-        <CardBoard
-          className="col-span-6 xl:col-span-2"
-          title="Margin Code Status"
-          subtitle="shows margin code summary"
-          children={
-            <StatisticsMarginCodeSummary data={marginCodeSummaryData} />
-          }
-        />
+      </PageHeader>
+      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
+        {summary?.shortSummary ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-2"
+            title="Summary"
+            subtitle="shows overall short summary"
+            children={
+              <StatisticsCardClientTurnoverSummary
+                data={summary.shortSummary}
+              />
+            }
+          />
+        ) : (
+          <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
+        )}
+        {summary?.cashCodeSummary ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-2"
+            title="Cash Code Status"
+            subtitle="shows cash code summary"
+            children={
+              <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
+            }
+          />
+        ) : (
+          <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
+        )}
+        {summary?.marginCodeSummary ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-2"
+            title="Margin Code Status"
+            subtitle="shows margin code summary"
+            children={
+              <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
+            }
+          />
+        ) : (
+          <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
+        )}
         {/* Turnover Performance Chart */}
-        <CardBoard
-          className="col-span-6 xl:col-span-3"
-          title={"Turnover Performance"}
-          subtitle="Shows a analytics of turnover performance of last 7 days."
-          children={
-            <BarChartVerticalGrouped
-              data={turnoverChartData}
-              options={turnoverChartOptions}
-            />
-          }
-        />
-        <CardBoard
-          className="col-span-6 xl:col-span-3"
-          title={"Daily Margin Loan Usage"}
-          subtitle="Shows a analytics of turnover performance of last 7 days."
-          children={
-            <BarChartVerticalGrouped
-              data={turnoverChartData}
-              options={turnoverChartOptions}
-            />
-          }
-        />
-        <CardBoard
-          className="col-span-6 row-span-2 xl:col-span-3"
-          title="Sector Exposure Margin Code"
-          subtitle="Shows analytics of marginal performance for comodities"
-          children={
-            <BarChartHorizontal
-              data={marginChartData}
-              options={marginChartOption}
-            />
-          }
-        />
+        {turnoverPerformance ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Turnover Performance"}
+            subtitle="Shows a analytics of turnover performance of last 7 days."
+            children={
+              <BarChartVerticalGrouped
+                data={turnoverPerformance}
+                options={turnoverChartOptions}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
 
-        <CardBoard
-          className="col-span-6 row-span-2 xl:col-span-3"
-          title="Sector Exposure Cash Code"
-          subtitle="Shows analytics of marginal performance for comodities"
-          children={
-            <BarChartHorizontal
-              data={marginChartData}
-              options={marginChartOption}
-            />
-          }
-        />
+        {marginCodeExposure ? (
+          <CardBoard
+            className="col-span-6 row-span-2 xl:col-span-3"
+            title="Sector Exposure Margin Code"
+            subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={marginCodeExposure}
+                options={sectorMarginCodeExposureOption}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
+        {cashCodeExposure ? (
+          <CardBoard
+            className="col-span-6 row-span-2 xl:col-span-3"
+            title="Sector Exposure Cash Code"
+            subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={cashCodeExposure}
+                options={sectorCashCodeExposureOption}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
       </div>
     </div>
   );
