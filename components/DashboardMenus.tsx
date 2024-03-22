@@ -34,8 +34,23 @@ export default function DashboardMenus() {
   const menuList = [
     {
       id: 1,
+      codeName: "admin_dashboards",
+      viewName: "Admin Analytics",
+      icon: <DiGoogleAnalytics className="h-5 w-5" />,
+      subMenus: [
+        {
+          id: 1,
+          codeName: "active_trading_codes",
+          viewName: "Active Trading Codes",
+          urlPath: "/dashboard/active-trading-codes",
+          icon: <GrBarChart className="h-4 w-4" />,
+        },
+      ],
+    },
+    {
+      id: 2,
       codeName: "branch_dashboards",
-      viewName: "Branch Dashboards",
+      viewName: "Branch Analytics",
       icon: <DiGoogleAnalytics className="h-5 w-5" />,
       subMenus: [
         {
@@ -66,19 +81,12 @@ export default function DashboardMenus() {
           urlPath: "/dashboard/branch-performance",
           icon: <GrBarChart className="h-4 w-4" />,
         },
-        {
-          id: 5,
-          codeName: "active_trading_codes",
-          viewName: "Active Trading Codes",
-          urlPath: "/dashboard/active-trading-codes",
-          icon: <GrBarChart className="h-4 w-4" />,
-        },
       ],
     },
     {
-      id: 2,
+      id: 3,
       codeName: "rm_dashboards",
-      viewName: "RM Dashboards",
+      viewName: "RM Analytics",
       icon: <BiBarChartAlt2 className="h-5 w-5" />,
       subMenus: [
         {
@@ -136,7 +144,7 @@ export default function DashboardMenus() {
       <CommandList className="max-h-full">
         {menuList.map((menu) => {
           return (
-            <div key={menu.id}>
+            <div key={menu.codeName}>
               <CommandGroup
                 value={menu.codeName}
                 heading={
