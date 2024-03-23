@@ -11,7 +11,7 @@ import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummar
 import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
 import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   ITargetGenerated,
   ISummaryDetails,
@@ -33,6 +33,7 @@ export default function DailyTradePerformance() {
     error(...args);
   };
   // ===========================================
+  const {data: session} = useSession()
 
   const turnoverChartOptions = [
     {
@@ -98,7 +99,6 @@ export default function DailyTradePerformance() {
         branchId: number,
         traderId: string
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/?branch=${branchId}&trader=${traderId}`,
@@ -125,7 +125,6 @@ export default function DailyTradePerformance() {
         branchId: number,
         traderId: string
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/?branch=${branchId}&trader=${traderId}`,
@@ -154,7 +153,6 @@ export default function DailyTradePerformance() {
         branchId: number,
         traderId: string
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/?branch=${branchId}&trader=${traderId}`,
@@ -180,7 +178,6 @@ export default function DailyTradePerformance() {
         branchId: number,
         traderId: string
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/?branch=${branchId}&trader=${traderId}`,
@@ -214,7 +211,6 @@ export default function DailyTradePerformance() {
     if (branch) {
       // Fetch Traders
       const fetchTraderWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branchId}/`,
@@ -234,7 +230,6 @@ export default function DailyTradePerformance() {
       };
       // Fetch Summary for Branch
       const fetchSummaryWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/?branch=${branchId}`,
@@ -260,7 +255,6 @@ export default function DailyTradePerformance() {
       const fetchDailyTurnoverPerformanceWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/?branch=${branchId}`,
@@ -289,7 +283,6 @@ export default function DailyTradePerformance() {
       const fetchCashCodeSectorExposureWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/?branch=${branchId}`,
@@ -314,7 +307,6 @@ export default function DailyTradePerformance() {
       const fetchMarginCodeSectorExposureWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/?branch=${branchId}`,
@@ -348,7 +340,6 @@ export default function DailyTradePerformance() {
   // effect  on the page load
   useEffect(() => {
     const fetchSummary = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/`,
@@ -369,7 +360,6 @@ export default function DailyTradePerformance() {
     };
     // Daily Trade Performance
     const fetchDailyTurnoverPerformance = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/`,
@@ -391,7 +381,6 @@ export default function DailyTradePerformance() {
 
     // Sector Exposure Cash Code
     const fetchCashCodeSectorExposure = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/`,
@@ -412,7 +401,6 @@ export default function DailyTradePerformance() {
     };
     // Sector Exposure Margin Code
     const fetchMarginCodeSectorExposure = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/`,
