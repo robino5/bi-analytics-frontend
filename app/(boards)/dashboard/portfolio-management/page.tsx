@@ -2,12 +2,6 @@
 
 import CardBoard from "@/components/CardBoard";
 import PageHeader from "@/components/PageHeader";
-import {
-  ClientTurnoverBiAxial,
-  DailyNetFundFlowDataType,
-  NewAccountOrTurnoverPerformanceDataType,
-  PortfolioMangementStatusDataType,
-} from "./columns";
 import BarChartPositiveNegative from "@/components/BarChartPositiveNegative";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
 
@@ -18,8 +12,7 @@ import { BarColors } from "@/components/ui/utils/constants";
 import { useEffect, useState } from "react";
 import BranchFilter from "@/components/branchFilter";
 import { successResponse } from "@/lib/utils";
-
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   IAccountsFundFlow,
   INetFundFlow,
@@ -38,6 +31,8 @@ export default function PortfolioManagement() {
     error(...args);
   };
   // ===========================================
+  const {data: session} = useSession();
+
   const dailyNetFundFlowOption = {
     dataKey: "tradingDate",
     valueKey: "amount",
@@ -74,7 +69,6 @@ export default function PortfolioManagement() {
   useEffect(() => {
     // Daily Net Fund Flow
     const fetchDailyNetFundFlow = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/`,
@@ -98,7 +92,6 @@ export default function PortfolioManagement() {
     };
     // Trade Vs Clients Statistics
     const fetchTradeVsClients = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/`,
@@ -122,7 +115,6 @@ export default function PortfolioManagement() {
     };
     // Turnover Performance Statistics
     const fetchTurnoverPerformance = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/`,
@@ -149,7 +141,6 @@ export default function PortfolioManagement() {
 
     // Account Fund Flow Data Table
     const fetchAccountsFundFlow = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/accounts-fundflow/`,
@@ -176,7 +167,6 @@ export default function PortfolioManagement() {
 
     // Portfolio Status DataTable
     const fetchPortfolioStatus = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/portfolio-status/`,
@@ -209,7 +199,6 @@ export default function PortfolioManagement() {
   useEffect(() => {
     if (branch) {
       const fetchNetFundFlowWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/${branchId}`,
@@ -234,7 +223,6 @@ export default function PortfolioManagement() {
 
       // Trade Vs Clients Statistics
       const fetchTradeVsClientsWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/${branchId}`,
@@ -261,7 +249,6 @@ export default function PortfolioManagement() {
 
       // Turnover Performance Statistics
       const fetchTurnoverPerformanceWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/${branchId}`,
@@ -287,7 +274,6 @@ export default function PortfolioManagement() {
       };
       // Account Fund Flow Data Table
       const fetchAccountsFundFlowWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/accounts-fundflow/${branchId}`,
@@ -313,7 +299,6 @@ export default function PortfolioManagement() {
       };
       // Portfolio Status DataTable
       const fetchPortfolioStatusWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/portfolio-status/${branchId}`,
