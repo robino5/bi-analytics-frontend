@@ -11,7 +11,7 @@ import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummar
 import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
 import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import {
   ITargetGenerated,
   ISummaryDetails,
@@ -33,7 +33,8 @@ export default function DailyTradePerformance() {
     error(...args);
   };
   // ===========================================
-
+  const { data: session } = useSession();
+  
   const turnoverChartOptions = [
     {
       name: "Target",
@@ -105,7 +106,6 @@ export default function DailyTradePerformance() {
   useEffect(() => {
     if (branch) {
       const fetchSummaryWithBranchId = async (branchId: number) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/basic-summaries/${branchId}`,
@@ -131,7 +131,6 @@ export default function DailyTradePerformance() {
       const fetchDailyTurnoverPerformanceWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-trade-performance/${branchId}`,
@@ -159,7 +158,6 @@ export default function DailyTradePerformance() {
       const fetchDailyMarginLoanUsageWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/margin-loan-usage/${branchId}`,
@@ -188,7 +186,6 @@ export default function DailyTradePerformance() {
       const fetchCashCodeSectorExposureWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/sector-exposure-cashcode/${branchId}`,
@@ -213,7 +210,6 @@ export default function DailyTradePerformance() {
       const fetchMarginCodeSectorExposureWithBranchId = async (
         branchId: number
       ) => {
-        const session = await getSession();
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/sector-exposure-margincode/${branchId}`,
@@ -246,7 +242,6 @@ export default function DailyTradePerformance() {
 
   useEffect(() => {
     const fetchSummary = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/basic-summaries/`,
@@ -267,7 +262,6 @@ export default function DailyTradePerformance() {
     };
     // Daily Trade Performance
     const fetchDailyTurnoverPerformance = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-trade-performance/`,
@@ -288,7 +282,6 @@ export default function DailyTradePerformance() {
     };
     // Daily Margin Loan Usage
     const fetchDailyMarginLoanUsage = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/margin-loan-usage/`,
@@ -309,7 +302,6 @@ export default function DailyTradePerformance() {
     };
     // Sector Exposure Cash Code
     const fetchCashCodeSectorExposure = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/sector-exposure-cashcode/`,
@@ -330,7 +322,6 @@ export default function DailyTradePerformance() {
     };
     // Sector Exposure Margin Code
     const fetchMarginCodeSectorExposure = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/sector-exposure-margincode/`,
