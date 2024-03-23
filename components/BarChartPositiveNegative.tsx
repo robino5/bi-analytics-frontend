@@ -184,7 +184,11 @@ const BarChartPositiveNegative: FC<BarCharHorizonalProps> = ({
   data,
   options,
 }) => {
-  return <BarChart data={data} option={options} />;
+  return data.length ? (
+    <BarChart data={data} option={options} />
+  ) : (
+    "No Data available"
+  );
 };
 
 export default BarChartPositiveNegative;
