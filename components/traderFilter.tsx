@@ -8,6 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { usePathname } from "next/navigation";
+
 export interface ITrader {
   traderId: string;
   traderName: string;
@@ -24,13 +26,17 @@ export default function TraderFilter({
   traders,
   currentTrader,
 }: ITraderFilterProps) {
+  const pathName = usePathname();
+
   return (
     <Select onValueChange={onChange} defaultValue="all" value={currentTrader}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a RM" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">Select RM</SelectItem>
+        {pathName.includes("/rm/") ? (
+          <SelectItem value="all">Select RM</SelectItem>
+        ) : null}
         {traders.map((trader) => (
           <SelectItem key={trader.traderId} value={trader.traderId}>
             {trader.traderId}
