@@ -34,20 +34,21 @@ const RmPerformanceBoard = () => {
 
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
-    setTrader("");
+    setTrader(traders[0]?.traderId);
   };
 
   const handleTraderChange = async (value: string) => {
     setTrader(value);
   };
 
+  // on page load
   useEffect(() => {
     // Fetch Traders
-    const fetchTraderWithBranchId = async (branchId: string) => {
+    const fetchTraderWithBranchId = async () => {
       try {
         let branchUrl;
-        if (branchId) {
-          branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branchId}/`;
+        if (branch) {
+          branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`;
         } else {
           branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/`;
         }
@@ -67,108 +68,113 @@ const RmPerformanceBoard = () => {
         console.error(`Error fetching traders.`, error);
       }
     };
-    const fetchTurnoverPerformance = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/turnover-performance/?branch=${branch}&trader=${trader}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
+    if (branch && trader) {
+      const fetchTurnoverPerformance = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/turnover-performance/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ITurnoverPerformance[]
+          >;
+          if (successResponse(result.status)) {
+            setTurnoverPerformance(result.data);
           }
-        );
-        const result = (await response.json()) as IResponse<
-          ITurnoverPerformance[]
-        >;
-        if (successResponse(result.status)) {
-          setTurnoverPerformance(result.data);
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
         }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching Turnover Performance`,
-          error
-        );
-      }
-    };
+      };
 
-    const fetchClientDetails = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/turnover-performance/?branch=${branch}&trader=${trader}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
+      const fetchClientDetails = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/client-details/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IClientDetail[]>;
+          if (successResponse(result.status)) {
+            setClients(result.data);
           }
-        );
-        const result = (await response.json()) as IResponse<IClientDetail[]>;
-        if (successResponse(result.status)) {
-          setClients(result.data);
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
         }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching Turnover Performance`,
-          error
-        );
-      }
-    };
-    fetchTraderWithBranchId(branch);
-    fetchTurnoverPerformance();
-    fetchClientDetails();
+      };
+      fetchTurnoverPerformance();
+      fetchClientDetails();
+    }
+    fetchTraderWithBranchId();
   }, [branch]);
 
+  // on trader change
   useEffect(() => {
-    const fetchTurnoverPerformance = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/turnover-performance/?branch=${branch}&trader=${trader}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
+    if (branch && trader) {
+      const fetchTurnoverPerformance = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/turnover-performance/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            ITurnoverPerformance[]
+          >;
+          if (successResponse(result.status)) {
+            setTurnoverPerformance(result.data);
           }
-        );
-        const result = (await response.json()) as IResponse<
-          ITurnoverPerformance[]
-        >;
-        if (successResponse(result.status)) {
-          setTurnoverPerformance(result.data);
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
         }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching Turnover Performance`,
-          error
-        );
-      }
-    };
+      };
 
-    const fetchClientDetails = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/client-details/?branch=${branch}&trader=${trader}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
+      const fetchClientDetails = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/client-details/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IClientDetail[]>;
+          if (successResponse(result.status)) {
+            setClients(result.data);
           }
-        );
-        const result = (await response.json()) as IResponse<IClientDetail[]>;
-        if (successResponse(result.status)) {
-          setClients(result.data);
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
         }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching Turnover Performance`,
-          error
-        );
-      }
-    };
-    fetchTurnoverPerformance();
-    fetchClientDetails();
+      };
+      fetchTurnoverPerformance();
+      fetchClientDetails();
+    }
   }, [trader]);
 
   return (

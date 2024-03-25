@@ -2,11 +2,9 @@
 
 import PageHeader from "@/components/PageHeader";
 import BranchFilter from "@/components/branchFilter";
-import TraderFilter from "@/components/traderFilter";
-import React, { useState } from "react";
+import TraderFilter, { ITrader } from "@/components/traderFilter";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
 import RMFundCollectionTable from "./_rmFundCollection";
 import PortfolioManagementStatusDataTable from "./_rmPortfolioStatus";
@@ -21,21 +19,40 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { successResponse } from "@/lib/utils";
+import {
+  IFundCollection,
+  IMarkedClient,
+  INetFundFlow,
+  IPortfolioManagement,
+} from "@/types/rmPortfolio";
+import MarkedTraderDataTable from "./_marked_traders_datatable";
+import SummarySkeletonCard from "@/components/skeletonCard";
 
 const RmPortfolioBoard = () => {
+  // Override console.error
+  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+  // @link https://github.com/recharts/recharts/issues/3615
+  const error = console.error;
+  console.error = (...args: any) => {
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
+  };
+  // ===========================================
   const { data: session } = useSession();
   const [branch, setBranch] = useState("");
   const [trader, setTrader] = useState("");
-  const [traders, setTraders] = useState([]);
+  const [traders, setTraders] = useState<ITrader[]>([]);
 
-  const [fundCollections, setFundCollection] = useState([]);
-  const [portfolio, setPortfolio] = useState([]);
-  const [netFundFlow, setNetFundFlow] = useState([]);
+  const [fundCollections, setFundCollection] = useState<IFundCollection[]>([]);
+  const [redClients, setRedClients] = useState<IMarkedClient[]>([]);
+  const [yellowClients, setYellowClients] = useState<IMarkedClient[]>([]);
+  const [portfolio, setPortfolio] = useState<IPortfolioManagement[]>([]);
+  const [netFundFlow, setNetFundFlow] = useState<INetFundFlow[]>([]);
 
   const handleBranchChange = (value: string) => {
     setBranch(value);
-    setTrader("");
+    setTrader(traders[0]?.traderId);
   };
   const handleTraderChange = (value: string) => {
     setTrader(value);
@@ -49,10 +66,287 @@ const RmPortfolioBoard = () => {
     barLabel: true,
   };
 
+  useEffect(() => {
+    if (branch && trader) {
+      const fetchFundCollections = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/fund-collections/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            IFundCollection[]
+          >;
+          if (successResponse(result.status)) {
+            setFundCollection(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      const fetchPortfolio = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/portfolio-management-status/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            IPortfolioManagement[]
+          >;
+          if (successResponse(result.status)) {
+            setPortfolio(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+
+      const fetchYellowClients = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/marked-clients/?branch=${branch}&category=yellow&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IMarkedClient[]>;
+          if (successResponse(result.status)) {
+            setYellowClients(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      const fetchRedClients = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/marked-clients/?branch=${branch}&category=red&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IMarkedClient[]>;
+          if (successResponse(result.status)) {
+            setRedClients(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      const fetchINetFundFlow = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-net-fund-flow/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<INetFundFlow[]>;
+          if (successResponse(result.status)) {
+            setNetFundFlow(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      fetchFundCollections();
+      fetchRedClients();
+      fetchYellowClients();
+      fetchPortfolio();
+      fetchINetFundFlow();
+    }
+  }, [trader]);
+
+  useEffect(() => {
+    // Fetch Traders
+    const fetchTraderWithBranchId = async (branchId: string) => {
+      try {
+        let branchUrl;
+        if (branchId) {
+          branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branchId}/`;
+        } else {
+          branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/`;
+        }
+        const response = await fetch(branchUrl, {
+          headers: {
+            Authorization: `Bearer ${session?.user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const result = (await response.json()) as IResponse<ITrader[]>;
+        if (successResponse(result.status)) {
+          setTraders(result.data);
+          setTrader(result.data[0].traderId);
+        }
+      } catch (error) {
+        console.error(`Error fetching traders.`, error);
+      }
+    };
+
+    if (branch && trader) {
+      const fetchFundCollections = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/fund-collections/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            IFundCollection[]
+          >;
+          if (successResponse(result.status)) {
+            setFundCollection(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      const fetchPortfolio = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/portfolio-management-status/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            IPortfolioManagement[]
+          >;
+          if (successResponse(result.status)) {
+            setPortfolio(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+
+      const fetchYellowClients = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/marked-clients/?branch=${branch}&category=yellow&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IMarkedClient[]>;
+          if (successResponse(result.status)) {
+            setYellowClients(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      const fetchRedClients = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/marked-clients/?branch=${branch}&category=red&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IMarkedClient[]>;
+          if (successResponse(result.status)) {
+            setRedClients(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      const fetchINetFundFlow = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-net-fund-flow/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<INetFundFlow[]>;
+          if (successResponse(result.status)) {
+            setNetFundFlow(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
+      fetchFundCollections();
+      fetchRedClients();
+      fetchYellowClients();
+      fetchPortfolio();
+      fetchINetFundFlow();
+    }
+    fetchTraderWithBranchId(branch);
+  }, [branch]);
+
   return (
     <div className="mx-4">
       <PageHeader name="RM Portfolio Report">
-        <BranchFilter onChange={handleBranchChange} />
+        <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
         <TraderFilter
           traders={traders}
           currentTrader={trader}
@@ -60,20 +354,10 @@ const RmPortfolioBoard = () => {
         />
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-6 mt-4">
-        {/* Fund Collection Status */}
-        {fundCollections ? (
-          <RMFundCollectionTable records={fundCollections} />
-        ) : null}
-
-        {/* Portfolio Management Status */}
-        {portfolio ? (
-          <PortfolioManagementStatusDataTable records={portfolio} />
-        ) : null}
-
         {/* Daily Net Fund Flow Chart */}
         {netFundFlow ? (
           <CardBoard
-            className="lg:col-span-4"
+            className="lg:col-span-3"
             title="Daily Net Fund Flow"
             subtitle="short summary of the portfolio"
             children={
@@ -83,62 +367,47 @@ const RmPortfolioBoard = () => {
               />
             }
           />
-        ) : null}
-
+        ) : <SummarySkeletonCard className="col-span-3" />}
         {/* Zonal Marked Investors */}
-        <Tabs defaultValue="account" className="col-span-2">
+        <Tabs defaultValue="red" className="col-span-3">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
+            <TabsTrigger value="red">Red</TabsTrigger>
+            <TabsTrigger value="yellow">Yellow</TabsTrigger>
           </TabsList>
-          <TabsContent value="account">
+          <TabsContent value="red">
             <Card>
               <CardHeader>
-                <CardTitle>Account</CardTitle>
-                <CardDescription>
-                  Make changes to your account here. Click save when you're
-                  done.
-                </CardDescription>
+                <CardTitle>Red</CardTitle>
+                <CardDescription>red clients details</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" defaultValue="Pedro Duarte" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="username">Username</Label>
-                  <Input id="username" defaultValue="@peduarte" />
-                </div>
+              <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
+                <MarkedTraderDataTable records={redClients} />
               </CardContent>
-              <CardFooter>
-                <Button>Save changes</Button>
-              </CardFooter>
+              <CardFooter></CardFooter>
             </Card>
           </TabsContent>
-          <TabsContent value="password">
+          <TabsContent value="yellow">
             <Card>
               <CardHeader>
-                <CardTitle>Password</CardTitle>
-                <CardDescription>
-                  Change your password here. After saving, you'll be logged out.
-                </CardDescription>
+                <CardTitle>Yellow</CardTitle>
+                <CardDescription>yellow clients details</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="space-y-1">
-                  <Label htmlFor="current">Current password</Label>
-                  <Input id="current" type="password" />
-                </div>
-                <div className="space-y-1">
-                  <Label htmlFor="new">New password</Label>
-                  <Input id="new" type="password" />
-                </div>
+              <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
+                <MarkedTraderDataTable records={yellowClients} />
               </CardContent>
-              <CardFooter>
-                <Button>Save password</Button>
-              </CardFooter>
+              <CardFooter></CardFooter>
             </Card>
           </TabsContent>
         </Tabs>
+        {/* Fund Collection Status */}
+        {fundCollections ? (
+          <RMFundCollectionTable records={fundCollections} />
+        ) : <SummarySkeletonCard className="col-span-4" />}
+
+        {/* Portfolio Management Status */}
+        {portfolio ? (
+          <PortfolioManagementStatusDataTable records={portfolio} />
+        ) : <SummarySkeletonCard className="col-span-2" />}
       </div>
     </div>
   );
