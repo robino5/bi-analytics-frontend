@@ -22,6 +22,7 @@ import { successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
   SkeletonStatistics,
 } from "@/components/skeletonCard";
+import { IResponse } from "@/types/utils";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -34,7 +35,7 @@ export default function DailyTradePerformance() {
   };
   // ===========================================
   const { data: session } = useSession();
-  
+
   const turnoverChartOptions = [
     {
       name: "Target",
@@ -80,7 +81,7 @@ export default function DailyTradePerformance() {
 
   const sectorCashCodeExposureOption = {
     ...sectorMarginCodeExposureOption,
-    fill: BarColors.purple
+    fill: BarColors.purple,
   };
 
   const [branch, setBranch] = useState<string>("");
@@ -351,9 +352,12 @@ export default function DailyTradePerformance() {
   return (
     <div className="mx-4">
       <title>Daily Trade Performance | LBSL</title>
-      <meta name="description" content="Showing a daily trade performance analytics" />
+      <meta
+        name="description"
+        content="Showing a daily trade performance analytics"
+      />
       <PageHeader name="Daily Trade Performance">
-        <BranchFilter onChange={traceBranchChange} />
+        <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {summary?.shortSummary ? (
@@ -422,7 +426,9 @@ export default function DailyTradePerformance() {
               />
             }
           />
-        ) : <SkeletonStatistics className="col-span-6 xl:col-span-3" />}
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
         {marginCodeExposure ? (
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
@@ -435,7 +441,9 @@ export default function DailyTradePerformance() {
               />
             }
           />
-        ) : <SkeletonStatistics className="col-span-6 xl:col-span-3" />}
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
         {cashCodeExposure ? (
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
@@ -448,7 +456,9 @@ export default function DailyTradePerformance() {
               />
             }
           />
-        ) : <SkeletonStatistics className="col-span-6 xl:col-span-3" />}
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
       </div>
     </div>
   );

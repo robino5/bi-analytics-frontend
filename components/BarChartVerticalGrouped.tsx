@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   ResponsiveContainer,
   BarChart as RechartsBarChart,

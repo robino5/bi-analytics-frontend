@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/card";
 import { successResponse } from "@/lib/utils";
 import { IClientDetail, ITurnoverPerformance } from "@/types/rmPerformance";
+import { IResponse } from "@/types/utils";
 
 const RmPerformanceBoard = () => {
   const { data: session } = useSession();

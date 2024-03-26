@@ -13,7 +13,6 @@ import {
   Pie,
   Sector,
   Cell,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -46,34 +45,6 @@ interface IActiveShape {
   value: number;
   index: number;
 }
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-}: IActiveShape) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="#023047"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`${percent * 100}%`}
-    </text>
-  );
-};
 
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;

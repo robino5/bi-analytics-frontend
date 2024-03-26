@@ -10,15 +10,11 @@ import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { MarkedTradersZoneWise } from "./_marked_traders_modal";
 import { MarkedTraderPayloadType } from "./_marked_traders_datatable";
-
-interface PerticularTypes {
-  exposure: string;
-  investors: number;
-  loanAmount: number;
-}
+import { IExposureSumamry } from "@/types/marginLoanUsage";
 
 interface Props {
-  records: PerticularTypes[];
+  records: IExposureSumamry[];
+  branch?: string;
   className?: string;
 }
 
@@ -39,6 +35,7 @@ const keywordMatcher = (text: string) => {
 export default function ExposureControllingDataTable({
   records,
   className,
+  branch,
 }: Props) {
   return (
     <Card
@@ -103,6 +100,7 @@ export default function ExposureControllingDataTable({
                           record.exposure
                         ) as keyof MarkedTraderPayloadType
                       }
+                      branch={branch}
                     />
                   </div>
                 </td>

@@ -22,6 +22,7 @@ import SummarySkeletonCard, {
   SkeletonStatistics,
 } from "@/components/skeletonCard";
 import TraderFilter, { ITrader } from "@/components/traderFilter";
+import { IResponse } from "@/types/utils";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -226,7 +227,9 @@ export default function DailyTradePerformance() {
           if (successResponse(result.status)) {
             setTraders(result.data);
           }
-        } catch (error) {}
+        } catch (error) {
+          console.error(error);
+        }
       };
       // Fetch Summary for Branch
       const fetchSummaryWithBranchId = async () => {
@@ -245,10 +248,7 @@ export default function DailyTradePerformance() {
             setSummary(result.data);
           }
         } catch (error) {
-          console.error(
-            `Error Happened while fetching Summary`,
-            error
-          );
+          console.error(`Error Happened while fetching Summary`, error);
         }
       };
       // daily turnover performance
@@ -296,7 +296,10 @@ export default function DailyTradePerformance() {
             setCashCodeExposure(result.data);
           }
         } catch (error) {
-          console.error(`Error Happened while fetching sector exposure cash code`, error);
+          console.error(
+            `Error Happened while fetching sector exposure cash code`,
+            error
+          );
         }
       };
       // Sector Exposure Margin Code
@@ -318,7 +321,10 @@ export default function DailyTradePerformance() {
             setMarginCodeExposure(result.data);
           }
         } catch (error) {
-          console.error(`Error Happened while fetching sector exposure margin code`, error);
+          console.error(
+            `Error Happened while fetching sector exposure margin code`,
+            error
+          );
         }
       };
       fetchTraderWithBranchId();
@@ -337,7 +343,7 @@ export default function DailyTradePerformance() {
         content="Showing a daily trade performance analytics"
       />
       <PageHeader name="Daily Trade Performance">
-        <BranchFilter onChange={traceBranchChange} currentBranch={branch}/>
+        <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
         <TraderFilter
           currentTrader={trader}
           traders={traders}

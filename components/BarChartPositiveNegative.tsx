@@ -8,7 +8,6 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  Label,
   ReferenceLine,
   Bar,
   Cell,
@@ -54,7 +53,6 @@ interface CustomizedLabelProps {
 const CustomizedLabel: FC<CustomizedLabelProps> = ({
   x = 0,
   y = 0,
-  fill = "#C6C6C6",
   value = 0,
 }) => {
   return (

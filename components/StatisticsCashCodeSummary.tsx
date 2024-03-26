@@ -1,5 +1,4 @@
 import Statistics from "./ui/statistics";
-import { LovResultType } from "@/lib/types";
 import { ICashCodeSummary } from "@/types/dailyTurnoverPerformance";
 import { FC } from "react";
 

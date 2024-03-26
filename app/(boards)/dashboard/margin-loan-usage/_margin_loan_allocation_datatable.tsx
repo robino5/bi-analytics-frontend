@@ -8,14 +8,10 @@ import {
 
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-
-interface PerticularTypes {
-  name: string;
-  amount: number;
-}
+import { IMarginLoanAllocation } from "@/types/marginLoanUsage";
 
 interface Props {
-  records: PerticularTypes[];
+  records: IMarginLoanAllocation[];
   className?: string;
 }
 
@@ -53,14 +49,14 @@ export default function MarginLoanAllocationDataTable({
           <tbody>
             {records.map((record) => (
               <tr
-                key={record.name}
+                key={record.perticular}
                 className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
               >
                 <th
                   scope="row"
                   className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {record.name}
+                  {record.perticular}
                 </th>
                 <td
                   className={cn("px-6 py-2", {
