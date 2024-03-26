@@ -14,6 +14,7 @@ import { IExposureSumamry } from "@/types/marginLoanUsage";
 
 interface Props {
   records: IExposureSumamry[];
+  branch?: string;
   className?: string;
 }
 
@@ -34,6 +35,7 @@ const keywordMatcher = (text: string) => {
 export default function ExposureControllingDataTable({
   records,
   className,
+  branch,
 }: Props) {
   return (
     <Card
@@ -98,6 +100,7 @@ export default function ExposureControllingDataTable({
                           record.exposure
                         ) as keyof MarkedTraderPayloadType
                       }
+                      branch={branch}
                     />
                   </div>
                 </td>

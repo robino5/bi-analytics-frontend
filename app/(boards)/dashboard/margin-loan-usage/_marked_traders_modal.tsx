@@ -19,9 +19,10 @@ import { cn } from "@/lib/utils";
 
 interface MarkedTraderProps {
   name: keyof MarkedTraderPayloadType;
+  branch?: string;
 }
 
-export function MarkedTradersZoneWise({ name }: MarkedTraderProps) {
+export function MarkedTradersZoneWise({ name, branch }: MarkedTraderProps) {
   return (
     <Dialog>
       {name !== "green" ? (
@@ -48,7 +49,7 @@ export function MarkedTradersZoneWise({ name }: MarkedTraderProps) {
             {`all the ${name} traders list.`}
           </DialogDescription>
         </DialogHeader>
-        <MarkedTraderDataTable kind={name} />
+        <MarkedTraderDataTable kind={name} branch={branch} />
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="secondary">

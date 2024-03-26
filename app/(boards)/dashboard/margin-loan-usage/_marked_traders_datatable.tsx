@@ -16,6 +16,7 @@ interface MarkedTradersDataType {
 
 interface Props {
   kind: keyof MarkedTraderPayloadType;
+  branch?: string;
 }
 
 export type MarkedTraderPayloadType = {
@@ -26,17 +27,21 @@ export type MarkedTraderPayloadType = {
 
 async function fetchMarkedTraders(
   kind: keyof MarkedTraderPayloadType,
-  session: Session | null
+  session: Session | null,
+  branch?: string
 ): Promise<IMarkedClient[]> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/zonewise-investors/?investor_type=${kind}`,
-    {
-      headers: {
-        Authorization: `Bearer ${session?.user.accessToken}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  let url;
+  if (branch) {
+    url = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/zonewise-investors/?investor_type=${kind}&branch=${branch}`;
+  } else {
+    url = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/zonewise-investors/?investor_type=${kind}`;
+  }
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${session?.user.accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
   const result = (await response.json()) as IResponse<IMarkedClient[]>;
   if (successResponse(result.status)) {
     return result.data;
@@ -44,18 +49,18 @@ async function fetchMarkedTraders(
   throw Error(`Marked data fetching error`);
 }
 
-export default function MarkedTraderDataTable({ kind }: Props) {
+export default function MarkedTraderDataTable({ kind, branch }: Props) {
   const { data: session } = useSession();
 
   const [records, setRecords] = useState<IMarkedClient[]>([]);
   useEffect(() => {
     const fetchClients = async () => {
-      const response = await fetchMarkedTraders(kind, session);
+      const response = await fetchMarkedTraders(kind, session, branch);
       setRecords(response);
     };
     fetchClients();
   }, []);
-
+  console.log(`Branch From MardTrader Dt ${branch}`);
   return (
     <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
