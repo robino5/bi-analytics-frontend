@@ -4,6 +4,7 @@ import { cn, numberToMillionsString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "./data-table-column-header";
+import { INetTradeClient } from "@/types/marginLoanUsage";
 
 export type MarginLoanAllocationDataType = {
   name: string;
@@ -16,20 +17,11 @@ export type ExposureControllingDataType = {
   loanAmount: number;
 };
 
-export type NetTradeRmWiseDataType = {
-  branch: string;
-  code: string;
-  openingBalance: number;
-  endingBalance: number;
-  netTrade: number;
-  rmName: string;
-};
-
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
   return (
     <div
-      className={cn("text-right font-medium ", {
+      className={cn("text-center font-medium ", {
         "text-red-600": amount < 0,
       })}
     >
@@ -75,17 +67,17 @@ export const exposureControllingColumns: ColumnDef<ExposureControllingDataType>[
     },
   ];
 
-export const netTradeRmWiseColumns: ColumnDef<NetTradeRmWiseDataType>[] = [
+export const netTradeRmWiseColumns: ColumnDef<INetTradeClient>[] = [
   {
-    accessorKey: "branch",
+    accessorKey: "branchName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Branch" />
     ),
   },
   {
-    accessorKey: "code",
+    accessorKey: "investorCode",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Code" />
+      <DataTableColumnHeader column={column} title="Investor Code" />
     ),
   },
   {
@@ -93,18 +85,27 @@ export const netTradeRmWiseColumns: ColumnDef<NetTradeRmWiseDataType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Opening Balance" />
     ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "openingBalance");
+    },
   },
   {
     accessorKey: "endingBalance",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Ending Balance" />
     ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "endingBalance");
+    },
   },
   {
-    accessorKey: "netTrade",
+    accessorKey: "netBuysell",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Net Trade/Net Change" />
     ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "netBuysell");
+    },
   },
   {
     accessorKey: "rmName",

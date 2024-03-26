@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="text-center">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -98,7 +98,10 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell className="p-1 text-[0.7rem]" key={cell.id}>
+                    <TableCell
+                      className="p-1 text-[0.8rem] text-center text-slate-800"
+                      key={cell.id}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

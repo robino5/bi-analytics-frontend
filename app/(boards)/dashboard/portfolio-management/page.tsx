@@ -31,7 +31,7 @@ export default function PortfolioManagement() {
     error(...args);
   };
   // ===========================================
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
   const dailyNetFundFlowOption = {
     dataKey: "tradingDate",
@@ -198,10 +198,10 @@ export default function PortfolioManagement() {
   // on branch change
   useEffect(() => {
     if (branch) {
-      const fetchNetFundFlowWithBranchId = async (branchId: number) => {
+      const fetchNetFundFlowWithBranchId = async () => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/${branchId}`,
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/${branch}`,
             {
               headers: {
                 Authorization: `Bearer ${session?.user.accessToken}`,
@@ -215,17 +215,17 @@ export default function PortfolioManagement() {
           }
         } catch (error) {
           console.error(
-            `Error Happened while fetching daily net fund flow with branchId = ${branchId}`,
+            `Error Happened while fetching daily net fund flow with branchId = ${branch}`,
             error
           );
         }
       };
 
       // Trade Vs Clients Statistics
-      const fetchTradeVsClientsWithBranchId = async (branchId: number) => {
+      const fetchTradeVsClientsWithBranchId = async () => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/${branchId}`,
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/${branch}`,
             {
               headers: {
                 Authorization: `Bearer ${session?.user.accessToken}`,
@@ -241,17 +241,17 @@ export default function PortfolioManagement() {
           }
         } catch (error) {
           console.error(
-            `Error Happened while fetching trade vs clients with branchId=${branchId}`,
+            `Error Happened while fetching trade vs clients with branchId=${branch}`,
             error
           );
         }
       };
 
       // Turnover Performance Statistics
-      const fetchTurnoverPerformanceWithBranchId = async (branchId: number) => {
+      const fetchTurnoverPerformanceWithBranchId = async () => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/${branchId}`,
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/${branch}`,
             {
               headers: {
                 Authorization: `Bearer ${session?.user.accessToken}`,
@@ -273,10 +273,10 @@ export default function PortfolioManagement() {
         }
       };
       // Account Fund Flow Data Table
-      const fetchAccountsFundFlowWithBranchId = async (branchId: number) => {
+      const fetchAccountsFundFlowWithBranchId = async () => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/accounts-fundflow/${branchId}`,
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/accounts-fundflow/${branch}`,
             {
               headers: {
                 Authorization: `Bearer ${session?.user.accessToken}`,
@@ -298,10 +298,10 @@ export default function PortfolioManagement() {
         }
       };
       // Portfolio Status DataTable
-      const fetchPortfolioStatusWithBranchId = async (branchId: number) => {
+      const fetchPortfolioStatusWithBranchId = async () => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/portfolio-status/${branchId}`,
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/portfolio-status/${branch}`,
             {
               headers: {
                 Authorization: `Bearer ${session?.user.accessToken}`,
@@ -322,19 +322,18 @@ export default function PortfolioManagement() {
           );
         }
       };
-      const branchId = Number.parseInt(branch);
-      fetchNetFundFlowWithBranchId(branchId);
-      fetchTradeVsClientsWithBranchId(branchId);
-      fetchTurnoverPerformanceWithBranchId(branchId);
-      fetchAccountsFundFlowWithBranchId(branchId);
-      fetchPortfolioStatusWithBranchId(branchId);
+      fetchNetFundFlowWithBranchId();
+      fetchTradeVsClientsWithBranchId();
+      fetchTurnoverPerformanceWithBranchId();
+      fetchAccountsFundFlowWithBranchId();
+      fetchPortfolioStatusWithBranchId();
     }
   }, [branch]);
 
   return (
     <div className="mx-4">
       <PageHeader name="Portfolio Management">
-        <BranchFilter onChange={handleBranchChange} />
+        <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {/* Daily Net Fund Flow Chart */}
