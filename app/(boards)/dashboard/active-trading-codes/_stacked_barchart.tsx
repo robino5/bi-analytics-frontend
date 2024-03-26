@@ -39,11 +39,10 @@ interface CustomizedLabelProps {
 type Props = {
   x: number;
   y: number;
-  stroke: string;
   payload: CustomizedLabelProps;
 };
 
-const CustomizedAxisTick = ({ x, y, stroke, payload }: Props) => {
+const CustomizedAxisTick = ({ x, y, payload }: Props) => {
   return (
     <g transform={`translate(${x},${y})`}>
       <text

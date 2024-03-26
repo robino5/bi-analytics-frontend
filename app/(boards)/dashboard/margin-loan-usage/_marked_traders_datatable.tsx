@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { IMarkedClient } from "@/types/marginLoanUsage";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
+import { IResponse } from "@/types/utils";
 
 interface MarkedTradersDataType {
   code: number;

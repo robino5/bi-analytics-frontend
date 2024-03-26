@@ -28,6 +28,7 @@ import {
 } from "@/types/rmPortfolio";
 import MarkedTraderDataTable from "./_marked_traders_datatable";
 import SummarySkeletonCard from "@/components/skeletonCard";
+import { IResponse } from "@/types/utils";
 
 const RmPortfolioBoard = () => {
   // Override console.error
@@ -367,7 +368,9 @@ const RmPortfolioBoard = () => {
               />
             }
           />
-        ) : <SummarySkeletonCard className="col-span-3" />}
+        ) : (
+          <SummarySkeletonCard className="col-span-3" />
+        )}
         {/* Zonal Marked Investors */}
         <Tabs defaultValue="red" className="col-span-3">
           <TabsList className="grid w-full grid-cols-2">
@@ -402,12 +405,16 @@ const RmPortfolioBoard = () => {
         {/* Fund Collection Status */}
         {fundCollections ? (
           <RMFundCollectionTable records={fundCollections} />
-        ) : <SummarySkeletonCard className="col-span-4" />}
+        ) : (
+          <SummarySkeletonCard className="col-span-4" />
+        )}
 
         {/* Portfolio Management Status */}
         {portfolio ? (
           <PortfolioManagementStatusDataTable records={portfolio} />
-        ) : <SummarySkeletonCard className="col-span-2" />}
+        ) : (
+          <SummarySkeletonCard className="col-span-2" />
+        )}
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ import {
   ITradeVsClients,
   ITurnoverPerformance,
 } from "@/types/portfolioManagement";
+import { IResponse } from "@/types/utils";
 
 export default function PortfolioManagement() {
   // Override console.error

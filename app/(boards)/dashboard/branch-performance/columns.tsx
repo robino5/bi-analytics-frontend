@@ -4,6 +4,7 @@ import { cn, numberToMillionsString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "./data-table-column-header";
+import { IBranchWiseFund, ITurnoverStatus } from "@/types/branchPerformance";
 
 export type BranchWiseFundDataType = {
   branchName: string;
@@ -35,7 +36,7 @@ const cellNumberFormatter = (row: any, accessorKey: string) => {
   );
 };
 
-export const branchWiseFundColumns: ColumnDef<BranchWiseFundDataType>[] = [
+export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
   {
     accessorKey: "branchName",
     header: ({ column }) => (
@@ -56,7 +57,7 @@ export const branchWiseFundColumns: ColumnDef<BranchWiseFundDataType>[] = [
     },
   },
   {
-    accessorKey: "clients",
+    accessorKey: "totalClients",
     header: ({ column }) => (
       <DataTableColumnHeader
         className="place-content-center"
@@ -65,7 +66,7 @@ export const branchWiseFundColumns: ColumnDef<BranchWiseFundDataType>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "clients");
+      return cellNumberFormatter(row, "totalClients");
     },
   },
   {
@@ -82,7 +83,7 @@ export const branchWiseFundColumns: ColumnDef<BranchWiseFundDataType>[] = [
     },
   },
   {
-    accessorKey: "fundWidthdrawn",
+    accessorKey: "fundWithdrawl",
     header: ({ column }) => (
       <DataTableColumnHeader
         className="place-content-center"
@@ -91,7 +92,7 @@ export const branchWiseFundColumns: ColumnDef<BranchWiseFundDataType>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "fundWidthdrawn");
+      return cellNumberFormatter(row, "fundWithdrawl");
     },
   },
   {
@@ -108,64 +109,63 @@ export const branchWiseFundColumns: ColumnDef<BranchWiseFundDataType>[] = [
     },
   },
 ];
-export const branchWiseTurnoverColumns: ColumnDef<BranchWiseTurnoverDataType>[] =
-  [
-    {
-      accessorKey: "branchName",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Branch" />
-      ),
+export const branchWiseTurnoverColumns: ColumnDef<ITurnoverStatus>[] = [
+  {
+    accessorKey: "branchName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Branch" />
+    ),
+  },
+  {
+    accessorKey: "turnoverDaily",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="place-content-center"
+        column={column}
+        title="Daily"
+      />
+    ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "turnoverDaily");
     },
-    {
-      accessorKey: "daily",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          className="place-content-center"
-          column={column}
-          title="Daily"
-        />
-      ),
-      cell: ({ row }) => {
-        return cellNumberFormatter(row, "daily");
-      },
+  },
+  {
+    accessorKey: "turnoverWeekly",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="place-content-center"
+        column={column}
+        title="Weekly"
+      />
+    ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "turnoverWeekly");
     },
-    {
-      accessorKey: "weekly",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          className="place-content-center"
-          column={column}
-          title="Weekly"
-        />
-      ),
-      cell: ({ row }) => {
-        return cellNumberFormatter(row, "weekly");
-      },
+  },
+  {
+    accessorKey: "turnoverMonthly",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="place-content-center"
+        column={column}
+        title="Monthly"
+      />
+    ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "turnoverMonthly");
     },
-    {
-      accessorKey: "monthly",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          className="place-content-center"
-          column={column}
-          title="Monthly"
-        />
-      ),
-      cell: ({ row }) => {
-        return cellNumberFormatter(row, "monthly");
-      },
+  },
+  {
+    accessorKey: "turnoverYearly",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="place-content-center"
+        column={column}
+        title="Yearly"
+      />
+    ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "turnoverYearly");
     },
-    {
-      accessorKey: "yearly",
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          className="place-content-center"
-          column={column}
-          title="Yearly"
-        />
-      ),
-      cell: ({ row }) => {
-        return cellNumberFormatter(row, "yearly");
-      },
-    },
-  ];
+  },
+];

@@ -22,6 +22,7 @@ import {
 } from "@/types/marginLoanUsage";
 import { successResponse } from "@/lib/utils";
 import BranchFilter from "@/components/branchFilter";
+import { IResponse } from "@/types/utils";
 
 export default function MarginLoanUsage() {
   const { data: session } = useSession();

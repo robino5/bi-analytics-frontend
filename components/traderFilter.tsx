@@ -18,7 +18,7 @@ export interface ITrader {
 interface ITraderFilterProps {
   traders: ITrader[];
   currentTrader: string;
-  onChange: (branch: string) => void;
+  onChange: (_trader: string) => void;
 }
 
 export default function TraderFilter({

@@ -22,6 +22,7 @@ import { successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
   SkeletonStatistics,
 } from "@/components/skeletonCard";
+import { IResponse } from "@/types/utils";
 
 export default function DailyTradePerformance() {
   // Override console.error

@@ -1,3 +1,5 @@
+"use client";
+
 import PageHeader from "@/components/PageHeader";
 import {
   Card,
@@ -6,50 +8,141 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import BranchWiseMarginDataTable, {
-  MarginTableDataType,
-} from "./_branchwise_margin_datatable";
-import BranchWiseExposureDataTable, {
-  BranchWiseExposureTableDataType,
-} from "./_branchwise_exposure_datatable";
-import { BranchWiseTurnoverDataType } from "./_branchwise_turnover_datatable";
+import BranchWiseMarginDataTable from "./_branchwise_margin_datatable";
+import BranchWiseExposureDataTable from "./_branchwise_exposure_datatable";
 
-import { branchWiseMarginData } from "./data/branchWiseMarginData";
-import { branchWiseExposureData } from "./data/branchWiseExposureData";
-import { branchWiseTurnoverData } from "./data/branchWiseTurnoverData";
-import { branchwiseFundData } from "./data/branchwiseFundData";
-import { BranchWiseFundDataType } from "./_branchwise_fund_datatable";
 import { DataTableCard } from "./data-table";
 import { branchWiseFundColumns, branchWiseTurnoverColumns } from "./columns";
+import BranchFilter from "@/components/branchFilter";
+import { useEffect, useState } from "react";
+import {
+  IBranchWiseExposure,
+  IBranchWiseFund,
+  IBranchWiseMargin,
+  ITurnoverStatus,
+} from "@/types/branchPerformance";
+import { useSession } from "next-auth/react";
+import { successResponse } from "@/lib/utils";
+import { IResponse } from "@/types/utils";
 
-async function fetchBranchWiseMarginStatus(): Promise<MarginTableDataType[]> {
-  return branchWiseMarginData;
-}
+export default function BranchPerformance() {
+  const { data: session } = useSession();
 
-async function fetchBranchWiseExposureStatus(): Promise<
-  BranchWiseExposureTableDataType[]
-> {
-  return branchWiseExposureData;
-}
-async function fetchBranchWiseTurnoverStatus(): Promise<
-  BranchWiseTurnoverDataType[]
-> {
-  return branchWiseTurnoverData;
-}
+  const [branch, setBranch] = useState<string>("");
 
-async function fetchBranchWiseFundStatus(): Promise<BranchWiseFundDataType[]> {
-  return branchwiseFundData;
-}
+  const [turnover, setTurnover] = useState<ITurnoverStatus[]>([]);
+  const [branchWiseFund, setBranchWiseFund] = useState<IBranchWiseFund[]>([]);
+  const [branchWiseExposure, setBranchWiseExposure] = useState<
+    IBranchWiseExposure[]
+  >([]);
+  const [branchWiseMargin, setBranchWiseMargin] = useState<IBranchWiseMargin[]>(
+    []
+  );
 
-export default async function BranchPerformance() {
-  const branchWiseTurnoverStatusJson = await fetchBranchWiseTurnoverStatus();
-  const branchWiseMarginStatusJson = await fetchBranchWiseMarginStatus();
-  const branchWiseExposureStatusJson = await fetchBranchWiseExposureStatus();
-  const branchWiseFundStatusJson = await fetchBranchWiseFundStatus();
+  const handleBranchChange = (branchId: string) => {
+    setBranch(branchId);
+  };
+
+  // on page load
+  useEffect(() => {
+    // fetch turnover status
+    const fetchTurnoverStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-turnover-status/?branch=${branch}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<ITurnoverStatus[]>;
+        if (successResponse(result.status)) {
+          setTurnover(result.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetch branch wise fund status
+    const fetchBranchWiseFundStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-fund-status/?branch=${branch}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<IBranchWiseFund[]>;
+        if (successResponse(result.status)) {
+          setBranchWiseFund(result.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // fetch branch wise fund status
+    const fetchBranchWiseMarginStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-margin-status/?branch=${branch}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+          IBranchWiseMargin[]
+        >;
+        if (successResponse(result.status)) {
+          setBranchWiseMargin(result.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    // fetch branch wise fund status
+    const fetchBranchWiseExposureStatus = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-exposure-status/?branch=${branch}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+          IBranchWiseExposure[]
+        >;
+        if (successResponse(result.status)) {
+          setBranchWiseExposure(result.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchTurnoverStatus();
+    fetchBranchWiseFundStatus();
+    fetchBranchWiseMarginStatus();
+    fetchBranchWiseExposureStatus();
+  }, [branch]);
 
   return (
     <div className="mx-4">
-      <PageHeader name="Branch Performance" />
+      <title>Branch Performance - LBSL</title>
+      <meta name="description" content="branch performance analytics" />
+      <PageHeader name="Branch Performance">
+        <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
+      </PageHeader>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
         {/* Branch Wise Turnover Status */}
         <DataTableCard
@@ -57,7 +150,7 @@ export default async function BranchPerformance() {
           subtitle="show data for branch wise turnover"
           className="col-span1 max-h[700px] overflow-y-auto lg:col-span-2 lg:row-span-2"
           columns={branchWiseTurnoverColumns}
-          data={branchWiseTurnoverStatusJson}
+          data={turnover}
         />
 
         {/* Branch Wise Margin Status */}
@@ -69,7 +162,7 @@ export default async function BranchPerformance() {
             <CardDescription>shows the grid for margin status</CardDescription>
           </CardHeader>
           <CardContent>
-            <BranchWiseMarginDataTable records={branchWiseMarginStatusJson} />
+            <BranchWiseMarginDataTable records={branchWiseMargin} />
           </CardContent>
         </Card>
 
@@ -84,9 +177,7 @@ export default async function BranchPerformance() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <BranchWiseExposureDataTable
-              records={branchWiseExposureStatusJson}
-            />
+            <BranchWiseExposureDataTable records={branchWiseExposure} />
           </CardContent>
         </Card>
 
@@ -96,7 +187,7 @@ export default async function BranchPerformance() {
           title="Branch Wise Fund Status(Till Today)"
           subtitle="summary of fund status branch wise"
           columns={branchWiseFundColumns}
-          data={branchWiseFundStatusJson}
+          data={branchWiseFund}
         />
       </div>
     </div>

@@ -12,6 +12,7 @@ import { successResponse } from "@/lib/utils";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { IResponse } from "@/types/utils";
 
 export interface IBranchLov {
   branchCode: string;
@@ -19,7 +20,7 @@ export interface IBranchLov {
 }
 
 interface IBranchFilterProps {
-  onChange: (branch: string) => void;
+  onChange: (_branch: string) => void;
   currentBranch?: string;
 }
 
