@@ -19,9 +19,9 @@ import {
 const COLORS = [BarColors.red, BarColors.green];
 
 interface IDataType {
-  name: string;
-  totalClient: number;
-  totalTrade: number;
+  channel: string;
+  totalClients: number;
+  trades: number;
   totalTurnover: number;
 }
 
@@ -74,7 +74,7 @@ const renderActiveShape = (props: any) => {
   return (
     <g>
       <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={12}>
-        {payload.name}
+        {payload.channel}
       </text>
       <Sector
         cx={cx}
@@ -157,7 +157,6 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
                 />
               ))}
             </Pie>
-            {/* <Legend /> */}
           </PieChartRechart>
         </ResponsiveContainer>
       </CardContent>
