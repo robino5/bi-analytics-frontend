@@ -4,11 +4,20 @@ import ClientTradesDataTable from "./_client_trades_datatable";
 import PieChart from "./_pie_chart";
 import StackBarChart from "./_stacked_barchart";
 import {
-  dayWiseStatistics,
   monthWiseClientStatistics,
   monthWiseTradeStatistics,
   monthWiseTurnoverStatistics,
 } from "./data";
+import {
+  IActiveTradeDayWise,
+  IActiveTradingToday,
+  IMonthWiseData,
+  PayloadType,
+} from "@/types/activeTradingCodes";
+import { IResponse } from "@/types/utils";
+import { auth } from "@/auth";
+import { Session } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Active Trading Codes - LBSL",
@@ -16,38 +25,27 @@ export const metadata: Metadata = {
 };
 
 const removeKeyFromObjects = (data: any[], ignoreKey: string) => {
-  return data.filter((item) => item.name !== ignoreKey);
+  return data.filter((item) => item.channel.trim() !== ignoreKey);
 };
 
-const getClientTradeSummaryOfToday = async () => {
-  return [
+const getClientTradeSummaryOfToday: (
+  session: Session
+) => Promise<IActiveTradingToday[]> = async (session: Session) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-today/`,
     {
-      name: "DT",
-      totalClient: 1200,
-      totalTrade: 16591,
-      totalTurnover: 7866633,
-    },
-    {
-      name: "INTERNET",
-      totalClient: 3338,
-      totalTrade: 20903,
-      totalTurnover: 47333344,
-    },
-    {
-      name: "TOTAL(DT + INTERNET)",
-      totalClient: 5192,
-      totalTrade: 37494,
-      totalTurnover: 12720293099,
-    },
-  ];
-};
+      headers: {
+        Authorization: `Bearer ${session.user.accessToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
-type StatisticsPayloadType = {
-  tradingDate: string;
-  channel: string;
-  totalClients: number;
-  totalTrades: number;
-  totalTurnover: number;
+  if (response.status !== 200) {
+    console.error(response.statusText);
+  }
+  const data: IResponse<IActiveTradingToday[]> = await response.json();
+  return data.data;
 };
 
 type TransformedDataItem = {
@@ -56,28 +54,52 @@ type TransformedDataItem = {
   internet: number;
 };
 
-const getDayWiseStatistics = async () => {
-  return dayWiseStatistics;
+const getDayWiseStatistics: (
+  session: Session
+) => Promise<IActiveTradeDayWise[]> = async (session: Session) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-daywise/`,
+    {
+      headers: {
+        Authorization: `Bearer ${session.user.accessToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (response.status !== 200) {
+    console.error(response.statusText);
+  }
+  const data: IResponse<IActiveTradeDayWise[]> = await response.json();
+  return data.data;
 };
 
-const getMonthWiseClientStatistics = async () => {
-  return monthWiseClientStatistics;
-};
+const getMonthWiseStatistics: (
+  session: Session
+) => Promise<IMonthWiseData> = async (session: Session) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-monthwise/`,
+    {
+      headers: {
+        Authorization: `Bearer ${session.user.accessToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
-const getMonthWiseTradeStatistics = async () => {
-  return monthWiseTradeStatistics;
-};
-
-const getMonthWiseTurnoverStatistics = async () => {
-  return monthWiseTurnoverStatistics;
+  if (response.status !== 200) {
+    console.error(response.statusText);
+  }
+  const data: IResponse<IMonthWiseData> = await response.json();
+  return data.data;
 };
 
 const transformData = (
-  data: StatisticsPayloadType[],
+  data: IActiveTradeDayWise[],
   key: string
 ): TransformedDataItem[] => {
   const transformedData: TransformedDataItem[] = data.reduce(
-    (acc: TransformedDataItem[], curr: StatisticsPayloadType) => {
+    (acc: TransformedDataItem[], curr: IActiveTradeDayWise) => {
       const existingItemIndex = acc.findIndex(
         (item) => item.tradingDate === curr.tradingDate
       );
@@ -114,29 +136,48 @@ const ratioMaker = (data: TransformedDataItem[]) => {
   });
 };
 
+const ratioMakerMonthWise = (data: PayloadType[]) => {
+  return data.map((d) => {
+    const total = d.DT + d.INTERNET;
+    return {
+      ...d,
+      dtRatio: Math.round((d.DT / total) * 100),
+      internetRatio: Math.round((d.INTERNET / total) * 100),
+    };
+  });
+};
+
 const ActiveTradingCodesBoard = async () => {
-  const dayWiseSummary = await getClientTradeSummaryOfToday();
-  const dayWiseData = await getDayWiseStatistics();
-  const monthWiseClients = await getMonthWiseClientStatistics();
-  const monthWiseTrades = await getMonthWiseTradeStatistics();
-  const monthWiseTurnover = await getMonthWiseTurnoverStatistics();
+  const session = await auth();
+
+  if (!session) {
+    redirect("/auth/login");
+  }
+
+  const dayWiseSummary = await getClientTradeSummaryOfToday(session);
+  const dayWiseData = await getDayWiseStatistics(session);
+  const monthWiseData = await getMonthWiseStatistics(session);
+
+  const monthWiseClients = monthWiseData.totalClients;
+  const monthWiseTrades = monthWiseData.totalTrades;
+  const monthWiseTurnover = monthWiseData.totalTurnover;
 
   const sanitizedDayWiseSummary = removeKeyFromObjects(
     dayWiseSummary,
-    "TOTAL(DT + INTERNET)"
+    "TOTAL (DT+INTERNET)"
   );
 
   const dayWiseClients = transformData(dayWiseData, "totalClients");
-  const dayWiseTrades = transformData(dayWiseData, "totalTrades");
+  const dayWiseTrades = transformData(dayWiseData, "trades");
   const dayWiseTurnover = transformData(dayWiseData, "totalTurnover");
 
   const transformedClients = ratioMaker(dayWiseClients);
   const transformedTrades = ratioMaker(dayWiseTrades);
   const transformedTurnover = ratioMaker(dayWiseTurnover);
 
-  const transformedMonthWiseClients = ratioMaker(monthWiseClients);
-  const transformedMonthWiseTrades = ratioMaker(monthWiseTrades);
-  const transformedMonthWiseTurnover = ratioMaker(monthWiseTurnover);
+  const transformedMonthWiseClients = ratioMakerMonthWise(monthWiseClients);
+  const transformedMonthWiseTrades = ratioMakerMonthWise(monthWiseTrades);
+  const transformedMonthWiseTurnover = ratioMakerMonthWise(monthWiseTurnover);
 
   const fixedProps = {
     xDataKey: "tradingDate",
@@ -145,7 +186,7 @@ const ActiveTradingCodesBoard = async () => {
   };
   return (
     <div className="mx-4">
-      <PageHeader name="Active Trading Codes" showFilters={false} />
+      <PageHeader name="Active Trading Codes" />
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-2">
         <div className="rounded-md xl:col-span-6">
           <ClientTradesDataTable records={dayWiseSummary} />
@@ -155,14 +196,14 @@ const ActiveTradingCodesBoard = async () => {
         <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
           <PieChart
             title="Clients (Today)"
-            dataKey="totalClient"
+            dataKey="totalClients"
             data={sanitizedDayWiseSummary}
           />
         </div>
         <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
           <PieChart
             title="Trades (Today)"
-            dataKey="totalTrade"
+            dataKey="trades"
             data={sanitizedDayWiseSummary}
           />
         </div>
