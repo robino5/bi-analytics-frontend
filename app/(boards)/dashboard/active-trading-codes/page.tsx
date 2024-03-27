@@ -136,11 +136,17 @@ const ratioMaker = (data: TransformedDataItem[]) => {
   });
 };
 
+const parseDateOfMonthWise = (date: string) => {
+  return date.slice(3);
+};
+
 const ratioMakerMonthWise = (data: PayloadType[]) => {
   return data.map((d) => {
     const total = d.DT + d.INTERNET;
     return {
-      ...d,
+      dt: d.DT,
+      internet: d.INTERNET,
+      tradingDate: parseDateOfMonthWise(d.monthYear),
       dtRatio: Math.round((d.DT / total) * 100),
       internetRatio: Math.round((d.INTERNET / total) * 100),
     };
