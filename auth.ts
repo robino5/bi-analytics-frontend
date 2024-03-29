@@ -2,6 +2,9 @@ import NextAuth from "next-auth";
 
 import authConfig from "@/auth.config";
 
+const ONE_DAY = 60 * 60 * 24
+const TWO_DAY = 2 * ONE_DAY
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -32,6 +35,6 @@ export const {
       return token;
     }
   },
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: TWO_DAY, updateAge: ONE_DAY },
   ...authConfig,
 });
