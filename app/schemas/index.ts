@@ -19,6 +19,8 @@ export const CreateUserSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
   email: z.union([z.literal(""), z.string().email()]),
   password: z.string().min(4, "minium 4 character password is required"),
   role: z.nativeEnum(RoleType).default(RoleType.REGIONAL_MANAGER),

@@ -125,13 +125,6 @@ export default function DashboardMenus() {
           urlPath: "/users",
           icon: <CgUserList className="h-4 w-4" />,
         },
-        {
-          id: 2,
-          codeName: "auth_controls",
-          viewName: "Role & Permissions",
-          urlPath: "/auths",
-          icon: <BsWrenchAdjustableCircle className="h-4 w-4" />,
-        },
       ],
     },
   ];

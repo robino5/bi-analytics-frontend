@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { DataTableColumnHeader } from "./_userTableHeader";
 import { IUser } from "@/types/user";
+import { DataTableRowActions } from "./_userTableRowActions";
 
 export const useTableColumns: ColumnDef<IUser>[] = [
   {
@@ -61,7 +62,6 @@ export const useTableColumns: ColumnDef<IUser>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Branch" />
     ),
-    enableHiding: false,
   },
   {
     accessorKey: "isActive",
@@ -72,12 +72,12 @@ export const useTableColumns: ColumnDef<IUser>[] = [
       row.getValue("isActive") === true ? (
         <Badge
           variant="default"
-          className="bg-green-300 text-green-800 font-bold"
+          className="bg-emerald-100 text-green-600 font-bold"
         >
           ACTIVE
         </Badge>
       ) : (
-        <Badge variant="default" className="bg-red-300 text-red-800 font-bold">
+        <Badge variant="default" className="bg-rose-100 text-red-600 font-bold">
           LOCKED
         </Badge>
       ),
@@ -119,5 +119,9 @@ export const useTableColumns: ColumnDef<IUser>[] = [
         </Badge>
       );
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
