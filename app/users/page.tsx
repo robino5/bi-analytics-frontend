@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 
 import { CreateUserForm } from "./forms";
+import { IUser } from "@/types/user";
 
 const fetchUsers = async (session: Session) => {
   try {
@@ -49,7 +50,8 @@ const Users = () => {
     redirect("/auth/login");
   }
 
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [newUserOpen, setNewUserOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,14 +67,14 @@ const Users = () => {
       <div className="mt-4">
         <div className="mb-4">
           {/* Add User Dialoge */}
-          <Dialog>
+          <Dialog open={newUserOpen} onOpenChange={setNewUserOpen}>
             <DialogTrigger asChild>
               <Button variant="outline">
                 <AiOutlinePlusCircle className="h-4 w-4 mr-2" />
                 Add User
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[500px]">
               <DialogHeader>
                 <DialogTitle>Add New User</DialogTitle>
                 <DialogDescription>
@@ -80,7 +82,7 @@ const Users = () => {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <CreateUserForm />
+                <CreateUserForm setOpen={setNewUserOpen}/>
               </div>
             </DialogContent>
           </Dialog>

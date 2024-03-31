@@ -33,13 +33,19 @@ enum RoleType {
   REGIONAL_MANAGER = "REGIONAL_MANAGER",
 }
 
-export function CreateUserForm() {
+interface CreateUserFormProps {
+  setOpen: (_open: boolean) => void;
+}
+
+export function CreateUserForm({ setOpen }: CreateUserFormProps) {
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
     defaultValues: {
       username: "",
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
       role: RoleType.REGIONAL_MANAGER,
       isActive: true,
     },
@@ -47,6 +53,7 @@ export function CreateUserForm() {
 
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     createUserAction(values);
+    setOpen(false);
   }
 
   return (
@@ -58,7 +65,7 @@ export function CreateUserForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Username<span className="text-red-500">*</span></FormLabel>
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
@@ -80,14 +87,42 @@ export function CreateUserForm() {
             )}
           />
         </div>
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Password<span className="text-red-500">*</span></FormLabel>
               <FormControl>
-                <Input placeholder="shadcn@testme.com" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,7 +133,7 @@ export function CreateUserForm() {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>User Role</FormLabel>
+              <FormLabel>User Role<span className="text-red-500">*</span></FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -123,7 +158,7 @@ export function CreateUserForm() {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center space-x-2">
-                <FormLabel htmlFor="isActive">Acive Status</FormLabel>
+                <FormLabel htmlFor="isActive">Acive Status<span className="text-red-500">*</span></FormLabel>
                 <FormControl>
                   <Switch
                     id="isActive"
