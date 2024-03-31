@@ -80,3 +80,7 @@ export const deleteUserAction = async (username: string) => {
     throw error;
   }
 };
+
+export const updateUserAction = async (payload: any) => {
+  console.log(payload)
+};

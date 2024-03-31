@@ -22,8 +22,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { createUserAction } from "@/app/actions/user";
-import { CreateUserSchema } from "@/app/schemas";
+import { createUserAction, updateUserAction } from "@/app/actions/user";
+import { CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
+import { IUser } from "@/types/user";
 
 enum RoleType {
   ADMIN = "ADMIN",
@@ -35,6 +36,10 @@ enum RoleType {
 
 interface CreateUserFormProps {
   setOpen: (_open: boolean) => void;
+}
+
+interface UpdateUserFormProps {
+  user: z.infer<typeof UpdateUserSchema>;
 }
 
 export function CreateUserForm({ setOpen }: CreateUserFormProps) {
@@ -65,7 +70,9 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username<span className="text-red-500">*</span></FormLabel>
+                <FormLabel>
+                  Username<span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
@@ -120,7 +127,9 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password<span className="text-red-500">*</span></FormLabel>
+              <FormLabel>
+                Password<span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -133,7 +142,9 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
           name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>User Role<span className="text-red-500">*</span></FormLabel>
+              <FormLabel>
+                User Role<span className="text-red-500">*</span>
+              </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -158,7 +169,9 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center space-x-2">
-                <FormLabel htmlFor="isActive">Acive Status<span className="text-red-500">*</span></FormLabel>
+                <FormLabel htmlFor="isActive">
+                  Acive Status<span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Switch
                     id="isActive"
@@ -171,6 +184,176 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
             </FormItem>
           )}
         />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+}
+
+export function UpdateUserForm({ user }: UpdateUserFormProps) {
+  const form = useForm<z.infer<typeof UpdateUserSchema>>({
+    resolver: zodResolver(UpdateUserSchema),
+    defaultValues: {
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      isActive: user.isActive,
+      password: "",
+      profile: {
+        branchId: user.profile.branchId,
+        designation: user.profile.designation,
+      },
+    },
+  });
+
+  function updateSubmit(values: z.infer<typeof UpdateUserSchema>) {
+    updateUserAction(values);
+  }
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(updateSubmit)} className="space-y-8">
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Username<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="shadcn"
+                    {...field}
+                    value={user.username}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn@testme.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex space-x-4">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                User Role<span className="text-red-500">*</span>
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={user.role}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.values(RoleType).map((role) => (
+                    <SelectItem key={role} value={role}>
+                      {role}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isActive"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center space-x-2">
+                <FormLabel htmlFor="isActive">
+                  Acive Status<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Switch
+                    id="isActive"
+                    onCheckedChange={field.onChange}
+                    defaultChecked={user.isActive}
+                  />
+                </FormControl>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* <div className="text-slate-700 font-semibold text-xl">
+          Profile Details
+        </div>
+        <div className="flex space-x-4 space-y-0">
+          <FormField
+            control={form.control}
+            name="profile.designation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Designation</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="profile.branchId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Branch Id</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div> */}
         <Button type="submit">Submit</Button>
       </form>
     </Form>

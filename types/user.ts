@@ -1,8 +1,10 @@
+import { RoleType } from "@/app/schemas";
+
 interface IUserProfile {
     designation: string;
     image: string | null;
     branchId: number | null;
-    branchName: number | null;
+    branchName: string | null;
 }
 
 export interface IUser {
@@ -19,7 +21,7 @@ export interface IUser {
     dateJoined: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
-    role: string;
+    role: RoleType;
     profile: IUserProfile;
     createdBy: number | null;
     updatedBy: number | null;
