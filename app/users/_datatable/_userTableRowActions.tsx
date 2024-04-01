@@ -16,6 +16,7 @@ import {
 import { FaUserEdit } from "react-icons/fa";
 import { TiUserDelete } from "react-icons/ti";
 import { deleteUserAction } from "@/app/actions/user";
+import { useRouter } from "next/navigation";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -24,8 +25,14 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const router = useRouter();
+
   const handleDeleteAction = () => {
     deleteUserAction(row.getValue("username"));
+  };
+
+  const handleEditAction = () => {
+    router.push(`users/${row.getValue("username")}`);
   };
 
   return (
@@ -40,7 +47,7 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleEditAction}>
           Edit
           <DropdownMenuShortcut>
             <FaUserEdit className="h-4 w-4 text-emerald-500" />

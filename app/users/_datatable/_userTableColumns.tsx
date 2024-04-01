@@ -47,6 +47,11 @@ export const useTableColumns: ColumnDef<IUser>[] = [
     ),
   },
   {
+    id: "role",
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableColumnFilter: true,
     accessorKey: "role",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Role" />
@@ -58,18 +63,24 @@ export const useTableColumns: ColumnDef<IUser>[] = [
     ),
   },
   {
+    id: "branch",
     accessorKey: "profile.branchName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Branch" />
     ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableColumnFilter: true,
   },
   {
+    id: "active",
     accessorKey: "isActive",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) =>
-      row.getValue("isActive") === true ? (
+      row.getValue("active") === true ? (
         <Badge
           variant="default"
           className="bg-emerald-100 text-green-600 font-bold"
