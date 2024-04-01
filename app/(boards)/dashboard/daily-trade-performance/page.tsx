@@ -76,7 +76,7 @@ export default function DailyTradePerformance() {
     fill: BarColors.blue,
     stroke: "purple",
     height: 700,
-    barLabel: false,
+    barLabel: true,
   };
 
   const sectorCashCodeExposureOption = {
@@ -364,7 +364,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Summary"
-            subtitle="shows overall short summary"
+            subtitle="overview of clients, turnover, net buy/sell"
             children={
               <StatisticsCardClientTurnoverSummary
                 data={summary.shortSummary}
@@ -378,7 +378,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Cash Code Status"
-            subtitle="shows cash code summary"
+            subtitle="overview of cash codes"
             children={
               <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
             }
@@ -390,7 +390,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Margin Code Status"
-            subtitle="shows margin code summary"
+            subtitle="overview of margin codes"
             children={
               <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
             }
@@ -402,8 +402,8 @@ export default function DailyTradePerformance() {
         {turnoverPerformance ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={"Turnover Performance"}
-            subtitle="Shows a analytics of turnover performance of last 7 days."
+            title={"Daily Turnover Target"}
+            subtitle="analytics of Turnover Target vs Generated"
             children={
               <BarChartVerticalGrouped
                 data={turnoverPerformance}
@@ -418,7 +418,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Margin Loan Usage"}
-            subtitle="Shows a analytics of turnover performance of last 7 days."
+            subtitle="analytics of Total Allocated vs Daily Usage"
             children={
               <BarChartVerticalGrouped
                 data={marginLoanUsage as any}

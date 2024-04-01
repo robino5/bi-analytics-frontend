@@ -36,13 +36,35 @@ export function formatDate(date: Date): string {
  * @param num The number to convert.
  * @returns A string representation of the number, with millions abbreviated as "M" if applicable.
  */
-export function numberToMillionsString(num: number): string {
-  if (Math.abs(num) >= 1000000) {
-    const millions = num / 1000000;
-    return `${millions.toFixed(1)}M`;
-  } else {
-    return numberFormatter(num);
+export function numberToMillionsString(num: number, useThousand: boolean = false): string {
+  if (isNaN(num)) {
+    return 'Invalid Number';
   }
+
+  const absNumber = Math.abs(num);
+
+  if (useThousand) {
+    if (absNumber >= 1000 && absNumber < 1000000) {
+      return (num / 1000).toFixed(0) + 'K';
+    } else if (absNumber < 1000) {
+      return new Intl.NumberFormat('en-US').format(num);
+    }
+  }
+
+  if (absNumber < 1000000) {
+    const formattedNumber = new Intl.NumberFormat('en-US').format(num);
+    return formattedNumber;
+  }
+
+  if (absNumber < 10000000) {
+    return (num / 1000000).toFixed(1) + 'M';
+  }
+
+  if (absNumber < 1000000000) {
+    return Math.floor(num / 1000000) + 'M';
+  }
+
+  return Math.floor(num / 1000000) + 'M';
 }
 
 
