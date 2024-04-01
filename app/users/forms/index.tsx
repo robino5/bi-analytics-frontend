@@ -24,7 +24,10 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { createUserAction, updateUserAction } from "@/app/actions/user";
 import { CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
-import { IUser } from "@/types/user";
+import { useTransition } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { CiSaveUp1 } from "react-icons/ci";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 enum RoleType {
   ADMIN = "ADMIN",
@@ -191,6 +194,10 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
 }
 
 export function UpdateUserForm({ user }: UpdateUserFormProps) {
+  const [isPending, startTransition] = useTransition();
+
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof UpdateUserSchema>>({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
@@ -200,7 +207,6 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
       lastName: user.lastName,
       role: user.role,
       isActive: user.isActive,
-      password: "",
       profile: {
         branchId: user.profile.branchId,
         designation: user.profile.designation,
@@ -209,7 +215,19 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
   });
 
   function updateSubmit(values: z.infer<typeof UpdateUserSchema>) {
-    updateUserAction(values);
+    startTransition(async () => {
+      const res = await updateUserAction(values);
+      if (res.status === "success") {
+        toast({
+          description: res.message,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          description: res.message,
+        });
+      }
+    });
   }
   return (
     <Form {...form}>
@@ -223,12 +241,8 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                 <FormLabel>
                   Username<span className="text-red-500">*</span>
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="shadcn"
-                    {...field}
-                    value={user.username}
-                  />
+                <FormControl className="w-full">
+                  <Input {...field} value={user.username} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -240,8 +254,8 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn@testme.com" {...field} />
+                <FormControl className="w-full">
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -323,7 +337,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
             </FormItem>
           )}
         />
-        {/* <div className="text-slate-700 font-semibold text-xl">
+        <div className="text-slate-700 font-semibold text-xl">
           Profile Details
         </div>
         <div className="flex space-x-4 space-y-0">
@@ -353,8 +367,17 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
               </FormItem>
             )}
           />
-        </div> */}
-        <Button type="submit">Submit</Button>
+        </div>
+        {isPending ? (
+          <Button disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Saving
+          </Button>
+        ) : (
+          <Button type="submit" variant="default">
+            <CiSaveUp1 className="h-5 w-5 mr-2" /> Save
+          </Button>
+        )}
       </form>
     </Form>
   );

@@ -27,18 +27,15 @@ export const CreateUserSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
-export const ProfileSchema = z.object({
-  branchId: z.number().optional(),
-  designation: z.string().optional(),
-})
-
 export const UpdateUserSchema = z.object({
   username: z.string().readonly(),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   email: z.union([z.literal(""), z.string().email()]),
-  password: z.string().min(4, "minium 4 character password is required"),
   role: z.nativeEnum(RoleType).default(RoleType.REGIONAL_MANAGER),
-  profile: ProfileSchema,
+  profile: z.object({
+    branchId: z.number().optional(),
+    designation: z.string().optional(),
+  }),
   isActive: z.boolean().default(true),
 });

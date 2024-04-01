@@ -12,7 +12,6 @@ import { IResponse } from "@/types/utils";
 import { Session } from "next-auth";
 import { redirect, notFound } from "next/navigation";
 import { UpdateUserForm } from "../forms";
-import { UpdateUserSchema } from "@/app/schemas";
 
 const fetchUserByUserName = async (username: string, session: Session) => {
   const response = await fetch(
@@ -40,12 +39,11 @@ const UserProfile = async ({ params }: { params: { id: string } }) => {
     const user: any = await fetchUserByUserName(params.id, session);
     return (
       <div className="mx-4">
-        <div className="grid w-screen/7 h-screen place-items-center">
-          <div className="max-w-[680px]">
+        <div className="grid w-screen/2 h-screen place-items-center">
+          <div className="min-w-[480px]">
             <Card>
               <CardHeader>
                 <CardTitle>Edit Profile</CardTitle>
-                <CardDescription>edit details of profile</CardDescription>
               </CardHeader>
               <CardContent>
                 <UpdateUserForm user={user} />
