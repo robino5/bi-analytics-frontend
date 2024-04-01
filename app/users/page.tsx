@@ -6,7 +6,7 @@ import { UserTable } from "./_datatable/_userDataTable";
 import { useTableColumns } from "./_datatable/_userTableColumns";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogTrigger,
@@ -88,6 +88,10 @@ const Users = () => {
           </Dialog>
         </div>
         <Card className="p-4 space-y-4">
+          <CardHeader>
+            <CardTitle>Users</CardTitle>
+            <CardDescription>Manage access control of users</CardDescription>
+          </CardHeader>
           <CardContent>
             <UserTable columns={useTableColumns} data={users} />
           </CardContent>
