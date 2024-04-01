@@ -60,7 +60,7 @@ export default function DailyTradePerformance() {
     fill: BarColors.blue,
     stroke: "purple",
     height: 700,
-    barLabel: false,
+    barLabel: true,
   };
 
   const sectorCashCodeExposureOption = {

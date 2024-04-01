@@ -1,4 +1,5 @@
 "use client";
+
 import { FC } from "react";
 import {
   ResponsiveContainer,
@@ -10,10 +11,15 @@ import {
   Legend,
   Bar,
   Rectangle,
+  LabelList,
 } from "recharts";
 
-import { numberFormatter, numberToMillionsString } from "@/lib/utils";
-import { TOOLTIP_BACKGROUND } from "./ui/utils/constants";
+import { numberToMillionsString } from "@/lib/utils";
+import {
+  LABEL_COLOR,
+  LABEL_TICK_FONT_SIZE,
+  TOOLTIP_BACKGROUND,
+} from "./ui/utils/constants";
 import { Separator } from "./ui/separator";
 import { AiTwotoneAlert } from "react-icons/ai";
 
@@ -37,36 +43,11 @@ interface BarChartProps {
   option: BarOption;
 }
 
-interface CustomizedLabelProps {
-  x?: number;
-  y?: number;
-  fill?: string;
-  value?: number;
-}
-
-const CustomizedLabel: FC<CustomizedLabelProps> = ({
-  x = 0,
-  y = 0,
-  fill = "#C6C6C6",
-  value = 0,
-}) => {
-  return (
-    <text
-      x={x}
-      y={y}
-      fontSize="16"
-      fontFamily="sans-serif"
-      fill={fill}
-      textAnchor="start"
-    >
-      {numberToMillionsString(value)}
-    </text>
-  );
-};
 interface CustomTooltipProps {
   active?: boolean;
   payload?: PayloadType[];
   label?: number;
+  totalAmount?: number;
 }
 
 type PayloadType = {
@@ -77,7 +58,20 @@ type PayloadType = {
   dataKey: string;
 };
 
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+const findRatio = (
+  value: string,
+  totalAmount: number,
+  precision: number = 2
+) => {
+  return ((parseFloat(value) / totalAmount) * 100).toFixed(precision);
+};
+
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  totalAmount,
+}: CustomTooltipProps) => {
   if (active && payload && payload.length > 0) {
     return (
       <div
@@ -103,7 +97,11 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
                 color: pld.color,
               }}
             >
-              {`${pld.name} : ${numberFormatter(innerPayload.value as number)}`}
+              {`${pld.name} : ${findRatio(
+                innerPayload.value as string,
+                totalAmount ?? 1
+              )}`}
+              %
             </p>
           );
         })}
@@ -116,6 +114,10 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
   const TICK_COLOR = "#C7C7C7";
   const CARTESIAN_GRID_COLOR = "#565656";
+  const totalAmount = data.reduce(
+    (acc, obj) => acc + parseFloat(obj.value as string),
+    0
+  );
   return (
     <ResponsiveContainer height={option?.height ?? 300} width="100%">
       <RechartsBarChart
@@ -139,7 +141,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           type="number"
           tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
           tickLine={false}
-          tickFormatter={(value) => numberToMillionsString(value as number)}
+          tickFormatter={(value) => `${findRatio(value, totalAmount, 0)}%`}
         />
         <YAxis
           type="category"
@@ -148,16 +150,29 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
         />
         {option?.legendName ?? <Legend name={option.legendName} />}
-        <Tooltip content={<CustomTooltip />} />
+        <Tooltip content={<CustomTooltip totalAmount={totalAmount} />} />
         <Bar
           dataKey={option.valueKey}
           fill={option.fill}
           legendType="line"
           barSize={12}
-          // radius={[0, 5, 5, 0]}
-          label={option?.barLabel ? <CustomizedLabel /> : ""}
           activeBar={<Rectangle fill={option.fill} stroke={option.stroke} />}
-        />
+        >
+          {option?.barLabel ? (
+            <LabelList
+              position="right"
+              dataKey={option.valueKey}
+              fill={LABEL_COLOR}
+              fontSize={LABEL_TICK_FONT_SIZE}
+              offset={1}
+              formatter={(value: number) =>
+                `${numberToMillionsString(value, true)}`
+              }
+            />
+          ) : (
+            ""
+          )}
+        </Bar>
       </RechartsBarChart>
     </ResponsiveContainer>
   );
@@ -173,7 +188,7 @@ const BarChartHorizontal: FC<BarCharHorizonalProps> = ({ data, options }) => {
     <BarChart data={data} option={options} />
   ) : (
     <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
-      <AiTwotoneAlert className="mr-2 h-6 w-5"/> No data available
+      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data available
     </div>
   );
 };
