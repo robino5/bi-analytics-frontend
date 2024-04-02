@@ -225,6 +225,7 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
 
 export function UpdateUserForm({ user }: UpdateUserFormProps) {
   const [isPending, startTransition] = useTransition();
+  const [editable, _] = useState(user.role === RoleType.ADMIN);
 
   const { toast } = useToast();
 
@@ -331,7 +332,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
               <Select
                 onValueChange={field.onChange}
                 defaultValue={user.role}
-                disabled={user.role.toString() !== "ADMIN"}
+                disabled={!editable}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -361,7 +362,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                     id="isActive"
                     onCheckedChange={field.onChange}
                     defaultChecked={user.isActive}
-                    disabled={user.role.toString() !== "ADMIN"}
+                    disabled={!editable}
                   />
                 </FormControl>
                 <FormLabel htmlFor="isActive">
@@ -383,10 +384,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
               <FormItem>
                 <FormLabel>Designation</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={user.role.toString() !== "ADMIN"}
-                  />
+                  <Input {...field} disabled={!editable} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -399,10 +397,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
               <FormItem>
                 <FormLabel>Branch</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    disabled={user.role.toString() !== "ADMIN"}
-                  />
+                  <Input {...field} disabled={!editable} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
