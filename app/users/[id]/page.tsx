@@ -1,10 +1,5 @@
 import { auth } from "@/auth";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { IUser } from "@/types/user";
 import { IResponse } from "@/types/utils";
@@ -33,6 +28,11 @@ const UserProfile = async ({ params }: { params: { id: string } }) => {
   const session = await auth();
   if (!session) {
     redirect(DEFAULT_LOGIN_REDIRECT);
+  }
+  if (session.user.role !== "ADMIN") {
+    if (session.user.username !== params.id) {
+      redirect("/unauthorized");
+    }
   }
   try {
     const user: any = await fetchUserByUserName(params.id, session);
