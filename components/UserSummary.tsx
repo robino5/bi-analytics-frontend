@@ -9,7 +9,7 @@ export default async function UserSummary() {
     redirect("/auth/login");
   }
   const profileImg = session.user.image
-    ? `http://${process.env.NEXT_PUBLIC_MEDIA_URL}/media/${session.user.image}/`
+    ? `${process.env.NEXT_PUBLIC_MEDIA_URL}/media/${session.user.image}/`
     : "/man.png";
   const username = session.user.name || session.user.username;
   const subtitle = session.user.designation || session.user.role;
