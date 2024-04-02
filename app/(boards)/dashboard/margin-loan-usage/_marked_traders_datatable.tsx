@@ -61,7 +61,6 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
     };
     fetchClients();
   }, []);
-  console.log(`Branch From MardTrader Dt ${branch}`);
   return (
     <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

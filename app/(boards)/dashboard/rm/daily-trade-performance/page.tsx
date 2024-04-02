@@ -23,6 +23,7 @@ import SummarySkeletonCard, {
 } from "@/components/skeletonCard";
 import TraderFilter, { ITrader } from "@/components/traderFilter";
 import { IResponse } from "@/types/utils";
+import { RoleType } from "@/app/schemas";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -35,7 +36,10 @@ export default function DailyTradePerformance() {
   };
   // ===========================================
   const { data: session } = useSession();
-
+  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  // TODO : Need to inject BranchCode in the session object
+  const defaultBranch = isRM ? "12" : "";
+  const defaultTrader = isRM ? session.user.username : "";
   const turnoverChartOptions = [
     {
       name: "Target",
@@ -68,9 +72,9 @@ export default function DailyTradePerformance() {
     fill: BarColors.purple,
   };
 
-  const [branch, setBranch] = useState<string>("");
+  const [branch, setBranch] = useState<string>(defaultBranch);
+  const [trader, setTrader] = useState<string>(defaultTrader);
   const [traders, setTraders] = useState<ITrader[]>([]);
-  const [trader, setTrader] = useState<string>("");
 
   const [summary, setSummary] = useState<ISummaryDetails | null>(null);
   const [turnoverPerformance, setTurnoverPerformance] = useState<
@@ -85,7 +89,7 @@ export default function DailyTradePerformance() {
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
-    setTrader("");
+    setTrader(defaultTrader);
   };
 
   const handleTraderChange = async (value: string) => {
@@ -209,7 +213,7 @@ export default function DailyTradePerformance() {
 
   // effect on branch change
   useEffect(() => {
-    if (branch) {
+    if (branch && !trader) {
       // Fetch Traders
       const fetchTraderWithBranchId = async () => {
         try {
@@ -332,6 +336,29 @@ export default function DailyTradePerformance() {
       fetchDailyTurnoverPerformanceWithBranchId();
       fetchMarginCodeSectorExposureWithBranchId();
       fetchCashCodeSectorExposureWithBranchId();
+    } else {
+      // Fetch Traders
+      const fetchTraderWithBranchId = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const result = (await response.json()) as IResponse<ITrader[]>;
+          if (successResponse(result.status)) {
+            setTraders(result.data);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchTraderWithBranchId();
     }
   }, [branch]);
 

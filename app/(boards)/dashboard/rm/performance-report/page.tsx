@@ -20,12 +20,18 @@ import {
 import { successResponse } from "@/lib/utils";
 import { IClientDetail, ITurnoverPerformance } from "@/types/rmPerformance";
 import { IResponse } from "@/types/utils";
+import { RoleType } from "@/app/schemas";
 
 const RmPerformanceBoard = () => {
   const { data: session } = useSession();
 
-  const [trader, setTrader] = useState("");
-  const [branch, setBranch] = useState("");
+  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  // TODO : Need to inject BranchCode in the session object
+  const defaultBranch = isRM ? "12" : "";
+  const defaultTrader = isRM ? session.user.username : "";
+
+  const [branch, setBranch] = useState(defaultBranch);
+  const [trader, setTrader] = useState(defaultTrader);
   const [traders, setTraders] = useState<ITrader[]>([]);
 
   const [turnoverPerformance, setTurnoverPerformance] = useState<
@@ -35,7 +41,7 @@ const RmPerformanceBoard = () => {
 
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
-    setTrader(traders[0]?.traderId);
+    isRM ? setTrader(defaultTrader) : setTrader(traders[0]?.traderId);
   };
 
   const handleTraderChange = async (value: string) => {
@@ -63,7 +69,7 @@ const RmPerformanceBoard = () => {
         const result = (await response.json()) as IResponse<ITrader[]>;
         if (successResponse(result.status)) {
           setTraders(result.data);
-          setTrader(result.data[0].traderId);
+          isRM ? setTrader(defaultTrader) : setTrader(result.data[0].traderId);
         }
       } catch (error) {
         console.error(`Error fetching traders.`, error);
@@ -184,7 +190,7 @@ const RmPerformanceBoard = () => {
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
         <TraderFilter
           traders={traders}
-          currentTrader={trader}
+          currentTrader={defaultTrader ?? trader}
           onChange={handleTraderChange}
         />
       </PageHeader>
