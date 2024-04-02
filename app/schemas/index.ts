@@ -34,7 +34,7 @@ export const UpdateUserSchema = z.object({
   email: z.union([z.literal(""), z.string().email()]),
   role: z.nativeEnum(RoleType).default(RoleType.REGIONAL_MANAGER),
   profile: z.object({
-    branchId: z.number().optional(),
+    branchId: z.any().optional().readonly(),
     designation: z.string().optional(),
   }),
   isActive: z.boolean().default(true),

@@ -172,9 +172,6 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center space-x-2">
-                <FormLabel htmlFor="isActive">
-                  Acive Status<span className="text-red-500">*</span>
-                </FormLabel>
                 <FormControl>
                   <Switch
                     id="isActive"
@@ -182,6 +179,9 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
+                <FormLabel htmlFor="isActive">
+                  Active<span className="text-red-500">*</span>
+                </FormLabel>
               </div>
               <FormMessage />
             </FormItem>
@@ -208,7 +208,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
       role: user.role,
       isActive: user.isActive,
       profile: {
-        branchId: user.profile.branchId,
+        branchId: user.profile.branchId ?? "",
         designation: user.profile.designation,
       },
     },
@@ -298,7 +298,11 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
               <FormLabel>
                 User Role<span className="text-red-500">*</span>
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={user.role}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={user.role}
+                disabled={user.role.toString() !== "ADMIN"}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue />
@@ -322,16 +326,17 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center space-x-2">
-                <FormLabel htmlFor="isActive">
-                  Acive Status<span className="text-red-500">*</span>
-                </FormLabel>
                 <FormControl>
                   <Switch
                     id="isActive"
                     onCheckedChange={field.onChange}
                     defaultChecked={user.isActive}
+                    disabled={user.role.toString() !== "ADMIN"}
                   />
                 </FormControl>
+                <FormLabel htmlFor="isActive">
+                Active<span className="text-red-500">*</span>
+                </FormLabel>
               </div>
               <FormMessage />
             </FormItem>
@@ -348,7 +353,10 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
               <FormItem>
                 <FormLabel>Designation</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={user.role.toString() !== "ADMIN"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -359,9 +367,12 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
             name="profile.branchId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Branch Id</FormLabel>
+                <FormLabel>Branch</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    disabled={user.role.toString() !== "ADMIN"}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
