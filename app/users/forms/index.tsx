@@ -24,10 +24,11 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { createUserAction, updateUserAction } from "@/app/actions/user";
 import { CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
-import { useTransition } from "react";
+import { FormEvent, useState, useTransition } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { CiSaveUp1 } from "react-icons/ci";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { Session } from "next-auth";
 
 enum RoleType {
   ADMIN = "ADMIN",
@@ -39,13 +40,15 @@ enum RoleType {
 
 interface CreateUserFormProps {
   setOpen: (_open: boolean) => void;
+  session: Session;
 }
 
 interface UpdateUserFormProps {
   user: z.infer<typeof UpdateUserSchema>;
 }
 
-export function CreateUserForm({ setOpen }: CreateUserFormProps) {
+export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
+  const [isValid, setIsValid] = useState({ username: false });
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
     defaultValues: {
@@ -64,6 +67,27 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
     setOpen(false);
   }
 
+  function handleUsernameChange(e: FormEvent<HTMLInputElement>) {
+    form.setValue("username", e.currentTarget.value);
+    fetch(
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${e.currentTarget.value}/by-username/`,
+      {
+        headers: {
+          Authorization: `Bearer ${session.user.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((response) => {
+      if (response.status === 200) {
+        form.setError("username", { message: "Username already exists !" });
+        setIsValid((prevState) => ({ ...prevState, username: false }));
+      } else {
+        form.clearErrors("username");
+        setIsValid((prevState) => ({ ...prevState, username: true }));
+      }
+    });
+  }
+  const isFormValid = Object.values(isValid).every((val) => val);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -77,7 +101,11 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
                   Username<span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input
+                    placeholder="shadcn"
+                    {...field}
+                    onChange={handleUsernameChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -187,7 +215,9 @@ export function CreateUserForm({ setOpen }: CreateUserFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={!isFormValid}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
@@ -335,7 +365,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
                   />
                 </FormControl>
                 <FormLabel htmlFor="isActive">
-                Active<span className="text-red-500">*</span>
+                  Active<span className="text-red-500">*</span>
                 </FormLabel>
               </div>
               <FormMessage />
