@@ -6,7 +6,13 @@ import { UserTable } from "./_datatable/_userDataTable";
 import { useTableColumns } from "./_datatable/_userTableColumns";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogTrigger,
@@ -82,7 +88,7 @@ const Users = () => {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                <CreateUserForm setOpen={setNewUserOpen}/>
+                <CreateUserForm setOpen={setNewUserOpen} session={session} />
               </div>
             </DialogContent>
           </Dialog>

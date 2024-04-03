@@ -1,5 +1,6 @@
 "use client";
 
+import { RoleType } from "@/app/schemas";
 import {
   Select,
   SelectContent,
@@ -7,8 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSession } from "next-auth/react";
 
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export interface ITrader {
   traderId: string;
@@ -26,10 +29,25 @@ export default function TraderFilter({
   traders,
   currentTrader,
 }: ITraderFilterProps) {
+  const { data: session } = useSession();
+
+  if (!session) {
+    redirect("/auth/login");
+  }
+
+  const [traderLocked, _] = useState(
+    session?.user.role.toString() === RoleType.REGIONAL_MANAGER
+  );
+  const currentUser = session.user.username;
   const pathName = usePathname();
 
   return (
-    <Select onValueChange={onChange} defaultValue="all" value={currentTrader}>
+    <Select
+      onValueChange={onChange}
+      defaultValue={"all"}
+      value={currentTrader}
+      disabled={traderLocked}
+    >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a RM" />
       </SelectTrigger>

@@ -9,10 +9,11 @@ import {
 } from "@/components/ui/select";
 import { successResponse } from "@/lib/utils";
 
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { IResponse } from "@/types/utils";
+import { RoleType } from "@/app/schemas";
 
 export interface IBranchLov {
   branchCode: string;
@@ -28,8 +29,10 @@ export default function BranchFilter({
   onChange,
   currentBranch,
 }: IBranchFilterProps) {
+  const { data: session } = useSession();
   const [branchesList, setBranchesList] = useState<IBranchLov[]>([]);
   const [selectedBranch, setSelectedBranch] = useState("");
+  const [isRM, setIsRM] = useState(false);
   const pathName = usePathname();
 
   const setDefaultBranch = (branchCode: string) => {
@@ -39,7 +42,6 @@ export default function BranchFilter({
 
   useEffect(() => {
     const fetchBranches = async () => {
-      const session = await getSession();
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/branches/`,
@@ -56,6 +58,9 @@ export default function BranchFilter({
           // for RM Routes need to have default selected branch
           if (pathName.includes("/rm/")) {
             setDefaultBranch(result.data[0]?.branchCode || "");
+            if (session?.user.role.toString() == RoleType.REGIONAL_MANAGER) {
+              setIsRM(true);
+            }
           }
         }
       } catch (error) {
@@ -69,6 +74,7 @@ export default function BranchFilter({
       onValueChange={onChange}
       defaultValue={selectedBranch}
       value={currentBranch ?? ""}
+      disabled={isRM}
     >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a branch" />

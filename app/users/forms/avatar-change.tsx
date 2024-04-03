@@ -45,6 +45,7 @@ export function ChangeProfileImageForm({ user, session }: Props) {
         if (!response.ok) {
           throw new Error("Upload failed");
         }
+        // TODO: Show Sonner here
         console.log("Upload successful");
       })
       .catch((error) => {
@@ -57,7 +58,6 @@ export function ChangeProfileImageForm({ user, session }: Props) {
     const profileImage = user.profile.image;
     profileImage && setExistingImage(profileImage);
   };
-  console.log(existingImage)
   return (
     <div className="w-full">
       {/* Existing image */}
