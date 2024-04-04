@@ -11,7 +11,7 @@ import {
 import { useSession } from "next-auth/react";
 
 import { redirect, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export interface ITrader {
   traderId: string;
@@ -38,7 +38,6 @@ export default function TraderFilter({
   const [traderLocked, _] = useState(
     session?.user.role.toString() === RoleType.REGIONAL_MANAGER
   );
-  const currentUser = session.user.username;
   const pathName = usePathname();
 
   return (
@@ -52,7 +51,8 @@ export default function TraderFilter({
         <SelectValue placeholder="Select a RM" />
       </SelectTrigger>
       <SelectContent>
-        {pathName.includes("/rm/") ? (
+        {pathName.includes("/rm/") &&
+        session.user.role.toString() !== RoleType.REGIONAL_MANAGER ? (
           <SelectItem value="all">Select RM</SelectItem>
         ) : null}
         {traders.map((trader) => (
