@@ -6,6 +6,7 @@ import { IResponse } from "@/types/utils";
 import { Session } from "next-auth";
 import { redirect, notFound } from "next/navigation";
 import { UpdateUserForm } from "../forms";
+import { RoleType } from "@/app/schemas";
 
 const fetchUserByUserName = async (username: string, session: Session) => {
   const response = await fetch(
@@ -29,7 +30,7 @@ const UserProfile = async ({ params }: { params: { id: string } }) => {
   if (!session) {
     redirect(DEFAULT_LOGIN_REDIRECT);
   }
-  if (session.user.role !== "ADMIN") {
+  if (session.user.role !== RoleType.ADMIN) {
     if (session.user.username !== params.id) {
       redirect("/unauthorized");
     }

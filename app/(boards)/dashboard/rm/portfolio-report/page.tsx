@@ -29,6 +29,7 @@ import {
 import MarkedTraderDataTable from "./_marked_traders_datatable";
 import SummarySkeletonCard from "@/components/skeletonCard";
 import { IResponse } from "@/types/utils";
+import { RoleType } from "@/app/schemas";
 
 const RmPortfolioBoard = () => {
   // Override console.error
@@ -41,8 +42,14 @@ const RmPortfolioBoard = () => {
   };
   // ===========================================
   const { data: session } = useSession();
-  const [branch, setBranch] = useState("");
-  const [trader, setTrader] = useState("");
+
+  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  // TODO : Need to inject BranchCode in the session object
+  const defaultBranch = isRM ? "12" : "";
+  const defaultTrader = isRM ? session.user.username : "";
+
+  const [branch, setBranch] = useState(defaultBranch);
+  const [trader, setTrader] = useState(defaultTrader);
   const [traders, setTraders] = useState<ITrader[]>([]);
 
   const [fundCollections, setFundCollection] = useState<IFundCollection[]>([]);
@@ -190,159 +197,7 @@ const RmPortfolioBoard = () => {
       fetchPortfolio();
       fetchINetFundFlow();
     }
-  }, [trader]);
-
-  useEffect(() => {
-    // Fetch Traders
-    const fetchTraderWithBranchId = async (branchId: string) => {
-      try {
-        let branchUrl;
-        if (branchId) {
-          branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branchId}/`;
-        } else {
-          branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/`;
-        }
-        const response = await fetch(branchUrl, {
-          headers: {
-            Authorization: `Bearer ${session?.user.accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        const result = (await response.json()) as IResponse<ITrader[]>;
-        if (successResponse(result.status)) {
-          setTraders(result.data);
-          setTrader(result.data[0].traderId);
-        }
-      } catch (error) {
-        console.error(`Error fetching traders.`, error);
-      }
-    };
-
-    if (branch && trader) {
-      const fetchFundCollections = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/fund-collections/?branch=${branch}&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            IFundCollection[]
-          >;
-          if (successResponse(result.status)) {
-            setFundCollection(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-      const fetchPortfolio = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/portfolio-management-status/?branch=${branch}&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            IPortfolioManagement[]
-          >;
-          if (successResponse(result.status)) {
-            setPortfolio(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-
-      const fetchYellowClients = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/marked-clients/?branch=${branch}&category=yellow&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<IMarkedClient[]>;
-          if (successResponse(result.status)) {
-            setYellowClients(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-      const fetchRedClients = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/marked-clients/?branch=${branch}&category=red&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<IMarkedClient[]>;
-          if (successResponse(result.status)) {
-            setRedClients(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-      const fetchINetFundFlow = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-net-fund-flow/?branch=${branch}&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<INetFundFlow[]>;
-          if (successResponse(result.status)) {
-            setNetFundFlow(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-      fetchFundCollections();
-      fetchRedClients();
-      fetchYellowClients();
-      fetchPortfolio();
-      fetchINetFundFlow();
-    }
-    fetchTraderWithBranchId(branch);
-  }, [branch]);
+  }, [branch, trader]);
 
   return (
     <div className="mx-4">

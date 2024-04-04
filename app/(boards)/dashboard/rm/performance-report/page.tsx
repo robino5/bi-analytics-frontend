@@ -41,7 +41,7 @@ const RmPerformanceBoard = () => {
 
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
-    isRM ? setTrader(defaultTrader) : setTrader(traders[0]?.traderId);
+    setTrader(traders[0]?.traderId);
   };
 
   const handleTraderChange = async (value: string) => {
@@ -69,7 +69,7 @@ const RmPerformanceBoard = () => {
         const result = (await response.json()) as IResponse<ITrader[]>;
         if (successResponse(result.status)) {
           setTraders(result.data);
-          isRM ? setTrader(defaultTrader) : setTrader(result.data[0].traderId);
+          setTrader(result.data[0].traderId);
         }
       } catch (error) {
         console.error(`Error fetching traders.`, error);
@@ -127,62 +127,7 @@ const RmPerformanceBoard = () => {
       fetchClientDetails();
     }
     fetchTraderWithBranchId();
-  }, [branch]);
-
-  // on trader change
-  useEffect(() => {
-    if (branch && trader) {
-      const fetchTurnoverPerformance = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/turnover-performance/?branch=${branch}&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ITurnoverPerformance[]
-          >;
-          if (successResponse(result.status)) {
-            setTurnoverPerformance(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-
-      const fetchClientDetails = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/client-details/?branch=${branch}&trader=${trader}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<IClientDetail[]>;
-          if (successResponse(result.status)) {
-            setClients(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Turnover Performance`,
-            error
-          );
-        }
-      };
-      fetchTurnoverPerformance();
-      fetchClientDetails();
-    }
-  }, [trader]);
+  }, [branch, trader]);
 
   return (
     <div className="mx-4">
@@ -190,7 +135,7 @@ const RmPerformanceBoard = () => {
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
         <TraderFilter
           traders={traders}
-          currentTrader={defaultTrader ?? trader}
+          currentTrader={trader}
           onChange={handleTraderChange}
         />
       </PageHeader>
