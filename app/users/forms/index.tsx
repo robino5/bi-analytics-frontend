@@ -24,11 +24,14 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { createUserAction, updateUserAction } from "@/app/actions/user";
 import { CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
-import { FormEvent, useState, useTransition } from "react";
+import { FormEvent, useEffect, useState, useTransition } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { CiSaveUp1 } from "react-icons/ci";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Session } from "next-auth";
+import { IBranchLov } from "@/components/branchFilter";
+import { IResponse } from "@/types/utils";
+import { successResponse } from "@/lib/utils";
 
 enum RoleType {
   ADMIN = "ADMIN",
@@ -45,6 +48,7 @@ interface CreateUserFormProps {
 
 interface UpdateUserFormProps {
   user: z.infer<typeof UpdateUserSchema>;
+  session: Session;
 }
 
 export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
@@ -223,9 +227,10 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
   );
 }
 
-export function UpdateUserForm({ user }: UpdateUserFormProps) {
+export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
   const [isPending, startTransition] = useTransition();
-  const [editable, _] = useState(user.role === RoleType.ADMIN);
+  const [editable, _] = useState(session.user.role === RoleType.ADMIN);
+  const [branches, setBranches] = useState<IBranchLov[]>([]);
 
   const { toast } = useToast();
 
@@ -240,7 +245,6 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
       isActive: user.isActive,
       profile: {
         branchId: user.profile.branchId ?? "",
-        designation: user.profile.designation,
       },
     },
   });
@@ -260,6 +264,30 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
       }
     });
   }
+
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/branches/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<IBranchLov[]>;
+        if (successResponse(result.status)) {
+          setBranches(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+    fetchBranches();
+  }, [user]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(updateSubmit)} className="space-y-8">
@@ -377,32 +405,53 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
           Profile Details
         </div>
         <div className="flex space-x-4 space-y-0">
-          <FormField
-            control={form.control}
-            name="profile.designation"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Designation</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={!editable} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="profile.branchId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Branch</FormLabel>
-                <FormControl>
-                  <Input {...field} disabled={!editable} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {user.role === RoleType.ADMIN ? (
+            <FormField
+              control={form.control}
+              name="profile.branchId"
+              render={({ field }) => (
+                <FormItem hidden={true}>
+                  <FormLabel>Branch</FormLabel>
+                  <FormControl>
+                    <Input {...field} value="" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ) : (
+            <FormField
+              control={form.control}
+              name="profile.branchId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Branch</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={user.profile.branchId ?? ""}
+                    disabled={!editable}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {branches.map((branch) => (
+                        <SelectItem
+                          key={branch.branchCode}
+                          value={branch.branchCode}
+                        >
+                          {branch.branchName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
         {isPending ? (
           <Button disabled>
