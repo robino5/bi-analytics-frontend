@@ -24,9 +24,11 @@ import {
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { HiOutlineUsers } from "react-icons/hi";
 
 import { CreateUserForm } from "./forms";
 import { IUser } from "@/types/user";
+import { CreateBulkRMForm } from "./forms/create-existing-trader-form";
 
 const fetchUsers = async (session: Session) => {
   try {
@@ -71,27 +73,55 @@ const Users = () => {
     <div className="mx-4">
       <PageHeader name="User Mangement" />
       <div className="mt-4">
-        <div className="mb-4">
-          {/* Add User Dialoge */}
-          <Dialog open={newUserOpen} onOpenChange={setNewUserOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <AiOutlinePlusCircle className="h-4 w-4 mr-2" />
-                Add User
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-              <DialogHeader>
-                <DialogTitle>Add New User</DialogTitle>
-                <DialogDescription>
-                  create user as per requirements.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <CreateUserForm setOpen={setNewUserOpen} session={session} />
-              </div>
-            </DialogContent>
-          </Dialog>
+        <div className="flex gap-4">
+          <div className="mb-4">
+            {/* Add User Dialoge */}
+            <Dialog open={newUserOpen} onOpenChange={setNewUserOpen}>
+              <DialogTrigger asChild>
+                <Button variant="default">
+                  <AiOutlinePlusCircle className="h-4 w-4 mr-2" />
+                  Add User
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle>Add New User</DialogTitle>
+                  <DialogDescription>
+                    create user as per requirements.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <CreateUserForm setOpen={setNewUserOpen} session={session} />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+          <div className="mb-4">
+            {/* Add User Dialoge */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="default">
+                  <HiOutlineUsers className="h-4 w-4 mr-2" />
+                  Create From Existing RM
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle>Create RM Profiles</DialogTitle>
+                  <DialogDescription>
+                    create traders profile in bulk format. share a common
+                    password. You're advised to give role carefully.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <CreateBulkRMForm
+                    setOpen={setNewUserOpen}
+                    session={session}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
         <Card className="p-4 space-y-4">
           <CardHeader>

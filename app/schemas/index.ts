@@ -1,5 +1,5 @@
 import * as z from "zod";
-
+import { IUser } from "@/types/user";
 export enum RoleType {
   ADMIN = "ADMIN",
   MANAGEMENT = "MANAGEMENT",
@@ -25,6 +25,19 @@ export const CreateUserSchema = z.object({
   password: z.string().min(4, "minium 4 character password is required"),
   role: z.nativeEnum(RoleType).default(RoleType.REGIONAL_MANAGER),
   isActive: z.boolean().default(true),
+});
+
+export const UserForBulk = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  traderName: z.string().optional(),
+})
+
+export const CreateBulkRMSchema = z.object({
+  users: z.array(z.string()).min(1, "minium 1 item is required !"),
+  password: z.string().min(4, "minium 4 character password is required"),
+  role: z.nativeEnum(RoleType).default(RoleType.REGIONAL_MANAGER),
 });
 
 export const UpdateUserSchema = z.object({
