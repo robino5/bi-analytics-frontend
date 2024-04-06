@@ -47,7 +47,7 @@ const UserProfile = async ({ params }: { params: { id: string } }) => {
                 <CardTitle>Edit Profile</CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
-                <UpdateUserForm user={user} />
+                <UpdateUserForm user={user} session={session} />
               </CardContent>
             </Card>
           </div>

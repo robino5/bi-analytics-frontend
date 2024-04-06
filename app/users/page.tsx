@@ -43,7 +43,7 @@ const fetchUsers = async (session: Session) => {
       console.error(`error while fetching users`, await response.json());
     }
     const body = await response.json();
-    return body.data.results;
+    return body.data;
   } catch (error) {
     console.error(error);
   }

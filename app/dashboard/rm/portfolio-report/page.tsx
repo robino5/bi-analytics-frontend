@@ -197,7 +197,38 @@ const RmPortfolioBoard = () => {
       fetchPortfolio();
       fetchINetFundFlow();
     }
-  }, [branch, trader]);
+  }, [trader]);
+
+  useEffect(() => {
+    if (branch) {
+      // Fetch Traders
+      const fetchTraderWithBranchId = async () => {
+        try {
+          let branchUrl;
+          if (branch) {
+            branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`;
+          } else {
+            branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/`;
+          }
+          const response = await fetch(branchUrl, {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          const result = (await response.json()) as IResponse<ITrader[]>;
+          if (successResponse(result.status)) {
+            setTraders(result.data);
+            setTrader(result.data[0].traderId);
+          }
+        } catch (error) {
+          console.error(`Error fetching traders.`, error);
+        }
+      };
+      fetchTraderWithBranchId();
+    }
+  }, [branch]);
 
   return (
     <div className="mx-4">
