@@ -91,7 +91,7 @@ export const updateUserAction = async (
   }
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${payload.username}/by-username/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/withusername/?username=${payload.username}`,
       {
         method: "PATCH",
         headers: {
@@ -102,7 +102,9 @@ export const updateUserAction = async (
       }
     );
     if (response.status !== 200) {
-      console.error(await response.json());
+      const respo = await response.json()
+      console.error(respo);
+      throw Error(respo)
     }
     return { status: "success", message: "✔️ Profile has been updated" };
   } catch (error) {

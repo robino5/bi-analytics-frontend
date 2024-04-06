@@ -10,7 +10,7 @@ import { RoleType } from "@/app/schemas";
 
 const fetchUserByUserName = async (username: string, session: Session) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${username}/by-username/`,
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?username=${username}`,
     {
       headers: {
         Authorization: `Bearer ${session.user.accessToken}`,

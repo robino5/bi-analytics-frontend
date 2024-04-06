@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -231,6 +232,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
   const [isPending, startTransition] = useTransition();
   const [editable, _] = useState(session.user.role === RoleType.ADMIN);
   const [branches, setBranches] = useState<IBranchLov[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
 
@@ -244,7 +246,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
       role: user.role,
       isActive: user.isActive,
       profile: {
-        branchId: user.profile.branchId ?? "",
+        branchId: user.profile.branchId,
       },
     },
   });
@@ -257,6 +259,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
           description: res.message,
         });
       } else {
+        console.error(res);
         toast({
           variant: "destructive",
           description: res.message,
@@ -266,6 +269,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
   }
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchBranches = async () => {
       try {
         const response = await fetch(
@@ -281,8 +285,10 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
         if (successResponse(result.status)) {
           setBranches(result.data);
         }
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching branches:", error);
+        setIsLoading(false);
       }
     };
     fetchBranches();
@@ -290,136 +296,124 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(updateSubmit)} className="space-y-8">
-        <div className="flex space-x-4">
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Username<span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl className="w-full">
-                  <Input {...field} value={user.username} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl className="w-full">
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex space-x-4">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                User Role<span className="text-red-500">*</span>
-              </FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={user.role}
-                disabled={!editable}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {Object.values(RoleType).map((role) => (
-                    <SelectItem key={role} value={role}>
-                      {role}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="isActive"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center space-x-2">
-                <FormControl>
-                  <Switch
-                    id="isActive"
-                    onCheckedChange={field.onChange}
-                    defaultChecked={user.isActive}
-                    disabled={!editable}
-                  />
-                </FormControl>
-                <FormLabel htmlFor="isActive">
-                  Active<span className="text-red-500">*</span>
-                </FormLabel>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="text-slate-700 font-semibold text-xl">
-          Profile Details
-        </div>
-        <div className="flex space-x-4 space-y-0">
-          {user.role === RoleType.ADMIN ? (
+      {isLoading ? (
+        "Loading..."
+      ) : (
+        <form onSubmit={form.handleSubmit(updateSubmit)} className="space-y-8">
+          <div className="flex space-x-4">
             <FormField
               control={form.control}
-              name="profile.branchId"
+              name="username"
               render={({ field }) => (
-                <FormItem hidden={true}>
-                  <FormLabel>Branch</FormLabel>
-                  <FormControl>
-                    <Input {...field} value="" />
+                <FormItem>
+                  <FormLabel>
+                    Username<span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl className="w-full">
+                    <Input {...field} value={user.username} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-          ) : (
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl className="w-full">
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex space-x-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  User Role<span className="text-red-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={!editable}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {Object.values(RoleType).map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center space-x-2">
+                  <FormControl>
+                    <Switch
+                      id="isActive"
+                      onCheckedChange={field.onChange}
+                      defaultChecked={user.isActive}
+                      disabled={!editable}
+                    />
+                  </FormControl>
+                  <FormLabel htmlFor="isActive">
+                    Active<span className="text-red-500">*</span>
+                  </FormLabel>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="text-slate-700 font-semibold text-xl">
+            Profile Details
+          </div>
+          <div className="flex space-x-4 space-y-0">
             <FormField
               control={form.control}
               name="profile.branchId"
@@ -428,12 +422,12 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
                   <FormLabel>Branch</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={user.profile.branchId ?? ""}
+                    defaultValue={field.value}
                     disabled={!editable}
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue />
+                        <SelectValue placeholder="Assign a Branch" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -447,23 +441,26 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormDescription>
+                    Can only be managed by Admin.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+          {isPending ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Saving
+            </Button>
+          ) : (
+            <Button type="submit">
+              <CiSaveUp1 className="h-5 w-5 mr-2" /> Save
+            </Button>
           )}
-        </div>
-        {isPending ? (
-          <Button disabled>
-            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-            Saving
-          </Button>
-        ) : (
-          <Button type="submit" variant="default">
-            <CiSaveUp1 className="h-5 w-5 mr-2" /> Save
-          </Button>
-        )}
-      </form>
+        </form>
+      )}
     </Form>
   );
 }
