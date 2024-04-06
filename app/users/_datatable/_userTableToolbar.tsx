@@ -41,6 +41,17 @@ export const roles = [
   },
 ];
 
+export const SignedInTodayItems = [
+  {
+    value: "Yes",
+    label: "Yes",
+  },
+  {
+    value: "No",
+    label: "No",
+  },
+];
+
 const parseBranches = (branchList: IBranchLov[]) => {
   return branchList.map((branch) => ({
     label: branch.branchName,
@@ -104,6 +115,13 @@ export function DataTableToolbar<TData>({
             column={table.getColumn("role")}
             title="Role"
             options={roles}
+          />
+        )}
+        {table.getColumn("signedInToday") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("signedInToday")}
+            title="Logged-In Today ?"
+            options={SignedInTodayItems}
           />
         )}
         {isFiltered && (

@@ -21,14 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormEvent, useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { HiMiniChevronUpDown } from "react-icons/hi2";
 
 import { Session } from "next-auth";
-import { CreateBulkRMSchema, CreateUserSchema } from "@/app/schemas";
+import { CreateBulkRMSchema } from "@/app/schemas";
 import { cn, successResponse } from "@/lib/utils";
-import { IUser } from "@/types/user";
 import { IResponse } from "@/types/utils";
 import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
@@ -174,7 +173,7 @@ export function CreateBulkRMForm({ session }: CreateUserFormProps) {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={!isValid}>
+          <Button type="submit" disabled={!isValid || !users.length}>
             Save <TiChevronRightOutline className="h-4 w-4 ml-2" />
           </Button>
         </form>
@@ -192,7 +191,13 @@ interface ITraderListProps {
 function TraderListBox({ users, selected, onChange }: ITraderListProps) {
   return (
     <>
-      <Listbox name="users" value={selected} onChange={onChange} multiple>
+      <Listbox
+        name="users"
+        value={selected}
+        onChange={onChange}
+        multiple
+        disabled={!users.length}
+      >
         <div className="space-y-3">
           <Listbox.Label
             className={cn(

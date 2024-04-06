@@ -105,7 +105,15 @@ export const useTableColumns: ColumnDef<IUser>[] = [
   },
   {
     id: "signedInToday",
-    accessorKey: "lastLogin",
+    accessorFn: (data, _) => {
+      const timestamp = new Date(data?.lastLogin ?? "");
+      const today = new Date();
+      const isToday =
+        timestamp.getDate() === today.getDate() &&
+        timestamp.getMonth() === today.getMonth() &&
+        timestamp.getFullYear() === today.getFullYear();
+      return isToday ? "Yes" : "No";
+    },
     enableHiding: false,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Signed In Today ?" />
@@ -129,6 +137,9 @@ export const useTableColumns: ColumnDef<IUser>[] = [
           No
         </Badge>
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {
