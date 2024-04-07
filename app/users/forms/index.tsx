@@ -236,15 +236,15 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
           )}
         />
         {isPending ? (
-            <Button disabled>
-              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              Please Wait...
-            </Button>
-          ) : (
-            <Button type="submit" disabled={!isFormValid}>
-              <CiSaveUp1 className="h-5 w-5 mr-2" /> Create
-            </Button>
-          )}
+          <Button disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please Wait...
+          </Button>
+        ) : (
+          <Button type="submit" disabled={!isFormValid}>
+            <CiSaveUp1 className="h-5 w-5 mr-2" /> Create
+          </Button>
+        )}
       </form>
     </Form>
   );
@@ -439,39 +439,36 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
             <FormField
               control={form.control}
               name="profile.branchId"
-              render={({ field }) => {
-                console.log(field);
-                return (
-                  <FormItem className="w-full">
-                    <FormLabel>Branch</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value?.toString()}
-                      disabled={!editable}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Assign a Branch" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {branches.map((branch) => (
-                          <SelectItem
-                            key={branch.branchCode}
-                            value={branch.branchCode.toString()}
-                          >
-                            {branch.branchName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Can only be managed by Admin.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Branch</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value?.toString()}
+                    disabled={!editable}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Assign a Branch" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {branches.map((branch) => (
+                        <SelectItem
+                          key={branch.branchCode}
+                          value={branch.branchCode.toString()}
+                        >
+                          {branch.branchName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Can only be managed by Admin.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           </div>
           {isPending ? (
