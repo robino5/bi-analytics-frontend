@@ -7,6 +7,8 @@ import { Session } from "next-auth";
 import { redirect, notFound } from "next/navigation";
 import { UpdateUserForm } from "../forms";
 import { RoleType } from "@/app/schemas";
+import ChangePasswordModal from "@/components/change-password";
+
 
 const fetchUserByUserName = async (username: string, session: Session) => {
   const response = await fetch(
@@ -43,8 +45,9 @@ const UserProfile = async ({ params }: { params: { id: string } }) => {
         <div className="grid w-screen/2 h-screen place-items-center">
           <div className="min-w-[480px]">
             <Card>
-              <CardHeader>
+              <CardHeader className="space-y-4">
                 <CardTitle>Edit Profile</CardTitle>
+                <ChangePasswordModal username={params.id} />
               </CardHeader>
               <CardContent className="space-y-8">
                 <UpdateUserForm user={user} session={session} />

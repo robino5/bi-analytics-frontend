@@ -4,7 +4,12 @@ import * as z from "zod";
 
 import { auth } from "@/auth";
 
-import { CreateBulkRMSchema, CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
+import {
+  ChangePasswordSchema,
+  CreateBulkRMSchema,
+  CreateUserSchema,
+  UpdateUserSchema,
+} from "@/app/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { redirect } from "next/navigation";
 
@@ -51,8 +56,13 @@ export const createUserAction = async (
     if (response.status !== 201) {
       console.error(await response.json());
     }
+    return { status: "success", message: "✔️ User has been created" };
   } catch (error) {
-    throw error;
+    if (error instanceof SyntaxError) {
+      // Unexpected token < in JSON
+      return { status: "failed", message: "❌ Upexpected token in response." };
+    }
+    return { status: "failed", message: "❌ Server error. try later !" };
   }
 };
 
@@ -64,7 +74,7 @@ export const deleteUserAction = async (username: string) => {
   }
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${username}/by-username/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${username}/`,
       {
         method: "DELETE",
         headers: {
@@ -91,7 +101,7 @@ export const updateUserAction = async (
   }
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/withusername/?username=${payload.username}`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${payload.username}/`,
       {
         method: "PATCH",
         headers: {
@@ -102,9 +112,9 @@ export const updateUserAction = async (
       }
     );
     if (response.status !== 200) {
-      const respo = await response.json()
+      const respo = await response.json();
       console.error(respo);
-      throw Error(respo)
+      throw Error(respo);
     }
     return { status: "success", message: "✔️ Profile has been updated" };
   } catch (error) {
@@ -112,10 +122,9 @@ export const updateUserAction = async (
       // Unexpected token < in JSON
       return { status: "failed", message: "Upexpected token in response." };
     }
-    return { status: "failed", message: "Server error. try later !" }
+    return { status: "failed", message: "❌ Server error. try later !" };
   }
 };
-
 
 export const createUserActionWithBulkUser = async (
   payload: z.infer<typeof CreateBulkRMSchema>
@@ -132,8 +141,7 @@ export const createUserActionWithBulkUser = async (
     return { error: "invalid payload !" };
   }
 
-  const { users, role, password } =
-    validatedFormFields.data;
+  const { users, role, password } = validatedFormFields.data;
 
   const body = {
     users,
@@ -143,7 +151,7 @@ export const createUserActionWithBulkUser = async (
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/bulkusers/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/bulk/`,
       {
         method: "POST",
         headers: {
@@ -158,5 +166,49 @@ export const createUserActionWithBulkUser = async (
     }
   } catch (error) {
     throw error;
+  }
+};
+
+export const changePasswordAction = async (
+  who: string,
+  payload: z.infer<typeof ChangePasswordSchema>
+) => {
+  const session = await auth();
+
+  if (!session) {
+    redirect(DEFAULT_LOGIN_REDIRECT);
+  }
+
+  const validatedFormFields = ChangePasswordSchema.safeParse(payload);
+
+  if (!validatedFormFields.success) {
+    return { error: "invalid payload !" };
+  }
+
+  const { password, password2 } = validatedFormFields.data;
+
+  const body = {
+    password,
+    password2,
+  };
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${who}/change-password/`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${session.user.accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    if (response.status !== 200) {
+      console.error(await response.json());
+    }
+    return { status: "success", message: "✔️ Password has been changed" };
+  } catch (error) {
+    return { status: "failed", message: "❌ Password change failed" };
   }
 };

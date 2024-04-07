@@ -32,7 +32,7 @@ export const UserForBulk = z.object({
     message: "Username must be at least 2 characters.",
   }),
   traderName: z.string().optional(),
-})
+});
 
 export const CreateBulkRMSchema = z.object({
   users: z.array(z.string()).min(1, "minium 1 item is required !"),
@@ -51,3 +51,17 @@ export const UpdateUserSchema = z.object({
   }),
   isActive: z.boolean().default(true),
 });
+
+export const ChangePasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long.")
+      .max(20, "Password must not exceed 20 characters."),
+
+    password2: z.string(),
+  })
+  .refine((data) => data.password === data.password2, {
+    message: "Passwords don't match",
+    path: ["password2"],
+  });

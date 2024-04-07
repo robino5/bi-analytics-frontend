@@ -24,7 +24,11 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { createUserAction, updateUserAction } from "@/app/actions/user";
-import { CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
+import {
+  ChangePasswordSchema,
+  CreateUserSchema,
+  UpdateUserSchema,
+} from "@/app/schemas";
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { CiSaveUp1 } from "react-icons/ci";
@@ -52,7 +56,14 @@ interface UpdateUserFormProps {
   session: Session;
 }
 
+interface ChangePaswwordFormProps {
+  handleSubmit: (_open: any) => void;
+  submitPending: boolean;
+}
+
 export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const [isValid, setIsValid] = useState({ username: false });
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
@@ -68,14 +79,27 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
-    createUserAction(values);
-    setOpen(false);
+    startTransition(async () => {
+      const res = await createUserAction(values);
+      if (res.status === "success") {
+        toast({
+          description: res.message,
+        });
+        setOpen(false);
+      } else {
+        console.error(res);
+        toast({
+          variant: "destructive",
+          description: res.message,
+        });
+      }
+    });
   }
 
   function handleUsernameChange(e: FormEvent<HTMLInputElement>) {
     form.setValue("username", e.currentTarget.value);
     fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${e.currentTarget.value}/by-username/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?username=${e.currentTarget.value}`,
       {
         headers: {
           Authorization: `Bearer ${session.user.accessToken}`,
@@ -220,9 +244,16 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={!isFormValid}>
-          Submit
-        </Button>
+        {isPending ? (
+          <Button disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please Wait...
+          </Button>
+        ) : (
+          <Button type="submit" disabled={!isFormValid}>
+            <CiSaveUp1 className="h-5 w-5 mr-2" /> Create
+          </Button>
+        )}
       </form>
     </Form>
   );
@@ -246,7 +277,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
       role: user.role,
       isActive: user.isActive,
       profile: {
-        branchId: user.profile.branchId,
+        branchId: user.profile?.branchId?.toString(),
       },
     },
   });
@@ -422,7 +453,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
                   <FormLabel>Branch</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value?.toString()}
                     disabled={!editable}
                   >
                     <FormControl>
@@ -434,7 +465,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
                       {branches.map((branch) => (
                         <SelectItem
                           key={branch.branchCode}
-                          value={branch.branchCode}
+                          value={branch.branchCode.toString()}
                         >
                           {branch.branchName}
                         </SelectItem>
@@ -464,3 +495,59 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
     </Form>
   );
 }
+
+export const ChangePasswordForm = ({
+  handleSubmit,
+  submitPending,
+}: ChangePaswwordFormProps) => {
+  const form = useForm<z.infer<typeof ChangePasswordSchema>>({
+    resolver: zodResolver(ChangePasswordSchema),
+    defaultValues: {
+      password: "",
+      password2: "",
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password*</FormLabel>
+              <FormControl>
+                <Input {...field} type="password" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password*</FormLabel>
+              <FormControl>
+                <Input {...field} type="password" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {submitPending ? (
+          <Button variant="destructive" disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please Wait...
+          </Button>
+        ) : (
+          <Button type="submit" variant="destructive">
+            Save Changes
+          </Button>
+        )}
+      </form>
+    </Form>
+  );
+};

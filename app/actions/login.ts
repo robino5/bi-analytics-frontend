@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 
 import { LoginSchema } from "@/app/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
@@ -38,4 +38,8 @@ export const login = async (payload: z.infer<typeof LoginSchema>) => {
     }
     throw error;
   }
+};
+
+export const logoutAction = async () => {
+  await signOut();
 };
