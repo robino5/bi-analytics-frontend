@@ -24,7 +24,11 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { createUserAction, updateUserAction } from "@/app/actions/user";
-import { CreateUserSchema, UpdateUserSchema } from "@/app/schemas";
+import {
+  ChangePasswordSchema,
+  CreateUserSchema,
+  UpdateUserSchema,
+} from "@/app/schemas";
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { CiSaveUp1 } from "react-icons/ci";
@@ -50,6 +54,11 @@ interface CreateUserFormProps {
 interface UpdateUserFormProps {
   user: z.infer<typeof UpdateUserSchema>;
   session: Session;
+}
+
+interface ChangePaswwordFormProps {
+  handleSubmit: (_open: any) => void;
+  submitPending: boolean;
 }
 
 export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
@@ -486,3 +495,59 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
     </Form>
   );
 }
+
+export const ChangePasswordForm = ({
+  handleSubmit,
+  submitPending,
+}: ChangePaswwordFormProps) => {
+  const form = useForm<z.infer<typeof ChangePasswordSchema>>({
+    resolver: zodResolver(ChangePasswordSchema),
+    defaultValues: {
+      password: "",
+      password2: "",
+    },
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password*</FormLabel>
+              <FormControl>
+                <Input {...field} type="password" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password2"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password*</FormLabel>
+              <FormControl>
+                <Input {...field} type="password" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {submitPending ? (
+          <Button variant="destructive" disabled>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please Wait...
+          </Button>
+        ) : (
+          <Button type="submit" variant="destructive">
+            Save Changes
+          </Button>
+        )}
+      </form>
+    </Form>
+  );
+};
