@@ -51,8 +51,13 @@ export const createUserAction = async (
     if (response.status !== 201) {
       console.error(await response.json());
     }
+    return { status: "success", message: "✔️ User has been created" };
   } catch (error) {
-    throw error;
+    if (error instanceof SyntaxError) {
+      // Unexpected token < in JSON
+      return { status: "failed", message: "❌ Upexpected token in response." };
+    }
+    return { status: "failed", message: "❌ Server error. try later !" }
   }
 };
 
@@ -112,7 +117,7 @@ export const updateUserAction = async (
       // Unexpected token < in JSON
       return { status: "failed", message: "Upexpected token in response." };
     }
-    return { status: "failed", message: "Server error. try later !" }
+    return { status: "failed", message: "❌ Server error. try later !" }
   }
 };
 

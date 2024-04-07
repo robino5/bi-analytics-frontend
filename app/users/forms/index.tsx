@@ -53,6 +53,8 @@ interface UpdateUserFormProps {
 }
 
 export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const [isValid, setIsValid] = useState({ username: false });
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
@@ -68,8 +70,21 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof CreateUserSchema>) {
-    createUserAction(values);
-    setOpen(false);
+    startTransition(async () => {
+      const res = await createUserAction(values);
+      if (res.status === "success") {
+        toast({
+          description: res.message,
+        });
+        setOpen(false);
+      } else {
+        console.error(res);
+        toast({
+          variant: "destructive",
+          description: res.message,
+        });
+      }
+    });
   }
 
   function handleUsernameChange(e: FormEvent<HTMLInputElement>) {
@@ -220,9 +235,16 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={!isFormValid}>
-          Submit
-        </Button>
+        {isPending ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Please Wait...
+            </Button>
+          ) : (
+            <Button type="submit" disabled={!isFormValid}>
+              <CiSaveUp1 className="h-5 w-5 mr-2" /> Create
+            </Button>
+          )}
       </form>
     </Form>
   );
@@ -418,7 +440,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
               control={form.control}
               name="profile.branchId"
               render={({ field }) => {
-                console.log(field)
+                console.log(field);
                 return (
                   <FormItem className="w-full">
                     <FormLabel>Branch</FormLabel>
