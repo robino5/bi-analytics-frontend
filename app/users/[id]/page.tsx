@@ -9,10 +9,9 @@ import { UpdateUserForm } from "../forms";
 import { RoleType } from "@/app/schemas";
 import ChangePasswordModal from "@/components/change-password";
 
-
 const fetchUserByUserName = async (username: string, session: Session) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?username=${username}`,
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${username}/`,
     {
       headers: {
         Authorization: `Bearer ${session.user.accessToken}`,

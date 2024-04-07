@@ -99,7 +99,7 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
   function handleUsernameChange(e: FormEvent<HTMLInputElement>) {
     form.setValue("username", e.currentTarget.value);
     fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?username=${e.currentTarget.value}`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${e.currentTarget.value}/`,
       {
         headers: {
           Authorization: `Bearer ${session.user.accessToken}`,
