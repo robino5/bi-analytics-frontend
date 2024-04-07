@@ -75,7 +75,7 @@ export function CreateUserForm({ setOpen, session }: CreateUserFormProps) {
   function handleUsernameChange(e: FormEvent<HTMLInputElement>) {
     form.setValue("username", e.currentTarget.value);
     fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${e.currentTarget.value}/by-username/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?username=${e.currentTarget.value}`,
       {
         headers: {
           Authorization: `Bearer ${session.user.accessToken}`,
@@ -246,7 +246,7 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
       role: user.role,
       isActive: user.isActive,
       profile: {
-        branchId: user.profile.branchId,
+        branchId: user.profile?.branchId?.toString(),
       },
     },
   });
@@ -417,36 +417,39 @@ export function UpdateUserForm({ user, session }: UpdateUserFormProps) {
             <FormField
               control={form.control}
               name="profile.branchId"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Branch</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={!editable}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Assign a Branch" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {branches.map((branch) => (
-                        <SelectItem
-                          key={branch.branchCode}
-                          value={branch.branchCode}
-                        >
-                          {branch.branchName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Can only be managed by Admin.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                console.log(field)
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Branch</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value?.toString()}
+                      disabled={!editable}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Assign a Branch" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {branches.map((branch) => (
+                          <SelectItem
+                            key={branch.branchCode}
+                            value={branch.branchCode.toString()}
+                          >
+                            {branch.branchName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Can only be managed by Admin.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
           </div>
           {isPending ? (

@@ -64,7 +64,7 @@ export const deleteUserAction = async (username: string) => {
   }
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${username}/by-username/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${username}/`,
       {
         method: "DELETE",
         headers: {
@@ -91,7 +91,7 @@ export const updateUserAction = async (
   }
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/withusername/?username=${payload.username}`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${payload.username}/`,
       {
         method: "PATCH",
         headers: {
@@ -143,7 +143,7 @@ export const createUserActionWithBulkUser = async (
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/bulkusers/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/bulk/`,
       {
         method: "POST",
         headers: {
