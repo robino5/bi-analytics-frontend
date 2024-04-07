@@ -15,7 +15,8 @@ import { CgUserList } from "react-icons/cg";
 import { FaGear } from "react-icons/fa6";
 import { useRouter, usePathname, redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { RoleType } from "@/app/schemas";
+import { LiaUserShieldSolid } from "react-icons/lia";
+import { FcBearish } from "react-icons/fc";
 import { useSession } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
@@ -34,7 +35,7 @@ const menuList = [
     id: 1,
     codeName: "admin_dashboards",
     viewName: "Admin Analytics",
-    icon: <DiGoogleAnalytics className="h-5 w-5" />,
+    icon: <LiaUserShieldSolid className="h-5 w-5" />,
     roles: ["ADMIN", "MANAGEMENT"],
     subMenus: [
       {
@@ -42,7 +43,7 @@ const menuList = [
         codeName: "active_trading_codes",
         viewName: "Active Trading Codes",
         urlPath: "/dashboard/active-trading-codes",
-        icon: <GrBarChart className="h-4 w-4" />,
+        icon: <FcBearish className="h-4 w-4" />,
         roles: ["ADMIN", "MANAGEMENT"],
       },
     ],
