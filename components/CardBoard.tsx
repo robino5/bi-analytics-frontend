@@ -13,6 +13,7 @@ interface CardBoardProps {
   subtitle?: string;
   children: React.ReactNode;
   className?: string;
+  boardIcon?: React.ReactNode;
 }
 
 const CardBoard: React.FC<CardBoardProps> = ({
@@ -20,13 +21,14 @@ const CardBoard: React.FC<CardBoardProps> = ({
   subtitle,
   children,
   className,
+  boardIcon
 }) => {
   return (
     <Card
       className={cn("bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md", className)}
     >
       <CardHeader>
-        <CardTitle className="text-slate-600">{title}</CardTitle>
+        <CardTitle className="text-slate-600 flex justify-between items-center">{title} {boardIcon}</CardTitle>
         <CardDescription className="text-slate-500">
           {subtitle ?? ""}
         </CardDescription>

@@ -24,6 +24,10 @@ import SummarySkeletonCard, {
 } from "@/components/skeletonCard";
 import { IResponse } from "@/types/utils";
 
+import { PiChartScatterBold } from "react-icons/pi";
+import { FaChartSimple } from "react-icons/fa6";
+import { IoPieChartSharp } from "react-icons/io5";
+
 export default function DailyTradePerformance() {
   // Override console.error
   // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
@@ -365,6 +369,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Summary"
             subtitle="overview of clients, turnover, net buy/sell"
+            boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400"/>}
             children={
               <StatisticsCardClientTurnoverSummary
                 data={summary.shortSummary}
@@ -379,6 +384,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Cash Code Status"
             subtitle="overview of cash codes"
+            boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400"/>}
             children={
               <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
             }
@@ -391,6 +397,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Margin Code Status"
             subtitle="overview of margin codes"
+            boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400"/>}
             children={
               <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
             }
