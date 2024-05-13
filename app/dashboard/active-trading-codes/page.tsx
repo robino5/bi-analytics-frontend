@@ -4,11 +4,6 @@ import ClientTradesDataTable from "./_client_trades_datatable";
 import PieChart from "./_pie_chart";
 import StackBarChart from "./_stacked_barchart";
 import {
-  monthWiseClientStatistics,
-  monthWiseTradeStatistics,
-  monthWiseTurnoverStatistics,
-} from "./data";
-import {
   IActiveTradeDayWise,
   IActiveTradingToday,
   IMonthWiseData,
