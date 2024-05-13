@@ -23,7 +23,7 @@ interface Props {
 
 export default function NewAccountOpeningDataTable({ accounts }: Props) {
   return (
-    <Card className="col-span-2 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
+    <Card className="col-span-3 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
       <CardHeader>
         <CardTitle className="text-slate-600">
           New Account Opening & Fund Collection

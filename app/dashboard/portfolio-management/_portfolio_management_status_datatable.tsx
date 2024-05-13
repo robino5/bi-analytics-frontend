@@ -20,7 +20,7 @@ interface Props {
 
 export default function PortfolioManagementStatusDataTable({ records }: Props) {
   return (
-    <Card className="col-span-2 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
+    <Card className="col-span-3 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
       <CardHeader>
         <CardTitle className="text-slate-600">
           Portfolio Management Status
