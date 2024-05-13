@@ -23,7 +23,7 @@ interface Props {
 
 export default function RMTurnoverPerformance({ records }: Props) {
   return (
-    <Card className="col-span-3 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-50 rounded-md shadow-md">
+    <Card className="col-span-6 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-50 rounded-md shadow-md">
       <CardHeader>
         <CardTitle className="text-slate-600">Turnover Performance</CardTitle>
         <CardDescription>
