@@ -17,14 +17,9 @@ interface Props {
 
 export default function ClientTradesDataTable({ records, className }: Props) {
   return (
-    <Card
-      className={cn(
-        "overflow-auto bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md",
-        className
-      )}
-    >
+    <Card className={cn("overflow-auto drop-shadow-md", className)}>
       <CardHeader>
-        <CardTitle className="text-slate-600">
+        <CardTitle className="">
           Channel Wise Clients & Trades (Today)
         </CardTitle>
         <CardDescription>
@@ -32,8 +27,8 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left">
+          <thead className="text-xs uppercase">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Channel

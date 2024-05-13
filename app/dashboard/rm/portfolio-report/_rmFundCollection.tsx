@@ -23,16 +23,16 @@ interface Props {
 
 export default function RMFundCollectionTable({ records }: Props) {
   return (
-    <Card className="col-span-4 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
+    <Card className="col-span-4 overflow-auto">
       <CardHeader>
-        <CardTitle className="text-slate-600">Fund Collection Status</CardTitle>
+        <CardTitle className="">Fund Collection Status</CardTitle>
         <CardDescription>
           short summary of RM Fund Collection Status
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left">
+          <thead className="text-xs uppercase">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Particular

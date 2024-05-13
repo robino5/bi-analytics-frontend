@@ -33,15 +33,7 @@ export function MarkedTradersZoneWise({ name, branch }: MarkedTraderProps) {
         </DialogTrigger>
       ) : null}
       <DialogContent
-        className={cn(
-          "sm:max-w-[700px] max-h-[600px] overflow-auto",
-          {
-            "bg-gradient-to-tl from-red-50 to-red-100": name === "red",
-          },
-          {
-            "bg-gradient-to-tl from-yellow-50 to-yellow-100": name === "yellow",
-          }
-        )}
+        className={cn("sm:max-w-[700px] max-h-[600px] overflow-auto", {})}
       >
         <DialogHeader>
           <DialogTitle>{`${name.toUpperCase()} TRADERS`}</DialogTitle>

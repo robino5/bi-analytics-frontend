@@ -138,9 +138,9 @@ const StackBarChart = ({
   data,
 }: StackChartPropType) => {
   return (
-    <Card className="bg-gradient-to-tr from-gray-50 to-slate-200">
+    <Card className="">
       <CardHeader>
-        <CardTitle className="text-slate-600">{title}</CardTitle>
+        <CardTitle className="">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={260}>

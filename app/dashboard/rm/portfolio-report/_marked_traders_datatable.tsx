@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
@@ -10,8 +10,8 @@ interface Props {
 
 export default function MarkedTraderDataTable({ records }: Props) {
   return (
-    <table className="w-full overflow-y-auto text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table className="w-full overflow-y-auto text-sm text-left ">
+      <thead className="text-xs uppercase ">
         <tr>
           <th scope="col" className="px-6 py-3">
             Code

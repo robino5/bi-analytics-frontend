@@ -15,7 +15,7 @@ export default async function UserSummary() {
   const subtitle = session.user.designation || session.user.role;
   return (
     <Link href={`/users/${session?.user.username}`}>
-      <div className="flex justify-start items-center bg-gray-200 p-2 rounded-[10px] hover:bg-gray-300 cursor-pointer">
+      <div className="flex justify-start items-center bg-card p-2 rounded-[10px] hover:bg-ring cursor-pointer">
         <div>
           <Avatar>
             <AvatarImage src={profileImg} />

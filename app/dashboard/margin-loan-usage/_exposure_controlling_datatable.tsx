@@ -38,21 +38,14 @@ export default function ExposureControllingDataTable({
   branch,
 }: Props) {
   return (
-    <Card
-      className={cn(
-        "overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200",
-        className
-      )}
-    >
+    <Card className={cn("overflow-auto", className)}>
       <CardHeader>
-        <CardTitle className="text-slate-600">
-          Exposure Controlling & Management
-        </CardTitle>
+        <CardTitle className="">Exposure Controlling & Management</CardTitle>
         <CardDescription>excluding negative equity clients</CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left ">
+          <thead className="text-xs uppercase">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Exposure

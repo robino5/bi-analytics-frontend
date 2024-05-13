@@ -19,8 +19,8 @@ const StatisticsCardClientTurnoverSummary: FC<SummaryData> = ({ data }) => {
           label={totalActiveClients.name}
           value={totalActiveClients.value}
         />
-        <div className="absolute -right-4 top-4 rounded-full w-7 bg-gray-200 text-center">
-          <span className="text-[14px] text-gray-700 font-semibold p-[4px]">
+        <div className="absolute -right-4 top-4 rounded-full w-7 text-center">
+          <span className="text-[14px] text-green-800 font-semibold p-[4px] dark:text-green-400">
             {activeClientRatio}%
           </span>
         </div>

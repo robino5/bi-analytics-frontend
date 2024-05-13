@@ -23,13 +23,8 @@ export default async function AuthLayout({
 }>) {
   const session = await auth();
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          "bg-gradient-to-tl from-slate-300 to-slate-400 via-transparent",
-          fontSans.variable
-        )}
-      >
+    <html lang="en" className="dark">
+      <body className={cn("bg-secondary", fontSans.variable)}>
         <SessionProvider session={session}>
           <div>{children}</div>
         </SessionProvider>

@@ -23,14 +23,14 @@ interface Props {
 
 export default function TurnoverPerformanceDataTable({ records }: Props) {
   return (
-    <Card className="col-span-6 row-start-2 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200">
+    <Card className="col-span-6 row-start-2 overflow-auto">
       <CardHeader>
         <CardTitle className="text-slate-600">Turnover Performance</CardTitle>
         <CardDescription>short summary of the portfolio</CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left">
+          <thead className="text-xs uppercase">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Particular
