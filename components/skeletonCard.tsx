@@ -37,12 +37,7 @@ const SummarySkeletonCard: React.FC<CardBoardProps> = ({ className }) => {
 
 export const SkeletonStatistics: React.FC<CardBoardProps> = ({ className }) => {
   return (
-    <Card
-      className={cn(
-        "bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md",
-        className
-      )}
-    >
+    <Card className={cn("drop-shadow-md", className)}>
       <CardHeader>
         <div className="space-y-2">
           <Skeleton className="h-4 w-[350px]" />

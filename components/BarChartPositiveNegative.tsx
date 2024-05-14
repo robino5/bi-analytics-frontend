@@ -19,6 +19,7 @@ import {
   BarColors,
   CARTESIAN_GRID_COLOR,
   TICK_COLOR,
+  LABEL_COLOR,
   TOOLTIP_BACKGROUND,
 } from "./ui/utils/constants";
 import { Separator } from "./ui/separator";
@@ -63,7 +64,7 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
       fontSize="14"
       fontWeight={600}
       fontFamily="sans-serif"
-      fill="#6d6d6d"
+      fill={LABEL_COLOR}
       textAnchor="top"
     >
       {numberToMillionsString(value)}
