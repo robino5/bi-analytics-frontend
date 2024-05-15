@@ -13,6 +13,7 @@ interface CardBoardProps {
   subtitle?: string;
   children: React.ReactNode;
   className?: string;
+  boardIcon?: React.ReactNode;
 }
 
 const CardBoard: React.FC<CardBoardProps> = ({
@@ -20,6 +21,7 @@ const CardBoard: React.FC<CardBoardProps> = ({
   subtitle,
   children,
   className,
+  boardIcon
 }) => {
   return (
     <Card className={cn("drop-shadow-md", className)}>
