@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { ThemeToggle } from "./theme-toggle";
 
 interface PageHeaderProps {
   name: string;
@@ -14,6 +15,7 @@ const PageHeader: FC<PageHeaderProps> = ({ name, children }) => {
         <div className="ml-10 text-3xl text-center font-bold flex-2 w-full">
           {name}
         </div>
+        <ThemeToggle />
       </CardContent>
     </Card>
   );

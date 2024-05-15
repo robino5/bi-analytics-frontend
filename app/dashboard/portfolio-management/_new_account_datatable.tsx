@@ -6,6 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -31,70 +40,41 @@ export default function NewAccountOpeningDataTable({ accounts }: Props) {
         <CardDescription>short summary of the portfolio</CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left">
-          <thead className="text-xs uppercase">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Particular
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Daily
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Weekly
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Forthnightly
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Monthly
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[200px]">Particular</TableHead>
+              <TableHead className="text-right">Daily</TableHead>
+              <TableHead className="text-right">Weekly</TableHead>
+              <TableHead className="text-right">Forthnightly</TableHead>
+              <TableHead className="text-right">Monthly</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {accounts.map((account) => (
-              <tr
+              <TableRow
                 key={account.name}
-                className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+                className="odd:bg-muted even:bg-gradient"
               >
-                <th
-                  scope="row"
-                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                <TableCell className="font-medium py-1">
                   {account.name}
-                </th>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": account.daily < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(account.daily)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": account.weekly < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(account.weekly)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": account.forthnightly < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(account.forthnightly)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": account.monthly < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(account.monthly)}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );

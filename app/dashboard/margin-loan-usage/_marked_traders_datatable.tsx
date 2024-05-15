@@ -8,6 +8,15 @@ import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 import { IResponse } from "@/types/utils";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 interface MarkedTradersDataType {
   code: number;
   investorName: string;
@@ -62,47 +71,34 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
     fetchClients();
   }, []);
   return (
-    <table className="w-full text-sm text-lefts">
-      <thead className="text-xs uppercase">
-        <tr>
-          <th scope="col" className="px-6 py-3">
-            Code
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Investor Name
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Ledger Balance
-          </th>
-          <th scope="col" className="px-6 py-3">
-            RM
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {records?.map((record) => (
-          <tr
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-auto">Code</TableHead>
+          <TableHead className="text-right">Investor Name</TableHead>
+          <TableHead className="text-right">Ledger Balance</TableHead>
+          <TableHead className="text-right">RM</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {records.map((record) => (
+          <TableRow
             key={record.investorCode}
-            className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+            className="odd:bg-muted even:bg-gradient"
           >
-            <td
-              scope="row"
-              className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
+            <TableCell className="font-medium py-1">
               {record.investorCode}
-            </td>
-            <td className="px-6 py-2">{record.investorName}</td>
-            <td
-              className={cn("px-6 py-2", {
-                "text-red-500": record.ledgerBalance < 0,
-              })}
-            >
+            </TableCell>
+            <TableCell className="py-1 text-right">
+              {record.investorName}
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {numberToMillionsString(record.ledgerBalance)}
-            </td>
-            <td className="px-6 py-2">{record.rmName}</td>
-          </tr>
+            </TableCell>
+            <TableCell className="py-1 text-right">{record.rmName}</TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

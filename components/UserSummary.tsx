@@ -25,8 +25,8 @@ export default async function UserSummary() {
           </Avatar>
         </div>
         <div className="grow-2 w-full ml-2">
-          <p className="font-semibold">{username}</p>
-          <p className="text-[12px]">{subtitle}</p>
+          <p className="font-semibold green:text-white">{username}</p>
+          <p className="text-[12px] green:text-white">{subtitle}</p>
         </div>
       </div>
     </Link>

@@ -6,6 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { IActiveTradingToday } from "@/types/activeTradingCodes";
@@ -16,6 +25,15 @@ interface Props {
 }
 
 export default function ClientTradesDataTable({ records, className }: Props) {
+  // Override console.error
+  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+  // @link https://github.com/recharts/recharts/issues/3615
+  const error = console.error;
+  console.error = (...args: any) => {
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
+  };
+  // ===========================================
   return (
     <Card className={cn("overflow-auto drop-shadow-md", className)}>
       <CardHeader>
@@ -27,56 +45,37 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left">
-          <thead className="text-xs uppercase">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Channel
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Total Client
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Trades
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Turnover
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[200px]">Channel</TableHead>
+              <TableHead>Total Client</TableHead>
+              <TableHead>Trades</TableHead>
+              <TableHead className="text-right">Turnover</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {records.map((record) => (
-              <tr
+              <TableRow
                 key={record.channel}
-                className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+                className="odd:bg-muted even:bg-gradient"
               >
-                <th
-                  scope="row"
-                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                <TableCell className="font-medium py-1">
                   {record.channel}
-                </th>
-                <td className="px-6 py-2">
+                </TableCell>
+                <TableCell className="py-1">
                   {numberToMillionsString(record.totalClients)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.trades < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="py-1">
                   {numberToMillionsString(record.trades)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.totalTurnover < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(record.totalTurnover)}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );
