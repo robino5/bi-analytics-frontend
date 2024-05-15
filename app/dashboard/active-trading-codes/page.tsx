@@ -4,11 +4,6 @@ import ClientTradesDataTable from "./_client_trades_datatable";
 import PieChart from "./_pie_chart";
 import StackBarChart from "./_stacked_barchart";
 import {
-  monthWiseClientStatistics,
-  monthWiseTradeStatistics,
-  monthWiseTurnoverStatistics,
-} from "./data";
-import {
   IActiveTradeDayWise,
   IActiveTradingToday,
   IMonthWiseData,
@@ -199,21 +194,21 @@ const ActiveTradingCodesBoard = async () => {
         </div>
 
         {/* client  */}
-        <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
+        <div className="rounded-md xl:col-span-2">
           <PieChart
             title="Clients (Today)"
             dataKey="totalClients"
             data={sanitizedDayWiseSummary}
           />
         </div>
-        <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
+        <div className="rounded-md xl:col-span-2">
           <PieChart
             title="Trades (Today)"
             dataKey="trades"
             data={sanitizedDayWiseSummary}
           />
         </div>
-        <div className="rounded-md xl:col-span-2 bg-gradient-to-br from-gray-50 to-slate-200">
+        <div className="rounded-md xl:col-span-2">
           <PieChart
             title="Turnover (Today)"
             dataKey="totalTurnover"

@@ -24,14 +24,10 @@ const CardBoard: React.FC<CardBoardProps> = ({
   boardIcon
 }) => {
   return (
-    <Card
-      className={cn("bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md", className)}
-    >
+    <Card className={cn("drop-shadow-md", className)}>
       <CardHeader>
-        <CardTitle className="text-slate-600 flex justify-between items-center">{title} {boardIcon}</CardTitle>
-        <CardDescription className="text-slate-500">
-          {subtitle ?? ""}
-        </CardDescription>
+        <CardTitle className="">{title}</CardTitle>
+        <CardDescription className="">{subtitle ?? ""}</CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center items-center">
         {children}

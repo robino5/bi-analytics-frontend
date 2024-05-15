@@ -6,6 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { IMarginLoanAllocation } from "@/types/marginLoanUsage";
@@ -20,55 +29,37 @@ export default function MarginLoanAllocationDataTable({
   className,
 }: Props) {
   return (
-    <Card
-      className={cn(
-        "overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200",
-        className
-      )}
-    >
+    <Card className={cn("overflow-auto", className)}>
       <CardHeader>
-        <CardTitle className="text-slate-600">
-          Margin Loan Allocation & Usage
-        </CardTitle>
+        <CardTitle className="">Margin Loan Allocation & Usage</CardTitle>
         <CardDescription>
           short summary of the margin loan allocation & usage
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Particular
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Amount
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-auto">Particular</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {records.map((record) => (
-              <tr
+              <TableRow
                 key={record.perticular}
-                className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+                className="odd:bg-muted even:bg-gradient"
               >
-                <th
-                  scope="row"
-                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                <TableCell className="font-medium py-1">
                   {record.perticular}
-                </th>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.amount < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="py-1 text-right">
                   {numberToMillionsString(record.amount)}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );

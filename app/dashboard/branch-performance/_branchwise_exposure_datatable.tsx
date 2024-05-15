@@ -1,4 +1,12 @@
 import { IBranchWiseExposure } from "@/types/branchPerformance";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface Props {
   records: IBranchWiseExposure[];
@@ -6,61 +14,58 @@ interface Props {
 
 export default function BranchWiseExposureDataTable({ records }: Props) {
   return (
-    <table className="w-full text-sm text-left text-gray-500 border-collapse rtl:text-right dark:text-gray-400">
-      <thead className="text-xs text-gray-700 uppercase border bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <th rowSpan={2} className="p-1 border">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead rowSpan={2} className="border">
             Branch
-          </th>
-          <th colSpan={2} className="text-center border">
-            Green <br /> (100% and above)
-          </th>
-          <th colSpan={2} className="text-center border">
-            Yellow <br /> (50% and Below 100%)
-          </th>
-          <th colSpan={2} className="text-center border">
-            Red <br /> (Less than 50%)
-          </th>
-        </tr>
-        <tr>
-          <th className="text-center border">No. of code</th>
-          <th className="text-center border">% ratio</th>
-          <th className="text-center border">No. of code</th>
-          <th className="text-center border">% ratio</th>
-          <th className="text-center border">No. of code</th>
-          <th className="text-center border">% ratio</th>
-        </tr>
-      </thead>
-      <tbody>
+          </TableHead>
+          <TableHead colSpan={2} className="border">
+            Green
+          </TableHead>
+          <TableHead colSpan={2} className="border">
+            Yellow
+          </TableHead>
+          <TableHead colSpan={2} className="border">
+            Red
+          </TableHead>
+        </TableRow>
+        <TableRow>
+          <TableHead className="px-2 text-center border">No. of code</TableHead>
+          <TableHead className="px-2 text-center border">% ratio</TableHead>
+          <TableHead className="px-2 text-center border">No. of code</TableHead>
+          <TableHead className="px-2 text-center border">% ratio</TableHead>
+          <TableHead className="px-2 text-center border">No. of code</TableHead>
+          <TableHead className="px-2 text-center border">% ratio</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody className="border">
         {records.map((record, index) => (
-          <tr
-            key={index}
-            className="text-[0.7rem] lg:text-[0.8rem] border odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
-          >
-            <td className="p-1 border text-gray-700 font-semibold">
+          <TableRow key={index} className="odd:bg-muted even:bg-gradient">
+            <TableCell className="font-medium py-1">
               {record.branchName}
-            </td>
-            <td className="text-center border">
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {record.exposures.green?.investorsCount ?? 0}
-            </td>
-            <td className="text-center border">
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {record.exposures.green?.exposureRatio ?? 0}
-            </td>
-            <td className="text-center border">
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {record.exposures.yellow?.investorsCount ?? 0}
-            </td>
-            <td className="text-center border">
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {record.exposures.yellow?.exposureRatio ?? 0}
-            </td>
-            <td className="text-center border">
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {record.exposures.red?.investorsCount ?? 0}
-            </td>
-            <td className="text-center border">
+            </TableCell>
+            <TableCell className="py-1 text-right">
               {record.exposures.red?.exposureRatio ?? 0}
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 }

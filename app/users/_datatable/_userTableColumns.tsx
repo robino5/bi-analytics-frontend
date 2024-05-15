@@ -57,7 +57,10 @@ export const useTableColumns: ColumnDef<IUser>[] = [
       <DataTableColumnHeader column={column} title="Role" />
     ),
     cell: ({ row }) => (
-      <Badge variant="outline" className="text-slate-600 font-medium">
+      <Badge
+        variant="outline"
+        className="text-slate-600 font-medium dark:text-gray-300"
+      >
         {row.getValue("role")}
       </Badge>
     ),
@@ -129,13 +132,9 @@ export const useTableColumns: ColumnDef<IUser>[] = [
 
       // Return "Yes" if the timestamp is today, otherwise return "No"
       return isToday ? (
-        <Badge variant="outline" className="bg-green-50">
-          Yes
-        </Badge>
+        <Badge variant="outline">Yes</Badge>
       ) : (
-        <Badge variant="outline" className="bg-red-50">
-          No
-        </Badge>
+        <Badge variant="outline">No</Badge>
       );
     },
     filterFn: (row, id, value) => {

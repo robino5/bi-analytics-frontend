@@ -15,8 +15,13 @@ import {
   Label,
 } from "recharts";
 
-import { formatDate, numberToMillionsString } from "@/lib/utils";
-import { BarColors } from "./ui/utils/constants";
+import {
+  formatDate,
+  numberFormatter,
+  numberToMillionsString,
+} from "@/lib/utils";
+import { BarColors, TOOLTIP_BACKGROUND } from "./ui/utils/constants";
+import { Separator } from "./ui/separator";
 
 interface BarData {
   date: string;
@@ -46,6 +51,58 @@ interface CustomizedLabelProps {
   fill?: string;
   value?: number;
 }
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: PayloadType[];
+  label?: number;
+}
+
+type PayloadType = {
+  value: string | number;
+  name: string;
+  payload: BarData;
+  color: string;
+  dataKey: string;
+};
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  if (active && payload && payload.length > 0) {
+    return (
+      <div
+        style={{
+          backgroundColor: TOOLTIP_BACKGROUND,
+          padding: "10px",
+          borderRadius: "10px",
+          boxShadow: "1px 2px 10px -2px #7873ffb1",
+        }}
+      >
+        <p>{label}</p>
+        <Separator className="border-gray-500" />
+        {payload.map((pld: PayloadType) => {
+          const innerPayload = pld.payload;
+          return (
+            <p
+              key={pld.name}
+              style={{
+                borderStyle: "solid 1px",
+                fontSize: "12px",
+                fontWeight: "600",
+                fontFamily: "sans-serif",
+                color: pld.color,
+              }}
+            >
+              {`${pld.name} : ${numberFormatter(
+                innerPayload[pld.dataKey as keyof BarData] as number
+              )}`}
+            </p>
+          );
+        })}
+      </div>
+    );
+  }
+  return null;
+};
 
 const CustomizedLabel: FC<CustomizedLabelProps> = ({
   x = 0,
@@ -120,7 +177,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
         <Legend />
-        <Tooltip />
+        <Tooltip content={<CustomTooltip />} />
         <Brush dataKey={option.valueKeyA} height={30} stroke="#8884d8" />
         <Bar
           name="Clients"

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarColors,
   LABEL_TICK_FONT_SIZE,
-  TICK_COLOR,
+  LABEL_COLOR,
 } from "@/components/ui/utils/constants";
 import { numberToMillionsString } from "@/lib/utils";
 import { useState } from "react";
@@ -73,7 +73,7 @@ const renderActiveShape = (props: any) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={12}>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={15}>
         {payload.channel}
       </text>
       <Sector
@@ -104,7 +104,7 @@ const renderActiveShape = (props: any) => {
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        fill="#333"
+        fill={LABEL_COLOR}
         fontSize={LABEL_TICK_FONT_SIZE}
       >{`${numberToMillionsString(value)}`}</text>
       <text
@@ -112,8 +112,8 @@ const renderActiveShape = (props: any) => {
         y={ey}
         dy={18}
         textAnchor={textAnchor}
-        fill={TICK_COLOR}
-        fontSize={11}
+        fill={LABEL_COLOR}
+        fontSize={13}
       >
         {`(${Math.round(percent * 100)}%)`}
       </text>
@@ -122,6 +122,15 @@ const renderActiveShape = (props: any) => {
 };
 
 const PieChart = ({ title, data, dataKey }: PropType) => {
+  // Override console.error
+  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
+  // @link https://github.com/recharts/recharts/issues/3615
+  const error = console.error;
+  console.error = (...args: any) => {
+    if (/defaultProps/.test(args[0])) return;
+    error(...args);
+  };
+  // ===========================================
   const [activeIndex, setActiveIndex] = useState(0);
 
   const onPieEnter = (_: any, index: any) => {
@@ -129,23 +138,21 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-gray-50 to-slate-200 drop-shadow-md">
+    <Card className="drop-shadow-md">
       <CardHeader>
-        <CardTitle className="text-slate-600">{title}</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={220}>
-          <PieChartRechart height={100} width={100}>
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChartRechart height={400} width={400}>
             <Pie
               activeIndex={activeIndex}
               activeShape={renderActiveShape}
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={40}
-              outerRadius={60}
-              // labelLine={false}
-              // label={renderCustomizedLabel}
+              innerRadius={70}
+              outerRadius={100}
               fill="#8884d8"
               dataKey={dataKey}
               onMouseEnter={onPieEnter}

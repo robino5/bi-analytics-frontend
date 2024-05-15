@@ -74,7 +74,7 @@ export function UserTable<TData, TValue>({
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
-          <TableHeader className="bg-gray-100">
+          <TableHeader className="bg-gray-100 dark:bg-accent">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -102,7 +102,7 @@ export function UserTable<TData, TValue>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="p-2 text-center text-slate-700"
+                      className="p-2 text-center text-slate-700 dark:text-white"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

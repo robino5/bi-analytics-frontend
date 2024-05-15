@@ -6,6 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -23,78 +32,49 @@ interface Props {
 
 export default function RMTurnoverPerformance({ records }: Props) {
   return (
-    <Card className="col-span-3 overflow-auto bg-gradient-to-tl from-gray-50 to-slate-50 rounded-md shadow-md">
+    <Card className="col-span-6 overflow-auto rounded-md shadow-md">
       <CardHeader>
-        <CardTitle className="text-slate-600">Turnover Performance</CardTitle>
+        <CardTitle className="">Turnover Performance</CardTitle>
         <CardDescription>
           short summary of RM Turnover Performance
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Particular
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Daily
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Weekly
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Forthnightly
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Monthly
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[200px]">Particular</TableHead>
+              <TableHead className="text-right">Daily</TableHead>
+              <TableHead className="text-right">Weekly</TableHead>
+              <TableHead className="text-right">Forthnightly</TableHead>
+              <TableHead className="text-right">Monthly</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {records.map((record) => (
-              <tr
+              <TableRow
                 key={record.name}
-                className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+                className="odd:bg-muted even:bg-gradient"
               >
-                <th
-                  scope="row"
-                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                <TableCell className="font-medium py-1">
                   {record.name}
-                </th>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.daily < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(record.daily)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.weekly < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(record.weekly)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.forthnightly < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(record.forthnightly)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.monthly < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="text-right py-1">
                   {numberToMillionsString(record.monthly)}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );

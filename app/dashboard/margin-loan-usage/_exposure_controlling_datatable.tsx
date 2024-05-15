@@ -6,6 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { MarkedTradersZoneWise } from "./_marked_traders_modal";
@@ -38,76 +47,50 @@ export default function ExposureControllingDataTable({
   branch,
 }: Props) {
   return (
-    <Card
-      className={cn(
-        "overflow-auto bg-gradient-to-tl from-gray-50 to-slate-200",
-        className
-      )}
-    >
+    <Card className={cn("overflow-auto", className)}>
       <CardHeader>
-        <CardTitle className="text-slate-600">
-          Exposure Controlling & Management
-        </CardTitle>
+        <CardTitle className="">Exposure Controlling & Management</CardTitle>
         <CardDescription>excluding negative equity clients</CardDescription>
       </CardHeader>
       <CardContent>
-        <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Exposure
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Investors
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Loan Amount
-              </th>
-              <th scope="col" className="px-4 py-3"></th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-auto">Exposure</TableHead>
+              <TableHead className="text-right">Investors</TableHead>
+              <TableHead className="text-right">Loan Amount</TableHead>
+              <TableHead className="text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {records.map((record) => (
-              <tr
+              <TableRow
                 key={record.exposure}
-                className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+                className="odd:bg-muted even:bg-gradient"
               >
-                <th
-                  scope="row"
-                  className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                <TableCell className="font-medium py-1">
                   {record.exposure}
-                </th>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.investors < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="py-1 text-right">
                   {numberToMillionsString(record.investors)}
-                </td>
-                <td
-                  className={cn("px-6 py-2", {
-                    "text-red-500": record.loanAmount < 0,
-                  })}
-                >
+                </TableCell>
+                <TableCell className="py-1 text-right">
                   {numberToMillionsString(record.loanAmount)}
-                </td>
-                <td className="px-6 py-2">
-                  <div className="cursor-pointer flex justify-center items-center h-[28px] w-[28px] rounded-full">
-                    <MarkedTradersZoneWise
-                      name={
-                        keywordMatcher(
-                          record.exposure
-                        ) as keyof MarkedTraderPayloadType
-                      }
-                      branch={branch}
-                    />
-                  </div>
-                </td>
-              </tr>
+                </TableCell>
+                <TableCell className="py-1 text-right">
+                  <MarkedTradersZoneWise
+                    name={
+                      keywordMatcher(
+                        record.exposure
+                      ) as keyof MarkedTraderPayloadType
+                    }
+                    branch={branch}
+                  />
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   );

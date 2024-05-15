@@ -145,11 +145,16 @@ const RmPerformanceBoard = () => {
         />
       </PageHeader>
       <div className="grid grid-col-6 gap-3 xl:grid-cols-6 mt-2">
+        {/* Turnover Performance */}
+        {turnoverPerformance ? (
+          <RMTurnoverPerformance records={turnoverPerformance} />
+        ) : null}
+
         {/* Client Details */}
         {clients ? (
-          <Card className="w-full col-span-6 mb-2 shadow-xl lg:col-span-3 bg-gradient-to-br from-gray-50 to-slate-50">
+          <Card className="col-span-6 mb-2 shadow-xl">
             <CardHeader>
-              <CardTitle className="text-slate-600">Client Details</CardTitle>
+              <CardTitle className="">Client Details</CardTitle>
               <CardDescription>
                 Client Details for Regional Managers
               </CardDescription>
@@ -161,10 +166,6 @@ const RmPerformanceBoard = () => {
               />
             </CardContent>
           </Card>
-        ) : null}
-        {/* Turnover Performance */}
-        {turnoverPerformance ? (
-          <RMTurnoverPerformance records={turnoverPerformance} />
         ) : null}
       </div>
     </div>

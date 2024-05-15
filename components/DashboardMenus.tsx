@@ -189,7 +189,7 @@ export default function DashboardMenus() {
 
   return (
     <Command>
-      <CommandList className="max-h-full">
+      <CommandList className="max-h-full mb-4">
         {menus.map((menu) => {
           return (
             <div key={menu.codeName}>
