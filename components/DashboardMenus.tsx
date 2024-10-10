@@ -46,6 +46,14 @@ const menuList = [
         icon: <FcBearish className="h-4 w-4" />,
         roles: ["ADMIN", "MANAGEMENT"],
       },
+      {
+        id: 2,
+        codeName: "business_and_trade_management",
+        viewName: "Business and Trade Management",
+        urlPath: "/dashboard/business-and-trade-management",
+        icon: <FcBearish className="h-4 w-4" />,
+        roles: ["ADMIN", "MANAGEMENT"],
+      },
     ],
   },
   {
