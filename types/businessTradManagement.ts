@@ -50,3 +50,24 @@ export interface MarketShareSME {
   cseSmePercent: number 
   cseAtbPercent: number; 
 }
+
+export interface CompanyWiseTotalSelableStock {
+  companyName: string;
+  stockAvailable: number;
+}
+
+export interface SelableStockPercentage {
+  companyName: string;             
+  branchName: string;              
+  stockAvailable: number;           
+  stockAvailablePercentage: number; 
+}
+
+export interface InvestorWiseTotalSelableStock {
+  companyName: string; 
+  branchName: string;      
+  investorCode: string;    
+  clientName: string;      
+  rmName: string;         
+  stockAvailable: number;  
+}
