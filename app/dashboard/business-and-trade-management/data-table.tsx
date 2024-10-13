@@ -3,17 +3,14 @@
 import * as React from "react";
 import {
   ColumnDef,
+  VisibilityState,
   ColumnFiltersState,
   SortingState,
-  VisibilityState,
-  flexRender,
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  flexRender,
 } from "@tanstack/react-table";
 
 import {
@@ -24,7 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import {
   Card,
   CardHeader,
@@ -36,68 +32,111 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 interface DataTableProps<TData, TValue> {
   title: string;
   subtitle: string;
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
   className?: string;
+  url?: string;
 }
 
 export function DataTableCard<TData, TValue>({
   title,
   subtitle,
   columns,
-  data,
   className,
+  url,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({});
+  const { data: session } = useSession();
+  const [data, setData] = React.useState<TData[]>([]);
+  const [totalRows, setTotalRows] = React.useState(0);
+  const [loading, setLoading] = React.useState(false);
+  const [companyName, setCompanyName] = React.useState<string>("");
+
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      const { pageIndex, pageSize } = pagination;
+      const query = new URLSearchParams({
+        page: (pageIndex + 1).toString(),
+        page_size: pageSize.toString(),
+      });
+
+      if (companyName) {
+        query.append("company", companyName);
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_V1_APIURL}${url}?${query.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result = await response.json();
+      setData(result.data.results);
+      setTotalRows(result.data.count);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [pagination, sorting, companyName]);
 
   const table = useReactTable({
     data,
     columns,
     state: {
+      pagination,
       sorting,
-      columnVisibility,
-      rowSelection,
       columnFilters,
+      columnVisibility,
     },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    manualPagination: true,
+    pageCount: Math.ceil(totalRows / pagination.pageSize),
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
     <Card className={cn("w-full shadow-md", className)}>
       <CardHeader>
-        <CardTitle className="">{title}</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>{subtitle}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <DataTableToolbar table={table} />
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
+          <DataTableToolbar
+            table={table}
+            onCompanySearch={(value) => setCompanyName(value)}
+          />
+          <div className="rounded-md border overflow-hidden">
+            <div className="max-h-[800px] overflow-y-auto">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
                         <TableHead key={header.id} colSpan={header.colSpan}>
                           {header.isPlaceholder
                             ? null
@@ -106,43 +145,46 @@ export function DataTableCard<TData, TValue>({
                                 header.getContext()
                               )}
                         </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          className="py-1 px-4 text-start text-[0.8rem]"
-                          key={cell.id}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
                       ))}
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="text-center"
+                      >
+                        Loading...
+                      </TableCell>
+                    </TableRow>
+                  ) : table.getRowModel().rows.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="text-center"
+                      >
+                        No results found.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
           <DataTablePagination table={table} />
         </div>

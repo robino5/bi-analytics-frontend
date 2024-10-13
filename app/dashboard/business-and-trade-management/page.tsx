@@ -45,13 +45,6 @@ export default function BusinessAndTradeManagement() {
   const [marketShareSME, setMarketShareSME] = useState<MarketShareSME[] | null>(
     null
   );
-  const [companyWiseTotalSalableStock, setCompanyWiseTotalSalableStock] =
-    useState<CompanyWiseTotalSelableStock[]>([]);
-  const [salableStockPercentage, setSalableStockPercentage] = useState<
-    SelableStockPercentage[]
-  >([]);
-  const [investorWiseTotalSalableStock, setInvestorWiseTotalSalableStock] =
-    useState<InvestorWiseTotalSelableStock[]>([]);
   // on page load
   useEffect(() => {
     // board ternover data
@@ -150,88 +143,10 @@ export default function BusinessAndTradeManagement() {
         );
       }
     };
-    // CompanyWise Totoal Salable Stock
-    const fetchCompanyWiseTotoalSalableStock = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/companywise-saleable-stock/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<
-          CompanyWiseTotalSelableStock[]
-        >;
-        if (successResponse(result.status)) {
-          setCompanyWiseTotalSalableStock(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching Company Wise Totoal Salable Stock`,
-          error
-        );
-      }
-    };
-    // CompanyWise Totoal Salable Percentage
-    const fetchSalableStockPercentage = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/companywise-saleable-stock-percentage/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<
-          SelableStockPercentage[]
-        >;
-        if (successResponse(result.status)) {
-          setSalableStockPercentage(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching Company Wise Totoal Salable Percentage`,
-          error
-        );
-      }
-    };
-    // InvestorWise Totoal Salable Stock
-    const fetchInvestorWiseTotoalSalableStock = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/investorwise-saleable-stock/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<
-          InvestorWiseTotalSelableStock[]
-        >;
-        if (successResponse(result.status)) {
-          setInvestorWiseTotalSalableStock(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching InvestorWise Totoal Salable Stock`,
-          error
-        );
-      }
-    };
     fetchBoardTernoverData();
     fetchBoardTernoverBreakdownData();
     fetchMarketShareLBSL();
     fetchMarketShareSME();
-    fetchCompanyWiseTotoalSalableStock();
-    fetchSalableStockPercentage();
-    fetchInvestorWiseTotoalSalableStock();
   }, []);
 
   return (
@@ -262,35 +177,29 @@ export default function BusinessAndTradeManagement() {
         ) : null}
       </div>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
-        {companyWiseTotalSalableStock ? (
-          <DataTableCard
-            title="CompanyWise Total Saleable Stock"
-            subtitle="show data for CompanyWise Total Saleable Stock"
-            className="col-span1 overflow-y-auto lg:col-span-2 lg:row-span-2"
-            columns={companyWiseSalableStock}
-            data={companyWiseTotalSalableStock}
-          />
-        ) : null}
-        {salableStockPercentage ? (
-          <DataTableCard
-            title="Saleable Percentage"
-            subtitle="show data for Saleable Percentage"
-            className="col-span1 overflow-y-auto lg:col-span-2 lg:row-span-2"
-            columns={SalableStockPercentage}
-            data={salableStockPercentage}
-          />
-        ) : null}
+        <DataTableCard
+          title="CompanyWise Total Saleable Stock"
+          subtitle="show data for CompanyWise Total Saleable Stock"
+          className="col-span1 overflow-y-auto lg:col-span-2 lg:row-span-2"
+          columns={companyWiseSalableStock}
+          url="/dashboards/admin/companywise-saleable-stock/"
+        />
+        <DataTableCard
+          title="Saleable Percentage"
+          subtitle="show data for Saleable Percentage"
+          className="col-span1 overflow-y-auto lg:col-span-2 lg:row-span-2"
+          columns={SalableStockPercentage}
+          url="/dashboards/admin/companywise-saleable-stock-percentage/"
+        />
       </div>
       <div className="grid grid-cols-12 gap-3 mt-2">
-        {investorWiseTotalSalableStock ? (
-          <DataTableCard
-            title="Investor Wise Total Saleable Stock"
-            subtitle="show data for investor wise total saleable stock "
-            className="col-span-12 overflow-y-auto lg:col-span-12 lg:row-span-2" // Update to span all 12 columns
-            columns={InvestorWiseSalableStock}
-            data={investorWiseTotalSalableStock}
-          />
-        ) : null}
+        <DataTableCard
+          title="Investor Wise Total Saleable Stock"
+          subtitle="show data for investor wise total saleable stock "
+          className="col-span-12 overflow-y-auto lg:col-span-12 lg:row-span-2" // Update to span all 12 columns
+          columns={InvestorWiseSalableStock}
+          url="/dashboards/admin/investorwise-saleable-stock/"
+        />
       </div>
     </div>
   );
