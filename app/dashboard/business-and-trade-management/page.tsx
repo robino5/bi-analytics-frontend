@@ -4,6 +4,7 @@ import BoardWiseTurnover from "./_board_wise_turnover";
 import BoardWiseTurnoverBreakdown from "./_board_wise_turnover_breakdown";
 import DetailsMarketShareLBSL from "./_details_market_share_of_lbsl";
 import DetailsMarketShareSME from "./_details_market_share_of_lbsl_sme_atb";
+import { DataTableCardInvestorWiseSaleableStock } from "./investor-wise-total-saleable-stock/data-table";
 import { useEffect, useState } from "react";
 import {
   BoardWiseTurnoverData,
@@ -193,7 +194,7 @@ export default function BusinessAndTradeManagement() {
         />
       </div>
       <div className="grid grid-cols-12 gap-3 mt-2">
-        <DataTableCard
+        <DataTableCardInvestorWiseSaleableStock
           title="Investor Wise Total Saleable Stock"
           subtitle="show data for investor wise total saleable stock "
           className="col-span-12 overflow-y-auto lg:col-span-12 lg:row-span-2" // Update to span all 12 columns
