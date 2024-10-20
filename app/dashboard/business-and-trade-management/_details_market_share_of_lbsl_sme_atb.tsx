@@ -147,13 +147,13 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="text-center py-1 border border-gray-300">
+              <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Share of DSE  ATB (%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.atbPercent)}
               </TableCell>
-              <TableCell className="text-center py-1 border border-gray-300">
+              <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Share of DSE  ATB (%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
