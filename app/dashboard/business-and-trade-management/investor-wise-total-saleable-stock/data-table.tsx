@@ -136,9 +136,16 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
               <Table>
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
+                    <TableRow
+                      key={headerGroup.id}
+                      className="bg-blue-500 hover:bg-blue-700"
+                    >
                       {headerGroup.headers.map((header) => (
-                        <TableHead key={header.id} colSpan={header.colSpan}>
+                        <TableHead
+                          key={header.id}
+                          colSpan={header.colSpan}
+                          className="text-white font-bold"
+                        >
                           {header.isPlaceholder
                             ? null
                             : flexRender(
@@ -161,8 +168,13 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
                       </TableCell>
                     </TableRow>
                   ) : table.getRowModel().rows.length ? (
-                    table.getRowModel().rows.map((row) => (
-                      <TableRow key={row.id}>
+                    table.getRowModel().rows.map((row, index) => (
+                      <TableRow
+                        key={row.id}
+                        className={`${
+                          index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                        } hover:bg-green-300 transition-all duration-300`}
+                      >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
                             {flexRender(

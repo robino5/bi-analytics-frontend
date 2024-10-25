@@ -50,7 +50,7 @@ const CustomizedAxisTick = ({ x, y, payload }: Props) => {
         y={0}
         dy={16}
         textAnchor="end"
-        fill="#999"
+        fill="black"
         transform="rotate(-35)"
         fontSize={12}
         opacity={1}
@@ -169,6 +169,7 @@ const StackBarChart = ({
                 stroke: TICK_COLOR,
                 strokeOpacity: 0.1,
                 fontSize: LABEL_TICK_FONT_SIZE,
+                fill: "black",
               }}
               tickFormatter={(value) => `${value}%`}
               domain={[0, 100]}
