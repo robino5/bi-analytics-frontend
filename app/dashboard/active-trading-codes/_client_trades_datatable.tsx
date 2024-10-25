@@ -45,31 +45,41 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Table>
+        <Table className="border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[200px]">Channel</TableHead>
-              <TableHead>Total Client</TableHead>
-              <TableHead>Trades</TableHead>
-              <TableHead className="text-right">Turnover</TableHead>
+            <TableRow className="bg-blue-500 hover:bg-blue-700">
+              <TableHead className="w-[200px] text-white font-bold py-2">
+                Channel
+              </TableHead>
+              <TableHead className="text-white font-bold py-2">
+                Total Client
+              </TableHead>
+              <TableHead className="text-white font-bold py-2">
+                Trades
+              </TableHead>
+              <TableHead className="text-right text-white font-bold py-2">
+                Turnover
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {records.map((record) => (
+            {records.map((record, index) => (
               <TableRow
                 key={record.channel}
-                className="odd:bg-muted even:bg-gradient"
+                className={`${
+                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                } hover:bg-green-300 transition-all duration-300`}
               >
-                <TableCell className="font-medium py-1">
+                <TableCell className="font-medium py-2">
                   {record.channel}
                 </TableCell>
-                <TableCell className="py-1">
+                <TableCell className="py-2">
                   {numberToMillionsString(record.totalClients)}
                 </TableCell>
-                <TableCell className="py-1">
+                <TableCell className="py-2">
                   {numberToMillionsString(record.trades)}
                 </TableCell>
-                <TableCell className="text-right py-1">
+                <TableCell className="text-right py-2">
                   {numberToMillionsString(record.totalTurnover)}
                 </TableCell>
               </TableRow>
