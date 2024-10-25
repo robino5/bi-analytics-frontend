@@ -54,7 +54,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
           <TableHeader>
             <TableRow>
               <TableHead
-                className="text-center border border-gray-300"
+                className="text-center text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold"
                 colSpan={4}
               >
                 Details market share of LBSL(SME-ATB)
@@ -62,7 +62,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
+            <TableRow className="text-center text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold">
               <TableCell
                 className="text-center py-1 border border-gray-300"
                 colSpan={2}
@@ -76,7 +76,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
                 CSE
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300 w-1/4">
                 LBSL SME
               </TableCell>
@@ -90,7 +90,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
                 {numberToMillionsString(datalist.cseSmeTurnover)}
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL ATB
               </TableCell>
@@ -104,7 +104,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
                 {numberToMillionsString(datalist.cseAtbTurnover)}
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL GSEC 
               </TableCell>
@@ -118,7 +118,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
                 {numberToMillionsString(datalist.cseGsecTurnover)}
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Block
               </TableCell>
@@ -132,7 +132,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
                 {numberToMillionsString(datalist.cseBlockTurnover)}
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Share of DSE SME (%)
               </TableCell>
@@ -146,7 +146,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
                 {numberToMillionsString(datalist.cseSmePercent)}
               </TableCell>
             </TableRow>
-            <TableRow>
+            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Share of DSE  ATB (%)
               </TableCell>

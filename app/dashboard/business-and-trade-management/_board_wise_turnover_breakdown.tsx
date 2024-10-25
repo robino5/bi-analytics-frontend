@@ -52,21 +52,31 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Table className="min-w-[453px]">
+        <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-            <TableRow>
-              <TableHead className="">Main Board</TableHead>
-              <TableHead className="text-right">DSE Turn Over(Mn)</TableHead>
-              <TableHead className="text-right">DSE(%)</TableHead>
-              <TableHead className="text-right">LBSL Turn Over(Mn)</TableHead>
-              <TableHead className="text-right">LBSL(%)</TableHead>
+            <TableRow className="bg-blue-500 hover:bg-blue-700">
+              <TableHead className="text-white font-bold">Main Board</TableHead>
+              <TableHead className="text-right text-white font-bold">
+                DSE Turn Over(Mn)
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                DSE(%)
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                LBSL Turn Over(Mn)
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                LBSL(%)
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {datalist.map((data) => (
+            {datalist.map((data, index) => (
               <TableRow
                 key={data.board}
-                className="odd:bg-muted even:bg-gradient"
+                className={`${
+                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                } hover:bg-green-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">{data.board}</TableCell>
                 <TableCell className="text-right py-1">
@@ -83,16 +93,9 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
                 </TableCell>
               </TableRow>
             ))}
-            <TableRow>
-              <TableCell className="text-right"></TableCell>
-              <TableCell className="text-right"></TableCell>
-              <TableCell className="text-right"></TableCell>
-              <TableCell className="text-right"></TableCell>
-              <TableCell className="text-right"></TableCell>
-            </TableRow>
           </TableBody>
           <TableFooter>
-            <TableRow>
+            <TableRow className="bg-green-500 hover:bg-green-500 transition-all duration-300">
               <TableCell className="font-medium py-2">Total</TableCell>
               <TableCell className="text-right py-2">
                 {numberToMillionsString(totalTurnover)}

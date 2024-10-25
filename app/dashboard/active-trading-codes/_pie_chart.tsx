@@ -61,6 +61,7 @@ const renderActiveShape = (props: any) => {
     percent,
     value,
   }: IActiveShape = props;
+
   const sin = Math.sin(-RADIAN * midAngle);
   const cos = Math.cos(-RADIAN * midAngle);
   const sx = cx + (outerRadius + 10) * cos;
@@ -104,16 +105,16 @@ const renderActiveShape = (props: any) => {
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        fill={LABEL_COLOR}
-        fontSize={LABEL_TICK_FONT_SIZE}
+        fill="black"
+        fontSize={14}
       >{`${numberToMillionsString(value)}`}</text>
       <text
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         dy={18}
         textAnchor={textAnchor}
-        fill={LABEL_COLOR}
-        fontSize={13}
+        fill="black"
+        fontSize={14}
       >
         {`(${Math.round(percent * 100)}%)`}
       </text>
