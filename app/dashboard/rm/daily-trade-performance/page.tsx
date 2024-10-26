@@ -41,9 +41,8 @@ export default function DailyTradePerformance() {
   // ===========================================
   const { data: session } = useSession();
   const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
-  // TODO : Need to inject BranchCode in the session object
-  const defaultBranch = isRM ? "12" : "";
-  const defaultTrader = isRM ? session.user.username : "";
+  const defaultBranch = isRM ? session?.user?.branchId : "";
+  const defaultTrader = isRM ? session?.user.username : "";
   const turnoverChartOptions = [
     {
       name: "Target",

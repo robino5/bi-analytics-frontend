@@ -25,6 +25,8 @@ export const {
         session.user.role = token?.me?.role
         // @ts-ignore
         session.user.accessToken = token?.me?.accessToken
+        // @ts-ignore
+        session.user.branchId = token?.me?.profile?.branchId
       }
       return session
     },
