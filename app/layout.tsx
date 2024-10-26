@@ -5,7 +5,6 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { auth } from "@/auth";
 import SessionProvider from "@/auth_provider";
-import { ThemeProvider } from "@/components/theme-provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,15 +26,7 @@ export default async function AuthLayout({
     <html lang="en">
       <body className={cn("bg-secondary", fontSans.variable)}>
         <SessionProvider session={session}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            themes={["black", "green", "violet", "dark", "light"]}
-          >
-            {children}
-          </ThemeProvider>
+          {children}
         </SessionProvider>
       </body>
     </html>

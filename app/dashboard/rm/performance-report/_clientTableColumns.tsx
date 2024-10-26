@@ -8,15 +8,7 @@ import { IClientDetail } from "@/types/rmPerformance";
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
-  return (
-    <div
-      className={cn("text-right font-medium ", {
-        "text-red-600": amount < 0,
-      })}
-    >
-      {numberToMillionsString(amount)}
-    </div>
-  );
+  return numberToMillionsString(amount);
 };
 
 export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
@@ -25,12 +17,18 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Investor Code" />
     ),
+    cell: ({ row }) => {
+      return <div className="text-left ml-4">{row.getValue("investorCode")}</div>
+    }
   },
   {
     accessorKey: "joinHolderName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Investor Name" />
     ),
+    cell: ({ row }) => {
+      return <div className="text-left">{row.getValue("joinHolderName")}</div>
+    }
   },
   {
     accessorKey: "tpv",
@@ -38,7 +36,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Portfolio Value" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "tpv");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("tpv") as number < 0,
+      })}>{cellNumberFormatter(row, "tpv")}</div >;
     },
   },
   {
@@ -47,7 +47,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Cost Value" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "cv");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("cv") as number < 0,
+      })}>{cellNumberFormatter(row, "cv")}</div >;
     },
   },
   {
@@ -56,7 +58,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Cash Amount" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "availableCashBalance");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("availableCashBalance") as number < 0,
+      })}>{cellNumberFormatter(row, "availableCashBalance")}</div >;
     },
   },
   {
@@ -65,7 +69,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Margin amount" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "loanBalance");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("loanBalance") as number < 0,
+      })}>{cellNumberFormatter(row, "loanBalance")}</div >;
     },
   },
   {
@@ -74,7 +80,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Equity" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "equity");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("equity") as number < 0,
+      })}>{cellNumberFormatter(row, "equity")}</div >;
     },
   },
   {
@@ -83,7 +91,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Exposure on Equity" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "exposureOnEquity");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("exposureOnEquity") as number < 0,
+      })}>{cellNumberFormatter(row, "exposureOnEquity")}</div >;
     },
   },
   {
@@ -92,7 +102,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Daily TO" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "dailyTurnover");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("dailyTurnover") as number < 0,
+      })}>{cellNumberFormatter(row, "dailyTurnover")}</div >;
     },
   },
   {
@@ -101,7 +113,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Weekly TO" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "weeklyTurnover");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("weeklyTurnover") as number < 0,
+      })}>{cellNumberFormatter(row, "weeklyTurnover")}</div >;
     },
   },
   {
@@ -110,7 +124,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Fortnightly TO" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "fortnightlyTurnover");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("fortnightlyTurnover") as number < 0,
+      })}>{cellNumberFormatter(row, "fortnightlyTurnover")}</div >;
     },
   },
   {
@@ -119,7 +135,9 @@ export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
       <DataTableColumnHeader column={column} title="Monthly TO" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "monthlyTurnover");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("monthlyTurnover") as number < 0,
+      })}>{cellNumberFormatter(row, "monthlyTurnover")}</div >;
     },
   },
 ];

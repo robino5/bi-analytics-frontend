@@ -41,9 +41,8 @@ export default function DailyTradePerformance() {
   // ===========================================
   const { data: session } = useSession();
   const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
-  // TODO : Need to inject BranchCode in the session object
-  const defaultBranch = isRM ? "12" : "";
-  const defaultTrader = isRM ? session.user.username : "";
+  const defaultBranch = isRM ? session?.user?.branchId : "";
+  const defaultTrader = isRM ? session?.user.username : "";
   const turnoverChartOptions = [
     {
       name: "Target",
@@ -387,7 +386,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Summary"
             subtitle="shows overall short summary"
-            boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400"/>}
+            boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCardClientTurnoverSummary
                 data={summary.shortSummary}
@@ -402,7 +401,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Cash Code Status"
             subtitle="shows cash code summary"
-            boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400"/>}
+            boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
             }
@@ -415,7 +414,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Margin Code Status"
             subtitle="shows margin code summary"
-            boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400"/>}
+            boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
             }
@@ -427,8 +426,8 @@ export default function DailyTradePerformance() {
         {turnoverPerformance ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={"Turnover Performance"}
-            subtitle="Shows a analytics of turnover performance of last 7 days."
+            title={"Daily Turnover Target"}
+            subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <BarChartVerticalGrouped
                 data={turnoverPerformance}

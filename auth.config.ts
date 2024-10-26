@@ -14,6 +14,7 @@ type LoginResponse = {
     phoneNumber?: string;
     email?: string;
     role: string;
+    branchId: string | null;
   };
 };
 

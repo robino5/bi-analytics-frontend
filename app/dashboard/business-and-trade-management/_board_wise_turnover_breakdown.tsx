@@ -46,7 +46,7 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
   return (
     <Card className="col-span-3 overflow-auto">
       <CardHeader>
-        <CardTitle className="">Board Wise Turnover Breakdown </CardTitle>
+        <CardTitle className="">Main Board Wise Turnover Breakdown </CardTitle>
         <CardDescription>
           short summary of the board wise turnover breakdown
         </CardDescription>
@@ -74,9 +74,8 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
             {datalist.map((data, index) => (
               <TableRow
                 key={data.board}
-                className={`${
-                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                } hover:bg-green-300 transition-all duration-300`}
+                className={`${index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                  } hover:bg-green-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">{data.board}</TableCell>
                 <TableCell className="text-right py-1">
