@@ -15,7 +15,6 @@ const PageHeader: FC<PageHeaderProps> = ({ name, children }) => {
         <div className="ml-10 text-3xl text-center font-bold flex-2 w-full">
           {name}
         </div>
-        <ThemeToggle />
       </CardContent>
     </Card>
   );
