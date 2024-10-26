@@ -47,6 +47,7 @@ export default function PortfolioManagement() {
     valueKeyB: "turnover",
     fill: "#ff3355",
     stroke: "#c3ce",
+    barLabel: true,
   };
 
   const [branch, setBranch] = useState("");
