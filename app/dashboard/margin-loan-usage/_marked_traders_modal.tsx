@@ -11,7 +11,7 @@ import {
   DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ArchiveIcon } from "lucide-react";
+import { ViewIcon } from "lucide-react";
 import MarkedTraderDataTable, {
   MarkedTraderPayloadType,
 } from "./_marked_traders_datatable";
@@ -27,8 +27,8 @@ export function MarkedTradersZoneWise({ name, branch }: MarkedTraderProps) {
     <Dialog>
       {name !== "green" ? (
         <DialogTrigger asChild>
-          <Button size="icon" variant="outline" className="rounded-full p-2">
-            <ArchiveIcon className="h-4 w-6" />
+          <Button size="icon" variant="outline" className="rounded-full p-2 bg-emerald-50">
+            <ViewIcon className="h-6 w-8 text-green-600 text-bold" />
           </Button>
         </DialogTrigger>
       ) : null}
