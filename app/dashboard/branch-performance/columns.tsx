@@ -25,15 +25,7 @@ export type BranchWiseTurnoverDataType = {
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
-  return (
-    <div
-      className={cn("text-center font-medium ", {
-        "text-red-600": amount < 0,
-      })}
-    >
-      {numberToMillionsString(amount)}
-    </div>
-  );
+  return numberToMillionsString(amount);
 };
 
 export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
@@ -53,7 +45,9 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "tpv");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("tpv") as number < 0,
+      })}>{cellNumberFormatter(row, "tpv")}</div >;
     },
   },
   {
@@ -66,7 +60,7 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "totalClients");
+      return <div className="text-right ml-4">{cellNumberFormatter(row, "totalClients")}</div >;
     },
   },
   {
@@ -79,7 +73,9 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "fundIn");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("fundIn") as number < 0,
+      })}>{cellNumberFormatter(row, "fundIn")}</div >;
     },
   },
   {
@@ -92,7 +88,9 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "fundWithdrawl");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("fundWithdrawl") as number < 0,
+      })}>{cellNumberFormatter(row, "fundWithdrawl")}</div >;
     },
   },
   {
@@ -105,7 +103,9 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "netFundflow");
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("netFundflow") as number < 0,
+      })}>{cellNumberFormatter(row, "netFundflow")}</div >;
     },
   },
 ];

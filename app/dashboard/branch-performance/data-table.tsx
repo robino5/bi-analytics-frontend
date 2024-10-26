@@ -98,13 +98,13 @@ export function DataTableCard<TData, TValue>({
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                        <TableHead key={header.id} colSpan={header.colSpan}>
+                        <TableHead key={header.id} colSpan={header.colSpan} className="border-r">
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       );
                     })}
@@ -120,7 +120,7 @@ export function DataTableCard<TData, TValue>({
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
-                          className="py-1 px-4 text-start text-[0.8rem]"
+                          className="py-1 px-4 text-start text-[0.8rem] border"
                           key={cell.id}
                         >
                           {flexRender(
