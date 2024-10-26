@@ -55,7 +55,7 @@ const menuList = [
         roles: ["ADMIN", "MANAGEMENT"],
       },
       {
-        id: 2,
+        id: 3,
         codeName: "customer_management",
         viewName: "Customer Management",
         urlPath: "/dashboard/customer-management",

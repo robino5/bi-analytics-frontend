@@ -46,28 +46,29 @@ export function numberToMillionsString(
   }
 
   const absNumber = Math.abs(num);
+  const sign = num < 0 ? "-" : "";
 
   if (useThousand) {
     if (absNumber >= 1000 && absNumber < 1000000) {
-      return `${numberFormatter(num / 1000)}K`;
+      return `${sign}${numberFormatter(absNumber / 1000)}K`;
     } else if (absNumber < 1000) {
-      return numberFormatter(num);
+      return `${sign}${numberFormatter(absNumber)}`;
     }
   }
 
   if (absNumber < 1_00_0000) {
-    return numberFormatter(absNumber);
+    return `${sign}${numberFormatter(absNumber)}`;
   }
 
   if (absNumber < 10_00_0000) {
-    return `${numberFormatter(num / 1000000)}M`;
+    return `${sign}${numberFormatter(absNumber / 1000000)}M`;
   }
 
   if (absNumber < 1_00_000_0000) {
-    return `${numberFormatter(num / 10_00_000)}M`;
+    return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
   }
 
-  return `${numberFormatter(num / 10_00_000)}M`;
+  return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
 }
 
 export function successResponse(key: string): boolean {

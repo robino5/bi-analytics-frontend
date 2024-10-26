@@ -19,15 +19,7 @@ export type ExposureControllingDataType = {
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
-  return (
-    <div
-      className={cn("text-center font-medium ", {
-        "text-red-600": amount < 0,
-      })}
-    >
-      {numberToMillionsString(amount)}
-    </div>
-  );
+  return numberToMillionsString(amount);
 };
 
 export const marginLoanAllocationColumns: ColumnDef<MarginLoanAllocationDataType>[] =
@@ -73,12 +65,18 @@ export const netTradeRmWiseColumns: ColumnDef<INetTradeClient>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Branch" />
     ),
+    cell: ({ row }) => {
+      return <div className="ml-2 text-left">{row.getValue("branchName")}</div>;
+    },
   },
   {
     accessorKey: "investorCode",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Investor Code" />
     ),
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("investorCode")}</div>;
+    },
   },
   {
     accessorKey: "openingBalance",
@@ -86,7 +84,9 @@ export const netTradeRmWiseColumns: ColumnDef<INetTradeClient>[] = [
       <DataTableColumnHeader column={column} title="Opening Balance" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "openingBalance");
+      return <div className={cn("text-left ml-4", {
+        "text-red-600": row.getValue("openingBalance") as number < 0,
+      })}>{cellNumberFormatter(row, "openingBalance")}</div >;
     },
   },
   {
@@ -95,7 +95,9 @@ export const netTradeRmWiseColumns: ColumnDef<INetTradeClient>[] = [
       <DataTableColumnHeader column={column} title="Ending Balance" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "endingBalance");
+      return <div className={cn("text-left ml-4", {
+        "text-red-600": row.getValue("endingBalance") as number < 0,
+      })}>{cellNumberFormatter(row, "endingBalance")}</div >;
     },
   },
   {
@@ -104,7 +106,9 @@ export const netTradeRmWiseColumns: ColumnDef<INetTradeClient>[] = [
       <DataTableColumnHeader column={column} title="Net Trade/Net Change" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "netBuysell");
+      return <div className={cn("text-left ml-4", {
+        "text-red-600": row.getValue("netBuysell") as number < 0,
+      })}>{cellNumberFormatter(row, "netBuysell")}</div >;
     },
   },
   {
@@ -112,5 +116,8 @@ export const netTradeRmWiseColumns: ColumnDef<INetTradeClient>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="RM" />
     ),
+    cell: ({ row }) => {
+      return <div className="text-right">{row.getValue("rmName")}</div>
+    }
   },
 ];
