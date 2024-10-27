@@ -23,7 +23,7 @@ const renderCustomizedLabel = ({
 
   const valueLabel =
     data[index].margin < 0
-      ? `-${data[index].formattedTurnover}`
+      ? `${data[index].formattedTurnover}`
       : data[index].formattedTurnover;
 
   return (
@@ -33,9 +33,15 @@ const renderCustomizedLabel = ({
       fill="black"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
-      fontSize={12}
+      fontSize={14}
     >
-      {`${valueLabel} (${(percent * 100).toFixed(0)}%)`}
+      <tspan x={x} dy="0">
+        {data[index].customerCategory}
+      </tspan>
+      <tspan
+        x={x}
+        dy="1.2em"
+      >{`${valueLabel} (${(percent * 100).toFixed(0)}%)`}</tspan>
     </text>
   );
 };

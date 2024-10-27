@@ -269,22 +269,6 @@ export default function CustomerManagement() {
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
-        {branchClientRation ? (
-          <BranchWiseClientsNumberChart
-            title="Branch Wise Clients Number"
-            subtitle="Showing data for branch wise clients number"
-            className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={branchClientRation as any}
-          />
-        ) : null}
-        {branchNonPerformerClient ? (
-          <BranchWiseNonPerformerClientsChart
-            title="Non Performer Clients As on "
-            subtitle="Showing data for non performer clients as on "
-            className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={branchNonPerformerClient as any}
-          />
-        ) : null}
         {lbslTurnoverSegmentation ? (
           <LBSLTurnOverSegmentationChart
             title="LBSL TurnOver segmentation ( Customer wise)"
@@ -292,16 +276,6 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={lbslTurnoverSegmentation as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
-          />
-        ) : null}
-        {portfolioValueSegmentation ? (
-          <PortfolioValueSegmentationChart
-            title="Portfolio Value segmentation ( Customer wise)"
-            subtitle="Showing data for portfolio value segmentation ( customer wise)"
-            className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={portfolioValueSegmentation as any}
-            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
-            colors2={["#9C27B0", "#3F51B5"]}
           />
         ) : null}
         {equityValueSegmentation ? (
@@ -322,12 +296,38 @@ export default function CustomerManagement() {
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
+        {portfolioValueSegmentation ? (
+          <PortfolioValueSegmentationChart
+            title="Portfolio Value segmentation ( Customer wise)"
+            subtitle="Showing data for portfolio value segmentation ( customer wise)"
+            className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
+            data={portfolioValueSegmentation as any}
+            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            colors2={["#9C27B0", "#3F51B5"]}
+          />
+        ) : null}
         {detailsMarketShareLBSL ? (
           <DetailsMarketShareLBSLChart
             title="Details Market Share of LBSL ( Foreign )"
             subtitle="Showing data for details  market share of LBSL ( Foreign )"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={detailsMarketShareLBSL as any}
+          />
+        ) : null}
+        {branchClientRation ? (
+          <BranchWiseClientsNumberChart
+            title="Branch Wise Clients Number"
+            subtitle="Showing data for branch wise clients number"
+            className="col-span1 overflow-y-auto lg:col-span-6 lg:row-span-6"
+            data={branchClientRation as any}
+          />
+        ) : null}
+        {branchNonPerformerClient ? (
+          <BranchWiseNonPerformerClientsChart
+            title="Non Performer Clients As on "
+            subtitle="Showing data for non performer clients as on "
+            className="col-span1 overflow-y-auto lg:col-span-6 lg:row-span-6"
+            data={branchNonPerformerClient as any}
           />
         ) : null}
       </div>

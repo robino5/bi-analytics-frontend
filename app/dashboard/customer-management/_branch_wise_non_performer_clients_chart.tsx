@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
   Brush,
+  LabelList,
 } from "recharts";
 import { BranchWiseNonPerformerClints } from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
@@ -65,7 +66,14 @@ export default function BranchWiseNonPerformerClientsChart({
               stroke="#8884d8"
               travellerWidth={10}
             />
-            <Bar yAxisId="left" dataKey="totalClients" fill="#413ea0" />
+            <Bar yAxisId="left" dataKey="totalClients" fill="#413ea0">
+              <LabelList
+                dataKey="totalClients"
+                position="top"
+                angle={-90}
+                style={{ fill: "red", fontSize: 16 }}
+              />
+            </Bar>
 
             <Line
               yAxisId="right"
