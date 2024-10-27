@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -24,20 +24,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { DataTablePagination } from "./_userTablePagination";
 import { DataTableToolbar } from "./_userTableToolbar";
+import { IUser } from "@/types/user"; // Assuming user type is available
+
+interface Pagination {
+  pageIndex: number;
+  pageSize: number;
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   fetching: boolean;
+  pagination: Pagination;
+  setPagination: (pagination: Pagination) => void;
+  totalRows: number;
 }
 
 export function UserTable<TData, TValue>({
   columns,
   data,
   fetching,
+  pagination,
+  setPagination,
+  totalRows,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -45,18 +56,27 @@ export function UserTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  console.log(columnFilters);
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
     state: {
+      pagination,
       sorting,
       columnVisibility,
       rowSelection,
       columnFilters,
     },
     enableRowSelection: true,
+    manualPagination: true,
+    pageCount: Math.ceil(totalRows / pagination.pageSize),
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === "function" ? updater(pagination) : updater;
+      setPagination(newPagination);
+    },
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -68,7 +88,6 @@ export function UserTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
@@ -77,23 +96,21 @@ export function UserTable<TData, TValue>({
           <TableHeader className="bg-gray-100 dark:bg-accent">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} colSpan={header.colSpan}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -119,10 +136,10 @@ export function UserTable<TData, TValue>({
                   className="h-24 text-center"
                 >
                   {fetching ? (
-                    <div role="status w-full">
+                    <div role="status" className="w-full">
                       <svg
                         aria-hidden="true"
-                        className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-green-500 text-center"
+                        className="inline w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
                         viewBox="0 0 100 101"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"

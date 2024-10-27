@@ -26,9 +26,9 @@ const renderCustomizedLabel = ({
       fill="black"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
-      fontSize={12}
+      fontSize={14}
     >
-      {`${data[index].totalClients} (${(percent * 100).toFixed(0)}%)`}
+      {`${data[index].customerCategory}-${data[index].totalClients}(${(percent * 100).toFixed(0)}%)`}
     </text>
   );
 };

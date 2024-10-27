@@ -12,9 +12,9 @@ import {
   Tooltip,
   Legend,
   Brush,
+  LabelList,
 } from "recharts";
 import { BranchWiseClintsNumber } from "@/types/customerManagement";
-import { numberToMillionsString } from "@/lib/utils";
 import { branchWiseClintsNumber } from "./columns";
 import { DialogDataTable } from "./data-table";
 
@@ -65,7 +65,14 @@ export default function BranchWiseClientsNumberChart({
               stroke="#8884d8"
               travellerWidth={10}
             />
-            <Bar yAxisId="left" dataKey="totalClients" fill="#413ea0" />
+            <Bar yAxisId="left" dataKey="totalClients" fill="#413ea0">
+              <LabelList
+                dataKey="totalClients"
+                position="top"
+                angle={-90}
+                style={{ fill: "red", fontSize: 16 }}
+              />
+            </Bar>
 
             <Line
               yAxisId="right"

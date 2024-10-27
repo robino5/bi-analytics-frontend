@@ -1,7 +1,7 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { UserTable } from "./_datatable/_userDataTable";
 import { useTableColumns } from "./_datatable/_userTableColumns";
 import { Session } from "next-auth";
@@ -30,10 +30,18 @@ import { CreateUserForm } from "./forms";
 import { IUser } from "@/types/user";
 import { CreateBulkRMForm } from "./forms/create-existing-trader-form";
 
-const fetchUsers = async (session: Session) => {
+const fetchUsers = async (
+  session: Session,
+  pagination: { pageIndex: number; pageSize: number }
+) => {
+  const { pageIndex, pageSize } = pagination;
+  const query = new URLSearchParams({
+    page: (pageIndex + 1).toString(),
+    page_size: pageSize.toString(),
+  });
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${query.toString()}`,
       {
         headers: {
           Authorization: `Bearer ${session.user.accessToken}`,
@@ -54,6 +62,11 @@ const fetchUsers = async (session: Session) => {
 const Users = () => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
+  const [totalRows, setTotalRows] = useState(0);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   if (!session) {
     redirect("/auth/login");
@@ -62,19 +75,24 @@ const Users = () => {
   const [users, setUsers] = useState<IUser[]>([]);
   const [newUserOpen, setNewUserOpen] = useState(false);
 
+  const fetchData = useCallback(async () => {
+    if (!session) return;
+
+    setLoading(true);
+    try {
+      const data = await fetchUsers(session, pagination);
+      setUsers(data.results);
+      setTotalRows(data.count);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [session, pagination]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchUsers(session);
-        setUsers(data);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return (
     <div className="mx-4">
@@ -145,6 +163,9 @@ const Users = () => {
               columns={useTableColumns}
               data={users}
               fetching={loading}
+              pagination={pagination}
+              setPagination={setPagination}
+              totalRows={totalRows}
             />
           </CardContent>
         </Card>
