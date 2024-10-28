@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
   pagination: Pagination;
   setPagination: (pagination: Pagination) => void;
   totalRows: number;
+  setFilterUrl: any;
 }
 
 export function UserTable<TData, TValue>({
@@ -49,6 +50,7 @@ export function UserTable<TData, TValue>({
   pagination,
   setPagination,
   totalRows,
+  setFilterUrl,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -56,7 +58,7 @@ export function UserTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  console.log(columnFilters);
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
@@ -88,6 +90,24 @@ export function UserTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
+
+  const generateFilterQuery = (filters: ColumnFiltersState): string => {
+    return filters
+      .map(({ id, value }) => {
+        if (Array.isArray(value)) {
+          return `${id}=${value.join(",")}`;
+        }
+        return `${id}=${value}`;
+      })
+      .join("&");
+  };
+
+  useEffect(() => {
+    const queryString = generateFilterQuery(columnFilters);
+    setFilterUrl(queryString);
+    //console.log("Generated Query String:", queryString);
+  }, [columnFilters]);
+
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
