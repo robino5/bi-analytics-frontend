@@ -78,7 +78,12 @@ const renderCustomizedLabelSecond = ({
       dominantBaseline="central"
       fontSize={12}
     >
-      {valueLabel}
+      <tspan x={x} dy="0">
+        {data[index].name}
+      </tspan>
+      <tspan x={x} dy="1.2em">
+        {valueLabel}
+      </tspan>
     </text>
   );
 };

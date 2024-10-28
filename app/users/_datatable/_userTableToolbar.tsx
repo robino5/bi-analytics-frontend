@@ -43,11 +43,11 @@ export const roles = [
 
 export const SignedInTodayItems = [
   {
-    value: "Yes",
+    value: "true",
     label: "Yes",
   },
   {
-    value: "No",
+    value: "false",
     label: "No",
   },
 ];

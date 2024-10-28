@@ -10,6 +10,7 @@ import {
   Legend,
   Brush,
   ResponsiveContainer,
+  LabelList,
 } from "recharts";
 import { DetailsMarketShareLBSL } from "@/types/customerManagement";
 import { cn } from "@/lib/utils";
@@ -74,8 +75,22 @@ export default function DetailsMarketShareLBSLChart({
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="turnoverDse" fill="#8884d8" />
-            <Bar dataKey="turnoverLbsl" fill="#82ca9d" />
+            <Bar dataKey="turnoverDse" fill="#8884d8">
+              <LabelList
+                dataKey="turnoverDse"
+                position="top"
+                angle={-90}
+                style={{ fill: "green", fontSize: 12 }}
+              />
+            </Bar>
+            <Bar dataKey="turnoverLbsl" fill="#82ca9d">
+              <LabelList
+                dataKey="turnoverLbsl"
+                position="top"
+                angle={-90}
+                style={{ fill: "red", fontSize: 12 }}
+              />
+            </Bar>
             <Brush dataKey="month" height={30} stroke="#8884d8" />
           </BarChart>
         </ResponsiveContainer>
