@@ -95,6 +95,9 @@ export const useTableColumns: ColumnDef<IUser>[] = [
           LOCKED
         </Badge>
       ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "lastLogin",

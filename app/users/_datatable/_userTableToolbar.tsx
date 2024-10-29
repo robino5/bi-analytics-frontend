@@ -43,12 +43,22 @@ export const roles = [
 
 export const SignedInTodayItems = [
   {
-    value: "true",
+    value: "Yes",
     label: "Yes",
   },
   {
-    value: "false",
+    value: "No",
     label: "No",
+  },
+];
+export const status = [
+  {
+    value: true,
+    label: "ACTIVE",
+  },
+  {
+    value: false,
+    label: "LOCKED",
   },
 ];
 
@@ -115,6 +125,13 @@ export function DataTableToolbar<TData>({
             column={table.getColumn("role")}
             title="Role"
             options={roles}
+          />
+        )}
+        {table.getColumn("active") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("active")}
+            title="Status"
+            options={status}
           />
         )}
         {table.getColumn("signedInToday") && (
