@@ -157,7 +157,9 @@ export default function BusinessAndTradeManagement() {
         name="description"
         content="Showing a  usiness and trade  management"
       />
-      <PageHeader name="Business and Trade  Management"></PageHeader>
+      <PageHeader
+        name={`Business and Trade Management (${boardTernoverData ? boardTernoverData[boardTernoverData.length - 1].tradingDate : ""})`}
+      />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {boardTernoverData ? (
           <BoardWiseTurnover datalist={boardTernoverData as any} />

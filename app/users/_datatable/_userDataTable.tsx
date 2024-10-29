@@ -60,7 +60,6 @@ export function UserTable<TData, TValue>({
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
   const table = useReactTable({
     data,
     columns,
