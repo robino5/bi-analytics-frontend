@@ -105,7 +105,7 @@ const renderActiveShape = (props: any) => {
         x={ex + (cos >= 0 ? 1 : -1) * 12}
         y={ey}
         textAnchor={textAnchor}
-        fill="black"
+        fill="white"
         fontSize={14}
       >{`${numberToMillionsString(value)}`}</text>
       <text
@@ -113,7 +113,7 @@ const renderActiveShape = (props: any) => {
         y={ey}
         dy={18}
         textAnchor={textAnchor}
-        fill="black"
+        fill="white"
         fontSize={14}
       >
         {`(${Math.round(percent * 100)}%)`}
@@ -139,9 +139,9 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
   };
 
   return (
-    <Card className="drop-shadow-md">
+    <Card className="drop-shadow-md bg-[#0e5e6f]">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className="text-white">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
