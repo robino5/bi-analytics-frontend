@@ -12,7 +12,10 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
-import { DetailsMarketShareLBSL } from "@/types/customerManagement";
+import {
+  DetailsMarketShareLBSL,
+  DetailsMarketShareLBSLDetails,
+} from "@/types/customerManagement";
 import { cn } from "@/lib/utils";
 import { detailsMarketShareLBSL } from "./columns";
 import { DialogDataTable } from "./data-table";
@@ -22,6 +25,7 @@ interface ChartComponentProps {
   subtitle?: string;
   className?: string;
   data: DetailsMarketShareLBSL[];
+  details: DetailsMarketShareLBSLDetails;
 }
 
 export default function DetailsMarketShareLBSLChart({
@@ -29,12 +33,13 @@ export default function DetailsMarketShareLBSLChart({
   subtitle,
   className,
   data,
+  details,
 }: ChartComponentProps) {
   return (
-    <Card className={cn("w-full shadow-md", className)}>
+    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{subtitle}</p>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
         <div className="text-end">
           <DialogDataTable
             columns={detailsMarketShareLBSL}
@@ -61,7 +66,12 @@ export default function DetailsMarketShareLBSLChart({
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" axisLine={true} tickLine={true} />
+            <XAxis
+              dataKey="month"
+              axisLine={true}
+              tickLine={true}
+              tick={{ fill: "white" }}
+            />
             <XAxis
               dataKey="year"
               axisLine={true}
@@ -69,21 +79,21 @@ export default function DetailsMarketShareLBSLChart({
               xAxisId="year"
               orientation="bottom"
               height={50}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: "white" }}
               label={{ value: "Year", position: "insideBottom", offset: -10 }}
             />
-            <YAxis />
+            <YAxis tick={{ fill: "white" }} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="turnoverDse" fill="#8884d8">
+            <Bar dataKey="turnoverDse" fill="orange">
               <LabelList
                 dataKey="turnoverDse"
                 position="top"
                 angle={-90}
-                style={{ fill: "green", fontSize: 12 }}
+                style={{ fill: "yellow", fontSize: 12 }}
               />
             </Bar>
-            <Bar dataKey="turnoverLbsl" fill="#82ca9d">
+            <Bar dataKey="turnoverLbsl" fill="Pink">
               <LabelList
                 dataKey="turnoverLbsl"
                 position="top"

@@ -9,7 +9,10 @@ import {
   Tooltip,
 } from "recharts";
 import { cn } from "@/lib/utils";
-import { PortfolioValueSegmentation } from "@/types/customerManagement";
+import {
+  PortfolioValueSegmentation,
+  PortfolioValueSegmentationDetails,
+} from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
 
 const RADIAN = Math.PI / 180;
@@ -37,7 +40,7 @@ const renderCustomizedLabel = ({
     <text
       x={x}
       y={y}
-      fill="black"
+      fill="white"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
       fontSize={14}
@@ -67,13 +70,13 @@ const renderCustomizedLabelSecond = ({
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  const valueLabel = `${data[index].value} (${(percent * 100).toFixed(0)}%)`;
+  const valueLabel = `${data[index].value.toFixed(2)} (${(percent * 100).toFixed(0)}%)`;
 
   return (
     <text
       x={x}
       y={y}
-      fill="black"
+      fill="white"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
       fontSize={12}
@@ -93,6 +96,7 @@ interface PieChartComponentProps {
   subtitle?: string;
   className?: string;
   data: PortfolioValueSegmentation[];
+  details: PortfolioValueSegmentationDetails;
   colors: string[];
   colors2: string[];
 }
@@ -102,6 +106,7 @@ export default function PortfolioValueSegmentationChart({
   subtitle,
   className,
   data,
+  details,
   colors,
   colors2,
 }: PieChartComponentProps) {
@@ -112,24 +117,27 @@ export default function PortfolioValueSegmentationChart({
 
   const totals = data.reduce(
     (acc, item) => {
-      acc.lockQty += item.lockQty;
-      acc.freeQty += item.freeQty;
+      acc.tpvLockQtyPercentage += item.tpvLockQtyPercentage;
+      acc.tpvFreeQtyPercentage += item.tpvFreeQtyPercentage;
       return acc;
     },
-    { lockQty: 0, freeQty: 0 }
+    { tpvLockQtyPercentage: 0, tpvFreeQtyPercentage: 0 }
   );
 
   const comparisonData = [
-    { name: "Free", value: totals.freeQty },
-    { name: "Lock", value: totals.lockQty },
+    { name: "Free", value: totals.tpvFreeQtyPercentage },
+    { name: "Lock", value: totals.tpvLockQtyPercentage },
   ];
 
   return (
-    <Card className={cn("w-full shadow-md", className)}>
+    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{subtitle}</p>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
       </CardHeader>
+      <div className="text-center text-white text-lg">
+        <h5>Client Segmentation-{details.sumOfTpvTotal}</h5>
+      </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

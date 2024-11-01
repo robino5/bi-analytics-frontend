@@ -40,12 +40,12 @@ interface Props {
 export default function DetailsMarketShareSME({ datalist }: Props) {
   console.log(datalist);
   return (
-    <Card className="col-span-3 overflow-auto">
+    <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
       <CardHeader>
-        <CardTitle className="">
+        <CardTitle className="text-white">
           Details SME-ATB market share of LBSL(Date:{datalist.tradingDate})
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-white">
           short summary of the details SME-ATB market share of LBSL
         </CardDescription>
       </CardHeader>

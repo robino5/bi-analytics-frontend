@@ -12,43 +12,124 @@ import DetailsMarketShareLBSLChart from "./_details_market_share_of_lbsl_chart";
 import PortfolioValueSegmentationChart from "./_portfolio_value_segmentation";
 import {
   ClientSegmentation,
+  ClientSegmentationDetails,
   BranchWiseClintsNumber,
+  BranchWiseClintsNumberDetails,
   BranchWiseNonPerformerClints,
+  BranchWiseNonPerformerClintsDetails,
   LBSLTurnoverSegmentation,
+  LBSLTurnoverSegmentationDetails,
   EquityValueSegmentation,
+  EquityValueSegmentationDetails,
   LedgerValueSegmentation,
+  LedgerValueSegmentationDetails,
   DetailsMarketShareLBSL,
+  DetailsMarketShareLBSLDetails,
   PortfolioValueSegmentation,
+  PortfolioValueSegmentationDetails,
 } from "@/types/customerManagement";
 import { successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
+
+interface ClientSegmentationData {
+  detail: {
+    sumOfClients: number;
+  };
+  rows: ClientSegmentation[];
+}
+
+interface LBSLTurnoverSegmentationData {
+  detail: {
+    sumOfTurnovers: number;
+  };
+  rows: LBSLTurnoverSegmentation[];
+}
+
+interface EquityValueSegmentationData {
+  detail: {
+    sumOfEquity: number;
+  };
+  rows: EquityValueSegmentation[];
+}
+
+interface LedgerValueSegmentationData {
+  detail: {
+    sumOfMargin: number;
+  };
+  rows: LedgerValueSegmentation[];
+}
+
+interface LedgerValueSegmentationData {
+  detail: {
+    sumOfMargin: number;
+  };
+  rows: LedgerValueSegmentation[];
+}
+
+interface PortfolioValueSegmentationData {
+  detail: PortfolioValueSegmentationDetails;
+  rows: PortfolioValueSegmentation[];
+}
+
+interface DetailsMarketShareLBSLData {
+  detail: DetailsMarketShareLBSLDetails;
+  rows: DetailsMarketShareLBSL[];
+}
+
+interface BranchWiseClintsNumberData {
+  detail: BranchWiseClintsNumberDetails;
+  rows: BranchWiseClintsNumber[];
+}
+
+interface BranchWiseNonPerformerClintsData {
+  detail: BranchWiseNonPerformerClintsDetails;
+  rows: BranchWiseNonPerformerClints[];
+}
 
 export default function CustomerManagement() {
   const { data: session } = useSession();
   const [clientSegmentation, setClientSegmentation] = useState<
     ClientSegmentation[] | null
   >(null);
+  const [clientSegmentationDetails, setClientSegmentationDetails] =
+    useState<ClientSegmentationDetails | null>(null);
   const [branchClientRation, setBranchClientRation] = useState<
     BranchWiseClintsNumber[] | null
   >(null);
+  const [branchClientRationDetails, setBranchClientRationDetails] =
+    useState<BranchWiseClintsNumberDetails | null>(null);
   const [branchNonPerformerClient, setBranchNonPerformerClient] = useState<
     BranchWiseNonPerformerClints[] | null
   >(null);
+  const [branchNonPerformerClientDetails, setBranchNonPerformerClientDetails] =
+    useState<BranchWiseNonPerformerClintsDetails | null>(null);
   const [lbslTurnoverSegmentation, setLBSLTurnoverSegmentation] = useState<
     LBSLTurnoverSegmentation[] | null
   >(null);
+  const [lbslTurnoverSegmentationDetails, setLBSLTurnoverSegmentationDetails] =
+    useState<LBSLTurnoverSegmentationDetails | null>(null);
   const [equityValueSegmentation, setEquityValueSegmentation] = useState<
     EquityValueSegmentation[] | null
   >(null);
+  const [equityValueSegmentationDetails, setEquityValueSegmentationDetails] =
+    useState<EquityValueSegmentationDetails | null>(null);
   const [ledgerValueSegmentation, setLedgerValueSegmentation] = useState<
     LedgerValueSegmentation[] | null
   >(null);
+  const [ledgerValueSegmentationDetails, setLedgerValueSegmentationDetails] =
+    useState<LedgerValueSegmentationDetails | null>(null);
   const [detailsMarketShareLBSL, setDetailsMarketShareLBSL] = useState<
     DetailsMarketShareLBSL[] | null
   >(null);
+  const [detailsMarketShareLBSLDetails, setDetailsMarketShareLBSLDetails] =
+    useState<DetailsMarketShareLBSLDetails | null>(null);
   const [portfolioValueSegmentation, setPortfolioValueSegmentationL] = useState<
     PortfolioValueSegmentation[] | null
   >(null);
+  const [
+    portfolioValueSegmentationDetails,
+    setPortfolioValueSegmentationLDetails,
+  ] = useState<PortfolioValueSegmentationDetails | null>(null);
   // Fetch data on page load
   useEffect(() => {
     // fatching client segmentation
@@ -63,12 +144,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          ClientSegmentation[]
-        >;
+        const result =
+          (await response.json()) as IResponse<ClientSegmentationData>;
 
         if (successResponse(result.status)) {
-          setClientSegmentation(result.data);
+          setClientSegmentation(result.data.rows);
+          setClientSegmentationDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching Client Segmentation", error);
@@ -86,12 +167,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          BranchWiseClintsNumber[]
-        >;
+        const result =
+          (await response.json()) as IResponse<BranchWiseClintsNumberData>;
 
         if (successResponse(result.status)) {
-          setBranchClientRation(result.data);
+          setBranchClientRation(result.data.rows);
+          setBranchClientRationDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching Brach Wise Client Ratio", error);
@@ -110,12 +191,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          BranchWiseNonPerformerClints[]
-        >;
+        const result =
+          (await response.json()) as IResponse<BranchWiseNonPerformerClintsData>;
 
         if (successResponse(result.status)) {
-          setBranchNonPerformerClient(result.data);
+          setBranchNonPerformerClient(result.data.rows);
+          setBranchNonPerformerClientDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching Brach Wise Non Performer Client", error);
@@ -134,12 +215,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          LBSLTurnoverSegmentation[]
-        >;
+        const result =
+          (await response.json()) as IResponse<LBSLTurnoverSegmentationData>;
 
         if (successResponse(result.status)) {
-          setLBSLTurnoverSegmentation(result.data);
+          setLBSLTurnoverSegmentation(result.data.rows);
+          setLBSLTurnoverSegmentationDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching lbsl turnover segmentation", error);
@@ -158,12 +239,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          EquityValueSegmentation[]
-        >;
+        const result =
+          (await response.json()) as IResponse<EquityValueSegmentationData>;
 
         if (successResponse(result.status)) {
-          setEquityValueSegmentation(result.data);
+          setEquityValueSegmentation(result.data.rows);
+          setEquityValueSegmentationDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching equity value segmentation", error);
@@ -182,12 +263,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          LedgerValueSegmentation[]
-        >;
+        const result =
+          (await response.json()) as IResponse<LedgerValueSegmentationData>;
 
         if (successResponse(result.status)) {
-          setLedgerValueSegmentation(result.data);
+          setLedgerValueSegmentation(result.data.rows);
+          setLedgerValueSegmentationDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching ledger value segmentation", error);
@@ -206,12 +287,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          DetailsMarketShareLBSL[]
-        >;
+        const result =
+          (await response.json()) as IResponse<DetailsMarketShareLBSLData>;
 
         if (successResponse(result.status)) {
-          setDetailsMarketShareLBSL(result.data);
+          setDetailsMarketShareLBSL(result.data.rows);
+          setDetailsMarketShareLBSLDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching market share segmentation", error);
@@ -230,12 +311,12 @@ export default function CustomerManagement() {
             },
           }
         );
-        const result = (await response.json()) as IResponse<
-          PortfolioValueSegmentation[]
-        >;
+        const result =
+          (await response.json()) as IResponse<PortfolioValueSegmentationData>;
 
         if (successResponse(result.status)) {
-          setPortfolioValueSegmentationL(result.data);
+          setPortfolioValueSegmentationL(result.data.rows);
+          setPortfolioValueSegmentationLDetails(result.data.detail);
         }
       } catch (error) {
         console.error("Error fetching portfolio value segmentation", error);
@@ -266,6 +347,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for client segmentation"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={clientSegmentation as any}
+            details={clientSegmentationDetails as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
@@ -275,6 +357,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for lbsl turnOver segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={lbslTurnoverSegmentation as any}
+            details={lbslTurnoverSegmentationDetails as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
@@ -284,6 +367,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for equity value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={equityValueSegmentation as any}
+            details={equityValueSegmentationDetails as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
@@ -293,6 +377,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for ledger value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={ledgerValueSegmentation as any}
+            details={ledgerValueSegmentationDetails as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
@@ -302,6 +387,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for portfolio value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={portfolioValueSegmentation as any}
+            details={portfolioValueSegmentationDetails as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
             colors2={["#9C27B0", "#3F51B5"]}
           />
@@ -312,6 +398,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for details  market share of LBSL ( Foreign )"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={detailsMarketShareLBSL as any}
+            details={detailsMarketShareLBSLDetails as any}
           />
         ) : null}
         {branchClientRation ? (
@@ -320,6 +407,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for branch wise clients number"
             className="col-span1 overflow-y-auto lg:col-span-6 lg:row-span-6"
             data={branchClientRation as any}
+            details={branchClientRationDetails as any}
           />
         ) : null}
         {branchNonPerformerClient ? (
@@ -328,6 +416,7 @@ export default function CustomerManagement() {
             subtitle="Showing data for non performer clients as on "
             className="col-span1 overflow-y-auto lg:col-span-6 lg:row-span-6"
             data={branchNonPerformerClient as any}
+            details={branchNonPerformerClientDetails as any}
           />
         ) : null}
       </div>

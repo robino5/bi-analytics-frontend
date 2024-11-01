@@ -31,7 +31,7 @@ export function DataTableToolbar<TData>({
           placeholder="Filter Company Name..."
           value={searchInput}
           onChange={handleSearch}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[150px] lg:w-[250px] bg-white"
         />
         {searchInput && (
           <Button
@@ -40,7 +40,7 @@ export function DataTableToolbar<TData>({
               setSearchInput("");
               onCompanySearch("");
             }}
-            className="h-8 px-2 lg:px-3"
+            className="h-8 px-2 lg:px-3 text-white"
           >
             Reset
             <Cross2Icon className="ml-2 h-4 w-4" />

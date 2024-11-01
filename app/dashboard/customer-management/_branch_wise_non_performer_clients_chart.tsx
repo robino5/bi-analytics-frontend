@@ -14,7 +14,10 @@ import {
   Brush,
   LabelList,
 } from "recharts";
-import { BranchWiseNonPerformerClints } from "@/types/customerManagement";
+import {
+  BranchWiseNonPerformerClints,
+  BranchWiseNonPerformerClintsDetails,
+} from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
 import { branchWiseNonPerformerClints } from "./columns";
 import { DialogDataTable } from "./data-table";
@@ -24,6 +27,7 @@ interface ComposedChartComponentProps {
   subtitle?: string;
   className?: string;
   data: BranchWiseNonPerformerClints[];
+  details: BranchWiseNonPerformerClintsDetails;
 }
 
 export default function BranchWiseNonPerformerClientsChart({
@@ -31,12 +35,13 @@ export default function BranchWiseNonPerformerClientsChart({
   subtitle,
   className,
   data,
+  details,
 }: ComposedChartComponentProps) {
   return (
-    <Card className={cn("w-full shadow-md", className)}>
+    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{subtitle}</p>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
         <div className="text-end">
           <DialogDataTable
             columns={branchWiseNonPerformerClints}
@@ -47,6 +52,9 @@ export default function BranchWiseNonPerformerClientsChart({
           />
         </div>
       </CardHeader>
+      <div className="text-center text-white text-lg">
+        <h5>Non-Performer Clients as on 2018-Nos{details.sumOfClients}</h5>
+      </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -54,9 +62,13 @@ export default function BranchWiseNonPerformerClientsChart({
             margin={{ top: 20, right: 40, bottom: 20, left: 20 }}
           >
             <CartesianGrid stroke="#f5f5f5" strokeDasharray="3 3" />
-            <XAxis dataKey="branchName" />
-            <YAxis yAxisId="left" />
-            <YAxis yAxisId="right" orientation="right" />
+            <XAxis dataKey="branchName" tick={{ fill: "white" }} />
+            <YAxis yAxisId="left" tick={{ fill: "white" }} />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              tick={{ fill: "white" }}
+            />
 
             <Tooltip />
             <Legend />
@@ -66,12 +78,12 @@ export default function BranchWiseNonPerformerClientsChart({
               stroke="#8884d8"
               travellerWidth={10}
             />
-            <Bar yAxisId="left" dataKey="totalClients" fill="#413ea0">
+            <Bar yAxisId="left" dataKey="totalClients" fill="Yellow">
               <LabelList
                 dataKey="totalClients"
                 position="top"
                 angle={-90}
-                style={{ fill: "red", fontSize: 16 }}
+                style={{ fill: "white", fontSize: 16 }}
               />
             </Bar>
 
@@ -79,7 +91,7 @@ export default function BranchWiseNonPerformerClientsChart({
               yAxisId="right"
               type="monotone"
               dataKey="totalClientPercentage"
-              stroke="#ff7300"
+              stroke="red"
               dot={{ r: 4 }}
             />
           </ComposedChart>
