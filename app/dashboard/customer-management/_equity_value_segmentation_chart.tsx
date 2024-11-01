@@ -2,7 +2,10 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { cn } from "@/lib/utils";
-import { EquityValueSegmentation } from "@/types/customerManagement";
+import {
+  EquityValueSegmentation,
+  EquityValueSegmentationDetails,
+} from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
 
 const RADIAN = Math.PI / 180;
@@ -25,7 +28,7 @@ const renderCustomizedLabel = ({
     <text
       x={x}
       y={y}
-      fill="black"
+      fill="white"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
       fontSize={16}
@@ -46,6 +49,7 @@ interface PieChartComponentProps {
   subtitle?: string;
   className?: string;
   data: EquityValueSegmentation[];
+  details: EquityValueSegmentationDetails;
   colors: string[];
 }
 
@@ -54,6 +58,7 @@ export default function EquityValueSegmentationChart({
   subtitle,
   className,
   data,
+  details,
   colors,
 }: PieChartComponentProps) {
   const processedData = data.map((item) => ({
@@ -62,11 +67,14 @@ export default function EquityValueSegmentationChart({
   }));
 
   return (
-    <Card className={cn("w-full shadow-md", className)}>
+    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{subtitle}</p>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
       </CardHeader>
+      <div className="text-center text-white text-lg">
+        <h5>Client Segmentation-{details.sumOfEquity}</h5>
+      </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

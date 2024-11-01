@@ -41,7 +41,7 @@ export function DataTableToolbar<TData>({
           placeholder="Filter Company Name..."
           value={companyInput}
           onChange={handleCompanySearch}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[150px] lg:w-[250px] bg-white"
         />
         {companyInput && (
           <Button
@@ -50,7 +50,7 @@ export function DataTableToolbar<TData>({
               setCompanyInput("");
               onCompanySearch("");
             }}
-            className="h-8 px-2 lg:px-3"
+            className="h-8 px-2 lg:px-3 text-white"
           >
             Reset
             <Cross2Icon className="ml-2 h-4 w-4" />
@@ -62,7 +62,7 @@ export function DataTableToolbar<TData>({
           placeholder="Filter Investor..."
           value={investorInput}
           onChange={handleInvestorSearch}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[150px] lg:w-[250px] bg-white"
         />
         {investorInput && (
           <Button
@@ -71,7 +71,7 @@ export function DataTableToolbar<TData>({
               setInvestorInput("");
               onInvestorSearch("");
             }}
-            className="h-8 px-2 lg:px-3"
+            className="h-8 px-2 lg:px-3 text-white"
           >
             Reset
             <Cross2Icon className="ml-2 h-4 w-4" />

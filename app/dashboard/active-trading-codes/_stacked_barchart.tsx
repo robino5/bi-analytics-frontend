@@ -50,7 +50,7 @@ const CustomizedAxisTick = ({ x, y, payload }: Props) => {
         y={0}
         dy={16}
         textAnchor="end"
-        fill="black"
+        fill="white"
         transform="rotate(-35)"
         fontSize={12}
         opacity={1}
@@ -147,9 +147,9 @@ const StackBarChart = ({
   };
   // ===========================================
   return (
-    <Card className="">
+    <Card className="bg-[#0e5e6f]">
       <CardHeader>
-        <CardTitle className="">{title}</CardTitle>
+        <CardTitle className="text-white">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={260}>
@@ -169,7 +169,7 @@ const StackBarChart = ({
                 stroke: TICK_COLOR,
                 strokeOpacity: 0.1,
                 fontSize: LABEL_TICK_FONT_SIZE,
-                fill: "black",
+                fill: "white",
               }}
               tickFormatter={(value) => `${value}%`}
               domain={[0, 100]}

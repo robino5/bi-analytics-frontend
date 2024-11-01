@@ -14,7 +14,10 @@ import {
   Brush,
   LabelList,
 } from "recharts";
-import { BranchWiseClintsNumber } from "@/types/customerManagement";
+import {
+  BranchWiseClintsNumber,
+  BranchWiseClintsNumberDetails,
+} from "@/types/customerManagement";
 import { branchWiseClintsNumber } from "./columns";
 import { DialogDataTable } from "./data-table";
 
@@ -23,6 +26,7 @@ interface ComposedChartComponentProps {
   subtitle?: string;
   className?: string;
   data: BranchWiseClintsNumber[];
+  details: BranchWiseClintsNumberDetails;
 }
 
 export default function BranchWiseClientsNumberChart({
@@ -30,12 +34,13 @@ export default function BranchWiseClientsNumberChart({
   subtitle,
   className,
   data,
+  details,
 }: ComposedChartComponentProps) {
   return (
-    <Card className={cn("w-full shadow-md", className)}>
+    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{subtitle}</p>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
         <div className="text-end">
           <DialogDataTable
             columns={branchWiseClintsNumber}
@@ -46,6 +51,9 @@ export default function BranchWiseClientsNumberChart({
           />
         </div>
       </CardHeader>
+      <div className="text-center text-white text-lg">
+        <h5>Branch Wise Client-{details.sumOfClientsPercentage}%</h5>
+      </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -53,9 +61,13 @@ export default function BranchWiseClientsNumberChart({
             margin={{ top: 20, right: 40, bottom: 20, left: 20 }}
           >
             <CartesianGrid stroke="#f5f5f5" strokeDasharray="3 3" />
-            <XAxis dataKey="branchName" />
-            <YAxis yAxisId="left" />
-            <YAxis yAxisId="right" orientation="right" />
+            <XAxis dataKey="branchName" tick={{ fill: "white" }} />
+            <YAxis yAxisId="left" tick={{ fill: "white" }} />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              tick={{ fill: "white" }}
+            />
 
             <Tooltip />
             <Legend />
@@ -65,12 +77,12 @@ export default function BranchWiseClientsNumberChart({
               stroke="#8884d8"
               travellerWidth={10}
             />
-            <Bar yAxisId="left" dataKey="totalClients" fill="#413ea0">
+            <Bar yAxisId="left" dataKey="totalClients" fill="red">
               <LabelList
                 dataKey="totalClients"
                 position="top"
                 angle={-90}
-                style={{ fill: "red", fontSize: 16 }}
+                style={{ fill: "white", fontSize: 16 }}
               />
             </Bar>
 
@@ -78,7 +90,7 @@ export default function BranchWiseClientsNumberChart({
               yAxisId="right"
               type="monotone"
               dataKey="totalClientPercentage"
-              stroke="#ff7300"
+              stroke="yellow"
               dot={{ r: 4 }}
             />
           </ComposedChart>

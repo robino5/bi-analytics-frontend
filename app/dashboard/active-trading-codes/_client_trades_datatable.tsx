@@ -35,12 +35,14 @@ export default function ClientTradesDataTable({ records, className }: Props) {
   };
   // ===========================================
   return (
-    <Card className={cn("overflow-auto drop-shadow-md", className)}>
+    <Card
+      className={cn("overflow-auto drop-shadow-md", className, "bg-[#0e5e6f]")}
+    >
       <CardHeader>
-        <CardTitle className="">
+        <CardTitle className="text-white">
           Channel Wise Clients & Trades (Today)
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-white">
           short summary of todays clients and trades
         </CardDescription>
       </CardHeader>

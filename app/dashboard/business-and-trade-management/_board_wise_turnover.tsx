@@ -44,10 +44,10 @@ export default function BoardWiseTurnover({ datalist }: Props) {
     0
   );
   return (
-    <Card className="col-span-3 overflow-auto">
+    <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
       <CardHeader>
-        <CardTitle className="">Board Wise Turnover</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-white">Board Wise Turnover</CardTitle>
+        <CardDescription className="text-white">
           short summary of the board wise turnover
         </CardDescription>
       </CardHeader>

@@ -3,11 +3,21 @@ export interface ClientSegmentation {
     totalClients: number;
   }
 
+  export interface ClientSegmentationDetails {
+    sumOfClients: number;
+  }
+
+
   export interface BranchWiseClintsNumber {
     branchName: string;
     branchCode: number;
     totalClients: number;
     totalClientPercentage: number;
+  }
+
+  export interface BranchWiseClintsNumberDetails {
+    sumOfClients: number;
+    sumOfClientsPercentage: number;
   }
 
   export interface BranchWiseNonPerformerClints {
@@ -17,9 +27,18 @@ export interface ClientSegmentation {
     totalClientPercentage: number;
   }
 
+  export interface BranchWiseNonPerformerClintsDetails {
+    sumOfClients: number;
+    sumOfClientsPercentage: number;
+  }
+
   export interface LBSLTurnoverSegmentation {
     customerCategory: string;
     turnover: number;
+  }
+
+  export interface LBSLTurnoverSegmentationDetails {
+    sumOfTurnovers: number;
   }
 
   
@@ -28,9 +47,17 @@ export interface ClientSegmentation {
     equity: number;
   }
 
+  export interface EquityValueSegmentationDetails {
+    sumOfEquity: number;
+  }
+
   export interface LedgerValueSegmentation {
     customerCategory: string;
     margin: number;
+  }
+
+  export interface LedgerValueSegmentationDetails {
+    sumOfMargin: number;
   }
 
   export interface DetailsMarketShareLBSL {
@@ -41,6 +68,11 @@ export interface ClientSegmentation {
     tradePercentage: number;
   }
 
+  export interface DetailsMarketShareLBSLDetails {
+    sumOfTurnoverDse: number;
+    sumOfTurnoverLbsl: number;
+  }
+
   export interface PortfolioValueSegmentation {
     customerCategory: string;
     freeQty: number;
@@ -48,5 +80,13 @@ export interface ClientSegmentation {
     tpvTotal: number;
     tpvFreeQtyPercentage: number;
     tpvLockQtyPercentage: number;
+  }
+
+  export interface PortfolioValueSegmentationDetails {
+    sumOfFreeQty: number;
+    sumOfLockQty: number;
+    sumOfTpvTotal: number;
+    sumOfTpvFreeQtyPercentage: number;
+    sumOfTpvLockQtyPercentage: number;
   }
   

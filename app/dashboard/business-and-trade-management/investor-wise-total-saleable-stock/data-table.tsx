@@ -119,10 +119,10 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
   });
 
   return (
-    <Card className={cn("w-full shadow-md", className)}>
+    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{subtitle}</CardDescription>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <CardDescription className="text-white">{subtitle}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
