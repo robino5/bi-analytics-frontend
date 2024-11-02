@@ -105,8 +105,12 @@ export const useTableColumns: ColumnDef<IUser>[] = [
       <DataTableColumnHeader column={column} title="Last Login" />
     ),
     cell: ({ row }) => {
-      const timestamp = new Date(row.getValue("lastLogin"));
-      return timestamp.toISOString();
+      const value = row.getValue("lastLogin");
+      if (value) {
+        const timestamp = new Date(row.getValue("lastLogin"));
+        return timestamp.toISOString();
+      }
+      return <span className="text-rose-500 font-bold">Never</span>;
     },
   },
   {
