@@ -14,7 +14,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { redirect } from "next/navigation";
 
 export const createUserAction = async (
-  payload: z.infer<typeof CreateUserSchema>
+  payload: z.infer<typeof CreateUserSchema>,
 ) => {
   const session = await auth();
 
@@ -51,7 +51,7 @@ export const createUserAction = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
-      }
+      },
     );
     if (response.status !== 201) {
       console.error(await response.json());
@@ -81,7 +81,7 @@ export const deleteUserAction = async (username: string) => {
           Authorization: `Bearer ${session.user.accessToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     if (response.status !== 204) {
       console.error(await response.json());
@@ -92,7 +92,7 @@ export const deleteUserAction = async (username: string) => {
 };
 
 export const updateUserAction = async (
-  payload: z.infer<typeof UpdateUserSchema>
+  payload: z.infer<typeof UpdateUserSchema>,
 ) => {
   const session = await auth();
 
@@ -109,7 +109,7 @@ export const updateUserAction = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-      }
+      },
     );
     if (response.status !== 200) {
       const respo = await response.json();
@@ -127,7 +127,7 @@ export const updateUserAction = async (
 };
 
 export const createUserActionWithBulkUser = async (
-  payload: z.infer<typeof CreateBulkRMSchema>
+  payload: z.infer<typeof CreateBulkRMSchema>,
 ) => {
   const session = await auth();
 
@@ -159,7 +159,7 @@ export const createUserActionWithBulkUser = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
-      }
+      },
     );
     if (response.status !== 201) {
       console.error(await response.json());
@@ -171,7 +171,7 @@ export const createUserActionWithBulkUser = async (
 
 export const changePasswordAction = async (
   who: string,
-  payload: z.infer<typeof ChangePasswordSchema>
+  payload: z.infer<typeof ChangePasswordSchema>,
 ) => {
   const session = await auth();
 
@@ -194,18 +194,19 @@ export const changePasswordAction = async (
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/${who}/change-password/`,
+      `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/${who}/change-password/`,
       {
-        method: "PATCH",
+        method: "POST",
         headers: {
           Authorization: `Bearer ${session.user.accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
-      }
+      },
     );
     if (response.status !== 200) {
       console.error(await response.json());
+      return { status: "failed", message: "X Password change failed." };
     }
     return { status: "success", message: "✔️ Password has been changed" };
   } catch (error) {
