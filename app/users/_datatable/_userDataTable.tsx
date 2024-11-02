@@ -56,7 +56,7 @@ export function UserTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -114,14 +114,21 @@ export function UserTable<TData, TValue>({
         <Table>
           <TableHeader className="bg-gray-100 dark:bg-accent">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className="bg-blue-500 hover:bg-blue-700"
+              >
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className="text-white font-bold"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 ))}
@@ -130,10 +137,13 @@ export function UserTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={`${
+                    index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                  } hover:bg-green-300 transition-all duration-300`}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -142,7 +152,7 @@ export function UserTable<TData, TValue>({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

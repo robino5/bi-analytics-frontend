@@ -34,7 +34,7 @@ export default function MarginLoanUsage() {
     IMarginLoanAllocation[]
   >([]);
   const [exposureSummary, setExposureSummary] = useState<IExposureSumamry[]>(
-    [],
+    []
   );
   const [netTradeClients, setNetTradeClients] = useState<INetTradeClient[]>([]);
 
@@ -57,7 +57,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<
           IMarginLoanAllocation[]
@@ -79,7 +79,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<IExposureSumamry[]>;
         if (successResponse(result.status)) {
@@ -99,7 +99,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<INetTradeClient[]>;
         if (successResponse(result.status)) {
@@ -120,7 +120,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<ITargetGenerated[]>;
         if (successResponse(result.status)) {
@@ -148,7 +148,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            },
+            }
           );
           const result = (await response.json()) as IResponse<
             IMarginLoanAllocation[]
@@ -170,7 +170,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            },
+            }
           );
           const result = (await response.json()) as IResponse<
             IExposureSumamry[]
@@ -192,7 +192,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            },
+            }
           );
           const result = (await response.json()) as IResponse<
             INetTradeClient[]
@@ -215,7 +215,7 @@ export default function MarginLoanUsage() {
   if (turnoverPerformance) {
     headerDate = getHeaderDate(
       turnoverPerformance[turnoverPerformance.length - 1],
-      "tradingDate",
+      "tradingDate"
     );
   }
 
@@ -236,10 +236,12 @@ export default function MarginLoanUsage() {
           records={exposureSummary}
           branch={branch}
         />
-        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6">
+        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-[#0e5e6f]">
           <CardHeader>
-            <CardTitle className="">RM Wise Net Trade</CardTitle>
-            <CardDescription>Net Trade for Regional Managers</CardDescription>
+            <CardTitle className="text-white">RM Wise Net Trade</CardTitle>
+            <CardDescription className="text-white">
+              Net Trade for Regional Managers
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <NetTradeTable

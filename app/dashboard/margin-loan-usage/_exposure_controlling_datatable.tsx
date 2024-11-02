@@ -47,26 +47,41 @@ export default function ExposureControllingDataTable({
   branch,
 }: Props) {
   return (
-    <Card className={cn("overflow-auto", className)}>
+    <Card className={cn("overflow-auto", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="">Exposure Controlling & Management</CardTitle>
-        <CardDescription>excluding negative equity clients</CardDescription>
+        <CardTitle className="text-white">
+          Exposure Controlling & Management
+        </CardTitle>
+        <CardDescription className="text-white">
+          excluding negative equity clients
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-auto">Exposure</TableHead>
-              <TableHead className="text-right">Investors</TableHead>
-              <TableHead className="text-right">Loan Amount</TableHead>
-              <TableHead className="text-right"></TableHead>
+            <TableRow className="bg-blue-500 hover:bg-blue-700">
+              <TableHead className="w-auto text-white font-bold">
+                Exposure
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                Investors
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                Loan Amount
+              </TableHead>
+              <TableHead className="text-right text-white font-bold"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {records.map((record) => (
               <TableRow
                 key={record.exposure}
-                className="odd:bg-muted even:bg-gradient"
+                className={cn(
+                  keywordMatcher(record.exposure) === "green" && "bg-green-400",
+                  keywordMatcher(record.exposure) === "yellow" &&
+                    "bg-yellow-400",
+                  keywordMatcher(record.exposure) === "red" && "bg-red-400"
+                )}
               >
                 <TableCell className="font-medium py-1">
                   {record.exposure}

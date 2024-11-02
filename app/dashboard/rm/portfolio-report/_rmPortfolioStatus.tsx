@@ -25,24 +25,34 @@ interface Props {
 
 export default function PortfolioManagementStatusDataTable({ records }: Props) {
   return (
-    <Card className="col-span-2 overflow-y-auto max-h-[385px]">
+    <Card className="col-span-2 overflow-y-auto max-h-[385px] bg-[#0e5e6f]">
       <CardHeader>
-        <CardTitle className="">Portfolio Management Status</CardTitle>
-        <CardDescription>short summary of the portfolio</CardDescription>
+        <CardTitle className="text-white">
+          Portfolio Management Status
+        </CardTitle>
+        <CardDescription className="text-white">
+          short summary of the portfolio
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-auto">Particular</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+            <TableRow className="bg-blue-500 hover:bg-blue-700">
+              <TableHead className="w-auto text-white font-bold">
+                Particular
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                Amount
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {records.map((record) => (
+            {records.map((record, index) => (
               <TableRow
                 key={record.particular}
-                className="odd:bg-muted even:bg-gradient"
+                className={`${
+                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                } hover:bg-green-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">
                   {record.particular}

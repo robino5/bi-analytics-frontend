@@ -12,26 +12,28 @@ export default function MarkedTraderDataTable({ records }: Props) {
   return (
     <table className="w-full overflow-y-auto text-sm text-left ">
       <thead className="text-xs uppercase ">
-        <tr>
-          <th scope="col" className="px-6 py-3">
+        <tr className="bg-blue-500 hover:bg-blue-700">
+          <th scope="col" className="px-6 py-3 text-white font-bold">
             Code
           </th>
-          <th scope="col" className="px-6 py-3">
+          <th scope="col" className="px-6 py-3 text-white font-bold">
             Investor Name
           </th>
-          <th scope="col" className="px-6 py-3">
+          <th scope="col" className="px-6 py-3 text-white font-bold">
             Ledger Balance
           </th>
-          <th scope="col" className="px-6 py-3">
+          <th scope="col" className="px-6 py-3 text-white font-bold">
             RM
           </th>
         </tr>
       </thead>
       <tbody>
-        {records?.map((record) => (
+        {records?.map((record, index) => (
           <tr
             key={record.investorCode}
-            className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+            className={`${
+              index % 2 === 0 ? "bg-red-300" : "bg-red-400"
+            } hover:bg-red-200 transition-all duration-300`}
           >
             <td
               scope="row"

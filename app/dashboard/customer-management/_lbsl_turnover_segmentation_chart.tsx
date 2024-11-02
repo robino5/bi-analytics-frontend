@@ -67,7 +67,7 @@ export default function LBSLTurnOverSegmentationChart({
         <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
       </CardHeader>
       <div className="text-center text-white text-lg">
-        <h5>Client Segmentation-{details.sumOfTurnovers}</h5>
+        <h5>Turn Over-{details.sumOfTurnovers} mn</h5>
       </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">

@@ -79,7 +79,7 @@ export default function LedgerValueSegmentationChart({
         <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
       </CardHeader>
       <div className="text-center text-white text-lg">
-        <h5>Client Segmentation-{details.sumOfMargin}</h5>
+        <h5>Ledger Balance-{details.sumOfMargin} mn</h5>
       </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">

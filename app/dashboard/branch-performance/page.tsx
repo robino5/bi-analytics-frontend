@@ -37,7 +37,7 @@ export default function BranchPerformance() {
     IBranchWiseExposure[]
   >([]);
   const [branchWiseMargin, setBranchWiseMargin] = useState<IBranchWiseMargin[]>(
-    [],
+    []
   );
 
   const handleBranchChange = (branchId: string) => {
@@ -60,7 +60,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<ITurnoverStatus[]>;
         if (successResponse(result.status)) {
@@ -80,7 +80,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<IBranchWiseFund[]>;
         if (successResponse(result.status)) {
@@ -100,7 +100,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<
           IBranchWiseMargin[]
@@ -123,7 +123,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<
           IBranchWiseExposure[]
@@ -146,7 +146,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          },
+          }
         );
         const result = (await response.json()) as IResponse<ITargetGenerated[]>;
         if (successResponse(result.status)) {
@@ -169,7 +169,7 @@ export default function BranchPerformance() {
   if (turnoverPerformance) {
     headerDate = getHeaderDate(
       turnoverPerformance[turnoverPerformance.length - 1],
-      "tradingDate",
+      "tradingDate"
     );
   }
 
@@ -191,10 +191,14 @@ export default function BranchPerformance() {
         />
 
         {/* Branch Wise Margin Status */}
-        <Card className="col-span-1 max-h-[340px] overflow-y-auto lg:col-span-2 shadow-md">
+        <Card className="col-span-1 max-h-[340px] overflow-y-auto lg:col-span-2 shadow-md bg-[#0e5e6f]">
           <CardHeader>
-            <CardTitle className="">Branch Wise Margin Status</CardTitle>
-            <CardDescription>shows the grid for margin status</CardDescription>
+            <CardTitle className="text-white">
+              Branch Wise Margin Status
+            </CardTitle>
+            <CardDescription className="text-white">
+              shows the grid for margin status
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <BranchWiseMarginDataTable records={branchWiseMargin} />
@@ -202,10 +206,12 @@ export default function BranchPerformance() {
         </Card>
 
         {/* Branch Wise Exposure Status */}
-        <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md lg:col-span-2">
+        <Card className="col-span-1 max-h-[340px] overflow-y-auto shadow-md lg:col-span-2 bg-[#0e5e6f]">
           <CardHeader>
-            <CardTitle className="">Branch Wise Exposure Status</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-white">
+              Branch Wise Exposure Status
+            </CardTitle>
+            <CardDescription className="text-white">
               shows the grid for exposure status
             </CardDescription>
           </CardHeader>
