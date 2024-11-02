@@ -1,19 +1,13 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  BarColors,
-  LABEL_TICK_FONT_SIZE,
-  LABEL_COLOR,
-} from "@/components/ui/utils/constants";
-import { numberToMillionsString } from "@/lib/utils";
-import { useState } from "react";
+import { BarColors } from "@/components/ui/utils/constants";
 import {
   PieChart as PieChartRechart,
   Pie,
-  Sector,
   Cell,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 const COLORS = [BarColors.red, BarColors.green];
@@ -46,79 +40,33 @@ interface IActiveShape {
   index: number;
 }
 
-const renderActiveShape = (props: any) => {
-  const RADIAN = Math.PI / 180;
-  const {
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle,
-    fill,
-    payload,
-    percent,
-    value,
-  }: IActiveShape = props;
+const RADIAN = Math.PI / 180;
 
-  const sin = Math.sin(-RADIAN * midAngle);
-  const cos = Math.cos(-RADIAN * midAngle);
-  const sx = cx + (outerRadius + 10) * cos;
-  const sy = cy + (outerRadius + 10) * sin;
-  const mx = cx + (outerRadius + 30) * cos;
-  const my = cy + (outerRadius + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? "start" : "end";
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+  data,
+}: any) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
   return (
-    <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} fontSize={15}>
-        {payload.channel}
-      </text>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius + 6}
-        outerRadius={outerRadius + 10}
-        fill={fill}
-      />
-      <path
-        d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-        stroke={fill}
-        fill="none"
-      />
-      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text
-        x={ex + (cos >= 0 ? 1 : -1) * 12}
-        y={ey}
-        textAnchor={textAnchor}
-        fill="white"
-        fontSize={14}
-      >{`${numberToMillionsString(value)}`}</text>
-      <text
-        x={ex + (cos >= 0 ? 1 : -1) * 12}
-        y={ey}
-        dy={18}
-        textAnchor={textAnchor}
-        fill="white"
-        fontSize={14}
-      >
-        {`(${Math.round(percent * 100)}%)`}
-      </text>
-    </g>
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${data[index].channel} - ${data[index].totalClients} (${(percent * 100).toFixed(0)}%)`}
+    </text>
   );
 };
 
@@ -132,11 +80,6 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
     error(...args);
   };
   // ===========================================
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const onPieEnter = (_: any, index: any) => {
-    setActiveIndex(index);
-  };
 
   return (
     <Card className="drop-shadow-md bg-[#0e5e6f]">
@@ -147,16 +90,13 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
         <ResponsiveContainer width="100%" height={300}>
           <PieChartRechart height={400} width={400}>
             <Pie
-              activeIndex={activeIndex}
-              activeShape={renderActiveShape}
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={70}
-              outerRadius={100}
               fill="#8884d8"
+              labelLine={false}
               dataKey={dataKey}
-              onMouseEnter={onPieEnter}
+              label={(props) => renderCustomizedLabel({ ...props, data })} // Use custom label
             >
               {data.map((entry, index) => (
                 <Cell
@@ -165,6 +105,17 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
                 />
               ))}
             </Pie>
+            <Legend
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
+              iconType="circle"
+              payload={data.map((entry, index) => ({
+                value: entry.channel,
+                type: "circle",
+                color: COLORS[index % COLORS.length],
+              }))}
+            />
           </PieChartRechart>
         </ResponsiveContainer>
       </CardContent>
