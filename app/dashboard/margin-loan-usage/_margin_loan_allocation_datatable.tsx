@@ -29,26 +29,34 @@ export default function MarginLoanAllocationDataTable({
   className,
 }: Props) {
   return (
-    <Card className={cn("overflow-auto", className)}>
+    <Card className={cn("overflow-auto", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="">Margin Loan Allocation & Usage</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-white">
+          Margin Loan Allocation & Usage
+        </CardTitle>
+        <CardDescription className="text-white">
           short summary of the margin loan allocation & usage
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-auto">Particular</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+            <TableRow className="bg-blue-500 hover:bg-blue-700">
+              <TableHead className="w-auto text-white font-bold">
+                Particular
+              </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                Amount
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {records.map((record) => (
+            {records.map((record, index) => (
               <TableRow
                 key={record.perticular}
-                className="odd:bg-muted even:bg-gradient"
+                className={`${
+                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                } hover:bg-green-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">
                   {record.perticular}

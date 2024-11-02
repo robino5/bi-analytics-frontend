@@ -152,10 +152,10 @@ const RmPerformanceBoard = () => {
 
         {/* Client Details */}
         {clients ? (
-          <Card className="col-span-6 mb-2 shadow-xl">
+          <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader>
-              <CardTitle className="">Client Details</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-white">Client Details</CardTitle>
+              <CardDescription className="text-white">
                 Client Details for Regional Managers
               </CardDescription>
             </CardHeader>

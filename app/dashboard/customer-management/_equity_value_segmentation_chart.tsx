@@ -73,7 +73,7 @@ export default function EquityValueSegmentationChart({
         <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
       </CardHeader>
       <div className="text-center text-white text-lg">
-        <h5>Client Segmentation-{details.sumOfEquity}</h5>
+        <h5>Equity-{details.sumOfEquity} mn</h5>
       </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">

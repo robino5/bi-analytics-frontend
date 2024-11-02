@@ -264,10 +264,12 @@ const RmPortfolioBoard = () => {
             <TabsTrigger value="yellow">Yellow</TabsTrigger>
           </TabsList>
           <TabsContent value="red">
-            <Card>
+            <Card className="bg-[#0e5e6f]">
               <CardHeader>
-                <CardTitle>Red</CardTitle>
-                <CardDescription>red clients details</CardDescription>
+                <CardTitle className="text-white">Red</CardTitle>
+                <CardDescription className="text-white">
+                  red clients details
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
                 <MarkedTraderDataTable records={redClients} />
@@ -276,10 +278,12 @@ const RmPortfolioBoard = () => {
             </Card>
           </TabsContent>
           <TabsContent value="yellow">
-            <Card>
+            <Card className="bg-[#0e5e6f]">
               <CardHeader>
-                <CardTitle>Yellow</CardTitle>
-                <CardDescription>yellow clients details</CardDescription>
+                <CardTitle className="text-white">Yellow</CardTitle>
+                <CardDescription className="text-white">
+                  yellow clients details
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
                 <MarkedTraderDataTable records={yellowClients} />

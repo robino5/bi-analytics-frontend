@@ -21,13 +21,15 @@ const CardBoard: React.FC<CardBoardProps> = ({
   subtitle,
   children,
   className,
-  boardIcon
+  boardIcon,
 }) => {
   return (
-    <Card className={cn("drop-shadow-md", className)}>
+    <Card className={cn("drop-shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="">{title}</CardTitle>
-        <CardDescription className="">{subtitle ?? ""}</CardDescription>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <CardDescription className="text-white">
+          {subtitle ?? ""}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center items-center">
         {children}

@@ -149,7 +149,12 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           angle={-30}
           textAnchor="end"
           height={70}
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
           tickLine={true}
           tickFormatter={tickDateFormatter}
         />
@@ -162,18 +167,35 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
               angle={-90}
               dx={-23}
               fontSize={12}
+              fill="white"
             />
           }
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
         <YAxis
           yAxisId={"right"}
           orientation="right"
           label={
-            <Label value={"LSBL Turnover"} angle={-90} dx={23} fontSize={12} />
+            <Label
+              value={"LSBL Turnover"}
+              angle={-90}
+              dx={23}
+              fontSize={12}
+              fill="white"
+            />
           }
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
         <Legend />

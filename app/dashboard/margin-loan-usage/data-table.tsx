@@ -74,16 +74,23 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader className="text-left">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow
+                key={headerGroup.id}
+                className="bg-blue-500 hover:bg-blue-700"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className="border">
+                    <TableHead
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      className="border text-white font-bold"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
@@ -92,10 +99,13 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody className="border border-gray-200">
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={`${
+                    index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                  } hover:bg-green-300 transition-all duration-300`}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -112,10 +122,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24"
-                >
+                <TableCell colSpan={columns.length} className="h-24">
                   No results.
                 </TableCell>
               </TableRow>

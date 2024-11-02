@@ -9,9 +9,9 @@ interface StatisticsProps {
 const Statistics: FC<StatisticsProps> = ({ label, value }) => {
   return (
     <div className="statistics text-center">
-      <div className="text-[0.8rem] text-neutral-500 ">{label}</div>
+      <div className="text-[0.8rem] text-neutral-500 text-white">{label}</div>
       <div
-        className={cn("text-xl text-neutral-700 font-bold ", {
+        className={cn("text-xl text-neutral-700 font-bold text-white", {
           "text-red-500": value < 0,
         })}
       >

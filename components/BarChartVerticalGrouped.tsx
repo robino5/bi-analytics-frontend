@@ -63,7 +63,7 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
       dy={-4}
       fontSize={LABEL_TICK_FONT_SIZE}
       fontFamily="sans-serif"
-      fill={fill}
+      fill={"white"}
       textAnchor="middle"
     >
       {numberToMillionsString(value)}
@@ -149,6 +149,7 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
             stroke: TICK_COLOR,
             strokeOpacity: 0.1,
             fontSize: LABEL_TICK_FONT_SIZE,
+            fill: "white",
           }}
         />
         <YAxis
@@ -157,6 +158,7 @@ const BarChart: FC<BarChartProps> = ({ data, options }) => {
             stroke: TICK_COLOR,
             strokeOpacity: 0.1,
             fontSize: LABEL_TICK_FONT_SIZE,
+            fill: "white",
           }}
         />
         <Legend verticalAlign="top" height={46} />

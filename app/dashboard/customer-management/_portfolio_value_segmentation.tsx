@@ -136,7 +136,7 @@ export default function PortfolioValueSegmentationChart({
         <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
       </CardHeader>
       <div className="text-center text-white text-lg">
-        <h5>Client Segmentation-{details.sumOfTpvTotal}</h5>
+        <h5>Portfolio Value-{details.sumOfTpvTotal} mn</h5>
       </div>
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">

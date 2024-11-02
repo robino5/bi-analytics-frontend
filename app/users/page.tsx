@@ -33,7 +33,7 @@ import { CreateBulkRMForm } from "./forms/create-existing-trader-form";
 
 const fetchUsers = async (
   session: Session,
-  pagination: { pageIndex: number; pageSize: number; filterUrl: string },
+  pagination: { pageIndex: number; pageSize: number; filterUrl: string }
 ) => {
   const { pageIndex, pageSize, filterUrl } = pagination;
 
@@ -45,7 +45,7 @@ const fetchUsers = async (
   const fullQuery = filterUrl ? `${query}&${filterUrl}` : query;
   console.log(
     "Full Query String:",
-    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${fullQuery}`,
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${fullQuery}`
   );
 
   try {
@@ -56,7 +56,7 @@ const fetchUsers = async (
           Authorization: `Bearer ${session.user.accessToken}`,
           "Content-Type": "application/json",
         },
-      },
+      }
     );
 
     if (response.status !== 200) {
@@ -111,11 +111,13 @@ const Users = () => {
     <div className="mx-4">
       <PageHeader name="User Mangement" />
       <div className="mt-4">
-        <Card className="p-4 space-y-4">
+        <Card className="p-4 space-y-4 bg-[#0e5e6f]">
           <CardHeader className="relative">
             <div>
-              <CardTitle>Users</CardTitle>
-              <CardDescription>Manage access control of users</CardDescription>
+              <CardTitle className="text-white">Users</CardTitle>
+              <CardDescription className="text-white">
+                Manage access control of users
+              </CardDescription>
             </div>
             <div className="absolute top-0 right-0 flex gap-4">
               <div className="mb-4">

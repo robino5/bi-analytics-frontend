@@ -139,7 +139,12 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
         />
         <XAxis
           type="number"
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
           tickLine={false}
           tickFormatter={(value) => `${findRatio(value, totalAmount, 0)}%`}
         />
@@ -147,7 +152,12 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           type="category"
           minTickGap={1}
           dataKey={option.dataKey}
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
         />
         {option?.legendName ?? <Legend name={option.legendName} />}
         <Tooltip content={<CustomTooltip totalAmount={totalAmount} />} />

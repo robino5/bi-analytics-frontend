@@ -18,27 +18,43 @@ export default function BranchWiseMarginDataTable({ records }: Props) {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead rowSpan={2} className="border">
+        <TableRow className="bg-blue-500 hover:bg-blue-700">
+          <TableHead rowSpan={2} className="border text-white font-bold">
             Branch
           </TableHead>
-          <TableHead rowSpan={2} className="border">
+          <TableHead rowSpan={2} className="border text-white font-bold">
             Margin Used
           </TableHead>
-          <TableHead className="text-center border" colSpan={4}>
+          <TableHead
+            className="text-center border text-white font-bold"
+            colSpan={4}
+          >
             Turnover of Margin Clients
           </TableHead>
         </TableRow>
-        <TableRow>
-          <TableHead className="px-2 text-center border">Daily</TableHead>
-          <TableHead className="px-2 text-center border">Weekly</TableHead>
-          <TableHead className="px-2 text-center border">Monthly</TableHead>
-          <TableHead className="px-2 text-center border">Yearly</TableHead>
+        <TableRow className="bg-blue-500 hover:bg-blue-700">
+          <TableHead className="px-2 text-center border text-white font-bold">
+            Daily
+          </TableHead>
+          <TableHead className="px-2 text-center border text-white font-bold">
+            Weekly
+          </TableHead>
+          <TableHead className="px-2 text-center border text-white font-bold">
+            Monthly
+          </TableHead>
+          <TableHead className="px-2 text-center border text-white font-bold">
+            Yearly
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="border">
         {records.map((record, index) => (
-          <TableRow key={index} className="odd:bg-muted even:bg-gradient">
+          <TableRow
+            key={index}
+            className={`${
+              index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+            } hover:bg-green-300 transition-all duration-300`}
+          >
             <TableCell className="font-medium py-1">
               {record.branchName}
             </TableCell>

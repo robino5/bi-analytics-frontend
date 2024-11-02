@@ -142,12 +142,22 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           angle={-30}
           textAnchor="end"
           height={70}
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
           tickLine={true}
         />
         <YAxis
           dataKey={option.valueKey}
-          tick={{ stroke: TICK_COLOR, strokeOpacity: 0.1, fontSize: 12 }}
+          tick={{
+            stroke: TICK_COLOR,
+            strokeOpacity: 0.1,
+            fontSize: 12,
+            fill: "white",
+          }}
           tickFormatter={(value) => numberToMillionsString(value as number)}
         />
         <Tooltip content={<CustomTooltip />} />
