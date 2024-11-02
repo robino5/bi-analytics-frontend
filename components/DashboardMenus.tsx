@@ -205,7 +205,7 @@ export default function DashboardMenus() {
 
   return (
     <Command>
-      <CommandList className="max-h-full mb-4">
+      <CommandList className="max-h-full bg-[#FAF7F0]">
         {menus.map((menu) => {
           return (
             <div key={menu.codeName}>
@@ -221,11 +221,11 @@ export default function DashboardMenus() {
                     key={subMenu.id}
                     value={subMenu.urlPath}
                     className={cn(
-                      "ml-4 flex justify-between items-center gap-3 ",
+                      "ml-4 flex justify-between items-center gap-3",
                       {
                         "bg-gray-300 text-gray-800 font-bold":
                           subMenu.urlPath === pathName,
-                      }
+                      },
                     )}
                   >
                     <div className="flex justify-between items-center gap-3">

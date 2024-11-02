@@ -4,7 +4,7 @@ import Logout from "./logout";
 
 const Sidebar = () => {
   return (
-    <div className="fixed flex flex-col w-[300px] min-w-[300px] gap-4 p-4 min-h-screen">
+    <div className="fixed flex flex-col w-[300px] min-w-[300px] gap-4 p-4 min-h-screen bg-[#5a6c82]">
       <div>
         <UserSummary />
       </div>
