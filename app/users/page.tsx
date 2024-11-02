@@ -33,7 +33,7 @@ import { CreateBulkRMForm } from "./forms/create-existing-trader-form";
 
 const fetchUsers = async (
   session: Session,
-  pagination: { pageIndex: number; pageSize: number; filterUrl: string }
+  pagination: { pageIndex: number; pageSize: number; filterUrl: string },
 ) => {
   const { pageIndex, pageSize, filterUrl } = pagination;
 
@@ -45,7 +45,7 @@ const fetchUsers = async (
   const fullQuery = filterUrl ? `${query}&${filterUrl}` : query;
   console.log(
     "Full Query String:",
-    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${fullQuery}`
+    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${fullQuery}`,
   );
 
   try {
@@ -56,7 +56,7 @@ const fetchUsers = async (
           Authorization: `Bearer ${session.user.accessToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (response.status !== 200) {
