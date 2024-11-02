@@ -25,7 +25,7 @@ import { login } from "@/app/actions/login";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -37,12 +37,19 @@ const LoginForm = () => {
   function onSubmit(values: z.infer<typeof LoginSchema>) {
     startTransition(async () => {
       const resp = await login(values);
-      setError(resp?.error ?? "")
+      setError(resp?.error ?? "");
     });
   }
   return (
     <div className="grid grid-flow-col grid-columns-3 gap-2 place-items-center p-4">
       <div className="h-full w-full grid place-items-center">
+        <Image
+          src="/logo.png"
+          priority={true}
+          height={600}
+          width={300}
+          alt="logo"
+        />
         <Image
           src="/business_analytics.svg"
           priority={true}
@@ -57,6 +64,10 @@ const LoginForm = () => {
       </div>
       <div className="min-w-72">
         <div className="p-4">
+          <p className="text-xl text-green-700 font-bold text-center mb-4">
+            Welcome to <span>iDash</span>
+          </p>
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
