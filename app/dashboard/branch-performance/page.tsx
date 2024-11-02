@@ -24,6 +24,7 @@ import {
 import { useSession } from "next-auth/react";
 import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
+import { ITargetGenerated } from "@/types/dailyTurnoverPerformance";
 
 export default function BranchPerformance() {
   const { data: session } = useSession();
@@ -42,6 +43,10 @@ export default function BranchPerformance() {
   const handleBranchChange = (branchId: string) => {
     setBranch(branchId);
   };
+
+  const [turnoverPerformance, setTurnoverPerformance] = useState<
+    ITargetGenerated[]
+  >([]);
 
   // on page load
   useEffect(() => {
@@ -130,6 +135,29 @@ export default function BranchPerformance() {
         console.error(error);
       }
     };
+
+    // TODO: Need to think of other way to fetch date for header
+    const fetchDailyTurnoverPerformance = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-trade-performance/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        const result = (await response.json()) as IResponse<ITargetGenerated[]>;
+        if (successResponse(result.status)) {
+          setTurnoverPerformance(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+
+    fetchDailyTurnoverPerformance();
     fetchTurnoverStatus();
     fetchBranchWiseFundStatus();
     fetchBranchWiseMarginStatus();
@@ -138,8 +166,11 @@ export default function BranchPerformance() {
 
   let headerDate = null;
 
-  if (turnover) {
-    headerDate = formatDate(new Date());
+  if (turnoverPerformance) {
+    headerDate = getHeaderDate(
+      turnoverPerformance[turnoverPerformance.length - 1],
+      "tradingDate",
+    );
   }
 
   return (
