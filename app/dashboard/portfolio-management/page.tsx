@@ -11,7 +11,7 @@ import PortfolioManagementStatusDataTable from "./_portfolio_management_status_d
 import { BarColors } from "@/components/ui/utils/constants";
 import { useEffect, useState } from "react";
 import BranchFilter from "@/components/branchFilter";
-import { successResponse } from "@/lib/utils";
+import { getHeaderDate, successResponse } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import {
   IAccountsFundFlow,
@@ -79,7 +79,7 @@ export default function PortfolioManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<INetFundFlow[]>;
         if (successResponse(result.status)) {
@@ -88,7 +88,7 @@ export default function PortfolioManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching daily net fund flow`,
-          error
+          error,
         );
       }
     };
@@ -102,7 +102,7 @@ export default function PortfolioManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<ITradeVsClients[]>;
         if (successResponse(result.status)) {
@@ -111,7 +111,7 @@ export default function PortfolioManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching daily net fund flow`,
-          error
+          error,
         );
       }
     };
@@ -125,7 +125,7 @@ export default function PortfolioManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           ITurnoverPerformance[]
@@ -136,7 +136,7 @@ export default function PortfolioManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching daily net fund flow`,
-          error
+          error,
         );
       }
     };
@@ -151,7 +151,7 @@ export default function PortfolioManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           IAccountsFundFlow[]
@@ -162,7 +162,7 @@ export default function PortfolioManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching daily net fund flow`,
-          error
+          error,
         );
       }
     };
@@ -177,7 +177,7 @@ export default function PortfolioManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<IPortfolioStatus[]>;
         if (successResponse(result.status)) {
@@ -186,7 +186,7 @@ export default function PortfolioManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching daily net fund flow`,
-          error
+          error,
         );
       }
     };
@@ -209,7 +209,7 @@ export default function PortfolioManagement() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<INetFundFlow[]>;
           if (successResponse(result.status)) {
@@ -218,7 +218,7 @@ export default function PortfolioManagement() {
         } catch (error) {
           console.error(
             `Error Happened while fetching daily net fund flow with branchId = ${branch}`,
-            error
+            error,
           );
         }
       };
@@ -233,7 +233,7 @@ export default function PortfolioManagement() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             ITradeVsClients[]
@@ -244,7 +244,7 @@ export default function PortfolioManagement() {
         } catch (error) {
           console.error(
             `Error Happened while fetching trade vs clients with branchId=${branch}`,
-            error
+            error,
           );
         }
       };
@@ -259,7 +259,7 @@ export default function PortfolioManagement() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             ITurnoverPerformance[]
@@ -270,7 +270,7 @@ export default function PortfolioManagement() {
         } catch (error) {
           console.error(
             `Error Happened while fetching daily net fund flow`,
-            error
+            error,
           );
         }
       };
@@ -284,7 +284,7 @@ export default function PortfolioManagement() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IAccountsFundFlow[]
@@ -295,7 +295,7 @@ export default function PortfolioManagement() {
         } catch (error) {
           console.error(
             `Error Happened while fetching daily net fund flow`,
-            error
+            error,
           );
         }
       };
@@ -309,7 +309,7 @@ export default function PortfolioManagement() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IPortfolioStatus[]
@@ -320,7 +320,7 @@ export default function PortfolioManagement() {
         } catch (error) {
           console.error(
             `Error Happened while fetching daily net fund flow`,
-            error
+            error,
           );
         }
       };
@@ -332,9 +332,18 @@ export default function PortfolioManagement() {
     }
   }, [branch]);
 
+  let headerDate = null;
+
+  if (netFundFlow) {
+    headerDate = getHeaderDate(
+      netFundFlow[netFundFlow.length - 1],
+      "tradingDate",
+    );
+  }
+
   return (
     <div className="mx-4">
-      <PageHeader name="Portfolio Management">
+      <PageHeader name={`Portfolio Management (${headerDate ?? ""})`}>
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">

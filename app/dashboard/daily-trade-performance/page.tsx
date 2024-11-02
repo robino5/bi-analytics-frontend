@@ -18,7 +18,7 @@ import {
   IMarginLoanUsage,
   ISectorExposure,
 } from "@/types/dailyTurnoverPerformance";
-import { successResponse } from "@/lib/utils";
+import { getHeaderDate, successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
   SkeletonStatistics,
 } from "@/components/skeletonCard";
@@ -119,7 +119,7 @@ export default function DailyTradePerformance() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<ISummaryDetails>;
           if (successResponse(result.status)) {
@@ -128,13 +128,13 @@ export default function DailyTradePerformance() {
         } catch (error) {
           console.error(
             `Error Happened while fetching Summary for BranchId=${branchId}`,
-            error
+            error,
           );
         }
       };
       // daily turnover performance
       const fetchDailyTurnoverPerformanceWithBranchId = async (
-        branchId: number
+        branchId: number,
       ) => {
         try {
           const response = await fetch(
@@ -144,7 +144,7 @@ export default function DailyTradePerformance() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             ITargetGenerated[]
@@ -155,13 +155,13 @@ export default function DailyTradePerformance() {
         } catch (error) {
           console.error(
             `Error Happened while fetching Summary for BranchId=${branchId}`,
-            error
+            error,
           );
         }
       };
       // daily margin loan usage
       const fetchDailyMarginLoanUsageWithBranchId = async (
-        branchId: number
+        branchId: number,
       ) => {
         try {
           const response = await fetch(
@@ -171,7 +171,7 @@ export default function DailyTradePerformance() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IMarginLoanUsage[]
@@ -182,14 +182,14 @@ export default function DailyTradePerformance() {
         } catch (error) {
           console.error(
             `Error Happened while fetching Summary for BranchId=${branchId}`,
-            error
+            error,
           );
         }
       };
 
       // Sector Exposure Cash Code
       const fetchCashCodeSectorExposureWithBranchId = async (
-        branchId: number
+        branchId: number,
       ) => {
         try {
           const response = await fetch(
@@ -199,7 +199,7 @@ export default function DailyTradePerformance() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             ISectorExposure[]
@@ -213,7 +213,7 @@ export default function DailyTradePerformance() {
       };
       // Sector Exposure Margin Code
       const fetchMarginCodeSectorExposureWithBranchId = async (
-        branchId: number
+        branchId: number,
       ) => {
         try {
           const response = await fetch(
@@ -223,7 +223,7 @@ export default function DailyTradePerformance() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             ISectorExposure[]
@@ -255,7 +255,7 @@ export default function DailyTradePerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<ISummaryDetails>;
         if (successResponse(result.status)) {
@@ -275,7 +275,7 @@ export default function DailyTradePerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<ITargetGenerated[]>;
         if (successResponse(result.status)) {
@@ -295,7 +295,7 @@ export default function DailyTradePerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<IMarginLoanUsage[]>;
         if (successResponse(result.status)) {
@@ -315,7 +315,7 @@ export default function DailyTradePerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<ISectorExposure[]>;
         if (successResponse(result.status)) {
@@ -335,7 +335,7 @@ export default function DailyTradePerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<ISectorExposure[]>;
         if (successResponse(result.status)) {
@@ -353,6 +353,15 @@ export default function DailyTradePerformance() {
     fetchCashCodeSectorExposure();
   }, []);
 
+  let headerDate = null;
+
+  if (turnoverPerformance) {
+    headerDate = getHeaderDate(
+      turnoverPerformance[turnoverPerformance.length - 1],
+      "tradingDate",
+    );
+  }
+
   return (
     <div className="mx-4">
       <title>Daily Trade Performance | LBSL</title>
@@ -360,7 +369,7 @@ export default function DailyTradePerformance() {
         name="description"
         content="Showing a daily trade performance analytics"
       />
-      <PageHeader name="Daily Trade Performance">
+      <PageHeader name={`Daily Trade Performance (${headerDate ?? ""})`}>
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
@@ -369,7 +378,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Summary"
             subtitle="overview of clients, turnover, net buy/sell"
-            boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400"/>}
+            boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCardClientTurnoverSummary
                 data={summary.shortSummary}
@@ -384,7 +393,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Cash Code Status"
             subtitle="overview of cash codes"
-            boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400"/>}
+            boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
             }
@@ -397,7 +406,7 @@ export default function DailyTradePerformance() {
             className="col-span-6 xl:col-span-2"
             title="Margin Code Status"
             subtitle="overview of margin codes"
-            boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400"/>}
+            boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
             }

@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const numberFormatter = (
   value: number,
-  options: Intl.NumberFormatOptions = FORMATTER_OPTIONS
+  options: Intl.NumberFormatOptions = FORMATTER_OPTIONS,
 ) => {
   return new Intl.NumberFormat("en-US", options).format(value);
 };
@@ -32,14 +32,15 @@ export function formatDate(date: Date): string {
     "Dec",
   ];
   const day = date.getDate();
+  const paddedDay = day < 10 ? `0${day}` : day;
   const month = months[date.getMonth()];
   const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
+  return `${paddedDay}-${month}-${year}`;
 }
 
 export function numberToMillionsString(
   num: number,
-  useThousand: boolean = false
+  useThousand: boolean = false,
 ): string {
   if (isNaN(num)) {
     throw Error(`${num} is not a valid number !`);
@@ -73,4 +74,11 @@ export function numberToMillionsString(
 
 export function successResponse(key: string): boolean {
   return key === "success";
+}
+
+export function getHeaderDate(from: any, key: string): string {
+  if (from) {
+    return from[key];
+  }
+  return "";
 }

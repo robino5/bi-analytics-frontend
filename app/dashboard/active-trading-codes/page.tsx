@@ -13,6 +13,7 @@ import { IResponse } from "@/types/utils";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
+import { getHeaderDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Active Trading Codes - LBSL",
@@ -23,8 +24,46 @@ const removeKeyFromObjects = (data: any[], ignoreKey: string) => {
   return data.filter((item) => item.channel.trim() !== ignoreKey);
 };
 
+export type DataType = {
+  tradingDate: string;
+  DT: number;
+  INTERNET: number;
+};
+
+function sortByMonthYearDescending(data: DataType[]) {
+  // Create a function to map month names to numbers
+  const monthMap: { [key: string]: number } = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+  };
+
+  // Sort the array by the specified field in descending order
+  return data.sort((a, b) => {
+    const [monthA, yearA] = a.tradingDate.split(" ");
+    const [monthB, yearB] = b.tradingDate.split(" ");
+
+    // Compare by year first
+    if (yearA !== yearB) {
+      return parseInt(yearA) - parseInt(yearB);
+    }
+
+    // If years are the same, compare by month
+    return monthMap[monthA] - monthMap[monthB];
+  });
+}
+
 const getClientTradeSummaryOfToday: (
-  session: Session
+  session: Session,
 ) => Promise<IActiveTradingToday[]> = async (session: Session) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-today/`,
@@ -33,7 +72,7 @@ const getClientTradeSummaryOfToday: (
         Authorization: `Bearer ${session.user.accessToken}`,
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 200) {
@@ -50,7 +89,7 @@ type TransformedDataItem = {
 };
 
 const getDayWiseStatistics: (
-  session: Session
+  session: Session,
 ) => Promise<IActiveTradeDayWise[]> = async (session: Session) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-daywise/`,
@@ -59,7 +98,7 @@ const getDayWiseStatistics: (
         Authorization: `Bearer ${session.user.accessToken}`,
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 200) {
@@ -70,7 +109,7 @@ const getDayWiseStatistics: (
 };
 
 const getMonthWiseStatistics: (
-  session: Session
+  session: Session,
 ) => Promise<IMonthWiseData> = async (session: Session) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-monthwise/`,
@@ -79,7 +118,7 @@ const getMonthWiseStatistics: (
         Authorization: `Bearer ${session.user.accessToken}`,
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 200) {
@@ -91,12 +130,12 @@ const getMonthWiseStatistics: (
 
 const transformData = (
   data: IActiveTradeDayWise[],
-  key: string
+  key: string,
 ): TransformedDataItem[] => {
   const transformedData: TransformedDataItem[] = data.reduce(
     (acc: TransformedDataItem[], curr: IActiveTradeDayWise) => {
       const existingItemIndex = acc.findIndex(
-        (item) => item.tradingDate === curr.tradingDate
+        (item) => item.tradingDate === curr.tradingDate,
       );
       if (existingItemIndex !== -1) {
         // @ts-ignore
@@ -114,7 +153,7 @@ const transformData = (
       }
       return acc;
     },
-    []
+    [],
   );
 
   return transformedData;
@@ -135,13 +174,16 @@ const parseDateOfMonthWise = (date: string) => {
   return date.slice(3);
 };
 
-const ratioMakerMonthWise = (data: PayloadType[]) => {
+const ratioMakerMonthWise = (
+  data: PayloadType[],
+  dateParse: boolean = true,
+) => {
   return data.map((d) => {
     const total = d.DT + d.INTERNET;
     return {
       dt: d.DT,
       internet: d.INTERNET,
-      tradingDate: parseDateOfMonthWise(d.monthYear),
+      tradingDate: dateParse ? parseDateOfMonthWise(d.monthYear) : d.monthYear,
       dtRatio: Math.round((d.DT / total) * 100),
       internetRatio: Math.round((d.INTERNET / total) * 100),
     };
@@ -165,7 +207,7 @@ const ActiveTradingCodesBoard = async () => {
 
   const sanitizedDayWiseSummary = removeKeyFromObjects(
     dayWiseSummary,
-    "TOTAL (DT+INTERNET)"
+    "TOTAL (DT+INTERNET)",
   );
 
   const dayWiseClients = transformData(dayWiseData, "totalClients");
@@ -176,18 +218,34 @@ const ActiveTradingCodesBoard = async () => {
   const transformedTrades = ratioMaker(dayWiseTrades);
   const transformedTurnover = ratioMaker(dayWiseTurnover);
 
-  const transformedMonthWiseClients = ratioMakerMonthWise(monthWiseClients);
-  const transformedMonthWiseTrades = ratioMakerMonthWise(monthWiseTrades);
-  const transformedMonthWiseTurnover = ratioMakerMonthWise(monthWiseTurnover);
+  const transformedMonthWiseClients = ratioMakerMonthWise(
+    monthWiseClients,
+    false,
+  );
+  const transformedMonthWiseTrades = ratioMakerMonthWise(
+    monthWiseTrades,
+    false,
+  );
+  const transformedMonthWiseTurnover = ratioMakerMonthWise(
+    monthWiseTurnover,
+    false,
+  );
+
+  sortByMonthYearDescending(transformedMonthWiseClients);
+  sortByMonthYearDescending(transformedMonthWiseTrades);
+  sortByMonthYearDescending(transformedMonthWiseTurnover);
 
   const fixedProps = {
     xDataKey: "tradingDate",
     dataKeyA: "dtRatio",
     dataKeyB: "internetRatio",
   };
+
   return (
     <div className="mx-4">
-      <PageHeader name="Active Trading Codes" />
+      <PageHeader
+        name={`Active Trading Codes (${getHeaderDate(dayWiseSummary[0], "tradingDate")})`}
+      />
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-2">
         <div className="rounded-md xl:col-span-6">
           <ClientTradesDataTable records={dayWiseSummary} />

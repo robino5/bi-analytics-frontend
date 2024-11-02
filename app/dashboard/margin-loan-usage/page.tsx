@@ -20,9 +20,10 @@ import {
   IMarginLoanAllocation,
   INetTradeClient,
 } from "@/types/marginLoanUsage";
-import { successResponse } from "@/lib/utils";
+import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
 import BranchFilter from "@/components/branchFilter";
 import { IResponse } from "@/types/utils";
+import { ITargetGenerated } from "@/types/dailyTurnoverPerformance";
 
 export default function MarginLoanUsage() {
   const { data: session } = useSession();
@@ -33,13 +34,17 @@ export default function MarginLoanUsage() {
     IMarginLoanAllocation[]
   >([]);
   const [exposureSummary, setExposureSummary] = useState<IExposureSumamry[]>(
-    []
+    [],
   );
   const [netTradeClients, setNetTradeClients] = useState<INetTradeClient[]>([]);
 
   const handleBranchChange = (branchId: string) => {
     setBranch(branchId);
   };
+
+  const [turnoverPerformance, setTurnoverPerformance] = useState<
+    ITargetGenerated[]
+  >([]);
 
   // effect on page load
   useEffect(() => {
@@ -52,7 +57,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           IMarginLoanAllocation[]
@@ -74,7 +79,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<IExposureSumamry[]>;
         if (successResponse(result.status)) {
@@ -94,7 +99,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<INetTradeClient[]>;
         if (successResponse(result.status)) {
@@ -105,6 +110,28 @@ export default function MarginLoanUsage() {
       }
     };
 
+    // TODO: Need to think of other way to fetch date for header
+    const fetchDailyTurnoverPerformance = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-trade-performance/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        const result = (await response.json()) as IResponse<ITargetGenerated[]>;
+        if (successResponse(result.status)) {
+          setTurnoverPerformance(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching Summary`, error);
+      }
+    };
+
+    fetchDailyTurnoverPerformance();
     fetchMarginLoanAllocation();
     fetchExposureSummary();
     fetchNetTradeClients();
@@ -121,7 +148,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IMarginLoanAllocation[]
@@ -143,7 +170,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IExposureSumamry[]
@@ -165,7 +192,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             INetTradeClient[]
@@ -183,11 +210,20 @@ export default function MarginLoanUsage() {
     }
   }, [branch]);
 
+  let headerDate = null;
+
+  if (turnoverPerformance) {
+    headerDate = getHeaderDate(
+      turnoverPerformance[turnoverPerformance.length - 1],
+      "tradingDate",
+    );
+  }
+
   return (
     <div className="mx-4">
       <title>Margin Loan Usage - LBSL</title>
       <meta name="description" content="analytics for margin loan usage" />
-      <PageHeader name="Margin Loan Usage">
+      <PageHeader name={`Margin Loan Usage (${headerDate ?? ""})`}>
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 my-2 lg:grid-cols-6">
