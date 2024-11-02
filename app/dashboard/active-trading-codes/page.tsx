@@ -24,6 +24,44 @@ const removeKeyFromObjects = (data: any[], ignoreKey: string) => {
   return data.filter((item) => item.channel.trim() !== ignoreKey);
 };
 
+export type DataType = {
+  tradingDate: string;
+  DT: number;
+  INTERNET: number;
+};
+
+function sortByMonthYearDescending(data: DataType[]) {
+  // Create a function to map month names to numbers
+  const monthMap: { [key: string]: number } = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+  };
+
+  // Sort the array by the specified field in descending order
+  return data.sort((a, b) => {
+    const [monthA, yearA] = a.tradingDate.split(" ");
+    const [monthB, yearB] = b.tradingDate.split(" ");
+
+    // Compare by year first
+    if (yearA !== yearB) {
+      return parseInt(yearA) - parseInt(yearB);
+    }
+
+    // If years are the same, compare by month
+    return monthMap[monthA] - monthMap[monthB];
+  });
+}
+
 const getClientTradeSummaryOfToday: (
   session: Session,
 ) => Promise<IActiveTradingToday[]> = async (session: Session) => {
@@ -136,13 +174,16 @@ const parseDateOfMonthWise = (date: string) => {
   return date.slice(3);
 };
 
-const ratioMakerMonthWise = (data: PayloadType[]) => {
+const ratioMakerMonthWise = (
+  data: PayloadType[],
+  dateParse: boolean = true,
+) => {
   return data.map((d) => {
     const total = d.DT + d.INTERNET;
     return {
       dt: d.DT,
       internet: d.INTERNET,
-      tradingDate: parseDateOfMonthWise(d.monthYear),
+      tradingDate: dateParse ? parseDateOfMonthWise(d.monthYear) : d.monthYear,
       dtRatio: Math.round((d.DT / total) * 100),
       internetRatio: Math.round((d.INTERNET / total) * 100),
     };
@@ -177,15 +218,29 @@ const ActiveTradingCodesBoard = async () => {
   const transformedTrades = ratioMaker(dayWiseTrades);
   const transformedTurnover = ratioMaker(dayWiseTurnover);
 
-  const transformedMonthWiseClients = ratioMakerMonthWise(monthWiseClients);
-  const transformedMonthWiseTrades = ratioMakerMonthWise(monthWiseTrades);
-  const transformedMonthWiseTurnover = ratioMakerMonthWise(monthWiseTurnover);
+  const transformedMonthWiseClients = ratioMakerMonthWise(
+    monthWiseClients,
+    false,
+  );
+  const transformedMonthWiseTrades = ratioMakerMonthWise(
+    monthWiseTrades,
+    false,
+  );
+  const transformedMonthWiseTurnover = ratioMakerMonthWise(
+    monthWiseTurnover,
+    false,
+  );
+
+  sortByMonthYearDescending(transformedMonthWiseClients);
+  sortByMonthYearDescending(transformedMonthWiseTrades);
+  sortByMonthYearDescending(transformedMonthWiseTurnover);
 
   const fixedProps = {
     xDataKey: "tradingDate",
     dataKeyA: "dtRatio",
     dataKeyB: "internetRatio",
   };
+
   return (
     <div className="mx-4">
       <PageHeader
