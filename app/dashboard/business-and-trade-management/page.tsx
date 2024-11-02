@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useSession } from "next-auth/react";
-import { successResponse } from "@/lib/utils";
+import { getHeaderDate, successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
 import { DataTableCard } from "./data-table";
 import {
@@ -44,7 +44,7 @@ export default function BusinessAndTradeManagement() {
     MarketShareLBSl[] | null
   >(null);
   const [marketShareSME, setMarketShareSME] = useState<MarketShareSME[] | null>(
-    null
+    null,
   );
   // on page load
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function BusinessAndTradeManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           BoardWiseTurnoverData[]
@@ -69,7 +69,7 @@ export default function BusinessAndTradeManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching bord wise turnover`,
-          error
+          error,
         );
       }
     };
@@ -83,7 +83,7 @@ export default function BusinessAndTradeManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           BoardWiseTurnoverBreakdownData[]
@@ -94,7 +94,7 @@ export default function BusinessAndTradeManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching bord wise turnover breadown`,
-          error
+          error,
         );
       }
     };
@@ -108,7 +108,7 @@ export default function BusinessAndTradeManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<MarketShareLBSl[]>;
         if (successResponse(result.status)) {
@@ -117,7 +117,7 @@ export default function BusinessAndTradeManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching details market share LBSL`,
-          error
+          error,
         );
       }
     };
@@ -131,7 +131,7 @@ export default function BusinessAndTradeManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<MarketShareSME[]>;
         if (successResponse(result.status)) {
@@ -140,7 +140,7 @@ export default function BusinessAndTradeManagement() {
       } catch (error) {
         console.error(
           `Error Happened while fetching details market share LBSL SME`,
-          error
+          error,
         );
       }
     };
@@ -150,6 +150,12 @@ export default function BusinessAndTradeManagement() {
     fetchMarketShareSME();
   }, []);
 
+  let headerDate = null;
+
+  if (boardTernoverData) {
+    headerDate = getHeaderDate(boardTernoverData[0], "tradingDate");
+  }
+
   return (
     <div className="mx-4">
       <title>Business and Trade Management | LBSL</title>
@@ -158,7 +164,7 @@ export default function BusinessAndTradeManagement() {
         content="Showing a  usiness and trade  management"
       />
       <PageHeader
-        name={`Business and Trade Management (${boardTernoverData ? boardTernoverData[boardTernoverData.length - 1].tradingDate : ""})`}
+        name={`Business and Trade Management (${headerDate ?? ""})`}
       />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {boardTernoverData ? (

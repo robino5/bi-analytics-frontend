@@ -13,6 +13,7 @@ import { IResponse } from "@/types/utils";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
+import { getHeaderDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Active Trading Codes - LBSL",
@@ -24,7 +25,7 @@ const removeKeyFromObjects = (data: any[], ignoreKey: string) => {
 };
 
 const getClientTradeSummaryOfToday: (
-  session: Session
+  session: Session,
 ) => Promise<IActiveTradingToday[]> = async (session: Session) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-today/`,
@@ -33,7 +34,7 @@ const getClientTradeSummaryOfToday: (
         Authorization: `Bearer ${session.user.accessToken}`,
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 200) {
@@ -50,7 +51,7 @@ type TransformedDataItem = {
 };
 
 const getDayWiseStatistics: (
-  session: Session
+  session: Session,
 ) => Promise<IActiveTradeDayWise[]> = async (session: Session) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-daywise/`,
@@ -59,7 +60,7 @@ const getDayWiseStatistics: (
         Authorization: `Bearer ${session.user.accessToken}`,
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 200) {
@@ -70,7 +71,7 @@ const getDayWiseStatistics: (
 };
 
 const getMonthWiseStatistics: (
-  session: Session
+  session: Session,
 ) => Promise<IMonthWiseData> = async (session: Session) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-monthwise/`,
@@ -79,7 +80,7 @@ const getMonthWiseStatistics: (
         Authorization: `Bearer ${session.user.accessToken}`,
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (response.status !== 200) {
@@ -91,12 +92,12 @@ const getMonthWiseStatistics: (
 
 const transformData = (
   data: IActiveTradeDayWise[],
-  key: string
+  key: string,
 ): TransformedDataItem[] => {
   const transformedData: TransformedDataItem[] = data.reduce(
     (acc: TransformedDataItem[], curr: IActiveTradeDayWise) => {
       const existingItemIndex = acc.findIndex(
-        (item) => item.tradingDate === curr.tradingDate
+        (item) => item.tradingDate === curr.tradingDate,
       );
       if (existingItemIndex !== -1) {
         // @ts-ignore
@@ -114,7 +115,7 @@ const transformData = (
       }
       return acc;
     },
-    []
+    [],
   );
 
   return transformedData;
@@ -165,7 +166,7 @@ const ActiveTradingCodesBoard = async () => {
 
   const sanitizedDayWiseSummary = removeKeyFromObjects(
     dayWiseSummary,
-    "TOTAL (DT+INTERNET)"
+    "TOTAL (DT+INTERNET)",
   );
 
   const dayWiseClients = transformData(dayWiseData, "totalClients");
@@ -187,7 +188,9 @@ const ActiveTradingCodesBoard = async () => {
   };
   return (
     <div className="mx-4">
-      <PageHeader name="Active Trading Codes" />
+      <PageHeader
+        name={`Active Trading Codes (${getHeaderDate(dayWiseSummary[0], "tradingDate")})`}
+      />
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-2">
         <div className="rounded-md xl:col-span-6">
           <ClientTradesDataTable records={dayWiseSummary} />

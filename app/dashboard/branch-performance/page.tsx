@@ -22,7 +22,7 @@ import {
   ITurnoverStatus,
 } from "@/types/branchPerformance";
 import { useSession } from "next-auth/react";
-import { successResponse } from "@/lib/utils";
+import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
 
 export default function BranchPerformance() {
@@ -36,7 +36,7 @@ export default function BranchPerformance() {
     IBranchWiseExposure[]
   >([]);
   const [branchWiseMargin, setBranchWiseMargin] = useState<IBranchWiseMargin[]>(
-    []
+    [],
   );
 
   const handleBranchChange = (branchId: string) => {
@@ -55,7 +55,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<ITurnoverStatus[]>;
         if (successResponse(result.status)) {
@@ -75,7 +75,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<IBranchWiseFund[]>;
         if (successResponse(result.status)) {
@@ -95,7 +95,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           IBranchWiseMargin[]
@@ -118,7 +118,7 @@ export default function BranchPerformance() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           IBranchWiseExposure[]
@@ -136,11 +136,17 @@ export default function BranchPerformance() {
     fetchBranchWiseExposureStatus();
   }, [branch]);
 
+  let headerDate = null;
+
+  if (turnover) {
+    headerDate = formatDate(new Date());
+  }
+
   return (
     <div className="mx-4">
       <title>Branch Performance - LBSL</title>
       <meta name="description" content="branch performance analytics" />
-      <PageHeader name="Branch Performance">
+      <PageHeader name={`Branch Performance (${headerDate ?? ""})`}>
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">

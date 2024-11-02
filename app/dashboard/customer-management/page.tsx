@@ -28,7 +28,7 @@ import {
   PortfolioValueSegmentation,
   PortfolioValueSegmentationDetails,
 } from "@/types/customerManagement";
-import { successResponse } from "@/lib/utils";
+import { formatDate, successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
 
 interface ClientSegmentationData {
@@ -142,7 +142,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<ClientSegmentationData>;
@@ -165,7 +165,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<BranchWiseClintsNumberData>;
@@ -189,7 +189,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<BranchWiseNonPerformerClintsData>;
@@ -213,7 +213,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<LBSLTurnoverSegmentationData>;
@@ -237,7 +237,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<EquityValueSegmentationData>;
@@ -261,7 +261,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<LedgerValueSegmentationData>;
@@ -285,7 +285,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<DetailsMarketShareLBSLData>;
@@ -309,7 +309,7 @@ export default function CustomerManagement() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result =
           (await response.json()) as IResponse<PortfolioValueSegmentationData>;
@@ -332,6 +332,9 @@ export default function CustomerManagement() {
     fetchDetailsMarketShareLBSL();
     fetchPortfolioValueSegmentation();
   }, []);
+
+  const currentDate = new Date();
+
   return (
     <div className="mx-4">
       <title>Customer Management | LBSL</title>
@@ -339,7 +342,7 @@ export default function CustomerManagement() {
         name="description"
         content="Showing business and trade management"
       />
-      <PageHeader name="Customer Management" />
+      <PageHeader name={`Customer Management (${formatDate(currentDate)})`} />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {clientSegmentation ? (
           <ClientSegmentationChart

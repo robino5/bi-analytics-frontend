@@ -20,7 +20,7 @@ import {
   IMarginLoanAllocation,
   INetTradeClient,
 } from "@/types/marginLoanUsage";
-import { successResponse } from "@/lib/utils";
+import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
 import BranchFilter from "@/components/branchFilter";
 import { IResponse } from "@/types/utils";
 
@@ -33,7 +33,7 @@ export default function MarginLoanUsage() {
     IMarginLoanAllocation[]
   >([]);
   const [exposureSummary, setExposureSummary] = useState<IExposureSumamry[]>(
-    []
+    [],
   );
   const [netTradeClients, setNetTradeClients] = useState<INetTradeClient[]>([]);
 
@@ -52,7 +52,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<
           IMarginLoanAllocation[]
@@ -74,7 +74,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<IExposureSumamry[]>;
         if (successResponse(result.status)) {
@@ -94,7 +94,7 @@ export default function MarginLoanUsage() {
               Authorization: `Bearer ${session?.user.accessToken}`,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const result = (await response.json()) as IResponse<INetTradeClient[]>;
         if (successResponse(result.status)) {
@@ -121,7 +121,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IMarginLoanAllocation[]
@@ -143,7 +143,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             IExposureSumamry[]
@@ -165,7 +165,7 @@ export default function MarginLoanUsage() {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             INetTradeClient[]
@@ -183,11 +183,17 @@ export default function MarginLoanUsage() {
     }
   }, [branch]);
 
+  let headerDate = null;
+
+  if (marginLoanAllocation) {
+    headerDate = formatDate(new Date());
+  }
+
   return (
     <div className="mx-4">
       <title>Margin Loan Usage - LBSL</title>
       <meta name="description" content="analytics for margin loan usage" />
-      <PageHeader name="Margin Loan Usage">
+      <PageHeader name={`Margin Loan Usage (${headerDate ?? ""})`}>
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 my-2 lg:grid-cols-6">
