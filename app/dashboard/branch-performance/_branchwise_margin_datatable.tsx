@@ -61,16 +61,24 @@ export default function BranchWiseMarginDataTable({ records }: Props) {
             <TableCell className="py-1 text-right">
               {numberToMillionsString(record.loanUsed)}
             </TableCell>
-            <TableCell className="py-1 text-right">
+            <TableCell className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
+                  }`}>
               {numberToMillionsString(record.turnoverDaily)}
             </TableCell>
-            <TableCell className="py-1 text-right">
+            <TableCell className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-green-200" : "bg-green-100"
+                  }`}>
               {numberToMillionsString(record.turnoverWeekly)}
             </TableCell>
-            <TableCell className="py-1 text-right">
+            <TableCell className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
+                  }`}>
               {numberToMillionsString(record.turnoverMonthly)}
             </TableCell>
-            <TableCell className="py-1 text-right">
+            <TableCell  className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
+                  }`}>
               {numberToMillionsString(record.turnoverYearly)}
             </TableCell>
           </TableRow>

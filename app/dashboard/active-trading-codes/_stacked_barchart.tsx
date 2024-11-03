@@ -103,7 +103,11 @@ const CustomTooltip = ({ active, payload, ...rest }: CustomTooltipProps) => {
           boxShadow: "1px 2px 10px -2px #7873ffb1",
         }}
       >
-        <p>{rest.label}</p>
+        <p
+        style={{
+          color: "white",
+        }}
+        >{rest.label}</p>
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;
           const tooltipPayloadKey = RATIO_TO_DATA_MAP[pld.dataKey];

@@ -15,6 +15,7 @@ import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { getHeaderDate } from "@/lib/utils";
 
+
 export const metadata: Metadata = {
   title: "Active Trading Codes - LBSL",
   description: "active trading codes analysis dashboards",
@@ -209,7 +210,6 @@ const ActiveTradingCodesBoard = async () => {
     dayWiseSummary,
     "TOTAL (DT+INTERNET)",
   );
-
   const dayWiseClients = transformData(dayWiseData, "totalClients");
   const dayWiseTrades = transformData(dayWiseData, "trades");
   const dayWiseTurnover = transformData(dayWiseData, "totalTurnover");

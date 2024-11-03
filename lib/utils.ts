@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 const FORMATTER_OPTIONS: Intl.NumberFormatOptions = {
-  maximumFractionDigits: 1,
+  maximumFractionDigits: 2,
 };
 
 export function cn(...inputs: ClassValue[]) {

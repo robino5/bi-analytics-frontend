@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { numberToMillionsString } from "@/lib/utils";
 
 const COLORS = [BarColors.red, BarColors.green];
 
@@ -51,12 +52,14 @@ const renderCustomizedLabel = ({
   percent,
   index,
   data,
+  dataKey
 }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
 
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
+if(dataKey=="totalClients"){
   return (
     <text
       x={x}
@@ -68,12 +71,36 @@ const renderCustomizedLabel = ({
       {`${data[index].channel} - ${data[index].totalClients} (${(percent * 100).toFixed(0)}%)`}
     </text>
   );
+}else if(dataKey=="trades"){
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${data[index].channel} - ${data[index].trades} (${(percent * 100).toFixed(0)}%)`}
+    </text>
+  );
+}else if(dataKey=="totalTurnover"){
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${data[index].channel} - ${numberToMillionsString(data[index].totalTurnover)} (${(percent * 100).toFixed(0)}%)`}
+    </text>
+  );
+}
+ 
 };
 
 const PieChart = ({ title, data, dataKey }: PropType) => {
-  // Override console.error
-  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
-  // @link https://github.com/recharts/recharts/issues/3615
+console.log(dataKey);
   const error = console.error;
   console.error = (...args: any) => {
     if (/defaultProps/.test(args[0])) return;
@@ -96,7 +123,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
               fill="#8884d8"
               labelLine={false}
               dataKey={dataKey}
-              label={(props) => renderCustomizedLabel({ ...props, data })} // Use custom label
+              label={(props) => renderCustomizedLabel({ ...props, data,dataKey })} 
             >
               {data.map((entry, index) => (
                 <Cell
