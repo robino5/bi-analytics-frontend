@@ -66,23 +66,31 @@ export default function TurnoverPerformanceDataTable({ records }: Props) {
             {records.map((record, index) => (
               <TableRow
                 key={record.name}
-                className={`${
-                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                } hover:bg-green-300 transition-all duration-300`}
+                className={index % 2 === 0 ? "bg-opacity-90" : "bg-opacity-70"}
               >
-                <TableCell className="font-medium py-1">
+                <TableCell className={`font-medium py-1 ${
+                    index % 2 === 0 ? "bg-purple-200" : "bg-purple-100"
+                  }`}>
                   {record.name}
                 </TableCell>
-                <TableCell className="text-right py-1">
+                <TableCell    className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
+                  }`}>
                   {numberToMillionsString(record.daily)}
                 </TableCell>
-                <TableCell className="text-right py-1">
+                <TableCell className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-green-200" : "bg-green-100"
+                  }`}>
                   {numberToMillionsString(record.weekly)}
                 </TableCell>
-                <TableCell className="text-right py-1">
+                <TableCell className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
+                  }`}>
                   {numberToMillionsString(record.forthnightly)}
                 </TableCell>
-                <TableCell className="text-right py-1">
+                <TableCell  className={`text-right py-1 ${
+                    index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
+                  }`}>
                   {numberToMillionsString(record.monthly)}
                 </TableCell>
               </TableRow>
