@@ -272,7 +272,7 @@ const RmPortfolioBoard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
-                <MarkedTraderDataTable records={redClients} />
+                <MarkedTraderDataTable records={redClients} clientType="red"/>
               </CardContent>
               <CardFooter></CardFooter>
             </Card>
@@ -286,7 +286,7 @@ const RmPortfolioBoard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
-                <MarkedTraderDataTable records={yellowClients} />
+                <MarkedTraderDataTable records={yellowClients} clientType="yellow"/>
               </CardContent>
               <CardFooter></CardFooter>
             </Card>

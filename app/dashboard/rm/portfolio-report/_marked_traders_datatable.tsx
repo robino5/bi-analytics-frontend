@@ -6,9 +6,10 @@ import { IMarkedClient } from "@/types/rmPortfolio";
 
 interface Props {
   records: IMarkedClient[];
+  clientType:string;
 }
 
-export default function MarkedTraderDataTable({ records }: Props) {
+export default function MarkedTraderDataTable({ records,clientType }: Props) {
   return (
     <table className="w-full overflow-y-auto text-sm text-left ">
       <thead className="text-xs uppercase ">
@@ -31,9 +32,9 @@ export default function MarkedTraderDataTable({ records }: Props) {
         {records?.map((record, index) => (
           <tr
             key={record.investorCode}
-            className={`${
-              index % 2 === 0 ? "bg-red-300" : "bg-red-400"
-            } hover:bg-red-200 transition-all duration-300`}
+            className={`${clientType=="red"?
+              (index % 2 === 0 ? "bg-red-300" : "bg-red-400"):(index % 2 === 0 ? "bg-yellow-300" : "bg-yellow-400")
+            } ${clientType=="red"?"hover:bg-red-100 transition-all duration-300":"hover:bg-yellow-100 transition-all duration-300"}`}
           >
             <td
               scope="row"
@@ -44,7 +45,7 @@ export default function MarkedTraderDataTable({ records }: Props) {
             <td className="px-6 py-2">{record.investorName}</td>
             <td
               className={cn("px-6 py-2", {
-                "text-red-500": record.ledgerBalance < 0,
+                "text-green-500": record.ledgerBalance < 0,
               })}
             >
               {numberToMillionsString(record.ledgerBalance)}

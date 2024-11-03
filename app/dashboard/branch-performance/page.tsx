@@ -12,6 +12,7 @@ import BranchWiseMarginDataTable from "./_branchwise_margin_datatable";
 import BranchWiseExposureDataTable from "./_branchwise_exposure_datatable";
 
 import { DataTableCard } from "./data-table";
+import {DataTableCardTurnover} from "./data-table-turnover"
 import { branchWiseFundColumns, branchWiseTurnoverColumns } from "./columns";
 import BranchFilter from "@/components/branchFilter";
 import { useEffect, useState } from "react";
@@ -182,7 +183,7 @@ export default function BranchPerformance() {
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
         {/* Branch Wise Turnover Status */}
-        <DataTableCard
+        <DataTableCardTurnover
           title="Branch Wise Turnover Status"
           subtitle="show data for branch wise turnover"
           className="col-span1 max-h[700px] overflow-y-auto lg:col-span-2 lg:row-span-2"
