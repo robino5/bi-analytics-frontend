@@ -25,7 +25,7 @@ const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
   return (
     <div
-      className={cn("text-center font-medium ", {
+      className={cn("text-right font-medium ", {
         "text-red-600": amount < 0,
       })}
     >
