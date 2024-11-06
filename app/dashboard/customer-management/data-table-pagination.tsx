@@ -26,12 +26,12 @@ export function DataTablePagination<TData>({
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex items-center space-x-2">
-        <p className="text-sm font-medium">Rows per page</p>
+        <p className="text-sm font-medium text-white">Rows per page</p>
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => table.setPageSize(Number(value))}
         >
-          <SelectTrigger className="h-8 w-[70px]">
+          <SelectTrigger className="h-8 w-[70px] bg-white">
             <SelectValue
               placeholder={`${table.getState().pagination.pageSize}`}
             />
@@ -61,7 +61,7 @@ export function DataTablePagination<TData>({
         >
           <ChevronLeftIcon />
         </Button>
-        <span>
+        <span className="text-white">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </span>
