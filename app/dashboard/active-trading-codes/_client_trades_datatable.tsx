@@ -42,9 +42,9 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         <CardTitle className="text-white">
           Channel Wise Clients & Trades (Today)
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of todays clients and trades
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table className="border border-gray-300 rounded-md overflow-hidden">

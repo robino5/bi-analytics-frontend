@@ -69,12 +69,12 @@ export default function EquityValueSegmentationChart({
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
-        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
+        <CardTitle className="text-white">{title}-{details.sumOfEquity.toLocaleString()}mn</CardTitle>
+        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
       </CardHeader>
-      <div className="text-center text-white text-lg">
+      {/* <div className="text-center text-white text-lg">
         <h5>Equity-{details.sumOfEquity} mn</h5>
-      </div>
+      </div> */}
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

@@ -45,9 +45,9 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
         <CardTitle className="text-white">
           Details SME-ATB market share of LBSL(Date:{datalist.tradingDate})
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the details SME-ATB market share of LBSL
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table className="min-w-[453px] border border-gray-300">
@@ -134,13 +134,13 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Share of DSE SME (%)
+                LBSL SME(%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.smePercent)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Share of DSE SME (%)
+                LBSL SME(%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseSmePercent)}
@@ -148,13 +148,13 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Share of DSE  ATB (%)
+                LBSL ATB(%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.atbPercent)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Share of DSE  ATB (%)
+                LBSL ATB(%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseAtbPercent)}
