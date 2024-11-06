@@ -47,9 +47,9 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
         <CardTitle className="text-white">
           Details market share of LBSL(Date:{datalist.tradingDate})
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the details market share of LBSL
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
@@ -80,13 +80,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300 w-1/4">
-                LBSL Buy of DSE
+                LBSL Buy
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300 w-1/4">
                 {numberToMillionsString(datalist.lbslBuyOfDse)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300 w-1/4">
-                LBSL Buy of CSE
+                LBSL Buy
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300 w-1/4">
                 {numberToMillionsString(datalist.lbslBuyOfCse)}
@@ -94,13 +94,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Sell of DSE
+                LBSL Sell
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.lbslSaleOfDse)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Sell of CSE
+                LBSL Sell
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.lbslSaleOfCse)}
@@ -108,13 +108,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Total of DSE
+                LBSL Total
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.lbslTotalOfDse)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Total of CSE
+                LBSL Total
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.lbslTotalOfCse)}
@@ -122,13 +122,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
-                DSE Market Turnover
+                Market Turnover
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.dseMarketTurnover)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300">
-                CSE Market Turnover
+                Market Turnover
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseMarketTurnover)}
@@ -136,13 +136,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Share of DSE (%)
+                LBSL Share(%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.lbslShareOfDse)}
               </TableCell>
               <TableCell className="text-left py-1 border border-gray-300">
-                LBSL Share of CSE (%)
+                LBSL Share(%)
               </TableCell>
               <TableCell className="text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.lbslShareOfCse)}

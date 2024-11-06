@@ -27,9 +27,12 @@ const removeKeyFromObjects = (data: any[], ignoreKey: string) => {
 
 export type DataType = {
   tradingDate: string;
-  DT: number;
-  INTERNET: number;
+  dt: number;
+  internet: number;
+  dtRatio: number;
+  internetRatio: number;
 };
+
 
 function sortByMonthYearDescending(data: DataType[]) {
   // Create a function to map month names to numbers

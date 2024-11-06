@@ -56,12 +56,12 @@ export default function ClientSegmentationChart({
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
-        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
+        <CardTitle className="text-white">{title}-{details.sumOfClients.toLocaleString()}</CardTitle>
+        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
       </CardHeader>
-      <div className="text-center text-white text-lg">
+      {/* <div className="text-center text-white text-lg">
         <h5>Client Segmentation-{details.sumOfClients}</h5>
-      </div>
+      </div> */}
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
