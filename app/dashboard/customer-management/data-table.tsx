@@ -101,10 +101,10 @@ export function DialogDataTable<TData, TValue>({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[788px] max-h-[600px] overflow-auto">
+      <DialogContent className="sm:max-w-[788px] max-h-[600px] overflow-auto bg-[#0e5e6f]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{subtitle}</DialogDescription>
+          <DialogTitle className="text-white">{title}</DialogTitle>
+          {/* <DialogDescription>{subtitle}</DialogDescription> */}
         </DialogHeader>
 
         <div className="space-y-4">
@@ -113,9 +113,9 @@ export function DialogDataTable<TData, TValue>({
             <Table>
               <TableHeader className="text-center">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
+                  <TableRow key={headerGroup.id} className="bg-blue-500 hover:bg-blue-700">
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} colSpan={header.colSpan}>
+                      <TableHead key={header.id} colSpan={header.colSpan} className="text-white font-bold">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -130,14 +130,17 @@ export function DialogDataTable<TData, TValue>({
 
               <TableBody>
                 {table.getRowModel().rows.length ? (
-                  table.getRowModel().rows.map((row) => (
+                  table.getRowModel().rows.map((row,index) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
+                      className={`${
+                        index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                      } hover:bg-green-300 transition-all duration-300`}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
-                          className="p-1 text-[0.8rem] text-center"
+                          className="p-1 text-[0.8rem]"
                           key={cell.id}
                         >
                           {flexRender(
