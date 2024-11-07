@@ -125,9 +125,6 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
   );
 };
 
-const tickDateFormatter = (date: string) => {
-  return formatDate(new Date(date));
-};
 
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
   const TICK_COLOR = "#C7C7C7";
@@ -156,7 +153,6 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
             fill: "white",
           }}
           tickLine={true}
-          tickFormatter={tickDateFormatter}
         />
         <YAxis
           yAxisId={"left"}
