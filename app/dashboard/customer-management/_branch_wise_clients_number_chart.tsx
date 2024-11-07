@@ -39,8 +39,8 @@ export default function BranchWiseClientsNumberChart({
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
-        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
+        <CardTitle className="text-white">{title}-{details.sumOfClients.toLocaleString()}mn</CardTitle>
+        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
         <div className="text-end">
           <DialogDataTable
             columns={branchWiseClintsNumber}
@@ -51,9 +51,9 @@ export default function BranchWiseClientsNumberChart({
           />
         </div>
       </CardHeader>
-      <div className="text-center text-white text-lg">
-        <h5>Branch Wise Client-{details.sumOfClientsPercentage}%</h5>
-      </div>
+      {/* <div className="text-center text-white text-lg">
+        <h5>Branch Wise Client-{details.sumOfClients}%</h5>
+      </div> */}
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -77,7 +77,7 @@ export default function BranchWiseClientsNumberChart({
               stroke="#8884d8"
               travellerWidth={10}
             />
-            <Bar yAxisId="left" dataKey="totalClients" fill="red">
+            <Bar yAxisId="left" dataKey="totalClients" fill="#f27373">
               <LabelList
                 dataKey="totalClients"
                 position="top"
@@ -90,7 +90,8 @@ export default function BranchWiseClientsNumberChart({
               yAxisId="right"
               type="monotone"
               dataKey="totalClientPercentage"
-              stroke="yellow"
+              stroke="#1ac1d6"
+              strokeWidth={2}
               dot={{ r: 4 }}
             />
           </ComposedChart>

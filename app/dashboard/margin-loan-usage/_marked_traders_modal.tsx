@@ -33,13 +33,13 @@ export function MarkedTradersZoneWise({ name, branch }: MarkedTraderProps) {
         </DialogTrigger>
       ) : null}
       <DialogContent
-        className={cn("sm:max-w-[700px] max-h-[600px] overflow-auto", {})}
+        className={cn("sm:max-w-[700px] max-h-[600px] overflow-auto bg-[#0e5e6f]" , {})}
       >
         <DialogHeader>
-          <DialogTitle>{`${name.toUpperCase()} TRADERS`}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-white">{`${name.toUpperCase()} TRADERS`}</DialogTitle>
+          {/* <DialogDescription>
             {`all the ${name} traders list.`}
-          </DialogDescription>
+          </DialogDescription> */}
         </DialogHeader>
         <MarkedTraderDataTable kind={name} branch={branch} />
         <DialogFooter>

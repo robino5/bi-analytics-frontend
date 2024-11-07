@@ -40,8 +40,8 @@ export default function BranchWiseNonPerformerClientsChart({
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
-        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
+        <CardTitle className="text-white">{title}-{details.sumOfClients.toLocaleString()}</CardTitle>
+        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
         <div className="text-end">
           <DialogDataTable
             columns={branchWiseNonPerformerClints}
@@ -52,9 +52,9 @@ export default function BranchWiseNonPerformerClientsChart({
           />
         </div>
       </CardHeader>
-      <div className="text-center text-white text-lg">
-        <h5>Non-Performer Clients as on 2018-Nos{details.sumOfClients}</h5>
-      </div>
+      {/* <div className="text-center text-white text-lg">
+        <h5>Non-Performer Clients as on 2018-Nos{details.sumOfClients.toLocaleString()}</h5>
+      </div> */}
       <CardContent style={{ height: "500px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -78,7 +78,7 @@ export default function BranchWiseNonPerformerClientsChart({
               stroke="#8884d8"
               travellerWidth={10}
             />
-            <Bar yAxisId="left" dataKey="totalClients" fill="Yellow">
+            <Bar yAxisId="left" dataKey="totalClients" fill="#1ac1d6">
               <LabelList
                 dataKey="totalClients"
                 position="top"

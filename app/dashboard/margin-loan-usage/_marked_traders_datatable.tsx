@@ -73,29 +73,31 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-auto">Code</TableHead>
-          <TableHead className="text-right">Investor Name</TableHead>
-          <TableHead className="text-right">Ledger Balance</TableHead>
-          <TableHead className="text-right">RM</TableHead>
+        <TableRow className="bg-blue-500 hover:bg-blue-700">
+          <TableHead className="w-auto text-white font-bold">Code</TableHead>
+          <TableHead className="text-left text-white font-bold">Investor Name</TableHead>
+          <TableHead className="text-right text-white font-bold">Ledger Balance</TableHead>
+          <TableHead className="text-right text-white font-bold">RM</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {records.map((record) => (
+        {records.map((record,index) => (
           <TableRow
             key={record.investorCode}
-            className="odd:bg-muted even:bg-gradient"
+            className={`${
+              index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+            } hover:bg-green-300 transition-all duration-300`}
           >
             <TableCell className="font-medium py-1">
               {record.investorCode}
             </TableCell>
-            <TableCell className="py-1 text-right">
+            <TableCell className="py-1 text-left">
               {record.investorName}
             </TableCell>
             <TableCell className="py-1 text-right">
               {numberToMillionsString(record.ledgerBalance)}
             </TableCell>
-            <TableCell className="py-1 text-right">{record.rmName}</TableCell>
+            <TableCell className="py-1 text-left">{record.rmName}</TableCell>
           </TableRow>
         ))}
       </TableBody>

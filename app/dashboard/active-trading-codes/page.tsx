@@ -29,7 +29,10 @@ export type DataType = {
   tradingDate: string;
   dt: number;
   internet: number;
+  dtRatio: number;
+  internetRatio: number;
 };
+
 
 function sortByMonthYearDescending(data: DataType[]) {
   // Create a function to map month names to numbers

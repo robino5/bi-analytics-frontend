@@ -49,9 +49,9 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
         <CardTitle className="text-white">
           Main Board Wise Turnover Breakdown{" "}
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the board wise turnover breakdown
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">

@@ -356,7 +356,7 @@ export default function CustomerManagement() {
         ) : null}
         {lbslTurnoverSegmentation ? (
           <LBSLTurnOverSegmentationChart
-            title="LBSL TurnOver segmentation ( Customer wise)"
+            title="LBSL TurnOver (Customer wise)"
             subtitle="Showing data for lbsl turnOver segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={lbslTurnoverSegmentation as any}
@@ -366,7 +366,7 @@ export default function CustomerManagement() {
         ) : null}
         {equityValueSegmentation ? (
           <EquityValueSegmentationChart
-            title="Equity Value segmentation ( Customer wise)"
+            title="Equity Value (Customer wise)"
             subtitle="Showing data for equity value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={equityValueSegmentation as any}
@@ -376,7 +376,7 @@ export default function CustomerManagement() {
         ) : null}
         {ledgerValueSegmentation ? (
           <LedgerValueSegmentationChart
-            title="Ledger Value segmentation ( Customer wise)"
+            title="Ledger Value (Customer wise)"
             subtitle="Showing data for ledger value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={ledgerValueSegmentation as any}
@@ -386,7 +386,7 @@ export default function CustomerManagement() {
         ) : null}
         {portfolioValueSegmentation ? (
           <PortfolioValueSegmentationChart
-            title="Portfolio Value segmentation ( Customer wise)"
+            title="Portfolio Value (Customer wise)"
             subtitle="Showing data for portfolio value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={portfolioValueSegmentation as any}

@@ -39,7 +39,7 @@ export default function DetailsMarketShareLBSLChart({
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
         <CardTitle className="text-white">{title}</CardTitle>
-        <p className="text-sm text-muted-foreground text-white">{subtitle}</p>
+        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
         <div className="text-end">
           <DialogDataTable
             columns={detailsMarketShareLBSL}
@@ -85,20 +85,20 @@ export default function DetailsMarketShareLBSLChart({
             <YAxis tick={{ fill: "white" }} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="turnoverDse" fill="orange">
+            <Bar dataKey="turnoverDse" fill="#ff7f50">
               <LabelList
                 dataKey="turnoverDse"
                 position="top"
                 angle={-90}
-                style={{ fill: "yellow", fontSize: 12 }}
+                style={{ fill: "#e0f7fa", fontSize: 12 }}
               />
             </Bar>
-            <Bar dataKey="turnoverLbsl" fill="Pink">
+            <Bar dataKey="turnoverLbsl" fill="#4db6ac">
               <LabelList
                 dataKey="turnoverLbsl"
                 position="top"
                 angle={-90}
-                style={{ fill: "red", fontSize: 12 }}
+                style={{ fill: "#e0f7fa", fontSize: 12 }}
               />
             </Bar>
             <Brush dataKey="month" height={30} stroke="#8884d8" />

@@ -67,23 +67,24 @@ export const SalableStockPercentage: ColumnDef<SelableStockPercentage>[] = [
     ),
   },
   {
-    accessorKey: "stockAvailablePercentage",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Stock(%)" />
-    ),
-    cell: ({ row }) => {
-      return cellNumberFormatter(row, "stockAvailablePercentage");
-    },
-  },
-  {
     accessorKey: "stockAvailable",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Saleable Qty" />
+      <DataTableColumnHeader column={column} title="Qty" />
     ),
     cell: ({ row }) => {
       return cellNumberFormatter(row, "stockAvailable");
     },
   },
+  {
+    accessorKey: "stockAvailablePercentage",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="(%)" />
+    ),
+    cell: ({ row }) => {
+      return cellNumberFormatter(row, "stockAvailablePercentage");
+    },
+  },
+ 
 ];
 
 export const InvestorWiseSalableStock: ColumnDef<InvestorWiseTotalSelableStock>[] =
