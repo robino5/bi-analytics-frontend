@@ -144,7 +144,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
                         <TableHead
                           key={header.id}
                           colSpan={header.colSpan}
-                          className="text-white font-bold"
+                          className="text-white font-bold border"
                         >
                           {header.isPlaceholder
                             ? null
@@ -157,7 +157,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
                     </TableRow>
                   ))}
                 </TableHeader>
-                <TableBody>
+                <TableBody className="border border-gray-200">
                   {loading ? (
                     <TableRow>
                       <TableCell
@@ -176,7 +176,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
                         } hover:bg-green-300 transition-all duration-300`}
                       >
                         {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
+                          <TableCell key={cell.id} className="p-1 text-[0.8rem] border">
                             {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
