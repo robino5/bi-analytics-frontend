@@ -82,7 +82,7 @@ const CustomTooltip = ({
           boxShadow: "1px 2px 10px -2px #7873ffb1",
         }}
       >
-        <p>{label}</p>
+        <p className="text-white">{label}</p>
         <Separator className="border-gray-500" />
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;

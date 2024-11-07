@@ -77,7 +77,7 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
           boxShadow: "1px 2px 10px -2px #7873ffb1",
         }}
       >
-        <p>{label}</p>
+        <p className="text-white">{label}</p>
         <Separator className="border-gray-500" />
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;
@@ -125,9 +125,6 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
   );
 };
 
-const tickDateFormatter = (date: string) => {
-  return formatDate(new Date(date));
-};
 
 const BarChart: FC<BarChartProps> = ({ data, option }) => {
   const TICK_COLOR = "#C7C7C7";
@@ -156,7 +153,6 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
             fill: "white",
           }}
           tickLine={true}
-          tickFormatter={tickDateFormatter}
         />
         <YAxis
           yAxisId={"left"}
