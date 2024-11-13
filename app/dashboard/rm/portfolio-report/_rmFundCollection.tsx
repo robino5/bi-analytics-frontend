@@ -35,9 +35,9 @@ export default function RMFundCollectionTable({ records }: Props) {
     <Card className="col-span-4 overflow-auto bg-[#0e5e6f]">
       <CardHeader>
         <CardTitle className="text-white">Fund Collection Status</CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of RM Fund Collection Status
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

@@ -52,9 +52,9 @@ export default function ExposureControllingDataTable({
         <CardTitle className="text-white">
           Exposure Controlling & Management
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           excluding negative equity clients
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

@@ -34,9 +34,9 @@ export default function PortfolioManagementStatusDataTable({ records }: Props) {
         <CardTitle className="text-white">
           Portfolio Management Status
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the portfolio
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

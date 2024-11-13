@@ -34,9 +34,9 @@ export default function MarginLoanAllocationDataTable({
         <CardTitle className="text-white">
           Margin Loan Allocation & Usage
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the margin loan allocation & usage
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

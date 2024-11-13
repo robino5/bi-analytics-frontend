@@ -37,9 +37,9 @@ export default function TurnoverPerformanceDataTable({ records }: Props) {
         <CardTitle className="text-slate-600 text-white">
           Turnover Performance
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the portfolio
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

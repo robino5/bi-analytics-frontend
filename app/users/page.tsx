@@ -114,10 +114,10 @@ const Users = () => {
         <Card className="p-4 space-y-4 bg-[#0e5e6f]">
           <CardHeader className="relative">
             <div>
-              <CardTitle className="text-white">Users</CardTitle>
-              <CardDescription className="text-white">
+              <CardTitle className="text-white">Manage access control of users</CardTitle>
+              {/* <CardDescription className="text-white">
                 Manage access control of users
-              </CardDescription>
+              </CardDescription> */}
             </div>
             <div className="absolute top-0 right-0 flex gap-4">
               <div className="mb-4">

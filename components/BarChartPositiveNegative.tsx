@@ -64,7 +64,7 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
       fontSize="14"
       fontWeight={600}
       fontFamily="sans-serif"
-      fill={LABEL_COLOR}
+      fill="white"
       textAnchor="top"
     >
       {numberToMillionsString(value)}

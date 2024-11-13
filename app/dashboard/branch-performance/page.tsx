@@ -197,9 +197,9 @@ export default function BranchPerformance() {
             <CardTitle className="text-white">
               Branch Wise Margin Status
             </CardTitle>
-            <CardDescription className="text-white">
+            {/* <CardDescription className="text-white">
               shows the grid for margin status
-            </CardDescription>
+            </CardDescription> */}
           </CardHeader>
           <CardContent>
             <BranchWiseMarginDataTable records={branchWiseMargin} />
@@ -212,9 +212,9 @@ export default function BranchPerformance() {
             <CardTitle className="text-white">
               Branch Wise Exposure Status
             </CardTitle>
-            <CardDescription className="text-white">
+            {/* <CardDescription className="text-white">
               shows the grid for exposure status
-            </CardDescription>
+            </CardDescription> */}
           </CardHeader>
           <CardContent>
             <BranchWiseExposureDataTable records={branchWiseExposure} />

@@ -246,7 +246,7 @@ const RmPortfolioBoard = () => {
           <CardBoard
             className="lg:col-span-3"
             title="Daily Net Fund Flow"
-            subtitle="short summary of the portfolio"
+            // subtitle="short summary of the portfolio"
             children={
               <BarChartPositiveNegative
                 data={netFundFlow as any}
@@ -266,10 +266,10 @@ const RmPortfolioBoard = () => {
           <TabsContent value="red">
             <Card className="bg-[#0e5e6f]">
               <CardHeader>
-                <CardTitle className="text-white">Red</CardTitle>
-                <CardDescription className="text-white">
+                <CardTitle className="text-white">Red Clients</CardTitle>
+                {/* <CardDescription className="text-white">
                   red clients details
-                </CardDescription>
+                </CardDescription> */}
               </CardHeader>
               <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
                 <MarkedTraderDataTable records={redClients} clientType="red"/>
@@ -280,10 +280,10 @@ const RmPortfolioBoard = () => {
           <TabsContent value="yellow">
             <Card className="bg-[#0e5e6f]">
               <CardHeader>
-                <CardTitle className="text-white">Yellow</CardTitle>
-                <CardDescription className="text-white">
+                <CardTitle className="text-white">Yellow Clients</CardTitle>
+                {/* <CardDescription className="text-white">
                   yellow clients details
-                </CardDescription>
+                </CardDescription> */}
               </CardHeader>
               <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
                 <MarkedTraderDataTable records={yellowClients} clientType="yellow"/>
