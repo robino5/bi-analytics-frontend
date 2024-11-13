@@ -239,9 +239,9 @@ export default function MarginLoanUsage() {
         <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-[#0e5e6f]">
           <CardHeader>
             <CardTitle className="text-white">RM Wise Net Trade</CardTitle>
-            <CardDescription className="text-white">
+            {/* <CardDescription className="text-white">
               Net Trade for Regional Managers
-            </CardDescription>
+            </CardDescription> */}
           </CardHeader>
           <CardContent>
             <NetTradeTable

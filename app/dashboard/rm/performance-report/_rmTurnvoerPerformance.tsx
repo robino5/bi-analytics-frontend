@@ -35,9 +35,9 @@ export default function RMTurnoverPerformance({ records }: Props) {
     <Card className="col-span-6 overflow-auto rounded-md shadow-md bg-[#0e5e6f]">
       <CardHeader>
         <CardTitle className="text-white">Turnover Performance</CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of RM Turnover Performance
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

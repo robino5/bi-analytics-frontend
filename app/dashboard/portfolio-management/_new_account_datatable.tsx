@@ -37,9 +37,9 @@ export default function NewAccountOpeningDataTable({ accounts }: Props) {
         <CardTitle className="text-white">
           New Account Opening & Fund Collection
         </CardTitle>
-        <CardDescription className="text-white">
+        {/* <CardDescription className="text-white">
           short summary of the portfolio
-        </CardDescription>
+        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <Table>

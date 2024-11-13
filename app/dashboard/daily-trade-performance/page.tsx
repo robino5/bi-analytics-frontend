@@ -377,7 +377,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Summary"
-            subtitle="overview of clients, turnover, net buy/sell"
+            // subtitle="overview of clients, turnover, net buy/sell"
             boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCardClientTurnoverSummary
@@ -392,7 +392,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Cash Code Status"
-            subtitle="overview of cash codes"
+            // subtitle="overview of cash codes"
             boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
@@ -405,7 +405,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Margin Code Status"
-            subtitle="overview of margin codes"
+            // subtitle="overview of margin codes"
             boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
@@ -434,7 +434,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Margin Loan Usage"}
-            subtitle="analytics of Total Allocated vs Daily Usage"
+            // subtitle="analytics of Total Allocated vs Daily Usage"
             children={
               <BarChartVerticalGrouped
                 data={marginLoanUsage as any}
@@ -449,7 +449,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
             title="Sector Exposure Margin Code"
-            subtitle="Shows analytics of marginal performance for comodities"
+            // subtitle="Shows analytics of marginal performance for comodities"
             children={
               <BarChartHorizontal
                 data={marginCodeExposure}
@@ -464,7 +464,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
             title="Sector Exposure Cash Code"
-            subtitle="Shows analytics of marginal performance for comodities"
+            // subtitle="Shows analytics of marginal performance for comodities"
             children={
               <BarChartHorizontal
                 data={cashCodeExposure}

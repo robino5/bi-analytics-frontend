@@ -114,11 +114,12 @@ const CustomizedLabel: FC<CustomizedLabelProps> = ({
     <text
       x={x}
       y={y}
-      dy={-4}
-      fontSize="16"
+      dy={10}
+      fontSize="14"
       fontFamily="sans-serif"
-      fill={fill}
-      textAnchor="middle"
+      fontWeight={600}
+      fill={"white"}
+      textAnchor="top"
     >
       {numberToMillionsString(value)}
     </text>
@@ -135,7 +136,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
 
   return (
     <ResponsiveContainer height={option?.height ?? 300} width="100%">
-      <RechartsBarChart data={data}>
+      <RechartsBarChart data={data} >
         <CartesianGrid
           strokeDasharray={"1 3"}
           stroke={CARTESIAN_GRID_COLOR}

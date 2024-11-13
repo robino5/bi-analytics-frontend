@@ -155,9 +155,9 @@ const RmPerformanceBoard = () => {
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader>
               <CardTitle className="text-white">Client Details</CardTitle>
-              <CardDescription className="text-white">
+              {/* <CardDescription className="text-white">
                 Client Details for Regional Managers
-              </CardDescription>
+              </CardDescription> */}
             </CardHeader>
             <CardContent>
               <RMClientsDataTable

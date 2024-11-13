@@ -98,7 +98,7 @@ export function DataTableCardTurnover<TData, TValue>({
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader>
         <CardTitle className="text-white">{title}</CardTitle>
-        <CardDescription className="text-white">{subtitle}</CardDescription>
+        {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
