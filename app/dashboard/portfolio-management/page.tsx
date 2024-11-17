@@ -350,7 +350,7 @@ export default function PortfolioManagement() {
         {/* Daily Net Fund Flow Chart */}
         {netFundFlow ? (
           <CardBoard
-            className="col-span-2"
+            className="col-span-3"
             title="Daily Net Fund Flow"
             // subtitle="short summary of the portfolio"
             children={
@@ -364,7 +364,7 @@ export default function PortfolioManagement() {
 
         {/* Client Trade vs Turnover Chart */}
         <CardBoard
-          className="lg:col-span-4"
+          className="lg:col-span-3"
           title="Clients Trade vs Turnover"
           // subtitle="analysis of total clients traded vs lsbl turnover"
           children={
