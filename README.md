@@ -81,20 +81,20 @@ Include conf/extra/httpd-frontend.conf
 httpd.exe -k start
 ```
 
-# FOR FRONTEND
-
 ## Install pm2 (Required for Final Deployment)
 1. Install the PM2 package using the [link](https://pm2.keymetrics.io/docs/usage/quick-start/).
 
-# Steps to Complete for Frontend
+## Steps to Complete for Frontend
 
-### Step 1: place the given `apache-vhosts.conf` file given in `frontend` directory.
-### Step 2: navigate into the frontend directory and run below commands.
+- Step 1: place the given `httpd-frontend.conf` file given in `frontend` directory.
+- Step 2: navigate into the frontend directory and run below commands.
 ```bash
 npm i
+npm run build
 pm2 start pm2.json
 ```
-### Step 3: Restart the Apache Service with below Command
+
+-  Step 3: Restart the Apache Service with below Command
 ```bash
 httpd.exe -k restart
 ```
