@@ -31,6 +31,8 @@ import {
   SalableStockPercentage,
   InvestorWiseSalableStock,
 } from "./columns";
+import { redirect } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export default function BusinessAndTradeManagement() {
   const { data: session } = useSession();
@@ -60,6 +62,9 @@ export default function BusinessAndTradeManagement() {
             },
           },
         );
+        if (response.status === 401) {
+          return redirect(DEFAULT_LOGIN_REDIRECT);
+        }
         const result = (await response.json()) as IResponse<
           BoardWiseTurnoverData[]
         >;
