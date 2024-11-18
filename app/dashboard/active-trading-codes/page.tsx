@@ -14,6 +14,7 @@ import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { getHeaderDate } from "@/lib/utils";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 
 export const metadata: Metadata = {
@@ -198,7 +199,7 @@ const ActiveTradingCodesBoard = async () => {
   const session = await auth();
 
   if (!session) {
-    redirect("/auth/login");
+    return redirect(DEFAULT_LOGIN_REDIRECT);
   }
 
   const dayWiseSummary = await getClientTradeSummaryOfToday(session);

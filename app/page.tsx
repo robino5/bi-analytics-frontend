@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import {
   DEFAULT_ADMIN_REDIRECT,
   DEFAULT_MANAGEMENT_REDIRECT,
