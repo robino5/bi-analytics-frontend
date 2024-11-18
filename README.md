@@ -73,6 +73,17 @@ This guide will help you install Apache HTTP Server 2.4 on your Windows Server m
 Include conf/extra/httpd-frontend.conf
 ```
 
+7. Uncomment the root `httpd.conf` for below line
+
+```
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule env_module modules/mod_env.so
+LoadModule headers_module modules/mod_headers.so
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule setenvif_module modules/mod_setenvif.so
+```
+
 ## Step 4: Start Apache Server
 1. Open Command Prompt with administrative privileges by searching for "cmd" in the Start menu, right-clicking on it, and selecting "Run as administrator".
 2. Navigate to the "bin" folder within the Apache directory using the `cd` command.
