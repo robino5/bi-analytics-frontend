@@ -15,6 +15,7 @@ import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { getHeaderDate } from "@/lib/utils";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { apiGet } from "@/lib/apiService";
 
 
 export const metadata: Metadata = {
@@ -67,24 +68,11 @@ function sortByMonthYearDescending(data: DataType[]) {
   });
 }
 
-const getClientTradeSummaryOfToday: (
-  session: Session,
-) => Promise<IActiveTradingToday[]> = async (session: Session) => {
-  const response = await fetch(
+const getClientTradeSummaryOfToday = async (session: Session) => {
+  return apiGet<IActiveTradingToday[]>(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-today/`,
-    {
-      headers: {
-        Authorization: `Bearer ${session.user.accessToken}`,
-        "Content-Type": "application/json",
-      },
-    },
+    session,
   );
-
-  if (response.status !== 200) {
-    console.error(response.statusText);
-  }
-  const data: IResponse<IActiveTradingToday[]> = await response.json();
-  return data.data;
 };
 
 type TransformedDataItem = {
@@ -93,45 +81,19 @@ type TransformedDataItem = {
   internet: number;
 };
 
-const getDayWiseStatistics: (
-  session: Session,
-) => Promise<IActiveTradeDayWise[]> = async (session: Session) => {
-  const response = await fetch(
+const getDayWiseStatistics = async (session: Session) => {
+  return apiGet<IActiveTradeDayWise[]>(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-daywise/`,
-    {
-      headers: {
-        Authorization: `Bearer ${session.user.accessToken}`,
-        "Content-Type": "application/json",
-      },
-    },
+    session,
   );
-
-  if (response.status !== 200) {
-    console.error(response.statusText);
-  }
-  const data: IResponse<IActiveTradeDayWise[]> = await response.json();
-  return data.data;
 };
 
-const getMonthWiseStatistics: (
-  session: Session,
-) => Promise<IMonthWiseData> = async (session: Session) => {
-  const response = await fetch(
+const getMonthWiseStatistics = async (session: Session) => {
+  return apiGet<IMonthWiseData>(
     `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/active-trading-monthwise/`,
-    {
-      headers: {
-        Authorization: `Bearer ${session.user.accessToken}`,
-        "Content-Type": "application/json",
-      },
-    },
+    session,
   );
-
-  if (response.status !== 200) {
-    console.error(response.statusText);
-  }
-  const data: IResponse<IMonthWiseData> = await response.json();
-  return data.data;
-};
+}
 
 const transformData = (
   data: IActiveTradeDayWise[],
