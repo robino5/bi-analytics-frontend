@@ -11,7 +11,7 @@ const Statistics: FC<StatisticsProps> = ({ label, value }) => {
     <div className="statistics text-center">
       <div className="text-[0.8rem] text-neutral-500 text-white">{label}</div>
       <div
-        className={cn("text-xl text-neutral-700 font-bold text-white", {
+        className={cn("text-[.9rem] text-neutral-700 font-bold text-white", {
           "text-red-500": value < 0,
         })}
       >
