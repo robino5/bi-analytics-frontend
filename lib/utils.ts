@@ -76,9 +76,14 @@ export function successResponse(key: string): boolean {
   return key === "success";
 }
 
-export function getHeaderDate(from: any, key: string): string {
-  if (from) {
-    return from[key];
+/**
+ * @deprecated Use the new `getFormattedHeaderDate` function instead.
+ * This function will be removed in future releases.
+ */
+export function getHeaderDate<T extends Record<string, any>>(from: T | null | undefined, key: keyof T): string {
+  if (from && key in from) {
+    const value = from[key];
+    return typeof value === 'string' ? value : String(value); // Ensure the value is converted to a string.
   }
   return "";
 }

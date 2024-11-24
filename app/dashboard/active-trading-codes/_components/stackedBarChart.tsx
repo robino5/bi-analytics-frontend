@@ -104,9 +104,9 @@ const CustomTooltip = ({ active, payload, ...rest }: CustomTooltipProps) => {
         }}
       >
         <p
-        style={{
-          color: "white",
-        }}
+          style={{
+            color: "white",
+          }}
         >{rest.label}</p>
         {payload.map((pld: PayloadType) => {
           const innerPayload = pld.payload;

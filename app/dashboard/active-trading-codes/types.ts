@@ -1,3 +1,23 @@
+export type DataType = {
+    tradingDate: string;
+    dt: number;
+    internet: number;
+    dtRatio: number;
+    internetRatio: number;
+};
+
+export type TransformedDataItem = {
+    tradingDate: string;
+    dt: number;
+    internet: number;
+};
+
+export type PayloadType = {
+    monthYear: string;
+    DT: number;
+    INTERNET: number;
+}
+
 export interface IActiveTradingToday {
     channel: "DT" | "INTERNET" | "TOTAL (DT+INTERNET)";
     totalClients: number;
@@ -13,12 +33,6 @@ export interface IActiveTradeDayWise {
     trades: number;
     totalTurnover: number;
 };
-
-export type PayloadType = {
-    monthYear: string;
-    DT: number;
-    INTERNET: number;
-}
 
 
 export interface IMonthWiseData {
