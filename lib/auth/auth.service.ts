@@ -8,33 +8,17 @@ export class AuthService {
         return localStorage.getItem('token');
     }
 
-    getRefreshToken() {
-        return localStorage.getItem('refreshToken');
-    }
-
     setToken(token: string) {
         localStorage.setItem('token', token);
         this.listners.forEach((listner) => listner(token));
     }
 
-    setRefreshToken(token: string) {
-        localStorage.setItem('refreshToken', token);
-    }
-
-    setTokens(token: string, refreshToken: string) {
-        this.setToken(token);
-        this.setRefreshToken(refreshToken);
-    }
-
     removeTokens() {
         localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
         localStorage.removeItem('refreshToken');
         this.listners.forEach((listner) => listner(null));
     }
-
-    removeAppCookies(name: string) {
-    }
-
 }
 
 export const authService = new AuthService();

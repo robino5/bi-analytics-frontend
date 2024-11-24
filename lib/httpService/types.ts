@@ -12,6 +12,3 @@ export type HttpServiceConfig = {
     onLoading?: (status: 'start' | 'error' | 'complete') => void;
 };
 
-export type RefreshTokenResponse = {
-    access_token: string;
-};
