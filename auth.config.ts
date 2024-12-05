@@ -1,6 +1,9 @@
 import type { NextAuthConfig } from "next-auth";
 import CredendialProvider from "next-auth/providers/credentials";
 import { LoginSchema } from "@/app/schemas";
+import { cookies } from "next/headers";
+
+
 
 type LoginResponse = {
   status: string;
@@ -15,6 +18,9 @@ type LoginResponse = {
     email?: string;
     role: string;
     branchId: string | null;
+    accessToken: string;
+    refreshToken: string;
+    expires: number;
   };
 };
 
@@ -62,6 +68,8 @@ const credentialProvider = CredendialProvider({
       if (Number.parseInt(response.code) !== 200) {
         return null;
       }
+      cookies().set("accessToken", response.data?.accessToken, { httpOnly: true })
+      cookies().set("expiresAt", response.data?.expires.toString(), { httpOnly: true })
       return response.data;
     }
     return null;

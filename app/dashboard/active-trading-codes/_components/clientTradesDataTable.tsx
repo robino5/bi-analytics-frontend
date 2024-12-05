@@ -2,7 +2,6 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardDescription,
   CardTitle,
 } from "@/components/ui/card";
 
@@ -17,7 +16,7 @@ import {
 
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import { IActiveTradingToday } from "@/types/activeTradingCodes";
+import { IActiveTradingToday } from "../types";
 
 interface Props {
   records: IActiveTradingToday[];
@@ -68,9 +67,8 @@ export default function ClientTradesDataTable({ records, className }: Props) {
             {records.map((record, index) => (
               <TableRow
                 key={record.channel}
-                className={`${
-                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                } hover:bg-green-300 transition-all duration-300`}
+                className={`${index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                  } hover:bg-green-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-2">
                   {record.channel}

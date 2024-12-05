@@ -7,6 +7,7 @@ import { signIn, signOut } from "@/auth";
 import { LoginSchema } from "@/app/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { cookies } from "next/headers";
 
 export const login = async (payload: z.infer<typeof LoginSchema>) => {
   const validatedFormFields = LoginSchema.safeParse(payload);
@@ -41,5 +42,7 @@ export const login = async (payload: z.infer<typeof LoginSchema>) => {
 };
 
 export const logoutAction = async () => {
+  (await cookies()).delete("accessToken");
+  (await cookies()).delete("expiresAt");
   await signOut();
 };
