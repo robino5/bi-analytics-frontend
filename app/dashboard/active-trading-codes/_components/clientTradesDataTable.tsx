@@ -37,8 +37,8 @@ export default function ClientTradesDataTable({ records, className }: Props) {
     <Card
       className={cn("overflow-auto drop-shadow-md", className, "bg-[#0e5e6f]")}
     >
-      <CardHeader>
-        <CardTitle className="text-white">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2">
+        <CardTitle className="text-white text-md text-lg">
           Channel Wise Clients & Trades (Today)
         </CardTitle>
         {/* <CardDescription className="text-white">
@@ -46,19 +46,19 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         </CardDescription> */}
       </CardHeader>
       <CardContent>
-        <Table className="border border-gray-300 rounded-md overflow-hidden">
+        <Table className="border border-gray-300 rounded-md overflow-hidden mt-2">
           <TableHeader>
-            <TableRow className="bg-blue-500 hover:bg-blue-700">
-              <TableHead className="w-[200px] text-white font-bold py-2">
+            <TableRow className="bg-yellow-200 hover:bg-yellow-200">
+              <TableHead className="w-[200px] text-black font-bold py-2">
                 Channel
               </TableHead>
-              <TableHead className="text-white font-bold py-2">
+              <TableHead className="text-black font-bold py-2">
                 Total Client
               </TableHead>
-              <TableHead className="text-white font-bold py-2">
+              <TableHead className="text-black font-bold py-2">
                 Trades
               </TableHead>
-              <TableHead className="text-right text-white font-bold py-2">
+              <TableHead className="text-right text-black font-bold py-2">
                 Turnover
               </TableHead>
             </TableRow>
@@ -67,8 +67,8 @@ export default function ClientTradesDataTable({ records, className }: Props) {
             {records.map((record, index) => (
               <TableRow
                 key={record.channel}
-                className={`${index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                  } hover:bg-green-300 transition-all duration-300`}
+                className={`${index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
+                  } hover:bg-yellow-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-2">
                   {record.channel}
