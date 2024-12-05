@@ -24,7 +24,7 @@ const isSessionExpired = () => {
 export default auth((req) => {
   const { nextUrl } = req;
   const pathName = nextUrl.pathname
-  const isProtected = pathName === "/" || pathName.includes("dashboard")
+  const isProtected = pathName === "/" || pathName.includes("dashboard") || pathName.includes("users")
 
   // check for protected route and if backend JWT session is valid
   if (isProtected && isSessionExpired()) {
