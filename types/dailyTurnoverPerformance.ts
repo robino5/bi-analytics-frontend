@@ -35,6 +35,7 @@ export interface ITargetGenerated {
     label: string;
     generated: number;
     target: number;
+    tradingDate: string;
 }
 export interface IMarginLoanUsage {
     label: string;

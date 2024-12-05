@@ -1,17 +1,12 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarColors } from "@/components/ui/utils/constants";
-import {
-  PieChart as PieChartRechart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+import * as echarts from "echarts";
 import { numberToMillionsString } from "@/lib/utils";
+import { BarColors } from "@/components/ui/utils/constants";
 
-const COLORS = [BarColors.red, BarColors.green];
+const COLORS = [BarColors.purple,BarColors.light_blue];
 
 interface IDataType {
   channel: string;
@@ -22,128 +17,96 @@ interface IDataType {
 
 type PropType = {
   title: string;
-  dataKey: string;
+  dataKey: keyof IDataType; 
   data: IDataType[];
 };
 
-interface IActiveShape {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  startAngle?: number;
-  endAngle?: number;
-  fill?: string;
-  payload: IDataType;
-  percent: number;
-  value: number;
-  index: number;
-}
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-  data,
-  dataKey
-}: any) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  if (dataKey == "totalClients") {
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${data[index].channel} - ${data[index].totalClients} (${(percent * 100).toFixed(0)}%)`}
-      </text>
-    );
-  } else if (dataKey == "trades") {
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${data[index].channel} - ${data[index].trades} (${(percent * 100).toFixed(0)}%)`}
-      </text>
-    );
-  } else if (dataKey == "totalTurnover") {
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${data[index].channel} - ${numberToMillionsString(data[index].totalTurnover)} (${(percent * 100).toFixed(0)}%)`}
-      </text>
-    );
-  }
-
-};
-
 const PieChart = ({ title, data, dataKey }: PropType) => {
-  const error = console.error;
-  console.error = (...args: any) => {
-    if (/defaultProps/.test(args[0])) return;
-    error(...args);
-  };
-  // ===========================================
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const chart = echarts.init(chartRef.current!);
+
+    const dataForChart = data.map((item, index) => ({
+      value: item[dataKey],
+      name: item.channel,
+      itemStyle: {
+        color: COLORS[index % COLORS.length],
+      },
+    }));
+
+    const option = {
+      title: {
+        left: "center",
+        textStyle: {
+          color: "#fff",
+          fontSize: 18,
+        },
+      },
+      tooltip: {
+        trigger: "item",
+        formatter: (params: any) => {
+          const value =
+            dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
+          return `${params.name} - ${value} (${(params.percent).toFixed(0)}%)`;
+        },
+      },
+      legend: {
+        orient: 'horizontal',  
+        bottom: 0,             
+        left: 'center',textStyle: {
+          color: '#ffffff'  
+        }      
+      },
+      series: [
+        {
+          name: title,
+          type: "pie",
+          radius: '80%',
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: "inside",
+            formatter: (params: any) => {
+              const value =
+                dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
+              return `${params.name}\n${value} (${(params.percent).toFixed(0)}%)`;
+            },
+            textStyle: {
+              color: "#fff",
+              // fontWeight: "bold",
+              fontSize: 14,
+            },
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          },
+          data: dataForChart,
+        },
+      ],
+    };
+
+    chart.setOption(option);
+    window.addEventListener("resize", () => {
+      chart.resize();
+    });
+
+    return () => {
+      chart.dispose();
+    };
+  }, [data, dataKey, title]);
 
   return (
     <Card className="drop-shadow-md bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChartRechart height={400} width={400}>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              fill="#8884d8"
-              labelLine={false}
-              dataKey={dataKey}
-              label={(props) => renderCustomizedLabel({ ...props, data, dataKey })}
-            >
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Legend
-              layout="horizontal"
-              verticalAlign="bottom"
-              align="center"
-              iconType="circle"
-              payload={data.map((entry, index) => ({
-                value: entry.channel,
-                type: "circle",
-                color: COLORS[index % COLORS.length],
-              }))}
-            />
-          </PieChartRechart>
-        </ResponsiveContainer>
+      <CardContent className="mt-2">
+        <div ref={chartRef} style={{ width: "100%", height: "300px" }} />
       </CardContent>
     </Card>
   );

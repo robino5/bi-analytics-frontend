@@ -148,3 +148,9 @@
     @apply font-sans;
   }
 }
+
+[data-state="closed"] .Button:hover {
+  background-color: transparent !important;  
+  border-color: transparent !important;      
+  color: white !important;                  
+}

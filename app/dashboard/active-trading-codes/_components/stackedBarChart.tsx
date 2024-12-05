@@ -1,18 +1,15 @@
 "use client";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  LabelList,
-} from "recharts";
-
+import { useEffect, useRef } from "react";
+import * as echarts from "echarts";
+import { saveAs } from "file-saver";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import {
   BarColors,
   LABEL_TICK_FONT_SIZE,
@@ -20,6 +17,8 @@ import {
   TOOLTIP_BACKGROUND,
 } from "@/components/ui/utils/constants";
 import { numberToMillionsString } from "@/lib/utils";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type StackChartPropType = {
   title: string;
@@ -29,109 +28,17 @@ type StackChartPropType = {
   data: any[];
 };
 
-interface CustomizedLabelProps {
-  x?: number;
-  y?: number;
-  fill?: string;
-  value?: number;
-}
-
-type Props = {
-  x: number;
-  y: number;
-  payload: CustomizedLabelProps;
-};
-
-const CustomizedAxisTick = ({ x, y, payload }: Props) => {
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={16}
-        textAnchor="end"
-        fill="white"
-        transform="rotate(-35)"
-        fontSize={12}
-        opacity={1}
-      >
-        {payload.value}
-      </text>
-    </g>
-  );
-};
-
-const customLegendFormatter = (value: string) => {
-  return value.toUpperCase();
-};
-
 interface CustomTooltipProps {
-  active?: boolean;
-  payload?: PayloadType[];
-  label?: number;
+  formatter: (params: any) => string;
 }
 
-type PayloadType = {
-  value: string | number;
-  name: string;
-  payload: DataType;
-  color: string;
-  dataKey: string;
-};
-
-type DataType = {
-  tradingDate: string;
-  dt: number;
-  internet: number;
-  dtRatio?: number;
-  internetRatio?: number;
-};
-
-const RATIO_TO_DATA_MAP: Record<string, string> = {
-  dtRatio: "dt",
-  internetRatio: "internet",
-};
-
-const CustomTooltip = ({ active, payload, ...rest }: CustomTooltipProps) => {
-  if (active && payload && payload.length > 0) {
-    return (
-      <div
-        style={{
-          backgroundColor: TOOLTIP_BACKGROUND,
-          padding: "10px",
-          borderRadius: "10px",
-          boxShadow: "1px 2px 10px -2px #7873ffb1",
-        }}
-      >
-        <p
-          style={{
-            color: "white",
-          }}
-        >{rest.label}</p>
-        {payload.map((pld: PayloadType) => {
-          const innerPayload = pld.payload;
-          const tooltipPayloadKey = RATIO_TO_DATA_MAP[pld.dataKey];
-          return (
-            <p
-              key={pld.name}
-              style={{
-                borderStyle: "solid 1px",
-                fontSize: "13px",
-                fontWeight: "600",
-                fontFamily: "sans-serif",
-                color: pld.color,
-              }}
-            >
-              {`${pld.name} : ${numberToMillionsString(
-                innerPayload[tooltipPayloadKey as keyof DataType] as number
-              )}`}
-            </p>
-          );
-        })}
-      </div>
-    );
-  }
-  return null;
+const CustomTooltip = ({ formatter }: CustomTooltipProps) => {
+  return {
+    trigger: "item",
+    formatter: (params: any) => {
+      return params.seriesName + " : " + numberToMillionsString(params.value);
+    },
+  };
 };
 
 const StackBarChart = ({
@@ -141,77 +48,173 @@ const StackBarChart = ({
   dataKeyB,
   data,
 }: StackChartPropType) => {
-  // Override console.error
-  // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
-  // @link https://github.com/recharts/recharts/issues/3615
-  const error = console.error;
-  console.error = (...args: any) => {
-    if (/defaultProps/.test(args[0])) return;
-    error(...args);
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  const exportChart = (format: "png" | "svg") => {
+    if (chartRef.current) {
+      const chartInstance = echarts.getInstanceByDom(chartRef.current);
+      if (chartInstance) {
+        const url = chartInstance.getDataURL({
+          type: format,
+          backgroundColor: "#0e5e6f",
+        });
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `chart.${format}`;
+        link.click();
+      }
+    }
   };
-  // ===========================================
+
+  const exportCSV = () => {
+    const csvRows = [];
+    csvRows.push("Category,DT,INTERNET");
+    data.forEach((item) => {
+      csvRows.push(
+        `${item[xDataKey]},${item[dataKeyA]},${item[dataKeyB]}`
+      );
+    });
+
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "chart-data.csv");
+  };
+
+  useEffect(() => {
+    const chartInstance = echarts.init(chartRef.current as HTMLDivElement);
+
+    const chartOptions = {
+      title: {
+        textStyle: {
+          color: "white",
+          fontSize: 16,
+        },
+      },
+      tooltip: CustomTooltip({
+        formatter: (params) => `${params.name}: ${params.value}%`,
+      }),
+      legend: {
+        data: ["DT", "INTERNET"],
+        textStyle: {
+          color: "white",
+        },
+        orient: "horizontal",
+        bottom: 0,
+        itemGap: 30,
+        itemWidth: 20,
+        itemHeight: 10,
+      },
+      xAxis: {
+        type: "category",
+        data: data.map((item) => item[xDataKey]),
+        axisLabel: {
+          color: "white",
+          rotate: 35,
+          fontSize: 12,
+        },
+        axisLine: {
+          lineStyle: {
+            color: TICK_COLOR,
+          },
+        },
+      },
+      yAxis: {
+        type: "value",
+        min: 0,
+        max: 100,
+        axisLabel: {
+          formatter: "{value}%",
+          color: "white",
+          fontSize: LABEL_TICK_FONT_SIZE,
+        },
+        axisLine: {
+          lineStyle: {
+            color: TICK_COLOR,
+          },
+        },
+      },
+      series: [
+        {
+          name: "DT",
+          type: "bar",
+          stack: "total",
+          data: data.map((item) => item[dataKeyA]),
+          itemStyle: {
+            color: BarColors.purple,
+          },
+          label: {
+            show: true,
+            position: "inside",
+            formatter: "{c}%",
+            color: "white",
+            align: "center",
+            verticalAlign: "middle",
+          },
+        },
+        {
+          name: "INTERNET",
+          type: "bar",
+          stack: "total",
+          data: data.map((item) => item[dataKeyB]),
+          itemStyle: {
+            color: BarColors.light_blue,
+          },
+          label: {
+            show: true,
+            position: "inside",
+            formatter: "{c}%",
+            color: "white",
+            align: "center",
+            verticalAlign: "middle",
+          },
+        },
+      ],
+    };
+
+    chartInstance.setOption(chartOptions);
+    window.addEventListener("resize", () => chartInstance.resize());
+
+    return () => {
+      window.removeEventListener("resize", () => chartInstance.resize());
+      chartInstance.dispose();
+    };
+  }, [data, title, xDataKey, dataKeyA, dataKeyB]);
+
   return (
     <Card className="bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
+        <div className="text-white text-lg font-semibold">{title}</div>
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className="bg-transparent text-white px-2 py-0 rounded-md border-teal-500 hover:bg-transparent hover:border-teal-500 transition-all focus:outline-none focus:ring-0"
+              >
+                <Download className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => exportChart("png")}>
+                Download PNG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportChart("svg")}>
+                Download SVG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={exportCSV}>
+                Download CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
+
+
       <CardContent>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey={xDataKey}
-              angle={-30}
-              textAnchor="end"
-              height={70}
-              // @ts-ignore
-              tick={<CustomizedAxisTick />}
-              tickLine={true}
-            />
-            <YAxis
-              tick={{
-                stroke: TICK_COLOR,
-                strokeOpacity: 0.1,
-                fontSize: LABEL_TICK_FONT_SIZE,
-                fill: "white",
-              }}
-              tickFormatter={(value) => `${value}%`}
-              domain={[0, 100]}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend formatter={customLegendFormatter} />
-            <Bar
-              dataKey={dataKeyA}
-              stackId="a"
-              fill={BarColors.red}
-              name={"DT"}
-            >
-              <LabelList
-                fill="#fff"
-                dataKey={dataKeyA}
-                style={{ fontSize: "12px" }}
-                position="insideStart"
-                formatter={(value: number) => `${value}%`}
-              />
-            </Bar>
-            <Bar
-              dataKey={dataKeyB}
-              stackId="a"
-              fill={BarColors.green}
-              name={"INTERNET"}
-            >
-              <LabelList
-                fill="#fff"
-                style={{ fontSize: "12px" }}
-                dataKey={dataKeyB}
-                position="insideStart"
-                formatter={(value: number) => `${value}%`}
-              />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        <div ref={chartRef} style={{ width: "100%", height: 330 }} />
       </CardContent>
     </Card>
+
+
   );
 };
 
