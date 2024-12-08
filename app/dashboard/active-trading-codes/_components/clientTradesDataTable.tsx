@@ -52,10 +52,10 @@ export default function ClientTradesDataTable({ records, className }: Props) {
               <TableHead className="w-[200px] text-black font-bold py-2">
                 Channel
               </TableHead>
-              <TableHead className="text-black font-bold py-2">
+              <TableHead className="text-right text-black font-bold py-2">
                 Total Client
               </TableHead>
-              <TableHead className="text-black font-bold py-2">
+              <TableHead className="text-right text-black font-bold py-2">
                 Trades
               </TableHead>
               <TableHead className="text-right text-black font-bold py-2">
@@ -73,10 +73,10 @@ export default function ClientTradesDataTable({ records, className }: Props) {
                 <TableCell className="font-medium py-2">
                   {record.channel}
                 </TableCell>
-                <TableCell className="py-2">
+                <TableCell className="text-right py-2">
                   {numberToMillionsString(record.totalClients)}
                 </TableCell>
-                <TableCell className="py-2">
+                <TableCell className="text-right py-2">
                   {numberToMillionsString(record.trades)}
                 </TableCell>
                 <TableCell className="text-right py-2">
