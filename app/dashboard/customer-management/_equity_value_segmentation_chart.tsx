@@ -1,48 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import * as echarts from "echarts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { cn } from "@/lib/utils";
 import {
   EquityValueSegmentation,
   EquityValueSegmentationDetails,
 } from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-  data,
-}: any) => {
-  const radius = outerRadius + 20;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-      fontSize={16}
-    >
-      <tspan x={x} dy="0">
-        {data[index].customerCategory}
-      </tspan>
-      <tspan
-        x={x}
-        dy="1.2em"
-      >{`${data[index].formattedTurnover} (${(percent * 100).toFixed(0)}%)`}</tspan>
-    </text>
-  );
-};
 
 interface PieChartComponentProps {
   title?: string;
@@ -61,55 +25,99 @@ export default function EquityValueSegmentationChart({
   details,
   colors,
 }: PieChartComponentProps) {
-  const processedData = data.map((item) => ({
-    ...item,
-    formattedTurnover: numberToMillionsString(item.equity),
-  }));
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = echarts.init(chartRef.current);
+
+      const processedData = data.map((item, index) => ({
+        value: item.equity,
+        name: `${item.customerCategory}`,
+        formattedTurnover: numberToMillionsString(item.equity),
+        itemStyle: {
+          color: colors[index % colors.length],
+        },
+      }));
+
+      const option = {
+        tooltip: {
+          trigger: "item",
+          formatter: (params: { value: number; name: any; percent: any; }) =>
+            `${params.name}<br/>${numberToMillionsString(params.value)} (${params.percent}%)`,
+        },
+        legend: {
+          orient: "horizontal",
+          bottom: 0,
+          left: "center",
+          textStyle: {
+            color: "#ffffff", 
+            fontSize: 14,
+          },
+        },
+        series: [
+          {
+            name: "Equity Value Segmentation",
+            type: "pie",
+            radius:  ["10%", "60%"],
+            center: ["50%", "50%"],
+            data: processedData,
+            label: {
+              formatter: (params: { value: number; name: any; percent: any; }) =>
+                `${params.name}\n${numberToMillionsString(params.value)} (${params.percent}%)`,
+              color: "#ffffff",
+              fontSize: 12,
+              lineHeight: 16,
+            },
+            labelLine: {
+              show: true,
+              length: 15, 
+              length2: 10, 
+              lineStyle: {
+                width: 2, 
+              },
+            },
+            itemStyle: {
+              borderRadius: 8, 
+              borderColor: "#0e5e6f", 
+              borderWidth: 2,
+            },
+            emphasis: {
+              scale: true,
+              itemStyle: {
+                shadowBlur: 10,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+            paddingAngle: 5, 
+          },
+        ],
+        backgroundColor: "#0e5e6f", 
+      };
+
+      chart.setOption(option);
+      const handleResize = () => chart.resize();
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        chart.dispose();
+      };
+    }
+  }, [data, colors]);
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">{title}-{details.sumOfEquity.toLocaleString()}mn</CardTitle>
-        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
+          {title} - {details.sumOfEquity.toLocaleString()}mn
+        </CardTitle>
       </CardHeader>
-      {/* <div className="text-center text-white text-lg">
-        <h5>Equity-{details.sumOfEquity} mn</h5>
-      </div> */}
       <CardContent style={{ height: "500px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={processedData}
-              cx="50%"
-              cy="50%"
-              labelLine={true}
-              label={(props) =>
-                renderCustomizedLabel({ ...props, data: processedData })
-              }
-              outerRadius={150}
-              paddingAngle={5}
-              dataKey="equity"
-            >
-              {processedData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[index % colors.length]}
-                />
-              ))}
-            </Pie>
-            <Legend
-              layout="horizontal"
-              verticalAlign="bottom"
-              align="center"
-              iconType="circle"
-              payload={processedData.map((entry, index) => ({
-                value: entry.customerCategory,
-                type: "circle",
-                color: colors[index % colors.length],
-              }))}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        <div
+          ref={chartRef}
+          style={{ width: "100%", height: "100%", backgroundColor: "#0e5e6f" }}
+        />
       </CardContent>
     </Card>
   );

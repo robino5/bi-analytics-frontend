@@ -1,19 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import {
-  ResponsiveContainer,
-  ComposedChart,
-  Line,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  Brush,
-  LabelList,
-} from "recharts";
+import * as echarts from "echarts";
 import {
   BranchWiseNonPerformerClints,
   BranchWiseNonPerformerClintsDetails,
@@ -37,12 +25,99 @@ export default function BranchWiseNonPerformerClientsChart({
   data,
   details,
 }: ComposedChartComponentProps) {
+  const chartRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const chartInstance = echarts.init(chartRef.current);
+    const option = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: "shadow",
+        },
+      },
+      legend: {
+        data: ['Total Clients','Total Client Percentage'],
+        textStyle: { color: '#fff' },
+      },
+      xAxis: {
+        type: 'category',
+        data: data.map(item => item.branchName),
+        axisLabel: { color: '#fff',margin: 18,fontSize: 14,  },
+        axisLine: {
+          lineStyle: {
+            color: '#fff'
+          }
+        }
+      },
+      yAxis: [
+        {
+          type: 'value',
+          axisLabel: { color: '#fff' },
+          min: 0,
+          max: 5000,
+          interval: 1000,
+        },
+        {
+          type: 'value',
+          axisLabel: { color: '#fff' },
+          min: 0,
+          max: 25,
+          interval: 5,
+        },
+      ],
+      series: [
+        {
+          name: 'Total Clients',
+          type: 'bar',
+          barWidth: "80%",
+          data: data.map(item => item.totalClients),
+          label: {
+            show: true,
+            position: "insideTop",
+            rotate: 90,
+            color: "white",
+            fontSize: 14,
+          },
+          itemStyle: {
+            color: '#B3426F',
+          },
+          encode: {
+            tooltip: ['value', 'percentage'],
+          },
+        },
+        {
+          name: 'Total Client Percentage',
+          type: 'line',
+          yAxisIndex: 1,
+          data: data.map(item => item.totalClientPercentage),
+          itemStyle: { color: '#03FDFC' },
+          lineStyle: { width: 2 },
+        },
+      ],
+      dataZoom: [
+        {
+          type: "slider",
+          height: 20,
+          bottom: "5px",
+          textStyle: { color: "#ffffff" },
+        },
+      ]
+    };
+
+    chartInstance.setOption(option);
+
+    return () => {
+      chartInstance.dispose();
+    };
+  }, [data, title, details]);
+
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">{title}-{details.sumOfClients.toLocaleString()}</CardTitle>
-        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
-        <div className="text-end">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">{title}-{details.sumOfClients.toLocaleString()}</CardTitle>
+      </CardHeader>
+      <div className="text-end mt-2 mr-2">
           <DialogDataTable
             columns={branchWiseNonPerformerClints}
             data={data}
@@ -51,51 +126,8 @@ export default function BranchWiseNonPerformerClientsChart({
             subtitle={"Showing data for non performer clients as on data table"}
           />
         </div>
-      </CardHeader>
-      {/* <div className="text-center text-white text-lg">
-        <h5>Non-Performer Clients as on 2018-Nos{details.sumOfClients.toLocaleString()}</h5>
-      </div> */}
       <CardContent style={{ height: "500px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            data={data}
-            margin={{ top: 20, right: 40, bottom: 20, left: 20 }}
-          >
-            <CartesianGrid stroke="#f5f5f5" strokeDasharray="3 3" />
-            <XAxis dataKey="branchName" tick={{ fill: "white" }} />
-            <YAxis yAxisId="left" tick={{ fill: "white" }} />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              tick={{ fill: "white" }}
-            />
-
-            <Tooltip />
-            <Legend />
-            <Brush
-              dataKey="branchName"
-              height={30}
-              stroke="#8884d8"
-              travellerWidth={10}
-            />
-            <Bar yAxisId="left" dataKey="totalClients" fill="#1ac1d6">
-              <LabelList
-                dataKey="totalClients"
-                position="top"
-                angle={-90}
-                style={{ fill: "white", fontSize: 16 }}
-              />
-            </Bar>
-
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="totalClientPercentage"
-              stroke="red"
-              dot={{ r: 4 }}
-            />
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div ref={chartRef} style={{ width: '100%', height: '100%' }}></div>
       </CardContent>
     </Card>
   );

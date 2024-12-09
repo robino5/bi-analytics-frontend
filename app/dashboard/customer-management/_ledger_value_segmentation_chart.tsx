@@ -1,53 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import * as echarts from "echarts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { cn } from "@/lib/utils";
 import {
   LedgerValueSegmentation,
   LedgerValueSegmentationDetails,
 } from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-  data,
-}: any) => {
-  const radius = outerRadius + 20;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  const valueLabel =
-    data[index].margin < 0
-      ? `${data[index].formattedTurnover}`
-      : data[index].formattedTurnover;
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-      fontSize={14}
-    >
-      <tspan x={x} dy="0">
-        {data[index].customerCategory}
-      </tspan>
-      <tspan
-        x={x}
-        dy="1.2em"
-      >{`${valueLabel} (${(percent * 100).toFixed(0)}%)`}</tspan>
-    </text>
-  );
-};
 
 interface PieChartComponentProps {
   title?: string;
@@ -66,56 +25,97 @@ export default function LedgerValueSegmentationChart({
   details,
   colors,
 }: PieChartComponentProps) {
-  const processedData = data.map((item) => ({
-    ...item,
-    normalizedMargin: Math.abs(item.margin),
-    formattedTurnover: numberToMillionsString(item.margin),
-  }));
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = echarts.init(chartRef.current);
+
+      const processedData = data.map((item, index) => ({
+        value: item.margin < 0 ? Math.abs(item.margin) : item.margin,
+        name: `${item.customerCategory}`,
+        formattedTurnover: numberToMillionsString(item.margin),
+        itemStyle: {
+          color: colors[index % colors.length],
+        },
+        normalizedMargin: Math.abs(item.margin),
+      }));
+
+      const option = {
+        tooltip: {
+          trigger: "item",
+          formatter: (params: { value: number; name: any; percent: any; }) =>
+            `${params.name}<br/>-${numberToMillionsString(params.value)} (${params.percent}%)`,
+        },
+        legend: {
+          orient: "horizontal",
+          bottom: 0,
+          left: "center",
+          textStyle: {
+            color: "#ffffff", 
+            fontSize: 14,
+          }
+        },
+        series: [
+          {
+            name: "Ledger Value Segmentation",
+            type: "pie",
+            radius: ["10%", "60%"],
+            center: ["50%", "50%"],
+            data: processedData,
+            label: {
+              formatter: (params: { value: number; name: any; percent: any; }) =>
+                `${params.name}\n-${numberToMillionsString(params.value)} (${params.percent}%)`,
+              color: "#ffffff",
+              fontSize: 12,
+              lineHeight: 16,
+            },
+            labelLine: {
+              lineStyle: {
+                color: "#ffffff",
+              },
+            },
+            itemStyle: {
+              borderRadius: 8, 
+              borderColor: "#0e5e6f",
+              borderWidth: 2,
+            },
+            emphasis: {
+              scale: true,
+              itemStyle: {
+                shadowBlur: 10,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+            paddingAngle: 5, // Padding between sections
+          },
+        ],
+        backgroundColor: "#0e5e6f", // Match your card's background
+      };
+
+      chart.setOption(option);
+      const handleResize = () => chart.resize();
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        chart.dispose();
+      };
+    }
+  }, [data, colors]);
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">{title}-({details.sumOfMargin.toLocaleString()})</CardTitle>
-        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
+          {title} - ({details.sumOfMargin.toLocaleString()} mn)
+        </CardTitle>
       </CardHeader>
-      {/* <div className="text-center text-white text-lg">
-        <h5>Ledger Balance-{details.sumOfMargin} mn</h5>
-      </div> */}
       <CardContent style={{ height: "500px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={processedData}
-              cx="50%"
-              cy="50%"
-              labelLine={true}
-              label={(props) =>
-                renderCustomizedLabel({ ...props, data: processedData })
-              }
-              outerRadius={150}
-              paddingAngle={5}
-              dataKey="normalizedMargin"
-            >
-              {processedData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[index % colors.length]}
-                />
-              ))}
-            </Pie>
-            <Legend
-              layout="horizontal"
-              verticalAlign="bottom"
-              align="center"
-              iconType="circle"
-              payload={processedData.map((entry, index) => ({
-                value: entry.customerCategory,
-                type: "circle",
-                color: colors[index % colors.length],
-              }))}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        <div
+          ref={chartRef}
+          style={{ width: "100%", height: "100%", backgroundColor: "#0e5e6f" }}
+        />
       </CardContent>
     </Card>
   );
