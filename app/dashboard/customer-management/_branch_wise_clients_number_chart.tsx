@@ -91,7 +91,7 @@ export default function BranchWiseClientsNumberChart({
           type: 'line',
           yAxisIndex: 1,
           data: data.map(item => item.totalClientPercentage),
-          itemStyle: { color: '#1ac1d6' },
+          itemStyle: { color: '#03FDFC' },
           lineStyle: { width: 2 },
         },
       ],

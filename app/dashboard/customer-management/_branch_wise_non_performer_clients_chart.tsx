@@ -80,7 +80,7 @@ export default function BranchWiseNonPerformerClientsChart({
             fontSize: 14,
           },
           itemStyle: {
-            color: '#1ac1d6',
+            color: '#B3426F',
           },
           encode: {
             tooltip: ['value', 'percentage'],
@@ -91,7 +91,7 @@ export default function BranchWiseNonPerformerClientsChart({
           type: 'line',
           yAxisIndex: 1,
           data: data.map(item => item.totalClientPercentage),
-          itemStyle: { color: 'red' },
+          itemStyle: { color: '#03FDFC' },
           lineStyle: { width: 2 },
         },
       ],
