@@ -351,7 +351,7 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={clientSegmentation as any}
             details={clientSegmentationDetails as any}
-            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={[ "#ff6b6b ","#1e90ff ","#ffd166","#1dd1a1","#ee5253"]}
           />
         ) : null}
         {lbslTurnoverSegmentation ? (
@@ -371,7 +371,7 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={equityValueSegmentation as any}
             details={equityValueSegmentationDetails as any}
-            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={["#A4A0EB", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
         {ledgerValueSegmentation ? (
@@ -381,7 +381,7 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={ledgerValueSegmentation as any}
             details={ledgerValueSegmentationDetails as any}
-            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={["#4CAF50", "#C74272", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
         {portfolioValueSegmentation ? (
@@ -391,8 +391,8 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={portfolioValueSegmentation as any}
             details={portfolioValueSegmentationDetails as any}
-            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
-            colors2={["#9C27B0", "#3F51B5"]}
+            colors={["#c200fb", "#F689A6", "#2196F3", "#9C27B0", "#F44336"]}
+            colors2={["#DDB5EB", "#EB6122"]}
           />
         ) : null}
         {detailsMarketShareLBSL ? (

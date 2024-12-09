@@ -1,40 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import * as echarts from "echarts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { cn } from "@/lib/utils";
 import {
   ClientSegmentation,
   ClientSegmentationDetails,
 } from "@/types/customerManagement";
 import { numberToMillionsString } from "@/lib/utils";
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-  data,
-}: any) => {
-  const radius = outerRadius + 20;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-      fontSize={14}
-    >
-      {`${data[index].customerCategory}-${data[index].totalClients}(${(percent * 100).toFixed(0)}%)`}
-    </text>
-  );
-};
 
 interface PieChartComponentProps {
   title?: string;
@@ -53,48 +25,109 @@ export default function ClientSegmentationChart({
   details,
   colors,
 }: PieChartComponentProps) {
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = echarts.init(chartRef.current);
+      const sortedData = [...data].sort(
+        (a, b) => b.totalClients - a.totalClients
+      );
+
+      const option = {
+        tooltip: {
+          trigger: "item",
+          formatter: "{b}: {c} ({d}%)",
+        },
+        legend: {
+          orient: "horizontal",
+          bottom: 0,
+          left: "center",
+          textStyle: {
+            color: "#ffffff", 
+            fontSize: 14,
+          },
+        },
+        series: [
+          {
+            name: "Client Segmentation",
+            type: "pie",
+            radius: ['10%', '60%'],
+            center: ["50%", "50%"],
+            data: sortedData.map((entry, index) => ({
+              value: entry.totalClients,
+              name: `${entry.customerCategory}`,
+              itemStyle: {
+                color: colors[index % colors.length],
+                borderWidth: 2,
+                borderColor: "#0e5e6f", 
+              },
+            })),
+            label: {
+              formatter: (params: { value: number; name: any; percent: any; }) => {
+                const formattedValue = numberToMillionsString(params.value as number);
+                return `${params.name}\n${formattedValue} (${params.percent}%)`;
+              },
+              color: "#ffffff",
+              fontSize: 12,
+              lineHeight: 16,
+            },
+            labelLine: {
+              show: true,
+              length: 15, 
+              length2: 10, 
+              lineStyle: {
+                width: 2, 
+              },
+            },
+            itemStyle: {
+              borderRadius: 8, 
+              borderColor: "#0e5e6f", 
+              borderWidth: 2,
+            },
+            emphasis: {
+              scale: true,
+              itemStyle: {
+                shadowBlur: 10,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+        backgroundColor: "#0e5e6f", // Match your card's background
+        responsive: true,
+      };
+
+      // Render the chart with responsive behavior
+      const renderChart = () => {
+        chart.resize();
+        chart.setOption(option);
+      };
+
+      renderChart(); // Initial render
+      window.addEventListener("resize", renderChart); // Handle responsiveness
+
+      // Cleanup on component unmount
+      return () => {
+        window.removeEventListener("resize", renderChart);
+        chart.dispose();
+      };
+    }
+  }, [data, title, details, colors]);
+
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">{title}-{details.sumOfClients.toLocaleString()}</CardTitle>
-        {/* <p className="text-sm text-muted-foreground text-white">{subtitle}</p> */}
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
+          {title}-{details.sumOfClients.toLocaleString()}
+        </CardTitle>
       </CardHeader>
-      {/* <div className="text-center text-white text-lg">
-        <h5>Client Segmentation-{details.sumOfClients}</h5>
-      </div> */}
+      
       <CardContent style={{ height: "500px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              labelLine={true}
-              label={(props) => renderCustomizedLabel({ ...props, data })}
-              outerRadius={150}
-              paddingAngle={5}
-              dataKey="totalClients"
-            >
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[index % colors.length]}
-                />
-              ))}
-            </Pie>
-            <Legend
-              layout="horizontal"
-              verticalAlign="bottom"
-              align="center"
-              iconType="circle"
-              payload={data.map((entry, index) => ({
-                value: entry.customerCategory,
-                type: "circle",
-                color: colors[index % colors.length],
-              }))}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        <div
+          ref={chartRef}
+          style={{ width: "100%", height: "100%", backgroundColor: "#0e5e6f" }}
+        />
       </CardContent>
     </Card>
   );
