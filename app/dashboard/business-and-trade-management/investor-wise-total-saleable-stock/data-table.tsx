@@ -120,11 +120,11 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
         {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-2">
         <div className="space-y-4">
           <DataTableToolbar
             table={table}
@@ -138,7 +138,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow
                       key={headerGroup.id}
-                      className="bg-blue-500 hover:bg-blue-700"
+                      className="bg-table-header hover:bg-table-header"
                     >
                       {headerGroup.headers.map((header) => (
                         <TableHead
@@ -172,7 +172,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
                       <TableRow
                         key={row.id}
                         className={`${
-                          index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                          index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
                         } hover:bg-green-300 transition-all duration-300`}
                       >
                         {row.getVisibleCells().map((cell) => (
