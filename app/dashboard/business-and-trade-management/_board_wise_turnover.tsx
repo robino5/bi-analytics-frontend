@@ -45,27 +45,27 @@ export default function BoardWiseTurnover({ datalist }: Props) {
   );
   return (
     <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">Board Wise Turnover</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">Board Wise Turnover</CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the board wise turnover
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-2">
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-            <TableRow className="bg-blue-500 hover:bg-blue-700">
-              <TableHead className="text-white font-bold">Board Type</TableHead>
-              <TableHead className="text-right text-white font-bold">
+            <TableRow className="bg-table-header hover:bg-table-header">
+              <TableHead className="text-black font-bold">Board Type</TableHead>
+              <TableHead className="text-right text-black font-bold">
                 DSE Turn Over(Mn)
               </TableHead>
-              <TableHead className="text-right text-white font-bold">
+              <TableHead className="text-right text-black font-bold">
                 DSE(%)
               </TableHead>
-              <TableHead className="text-right text-white font-bold">
+              <TableHead className="text-right text-black font-bold">
                 LBSL Turn Over(Mn)
               </TableHead>
-              <TableHead className="text-right text-white font-bold">
+              <TableHead className="text-right text-black font-bold">
                 LBSL(%)
               </TableHead>
             </TableRow>
@@ -75,8 +75,8 @@ export default function BoardWiseTurnover({ datalist }: Props) {
               <TableRow
                 key={data.board}
                 className={`${
-                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                } hover:bg-green-300 transition-all duration-300`}
+                  index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                } hover:bg-table-even-row-hover transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">{data.board}</TableCell>
                 <TableCell className="text-right py-1">
@@ -95,7 +95,7 @@ export default function BoardWiseTurnover({ datalist }: Props) {
             ))}
           </TableBody>
           <TableFooter>
-            <TableRow className=" bg-green-500 hover:bg-green-500 transition-all duration-300">
+            <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
               <TableCell className="font-medium py-2">Total</TableCell>
               <TableCell className="text-right py-2">
                 {numberToMillionsString(totalTurnover)}

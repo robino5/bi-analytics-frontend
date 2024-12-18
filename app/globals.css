@@ -154,3 +154,24 @@
   border-color: transparent !important;      
   color: white !important;                  
 }
+
+.bg-table-header{
+  background-color: #BBAB8C;
+}
+.bg-table-footer{
+  background-color: #DED0B6;
+}
+.bg-table-odd-row{
+  background-color: #FAEED1;
+}
+.bg-table-even-row{
+  background-color: #FDF7E4;
+}
+.bg-table-odd-row:hover, .bg-table-even-row:hover{
+  background-color: #DED0B6!important;
+}
+
+
+
+
+

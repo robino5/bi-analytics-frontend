@@ -42,7 +42,7 @@ interface DataTableProps<TData, TValue> {
   url?: string;
 }
 
-export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
+export function SalableStockPercentageDataTableCard<TData, TValue>({
   title,
   subtitle,
   columns,
@@ -54,7 +54,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
   const [totalRows, setTotalRows] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [companyName, setCompanyName] = React.useState<string>("");
-  const [investorName, setInvestorName] = React.useState<string>("");
+  const [gsecFlag, setGsecFlag] = React.useState<any>();
 
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
@@ -78,8 +78,9 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
         page_size: pageSize.toString(),
       });
 
-      if (companyName) query.append("company", companyName);
-      if (investorName) query.append("investor", investorName);
+      if (companyName) {
+        query.append("company", companyName);
+      }
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_V1_APIURL}${url}?${query.toString()}`,
@@ -98,7 +99,7 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
     };
 
     fetchData();
-  }, [pagination, sorting, companyName, investorName]);
+  }, [pagination, sorting, companyName]);
 
   const table = useReactTable({
     data,
@@ -129,7 +130,6 @@ export function DataTableCardInvestorWiseSaleableStock<TData, TValue>({
           <DataTableToolbar
             table={table}
             onCompanySearch={(value) => setCompanyName(value)}
-            onInvestorSearch={(value) => setInvestorName(value)}
           />
           <div className="rounded-md border overflow-hidden">
             <div className="max-h-[800px] overflow-y-auto">

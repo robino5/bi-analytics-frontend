@@ -43,42 +43,37 @@ interface Props {
 export default function DetailsMarketShareLBSL({ datalist }: Props) {
   return (
     <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
           Details market share of LBSL(Date:{datalist.tradingDate})
         </CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the details market share of LBSL
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-2">
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-            <TableRow>
+          <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">
               <TableHead
-                className="text-center text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold"
-                colSpan={4}
+                className="text-center py-1 border border-gray-300 text-black"
+                colSpan={2}
               >
-                Details market share of LBSL
+                DSE
+              </TableHead>
+              <TableHead
+                className="text-center py-1 border border-gray-300 text-black"
+                colSpan={2}
+              >
+                CSE
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow className="text-center text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold">
-              <TableCell
-                className="text-center py-1 border border-gray-300"
-                colSpan={2}
-              >
-                DSE
-              </TableCell>
-              <TableCell
-                className="text-center py-1 border border-gray-300"
-                colSpan={2}
-              >
-                CSE
-              </TableCell>
+         
             </TableRow>
-            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-odd-row  transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300 w-1/4">
                 LBSL Buy
               </TableCell>
@@ -92,7 +87,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.lbslBuyOfCse)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-even-row transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Sell
               </TableCell>
@@ -106,7 +101,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.lbslSaleOfCse)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-odd-row  transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Total
               </TableCell>
@@ -120,7 +115,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.lbslTotalOfCse)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-even-row transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 Market Turnover
               </TableCell>
@@ -134,7 +129,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.cseMarketTurnover)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-odd-row  transition-all duration-300">
               <TableCell className="text-left py-1 border border-gray-300">
                 LBSL Share(%)
               </TableCell>
@@ -148,7 +143,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.lbslShareOfCse)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-even-row transition-all duration-300">
               <TableCell
                 className="text-center py-1 border border-gray-300"
                 colSpan={2}
@@ -162,7 +157,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.lbslTotalTurnover)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-odd-row  transition-all duration-300">
               <TableCell
                 className="text-center py-1 border border-gray-300"
                 colSpan={2}
@@ -176,7 +171,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.exchTotalMarket)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-even-row transition-all duration-300">
               <TableCell
                 className="text-center py-1 border border-gray-300"
                 colSpan={2}
@@ -190,7 +185,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.lbslMarketAll)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-pink-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-odd-row  transition-all duration-300">
               <TableCell
                 className="text-center py-1 border border-gray-300"
                 colSpan={2}
@@ -204,7 +199,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 {numberToMillionsString(datalist.foreign)}
               </TableCell>
             </TableRow>
-            <TableRow className="bg-yellow-200 hover:bg-green-300 transition-all duration-300">
+            <TableRow className="bg-table-even-row transition-all duration-300">
               <TableCell
                 className="text-center py-1 border border-gray-300"
                 colSpan={2}
