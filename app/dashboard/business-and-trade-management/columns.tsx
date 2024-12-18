@@ -3,12 +3,13 @@
 import { cn, numberToMillionsString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableColumnHeader } from "./salable-stock/data-table-column-header";
 import {
   CompanyWiseTotalSelableStock,
   SelableStockPercentage,
   InvestorWiseTotalSelableStock,
 } from "@/types/businessTradManagement";
+import { Badge } from "@/components/ui/badge";
 
 export type MarginLoanAllocationDataType = {
   name: string;
@@ -49,6 +50,17 @@ export const companyWiseSalableStock: ColumnDef<CompanyWiseTotalSelableStock>[] 
       ),
       cell: ({ row }) => {
         return cellNumberFormatter(row, "stockAvailable");
+      },
+    },
+    {
+      id: "gsecFlag",
+      accessorKey: "gsecFlag",
+      filterFn: (row, id, value) => {
+        return value.includes(row.getValue(id));
+      },
+      enableHiding: true, 
+      meta: {
+        isVisible: false, 
       },
     },
   ];

@@ -11,12 +11,14 @@ import {
   getSortedRowModel,
   useReactTable,
   flexRender,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -31,7 +33,7 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { cn } from "@/lib/utils";
+import { cn, numberToMillionsString } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 
 interface DataTableProps<TData, TValue> {
@@ -42,7 +44,7 @@ interface DataTableProps<TData, TValue> {
   url?: string;
 }
 
-export function DataTableCard<TData, TValue>({
+export function SalableStockDataTableCard<TData, TValue>({
   title,
   subtitle,
   columns,
@@ -54,15 +56,15 @@ export function DataTableCard<TData, TValue>({
   const [totalRows, setTotalRows] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [companyName, setCompanyName] = React.useState<string>("");
-
+  const [gsecFlag, setGsecFlag] = React.useState<any>();
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
-
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+    gsecFlag: false,
+  });
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -80,7 +82,9 @@ export function DataTableCard<TData, TValue>({
       if (companyName) {
         query.append("company", companyName);
       }
-
+      if (gsecFlag) {
+        query.append("gsec_flag", gsecFlag);
+      }
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_V1_APIURL}${url}?${query.toString()}`,
         {
@@ -98,7 +102,23 @@ export function DataTableCard<TData, TValue>({
     };
 
     fetchData();
-  }, [pagination, sorting, companyName]);
+  }, [pagination, sorting, companyName, gsecFlag]);
+
+  const generateFilterQuery = (data: { id: string; value: any }[]) => {
+    data.forEach((item) => {
+      if (item.id === "companyName") {
+        setCompanyName(item.value);
+      } else if (item.id === "gsecFlag") {
+        const flagValue = Array.isArray(item.value) && item.value[0] !== undefined
+          ? item.value[0]
+          : null;
+        setGsecFlag(flagValue);
+      }
+    });
+  };
+  React.useEffect(() => {
+    generateFilterQuery(columnFilters);
+  }, [columnFilters]);
 
   const table = useReactTable({
     data,
@@ -109,11 +129,14 @@ export function DataTableCard<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
+    onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     manualPagination: true,
     pageCount: Math.ceil(totalRows / pagination.pageSize),
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -128,7 +151,6 @@ export function DataTableCard<TData, TValue>({
         <div className="space-y-4">
           <DataTableToolbar
             table={table}
-            onCompanySearch={(value) => setCompanyName(value)}
           />
           <div className="rounded-md border overflow-hidden">
             <div className="max-h-[800px] overflow-y-auto">
@@ -148,9 +170,9 @@ export function DataTableCard<TData, TValue>({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       ))}
                     </TableRow>
@@ -170,9 +192,8 @@ export function DataTableCard<TData, TValue>({
                     table.getRowModel().rows.map((row, index) => (
                       <TableRow
                         key={row.id}
-                        className={`${
-                          index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
-                        } hover:bg-green-300 transition-all duration-300`}
+                        className={`${index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                          } hover:bg-green-300 transition-all duration-300`}
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id} className="p-1 text-[0.8rem] border">
@@ -183,6 +204,7 @@ export function DataTableCard<TData, TValue>({
                           </TableCell>
                         ))}
                       </TableRow>
+
                     ))
                   ) : (
                     <TableRow>
@@ -195,6 +217,16 @@ export function DataTableCard<TData, TValue>({
                     </TableRow>
                   )}
                 </TableBody>
+                <TableFooter className="border border-gray-200">
+                  <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
+                    <TableCell>Total</TableCell>
+                    <TableCell className="text-right">
+                      {numberToMillionsString(
+                        data.reduce((total, item) => total + (item as any).stockAvailable, 0)
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </TableFooter>
               </Table>
             </div>
           </div>
