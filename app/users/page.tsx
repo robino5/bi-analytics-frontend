@@ -43,11 +43,6 @@ const fetchUsers = async (
   }).toString();
 
   const fullQuery = filterUrl ? `${query}&${filterUrl}` : query;
-  console.log(
-    "Full Query String:",
-    `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${fullQuery}`
-  );
-
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_V1_APIURL}/auth/users/?${fullQuery}`,

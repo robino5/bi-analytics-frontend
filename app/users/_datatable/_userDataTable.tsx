@@ -104,7 +104,6 @@ export function UserTable<TData, TValue>({
   useEffect(() => {
     const queryString = generateFilterQuery(columnFilters);
     setFilterUrl(queryString);
-    //console.log("Generated Query String:", queryString);
   }, [columnFilters]);
 
   return (

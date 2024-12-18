@@ -68,7 +68,6 @@ export function SalableStockDataTableCard<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -105,16 +104,25 @@ export function SalableStockDataTableCard<TData, TValue>({
   }, [pagination, sorting, companyName, gsecFlag]);
 
   const generateFilterQuery = (data: { id: string; value: any }[]) => {
-    data.forEach((item) => {
-      if (item.id === "companyName") {
-        setCompanyName(item.value);
-      } else if (item.id === "gsecFlag") {
-        const flagValue = Array.isArray(item.value) && item.value[0] !== undefined
-          ? item.value[0]
-          : null;
-        setGsecFlag(flagValue);
-      }
-    });
+    const gsecFlagItem = data.find(item => item.id === "gsecFlag");
+    const companyName = data.find(item => item.id === "companyName");
+    if (gsecFlagItem) {
+      Array.isArray(gsecFlagItem.value) && gsecFlagItem.value.length > 0
+        ? setGsecFlag(gsecFlagItem.value[0])
+        : setGsecFlag(undefined);
+    } else {
+      setGsecFlag(undefined); 
+    }
+    if (companyName) {
+      data.forEach((item) => {
+        if (item.id === "companyName") {
+          setCompanyName(item.value);
+        }
+      });
+    } else {
+      setCompanyName(''); 
+    }
+    
   };
   React.useEffect(() => {
     generateFilterQuery(columnFilters);
