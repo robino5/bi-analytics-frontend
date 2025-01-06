@@ -54,6 +54,7 @@ export default function ClientSegmentationChart({
             type: "pie",
             radius: ['10%', '60%'],
             center: ["50%", "50%"],
+            startAngle: 10,
             data: sortedData.map((entry, index) => ({
               value: entry.totalClients,
               name: `${entry.customerCategory}`,
