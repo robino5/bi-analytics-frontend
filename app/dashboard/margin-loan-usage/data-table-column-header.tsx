@@ -33,13 +33,13 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn("space-x-2 text-white font-bold", className)}>
+    <div className={cn("flex items-center space-x-2 text-center text-black font-bold", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full font-bold hover:bg-blue-700 hover:text-white transition-colorss"
+            className="w-full text-md font-bold hover:bg-table-header hover:text-black transition-colors"
           >
             {title}
             {column.getIsSorted() === "desc" ? (

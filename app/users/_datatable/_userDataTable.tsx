@@ -115,7 +115,7 @@ export function UserTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-blue-500 hover:bg-blue-700"
+                   className="bg-table-header hover:bg-table-header"
               >
                 {headerGroup.headers.map((header) => (
                   <TableHead
@@ -141,8 +141,8 @@ export function UserTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={`${
-                    index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                  } hover:bg-green-300 transition-all duration-300`}
+                    index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                  } hover:bg-table-even-row-hover transition-all duration-300`}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

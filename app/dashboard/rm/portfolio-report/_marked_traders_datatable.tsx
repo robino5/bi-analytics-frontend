@@ -3,13 +3,14 @@
 import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { IMarkedClient } from "@/types/rmPortfolio";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   records: IMarkedClient[];
-  clientType:string;
+  clientType: string;
 }
 
-export default function MarkedTraderDataTable({ records,clientType }: Props) {
+export default function MarkedTraderDataTable({ records, clientType }: Props) {
   return (
     <table className="w-full overflow-y-auto text-sm text-left ">
       <thead className="text-xs uppercase ">
@@ -32,9 +33,9 @@ export default function MarkedTraderDataTable({ records,clientType }: Props) {
         {records?.map((record, index) => (
           <tr
             key={record.investorCode}
-            className={`${clientType=="red"?
-              (index % 2 === 0 ? "bg-red-300" : "bg-red-400"):(index % 2 === 0 ? "bg-yellow-300" : "bg-yellow-400")
-            } ${clientType=="red"?"hover:bg-red-100 transition-all duration-300":"hover:bg-yellow-100 transition-all duration-300"}`}
+            className={`${clientType == "red" ?
+              (index % 2 === 0 ? "bg-red-300" : "bg-red-400") : (index % 2 === 0 ? "bg-yellow-300" : "bg-yellow-400")
+              } ${clientType == "red" ? "hover:bg-red-100 transition-all duration-300" : "hover:bg-yellow-100 transition-all duration-300"}`}
           >
             <td
               scope="row"
@@ -48,7 +49,13 @@ export default function MarkedTraderDataTable({ records,clientType }: Props) {
                 "text-green-500": record.ledgerBalance < 0,
               })}
             >
-              {numberToMillionsString(record.ledgerBalance)}
+              <Badge
+                variant="default"
+                className={`font-bold ${record.ledgerBalance < 0 ? 'bg-green-100 text-green-600':'bg-red-100 text-red-600' }`}
+              >
+                {numberToMillionsString(record.ledgerBalance)}
+              </Badge>
+
             </td>
             <td className="px-6 py-2">{record.rmName}</td>
           </tr>

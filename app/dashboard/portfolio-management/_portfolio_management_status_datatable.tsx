@@ -39,13 +39,13 @@ export default function PortfolioManagementStatusDataTable({ records }: Props) {
         </CardDescription> */}
       </CardHeader>
       <CardContent>
-        <Table>
+        <Table className="border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-            <TableRow className="bg-blue-500 hover:bg-blue-700">
-              <TableHead className="w-auto text-white font-bold">
+            <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">
+              <TableHead className="text-left py-1 border border-gray-300 text-black">
                 Particular
               </TableHead>
-              <TableHead className="text-right text-white font-bold">
+              <TableHead className="text-right py-1 border border-gray-300 text-black">
                 Amount
               </TableHead>
             </TableRow>
@@ -55,8 +55,8 @@ export default function PortfolioManagementStatusDataTable({ records }: Props) {
               <TableRow
                 key={record.perticular}
                 className={`${
-                  index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-                } hover:bg-green-300 transition-all duration-300`}
+                  index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                } hover:bg-table-even-row-hover transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">
                   {record.perticular}

@@ -14,39 +14,39 @@ interface Props {
 
 export default function BranchWiseExposureDataTable({ records }: Props) {
   return (
-    <Table>
+    <Table className="border border-gray-300 rounded-md overflow-hidden">
       <TableHeader>
-        <TableRow className="bg-blue-500 hover:bg-blue-700">
-          <TableHead rowSpan={2} className="border text-white font-bold">
+        <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">
+          <TableHead rowSpan={2} className="border text-black font-bold">
             Branch
           </TableHead>
-          <TableHead colSpan={2} className="border text-white font-bold">
+          <TableHead colSpan={2} className="border text-black font-bold">
             Green
           </TableHead>
-          <TableHead colSpan={2} className="border text-white font-bold">
+          <TableHead colSpan={2} className="border text-black font-bold">
             Yellow
           </TableHead>
-          <TableHead colSpan={2} className="border text-white font-bold">
+          <TableHead colSpan={2} className="border text-black font-bold">
             Red
           </TableHead>
         </TableRow>
-        <TableRow className="bg-blue-500 hover:bg-blue-700">
-          <TableHead className="px-2 text-center border text-white font-bold">
+        <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">
+          <TableHead className="px-2 text-center border text-black font-bold">
             No. of code
           </TableHead>
-          <TableHead className="px-2 text-center border text-white font-bold">
+          <TableHead className="px-2 text-center border text-black font-bold">
             % ratio
           </TableHead>
-          <TableHead className="px-2 text-center border text-white font-bold">
+          <TableHead className="px-2 text-center border text-black font-bold">
             No. of code
           </TableHead>
-          <TableHead className="px-2 text-center border text-white font-bold">
+          <TableHead className="px-2 text-center border text-black font-bold">
             % ratio
           </TableHead>
-          <TableHead className="px-2 text-center border text-white font-bold">
+          <TableHead className="px-2 text-center border text-black font-bold">
             No. of code
           </TableHead>
-          <TableHead className="px-2 text-center border text-white font-bold">
+          <TableHead className="px-2 text-center border text-black font-bold">
             % ratio
           </TableHead>
         </TableRow>
@@ -56,8 +56,8 @@ export default function BranchWiseExposureDataTable({ records }: Props) {
           <TableRow
             key={index}
             className={`${
-              index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-            } hover:bg-green-300 transition-all duration-300`}
+              index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+            } hover:bg-table-even-row-hover transition-all duration-300`}
           >
             <TableCell className="font-medium py-1">
               {record.branchName}

@@ -113,7 +113,7 @@ export function DialogDataTable<TData, TValue>({
             <Table>
               <TableHeader className="text-center">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id} className="bg-blue-500 hover:bg-blue-700">
+                  <TableRow key={headerGroup.id} className="bg-table-header hover:bg-table-header">
                     {headerGroup.headers.map((header) => (
                       <TableHead key={header.id} colSpan={header.colSpan} className="text-white font-bold">
                         {header.isPlaceholder
@@ -135,7 +135,7 @@ export function DialogDataTable<TData, TValue>({
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
                       className={`${
-                        index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                        index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
                       } hover:bg-green-300 transition-all duration-300`}
                     >
                       {row.getVisibleCells().map((cell) => (

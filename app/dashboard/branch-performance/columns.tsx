@@ -4,6 +4,7 @@ import { cn, numberToMillionsString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableColumnHeaderTurnover } from "./data-table-column-header-turnover";
 import { IBranchWiseFund, ITurnoverStatus } from "@/types/branchPerformance";
 
 export type BranchWiseFundDataType = {
@@ -113,13 +114,13 @@ export const branchWiseTurnoverColumns: ColumnDef<ITurnoverStatus>[] = [
   {
     accessorKey: "branchName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Branch" />
+      <DataTableColumnHeaderTurnover column={column} title="Branch" />
     ),
   },
   {
     accessorKey: "turnoverDaily",
     header: ({ column }) => (
-      <DataTableColumnHeader
+      <DataTableColumnHeaderTurnover
         className="place-content-center"
         column={column}
         title="Daily"
@@ -132,7 +133,7 @@ export const branchWiseTurnoverColumns: ColumnDef<ITurnoverStatus>[] = [
   {
     accessorKey: "turnoverWeekly",
     header: ({ column }) => (
-      <DataTableColumnHeader
+      <DataTableColumnHeaderTurnover
         className="place-content-center"
         column={column}
         title="Weekly"
@@ -145,7 +146,7 @@ export const branchWiseTurnoverColumns: ColumnDef<ITurnoverStatus>[] = [
   {
     accessorKey: "turnoverMonthly",
     header: ({ column }) => (
-      <DataTableColumnHeader
+      <DataTableColumnHeaderTurnover
         className="place-content-center"
         column={column}
         title="Monthly"
@@ -158,7 +159,7 @@ export const branchWiseTurnoverColumns: ColumnDef<ITurnoverStatus>[] = [
   {
     accessorKey: "turnoverYearly",
     header: ({ column }) => (
-      <DataTableColumnHeader
+      <DataTableColumnHeaderTurnover
         className="place-content-center"
         column={column}
         title="Yearly"
