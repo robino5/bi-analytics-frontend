@@ -52,8 +52,8 @@ export default function BranchWiseMarginDataTable({ records }: Props) {
           <TableRow
             key={index}
             className={`${
-              index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-            } hover:bg-green-300 transition-all duration-300`}
+              index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+            } hover:bg-table-even-row-hover transition-all duration-300`}
           >
             <TableCell className="font-medium py-1">
               {record.branchName}

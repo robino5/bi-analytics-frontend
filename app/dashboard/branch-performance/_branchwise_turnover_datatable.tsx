@@ -38,7 +38,9 @@ export default function BranchWiseTurnoverDataTable({ records }: Props) {
         {records.map((record, index) => (
           <tr
             key={index}
-            className="border-b odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700"
+            className={`${
+              index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+            } hover:bg-table-even-row-hover transition-all duration-300`}
           >
             <th
               scope="row"

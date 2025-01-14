@@ -10,6 +10,8 @@ import EquityValueSegmentationChart from "./_equity_value_segmentation_chart";
 import LedgerValueSegmentationChart from "./_ledger_value_segmentation_chart";
 import DetailsMarketShareLBSLChart from "./_details_market_share_of_lbsl_chart";
 import PortfolioValueSegmentationChart from "./_portfolio_value_segmentation";
+import GsecTurnoverComparisonChart from "./_gsec_turnover_comparison_chart";
+import GsecTurnoverChart from "./_gsec_turnover_chart";
 import {
   ClientSegmentation,
   ClientSegmentationDetails,
@@ -27,6 +29,10 @@ import {
   DetailsMarketShareLBSLDetails,
   PortfolioValueSegmentation,
   PortfolioValueSegmentationDetails,
+  GsecTurnoverDetails,
+  GsecTurnover,
+  GsecTurnoverComparisonDetails,
+  GsecTurnoverComparison
 } from "@/types/customerManagement";
 import { formatDate, successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
@@ -86,6 +92,16 @@ interface BranchWiseNonPerformerClintsData {
   rows: BranchWiseNonPerformerClints[];
 }
 
+interface GsecTurnoverType {
+  detail: GsecTurnoverDetails;
+  rows: GsecTurnover[];
+}
+
+interface GsecTurnoverComparisonType {
+  detail: GsecTurnoverComparisonDetails;
+  rows: GsecTurnoverComparison[];
+}
+
 export default function CustomerManagement() {
   const { data: session } = useSession();
   const [clientSegmentation, setClientSegmentation] = useState<
@@ -130,6 +146,11 @@ export default function CustomerManagement() {
     portfolioValueSegmentationDetails,
     setPortfolioValueSegmentationLDetails,
   ] = useState<PortfolioValueSegmentationDetails | null>(null);
+  const [gsecTurmoverDetails,setGsecTurmoverDetails] = useState<GsecTurnoverDetails | null>(null);
+  const [gsecTurmover,setGsecTurmover] = useState<GsecTurnover[] | null>(null);
+  
+  const [gsecTurmoverComparisonDetails,setGsecTurmoverComparisonDetails] = useState<GsecTurnoverComparisonDetails | null>(null);
+  const [gsecTurmoverComparison,setGsecTurmoverComparison] = useState<GsecTurnoverComparison[] | null>(null);
   // Fetch data on page load
   useEffect(() => {
     // fatching client segmentation
@@ -323,6 +344,54 @@ export default function CustomerManagement() {
       }
     };
 
+        // fatching gsec turnover
+        const fetchGsecTurmover = async () => {
+          try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/gsec-turnover/`,
+              {
+                headers: {
+                  Authorization: `Bearer ${session?.user.accessToken}`,
+                  "Content-Type": "application/json",
+                },
+              },
+            );
+            const result =
+              (await response.json()) as IResponse<GsecTurnoverType>;
+    
+            if (successResponse(result.status)) {
+              setGsecTurmover(result.data.rows);
+              setGsecTurmoverDetails(result.data.detail);
+            }
+          } catch (error) {
+            console.error("Error fetching portfolio value segmentation", error);
+          }
+        };
+
+        // fatching gsec turnover
+        const fetchGsecTurmoverComparison = async () => {
+          try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/gsec-turnover-comparison/`,
+              {
+                headers: {
+                  Authorization: `Bearer ${session?.user.accessToken}`,
+                  "Content-Type": "application/json",
+                },
+              },
+            );
+            const result =
+              (await response.json()) as IResponse<GsecTurnoverComparisonType>;
+    
+            if (successResponse(result.status)) {
+              setGsecTurmoverComparison(result.data.rows);
+              setGsecTurmoverComparisonDetails(result.data.detail);
+            }
+          } catch (error) {
+            console.error("Error fetching portfolio value segmentation", error);
+          }
+        };
+
     fetchClientSegmentation();
     fetchBranchWiseClientRatio();
     fetchBranchWiseNonPerformerClient();
@@ -331,6 +400,8 @@ export default function CustomerManagement() {
     fetchLedgerValueSegmentation();
     fetchDetailsMarketShareLBSL();
     fetchPortfolioValueSegmentation();
+    fetchGsecTurmover();
+    fetchGsecTurmoverComparison();
   }, []);
 
   const currentDate = new Date();
@@ -402,6 +473,24 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={detailsMarketShareLBSL as any}
             details={detailsMarketShareLBSLDetails as any}
+          />
+        ) : null}
+          {gsecTurmover ? (
+          <GsecTurnoverChart
+            title="GSEC Turnover"
+            subtitle="Showing data for details  market share of LBSL ( Foreign )"
+            className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
+            data={gsecTurmover as any}
+            details={gsecTurmoverDetails as any}
+          />
+        ) : null}
+          {gsecTurmoverComparison ? (
+          <GsecTurnoverComparisonChart
+            title="Comparison"
+            subtitle="Showing data for details  market share of LBSL ( Foreign )"
+            className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
+            data={gsecTurmoverComparison as any}
+            details={gsecTurmoverComparisonDetails as any}
           />
         ) : null}
         {branchClientRation ? (

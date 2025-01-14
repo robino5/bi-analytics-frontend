@@ -73,11 +73,11 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
   return (
     <Table>
       <TableHeader>
-        <TableRow className="bg-blue-500 hover:bg-blue-700">
-          <TableHead className="w-auto text-white font-bold">Code</TableHead>
-          <TableHead className="text-left text-white font-bold">Investor Name</TableHead>
-          <TableHead className="text-right text-white font-bold">Ledger Balance</TableHead>
-          <TableHead className="text-right text-white font-bold">RM</TableHead>
+        <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">
+          <TableHead className="w-auto text-black font-bold">Code</TableHead>
+          <TableHead className="text-left text-black font-bold">Investor Name</TableHead>
+          <TableHead className="text-right text-black font-bold">Ledger Balance</TableHead>
+          <TableHead className="text-center text-black font-bold">RM</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -85,8 +85,8 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
           <TableRow
             key={record.investorCode}
             className={`${
-              index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
-            } hover:bg-green-300 transition-all duration-300`}
+              index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+            } hover:bg-table-even-row-hover transition-all duration-300`}
           >
             <TableCell className="font-medium py-1">
               {record.investorCode}

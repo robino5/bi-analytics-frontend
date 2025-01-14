@@ -23,7 +23,7 @@ interface DataTableColumnHeaderProps<TData, TValue>
   title: string;
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+export function DataTableColumnHeaderTurnover<TData, TValue>({
   column,
   title,
   className,
@@ -33,20 +33,15 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center space-x-2 text-center text-black font-bold",
-        className
-      )}
-    >
+    <div className={cn("flex items-center space-x-2 text-center text-white font-bold", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full text-md font-bold hover:bg-table-header hover:text-black transition-colors"
+             className="w-full text-md font-bold hover:bg-table-header hover:text-white transition-colors"
           >
-            {title}
+            <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
               <ArrowDownIcon className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === "asc" ? (

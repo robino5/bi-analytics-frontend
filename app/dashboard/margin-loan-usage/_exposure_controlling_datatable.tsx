@@ -77,10 +77,10 @@ export default function ExposureControllingDataTable({
               <TableRow
                 key={record.exposure}
                 className={cn(
-                  keywordMatcher(record.exposure) === "green" && "bg-green-400",
+                  keywordMatcher(record.exposure) === "green" && "bg-green-400 hover:bg-green-300",
                   keywordMatcher(record.exposure) === "yellow" &&
-                    "bg-yellow-400",
-                  keywordMatcher(record.exposure) === "red" && "bg-red-400"
+                    "bg-yellow-400 hover:bg-yellow-300",
+                  keywordMatcher(record.exposure) === "red" && "bg-red-400 hover:bg-red-300"
                 )}
               >
                 <TableCell className="font-medium py-1">

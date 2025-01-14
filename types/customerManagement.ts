@@ -89,4 +89,27 @@ export interface ClientSegmentation {
     sumOfTpvFreeQtyPercentage: number;
     sumOfTpvLockQtyPercentage: number;
   }
+
+  export interface GsecTurnoverDetails {
+    sumOfTurnoverGsec:number
+  }
+
+  export interface GsecTurnover {
+    tradingDate:string
+    turnoverGsec:number
+  }
   
+  export interface GsecTurnoverComparisonDetails {
+    sumOfTurnoverGsec:number,
+    sumOfTurnover:number
+  }
+
+  export interface GsecTurnoverComparison {
+    year:number
+    turnoverGsec:number
+    turnover:number
+  }
+  
+  
+
+

@@ -97,7 +97,7 @@ export function DataTableCard<TData, TValue>({
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}
-                    className="bg-blue-500 hover:bg-blue-700"
+                      className="bg-table-header hover:bg-table-header"
                   >
                     {headerGroup.headers.map((header) => {
                       return (
@@ -118,14 +118,14 @@ export function DataTableCard<TData, TValue>({
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody>
+              <TableBody className="border border-gray-200">
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row, index) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
                       className={`${
-                        index % 2 === 0 ? "bg-pink-200" : "bg-yellow-200"
+                        index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
                       } hover:bg-green-300 transition-all duration-300`}
                     >
                       {row.getVisibleCells().map((cell) => (
