@@ -54,16 +54,13 @@ export default function BranchWiseNonPerformerClientsChart({
         {
           type: 'value',
           axisLabel: { color: '#fff' },
-          min: 0,
-          max: 5000,
-          interval: 1000,
         },
         {
           type: 'value',
           axisLabel: { color: '#fff' },
-          min: 0,
-          max: 25,
-          interval: 5,
+          splitLine: {
+            show: false,
+          },
         },
       ],
       series: [

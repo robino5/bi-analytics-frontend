@@ -123,12 +123,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               formatter: numberToMillionsString,
             },
             splitLine: {
-              show: true,
-              lineStyle: {
-                color: "white",
-                type: "solid", 
-                width: 1, 
-              },
+              show: false,
             },
           },
           {
@@ -140,9 +135,6 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             axisLabel: {
               color: "white",
               formatter: numberToMillionsString,
-            },
-            splitLine: {
-              show: false,
             },
           },
         ],
