@@ -363,6 +363,7 @@ export default function PortfolioManagement() {
         ) : null}
 
         {/* Client Trade vs Turnover Chart */}
+        {tradeVsturnover?(
         <CardBoard
           className="lg:col-span-3"
           title="Clients Trade vs Turnover"
@@ -373,7 +374,7 @@ export default function PortfolioManagement() {
               options={biaxialChartOption}
             />
           }
-        />
+        />):null}
         {/* Turnover Performance Data Table */}
         {turnover ? (
           <TurnoverPerformanceDataTable records={turnover as any} />

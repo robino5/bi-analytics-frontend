@@ -44,14 +44,14 @@ export default function DailyTradePerformance() {
     {
       name: "Target",
       dataKey: "target",
-      fill: BarColors.red,
+      fill: BarColors.light_blue,
       stroke: "blue",
       barLabel: false,
     },
     {
       name: "Generated",
       dataKey: "generated",
-      fill: BarColors.green,
+      fill: BarColors.purple,
       stroke: "purple",
       barLabel: true,
     },
@@ -60,14 +60,14 @@ export default function DailyTradePerformance() {
     {
       name: "Total Allocated",
       dataKey: "totalAllocated",
-      fill: BarColors.green,
+      fill: BarColors.purple,
       stroke: "blue",
       barLabel: false,
     },
     {
       name: "Daily Usage",
       dataKey: "dailyUsage",
-      fill: BarColors.red,
+      fill: BarColors.light_blue,
       stroke: "purple",
       barLabel: true,
     },
@@ -419,7 +419,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Turnover Target"}
-            subtitle="analytics of Turnover Target vs Generated"
+            // subtitle="analytics of Turnover Target vs Generated"
             children={
               <BarChartVerticalGrouped
                 data={turnoverPerformance}
