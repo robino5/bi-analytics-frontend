@@ -53,16 +53,13 @@ export default function BranchWiseClientsNumberChart({
         {
           type: 'value',
           axisLabel: { color: '#fff' },
-          min: 0,
-          max: 18000,
-          interval: 3000,
         },
         {
           type: 'value',
           axisLabel: { color: '#fff' },
-          min: 0,
-          max: 30,
-          interval: 5,
+          splitLine: {
+            show: false,
+          },
         },
       ],
       series: [
