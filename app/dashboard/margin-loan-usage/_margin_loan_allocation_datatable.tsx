@@ -30,15 +30,15 @@ export default function MarginLoanAllocationDataTable({
 }: Props) {
   return (
     <Card className={cn("overflow-auto", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
           Margin Loan Allocation & Usage
         </CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the margin loan allocation & usage
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <Table className="border border-gray-300 rounded-md overflow-hidden">
           <TableHeader >
             <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">

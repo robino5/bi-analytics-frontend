@@ -146,7 +146,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             label: {
               show: true,
               position: "top",
-              color: "white", 
+              color: "white",
             },
           },
           {

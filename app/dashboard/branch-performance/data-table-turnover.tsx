@@ -96,11 +96,11 @@ export function DataTableCardTurnover<TData, TValue>({
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">{title}</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
         {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <div className="space-y-4">
           <DataTableToolbar table={table} />
           <div className="rounded-md border">

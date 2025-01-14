@@ -33,13 +33,13 @@ interface Props {
 export default function RMTurnoverPerformance({ records }: Props) {
   return (
     <Card className="col-span-6 overflow-auto rounded-md shadow-md bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">Turnover Performance</CardTitle>
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">Turnover Performance</CardTitle>
         {/* <CardDescription className="text-white">
           short summary of RM Turnover Performance
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <Table>
           <TableHeader>
             <TableRow className="bg-blue-500 hover:bg-blue-700">

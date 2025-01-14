@@ -33,15 +33,15 @@ interface Props {
 export default function NewAccountOpeningDataTable({ accounts }: Props) {
   return (
     <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">
+      <CardHeader  className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
           New Account Opening & Fund Collection
         </CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the portfolio
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <Table>
           <TableHeader>
             <TableRow className="bg-blue-500 hover:bg-blue-700">

@@ -237,13 +237,13 @@ export default function MarginLoanUsage() {
           branch={branch}
         />
         <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-[#0e5e6f]">
-          <CardHeader>
-            <CardTitle className="text-white">RM Wise Net Trade</CardTitle>
+          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg">RM Wise Net Trade</CardTitle>
             {/* <CardDescription className="text-white">
               Net Trade for Regional Managers
             </CardDescription> */}
           </CardHeader>
-          <CardContent>
+          <CardContent className="mt-3">
             <NetTradeTable
               data={netTradeClients}
               columns={netTradeRmWiseColumns}

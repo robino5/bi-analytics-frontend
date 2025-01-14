@@ -26,15 +26,15 @@ interface Props {
 export default function PortfolioManagementStatusDataTable({ records }: Props) {
   return (
     <Card className="col-span-2 overflow-y-auto max-h-[385px] bg-[#0e5e6f]">
-      <CardHeader>
-        <CardTitle className="text-white">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
           Portfolio Management Status
         </CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the portfolio
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <Table>
           <TableHeader>
             <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">

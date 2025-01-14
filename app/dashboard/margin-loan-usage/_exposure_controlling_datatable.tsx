@@ -48,15 +48,15 @@ export default function ExposureControllingDataTable({
 }: Props) {
   return (
     <Card className={cn("overflow-auto", className, "bg-[#0e5e6f]")}>
-      <CardHeader>
-        <CardTitle className="text-white">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg">
           Exposure Controlling & Management
         </CardTitle>
         {/* <CardDescription className="text-white">
           excluding negative equity clients
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <Table>
           <TableHeader>
             <TableRow className="bg-blue-500 hover:bg-blue-700">
