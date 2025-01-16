@@ -11,8 +11,6 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
-
-
 export const metadata: Metadata = {
   title: "BI Analytics - LBSL",
   description: "Custom Analytics Application for LBSL",
