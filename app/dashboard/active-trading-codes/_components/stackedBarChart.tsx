@@ -210,7 +210,7 @@ const StackBarChart = ({
 
 
       <CardContent>
-        <div ref={chartRef} style={{ width: "100%", height: 330 }} />
+        <div ref={chartRef} style={{ width: "100%", height: "auto" }} />
       </CardContent>
     </Card>
 
