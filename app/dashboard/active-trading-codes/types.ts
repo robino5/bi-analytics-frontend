@@ -40,3 +40,31 @@ export interface IMonthWiseData {
     totalTrades: PayloadType[];
     totalTurnover: PayloadType[];
 }
+
+
+export interface DatewiseTurnover {
+      detail: {
+        sumOfTotalClient: number;
+        sumOfTurnover: number;   
+      };
+      rows: {
+        tradingDate: string;     
+        activeClient: number;   
+        turnover: number; 
+      }[];
+  }
+
+export type BranchData = {
+    data: {
+        detail: {
+            period: string;
+            sumOfTotalClient: number;
+            sumOfTurnover: number;
+        };
+        rows: {
+            branch_Name: string;
+            activeClients: number;
+            turnover: number;
+        }[];
+    };
+};

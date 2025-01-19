@@ -1,10 +1,11 @@
+"use client";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-export default async function UserSummary() {
-  const session = await auth();
+export default  function UserSummary() {
+  const { data: session } = useSession();
   if (!session) {
     redirect("/auth/login");
   }

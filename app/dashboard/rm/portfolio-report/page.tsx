@@ -258,35 +258,45 @@ const RmPortfolioBoard = () => {
           <SummarySkeletonCard className="col-span-3" />
         )}
         {/* Zonal Marked Investors */}
-        <Tabs defaultValue="red" className="col-span-3">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="red">Red</TabsTrigger>
-            <TabsTrigger value="yellow">Yellow</TabsTrigger>
+        <Tabs defaultValue="red" className="col-span-3 ">
+          <TabsList className="grid w-full grid-cols-2 bg-[#0e5e6f]">
+            <TabsTrigger
+              value="red"
+              className="text-white active:bg-gradient-to-r active:from-teal-700 active:via-teal-600 active:to-teal-500"
+            >
+              Red
+            </TabsTrigger>
+            <TabsTrigger
+              value="yellow"
+              className="text-white active:bg-gradient-to-r active:from-teal-700 active:via-teal-600 active:to-teal-500"
+            >
+              Yellow
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="red">
             <Card className="bg-[#0e5e6f]">
-              <CardHeader>
-                <CardTitle className="text-white">Red Clients</CardTitle>
+              <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+                <CardTitle className="text-white text-md text-lg">Red Clients</CardTitle>
                 {/* <CardDescription className="text-white">
                   red clients details
                 </CardDescription> */}
               </CardHeader>
-              <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
-                <MarkedTraderDataTable records={redClients} clientType="red"/>
+              <CardContent className="space-y-2 overflow-y-auto max-h-[250px] mt-3">
+                <MarkedTraderDataTable records={redClients} clientType="red" />
               </CardContent>
               <CardFooter></CardFooter>
             </Card>
           </TabsContent>
           <TabsContent value="yellow">
             <Card className="bg-[#0e5e6f]">
-              <CardHeader>
-                <CardTitle className="text-white">Yellow Clients</CardTitle>
+              <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+                <CardTitle className="text-white text-md text-lg">Yellow Clients</CardTitle>
                 {/* <CardDescription className="text-white">
                   yellow clients details
                 </CardDescription> */}
               </CardHeader>
-              <CardContent className="space-y-2 overflow-y-auto max-h-[250px]">
-                <MarkedTraderDataTable records={yellowClients} clientType="yellow"/>
+              <CardContent className="space-y-2 overflow-y-auto max-h-[250px] mt-3">
+                <MarkedTraderDataTable records={yellowClients} clientType="yellow" />
               </CardContent>
               <CardFooter></CardFooter>
             </Card>

@@ -2,7 +2,7 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { IActiveTradingToday, IActiveTradeDayWise, IMonthWiseData } from "../types";
+import { IActiveTradingToday, IActiveTradeDayWise, IMonthWiseData,DatewiseTurnover,BranchData } from "../types";
 import { IResponse } from "@/types/utils";
 
 
@@ -21,6 +21,12 @@ class ActiveTradingCodeAPI extends Common {
 
     getStatisticsByMonth() {
         return this.http.get<IResponse<IMonthWiseData>>("dashboards/active-trading-monthwise/")
+    }
+    getDatewiseTurnover(){
+        return this.http.get<IResponse<DatewiseTurnover>>("dashboards/admin-oms-datewise-turnover/")
+    }
+    getBranchwiseTurnover(){
+        return this.http.get<IResponse<BranchData>>("dashboards/admin-oms-branchwise-turnover/")
     }
 
 }

@@ -1,32 +1,27 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query";
-
 import PageHeader from "@/components/PageHeader";
 import LoadingButton from "@/components/loading";
-
 import ClientTradesDataTable from "./_components/clientTradesDataTable";
 import PieChart from "./_components/pieChart";
 import StackBarChart from "./_components/stackedBarChart";
-
 import { getFormattedHeaderDate } from "@/utils";
-
 import { activeTradingCodeAPI } from "./api/activeTradingCode";
-
 import { removeKeyFromObjects } from "@/utils"
-
 import {
   transformData,
   ratioMaker,
   ratioMakerMonthWise,
   sortByMonthYearDescending,
 } from "./services"
-
 import {
   IActiveTradeDayWise,
   IActiveTradingToday,
 } from "./types";
-
+import CardBoard from "@/components/CardBoard";
+import BarChartBiAxis from "@/components/BarChartBiAxis";
+import OmsBranchwiseTurnover from "./_oms_branchwise_turnover";
 
 const ActiveTradingCodesBoard = () => {
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
@@ -53,9 +48,27 @@ const ActiveTradingCodesBoard = () => {
     }
   });
 
-  const isLoading = todayLoading || dayLoading || monthLoading;
+  const { data: datewiseTrunover, isLoading: datewiseTurnoverLoading, isError: DatewiseTurnoverError } = useQuery({
+    queryKey: ["datewiseTurnover"],
+    queryFn: () => activeTradingCodeAPI.getDatewiseTurnover()
+  });
+  const { data: branchwiseTrunover, isLoading: branchwiseTurnoverLoading, isError: branchwiseTurnoverError } = useQuery({
+    queryKey: ["branchwiseTurnover"],
+    queryFn: () => activeTradingCodeAPI.getBranchwiseTurnover()
+  });
+  const biaxialChartOption = {
+    dataKey: "tradingDate",
+    valueKeyA: "activeClients",
+    valueKeyB: "turnover",
+    fill: "#ff3355",
+    stroke: "#c3ce",
+    barLabel: true,
+    rotate: 90,
+  };
 
-  const error = todayError || dayError || monthError;
+  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading;
+
+  const error = todayError || dayError || monthError || DatewiseTurnoverError ||branchwiseTurnoverError;
 
   if (isLoading) {
     return <LoadingButton text="Loading..." />
@@ -194,6 +207,22 @@ const ActiveTradingCodesBoard = () => {
             title="Turnover (Month Wise)"
           />
         </div>
+        {datewiseTrunover?(
+        <CardBoard
+          className="lg:col-span-3"
+          title="OMS Date Wise Turnover"
+          // subtitle="analysis of total clients traded vs lsbl turnover"
+          children={
+            <BarChartBiAxis
+              data={datewiseTrunover?.data?.rows as any}
+              options={biaxialChartOption}
+            />
+          }
+        />):null}
+
+               {branchwiseTrunover?.data ? (
+                  <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
+                ) : null}
       </div>
     </div>
   );

@@ -40,6 +40,7 @@ interface BarOption {
   height?: number;
   barLabel?: boolean;
   legendName?: string;
+  rotate?:number;
 }
 
 interface BarChartProps {
@@ -78,7 +79,6 @@ interface BarCharHorizonalProps {
 
 const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
   const chartRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (chartRef.current) {
       const chartInstance = echarts.init(chartRef.current);
@@ -145,8 +145,9 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             data: data.map((item) => item.activeClients),
             label: {
               show: true,
+              rotate: options?.rotate,
               position: "top",
-              color: "white", 
+              color: "white",
             },
           },
           {
@@ -158,6 +159,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               show: true,
               position: "top",
               color: "white",
+              rotate: options?.rotate,
               formatter: (params: any) =>
                 numberToMillionsString(params.value, true),
             },

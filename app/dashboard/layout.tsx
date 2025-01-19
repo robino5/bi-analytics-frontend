@@ -1,33 +1,30 @@
-import React from "react";
-import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+"use client";
+import React, { useState } from "react";
 import Sidebar from "@/components/Sidebar";
-
 import { cn } from "@/lib/utils";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
-
-export const metadata: Metadata = {
-  title: "BI Analytics - LBSL",
-  description: "Analytics Application for LBSL",
-};
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <section
-      className={cn("flex items-start justify-between", fontSans.variable)}
-    >
-      <div className="min-w-[300px] border-r min-h-screen shadow-sm">
-        <Sidebar />
+    <section className={cn("flex items-start justify-between transition-all duration-300")}>
+      {/* Sidebar with transition */}
+      <div
+        className={`border-r min-h-screen shadow-sm transition-all duration-300 ${
+          collapsed ? "min-w-[50px]" : "min-w-[300px]"
+        }`}
+      >
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       </div>
-      <div className="w-full h-full">{children}</div>
+
+      {/* Content area with transition */}
+      <div className="flex-grow h-full transition-all duration-300">
+        {children}
+      </div>
     </section>
   );
 }
