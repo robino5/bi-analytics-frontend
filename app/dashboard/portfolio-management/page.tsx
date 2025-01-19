@@ -21,6 +21,7 @@ import {
   ITurnoverPerformance,
 } from "@/types/portfolioManagement";
 import { IResponse } from "@/types/utils";
+import { title } from "process";
 
 export default function PortfolioManagement() {
   // Override console.error
@@ -49,6 +50,7 @@ export default function PortfolioManagement() {
     stroke: "#c3ce",
     barLabel: true,
     rotate: 0,
+    title:"Clients Trade vs Turnover"
   };
 
   const [branch, setBranch] = useState("");
@@ -365,17 +367,10 @@ export default function PortfolioManagement() {
 
         {/* Client Trade vs Turnover Chart */}
         {tradeVsturnover?(
-        <CardBoard
-          className="lg:col-span-3"
-          title="Clients Trade vs Turnover"
-          // subtitle="analysis of total clients traded vs lsbl turnover"
-          children={
             <BarChartBiAxis
               data={tradeVsturnover as any}
               options={biaxialChartOption}
-            />
-          }
-        />):null}
+            />):null}
         {/* Turnover Performance Data Table */}
         {turnover ? (
           <TurnoverPerformanceDataTable records={turnover as any} />
