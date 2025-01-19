@@ -63,7 +63,8 @@ const ActiveTradingCodesBoard = () => {
     fill: "#ff3355",
     stroke: "#c3ce",
     barLabel: true,
-    rotate: 90,
+    rotate:0,
+    title:"OMS Date Wise Turnover"
   };
 
   const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading;
@@ -121,8 +122,12 @@ const ActiveTradingCodesBoard = () => {
   const fixedProps = {
     xDataKey: "tradingDate",
     dataKeyA: "dtRatio",
+    dataKeyX: "dt",
     dataKeyB: "internetRatio",
+    dataKeyY: "internet"
   };
+
+  console.log("test data",transformedClients)
 
   const headerTradingDate = getFormattedHeaderDate(dayWiseSummary?.[0], "tradingDate")
 
@@ -208,17 +213,10 @@ const ActiveTradingCodesBoard = () => {
           />
         </div>
         {datewiseTrunover?(
-        <CardBoard
-          className="lg:col-span-3"
-          title="OMS Date Wise Turnover"
-          // subtitle="analysis of total clients traded vs lsbl turnover"
-          children={
             <BarChartBiAxis
               data={datewiseTrunover?.data?.rows as any}
               options={biaxialChartOption}
-            />
-          }
-        />):null}
+            />):null}
 
                {branchwiseTrunover?.data ? (
                   <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />

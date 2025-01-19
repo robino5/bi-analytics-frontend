@@ -24,28 +24,19 @@ type StackChartPropType = {
   title: string;
   xDataKey: string;
   dataKeyA: string;
+  dataKeyX: string;
   dataKeyB: string;
+  dataKeyY: string;
   data: any[];
-};
-
-interface CustomTooltipProps {
-  formatter: (params: any) => string;
-}
-
-const CustomTooltip = ({ formatter }: CustomTooltipProps) => {
-  return {
-    trigger: "item",
-    formatter: (params: any) => {
-      return params.seriesName + " : " + numberToMillionsString(params.value);
-    },
-  };
 };
 
 const StackBarChart = ({
   title,
   xDataKey,
   dataKeyA,
+  dataKeyX,
   dataKeyB,
+  dataKeyY,
   data,
 }: StackChartPropType) => {
   const chartRef = useRef<HTMLDivElement>(null);
@@ -68,10 +59,10 @@ const StackBarChart = ({
 
   const exportCSV = () => {
     const csvRows = [];
-    csvRows.push("Category,DT,INTERNET");
+    csvRows.push("Category,DT (%),DT (Value),INTERNET (%),INTERNET (Value)");
     data.forEach((item) => {
       csvRows.push(
-        `${item[xDataKey]},${item[dataKeyA]},${item[dataKeyB]}`
+        `${item[xDataKey]},${item[dataKeyA]},${numberToMillionsString(item[dataKeyX])},${item[dataKeyB]},${numberToMillionsString(item[dataKeyY])}`
       );
     });
 
@@ -84,15 +75,16 @@ const StackBarChart = ({
     const chartInstance = echarts.init(chartRef.current as HTMLDivElement);
 
     const chartOptions = {
-      title: {
-        textStyle: {
-          color: "white",
-          fontSize: 16,
+      tooltip: {
+        trigger: "item",
+        formatter: (params: any) => {
+          const rawValue =
+            params.seriesName === "DT"
+              ? data.find((item) => item[xDataKey] === params.name)[dataKeyX]
+              : data.find((item) => item[xDataKey] === params.name)[dataKeyY];
+          return `${params.seriesName}: ${numberToMillionsString(rawValue)}(${params.value}%)`;
         },
       },
-      tooltip: CustomTooltip({
-        formatter: (params) => `${params.name}: ${params.value}%`,
-      }),
       legend: {
         data: ["DT", "INTERNET"],
         textStyle: {
@@ -145,10 +137,13 @@ const StackBarChart = ({
           label: {
             show: true,
             position: "inside",
-            formatter: "{c}%",
+            formatter: (params: any) => {
+              const rawValue = data.find(
+                (item) => item[xDataKey] === params.name
+              )[dataKeyX];
+              return `${params.value}%`;
+            },
             color: "white",
-            align: "center",
-            verticalAlign: "middle",
           },
         },
         {
@@ -162,10 +157,13 @@ const StackBarChart = ({
           label: {
             show: true,
             position: "inside",
-            formatter: "{c}%",
+            formatter: (params: any) => {
+              const rawValue = data.find(
+                (item) => item[xDataKey] === params.name
+              )[dataKeyY];
+              return `${params.value}%`;
+            },
             color: "white",
-            align: "center",
-            verticalAlign: "middle",
           },
         },
       ],
@@ -178,7 +176,7 @@ const StackBarChart = ({
       window.removeEventListener("resize", () => chartInstance.resize());
       chartInstance.dispose();
     };
-  }, [data, title, xDataKey, dataKeyA, dataKeyB]);
+  }, [data, title, xDataKey, dataKeyA, dataKeyX, dataKeyB, dataKeyY]);
 
   return (
     <Card className="bg-[#0e5e6f]">
@@ -187,9 +185,7 @@ const StackBarChart = ({
         <div className="text-right">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                className="bg-transparent text-white px-2 py-0 rounded-md border-teal-500 hover:bg-transparent hover:border-teal-500 transition-all focus:outline-none focus:ring-0"
-              >
+              <Button className="bg-transparent text-white px-2 py-0 rounded-md border-teal-500 hover:bg-transparent hover:border-teal-500 transition-all focus:outline-none focus:ring-0">
                 <Download className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
@@ -207,14 +203,10 @@ const StackBarChart = ({
           </DropdownMenu>
         </div>
       </CardHeader>
-
-
       <CardContent>
         <div ref={chartRef} style={{ width: "100%", height: 330 }} />
       </CardContent>
     </Card>
-
-
   );
 };
 

@@ -2,28 +2,22 @@
 
 import { FC } from "react";
 import {
-  ResponsiveContainer,
-  BarChart as RechartsBarChart,
-  CartesianGrid,
-  Tooltip,
-  XAxis,
-  YAxis,
-  Legend,
-  Brush,
-  Bar,
-  Rectangle,
-  Label,
-} from "recharts";
-
-import {
   formatDate,
   numberFormatter,
   numberToMillionsString,
 } from "@/lib/utils";
-import { BarColors, TOOLTIP_BACKGROUND } from "./ui/utils/constants";
-import { Separator } from "./ui/separator";
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import { saveAs } from "file-saver";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { Download } from "lucide-react";
 
 interface BarData {
   tradingDate: string;
@@ -40,37 +34,14 @@ interface BarOption {
   height?: number;
   barLabel?: boolean;
   legendName?: string;
-  rotate?:number;
+  rotate?: number;
+  title?:string
 }
 
 interface BarChartProps {
   data: BarData[];
   option: BarOption;
 }
-
-interface CustomizedLabelProps {
-  x?: number;
-  y?: number;
-  fill?: string;
-  value?: number;
-}
-
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: PayloadType[];
-  label?: number;
-}
-
-type PayloadType = {
-  value: string | number;
-  name: string;
-  payload: BarData;
-  color: string;
-  dataKey: string;
-};
-
-
-
 
 interface BarCharHorizonalProps {
   data: BarData[];
@@ -79,9 +50,12 @@ interface BarCharHorizonalProps {
 
 const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+
   useEffect(() => {
     if (chartRef.current) {
       const chartInstance = echarts.init(chartRef.current);
+      chartInstanceRef.current = chartInstance;
 
       const option = {
         tooltip: {
@@ -171,12 +145,77 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
         chartInstance.dispose();
       };
     }
-  }, []);
+  }, [data, options]);
 
-  return <div ref={chartRef} style={{ width: "100%", height: "500px" }} />;
+  const handleDownloadChart = (format: "png" | "svg") => {
+    if (chartInstanceRef.current) {
+      const dataURL = chartInstanceRef.current.getDataURL({
+        type: format,
+        backgroundColor: "#000", // Adjust background color if needed
+        pixelRatio: 2, // Optional: Increase resolution for PNG
+      });
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = `chart.${format}`;
+      link.click();
+    }
+  };
+
+  const handleDownloadCSV = () => {
+    const csvRows = [
+      ["Trading Date", "Active Clients", "Turnover"], // Header row
+      ...data.map((item) => [
+        item.tradingDate,
+        item.activeClients,
+        item.turnover,
+      ]),
+    ];
+
+    const csvContent = csvRows
+      .map((row) => row.map(String).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "chart_data.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+      <Card className=" col-span-3 overflow-auto bg-[#0e5e6f]">
+      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
+        <div className="text-white text-lg font-semibold">{options?.title}</div>
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className="bg-transparent text-white px-2 py-0 rounded-md border-teal-500 hover:bg-transparent hover:border-teal-500 transition-all focus:outline-none focus:ring-0"
+              >
+                <Download className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => handleDownloadChart("png")}>
+                Download PNG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDownloadChart("svg")}>
+                Download SVG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDownloadCSV}>
+                Download CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </CardHeader>
+      <CardContent>
+      <div ref={chartRef} style={{ width: "100%", height: "500px" }} />
+      </CardContent>
+      </Card>
+  );
 };
 
 export default BarChartBiAxis;
-
-
-
