@@ -16,6 +16,8 @@ import {
     TableFooter,
 } from "@/components/ui/table";
 import { numberToMillionsString } from "@/lib/utils";
+import { Download } from "lucide-react";
+import Link from "next/link";
 
 type BranchData = {
     data: {
@@ -35,12 +37,17 @@ type BranchData = {
 export default function OmsBranchwiseTurnover({ data }: BranchData) {
     return (
         <Card className="col-span-3 overflow-auto bg-[#0e5e6f] max-h-[600px]">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-                <CardTitle className="text-white text-md text-lg">OMS Branch Wise Turnover As On - {data.detail.period}</CardTitle>
-                {/* <CardDescription className="text-white">
-              short summary of the board wise turnover
-            </CardDescription> */}
-            </CardHeader>
+   <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
+  <CardTitle className="text-white text-lg font-semibold py-2">
+    Branch Wise Turnover (Internet) As On - {data.detail.period}
+  </CardTitle>
+  <div className="text-right">
+    <Link href="http://192.168.10.7:8080/api/v1/dashboards/admin-oms-branchwise-turnover-csv/" className="inline-flex items-center">
+      <Download className="h-5 w-5 text-white" />
+    </Link>
+  </div>
+</CardHeader>
+
             <CardContent className="mt-2">
                 <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
                     <TableHeader>
@@ -65,6 +72,17 @@ export default function OmsBranchwiseTurnover({ data }: BranchData) {
                             </TableRow>
                         ))}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
+                            <TableCell className="font-medium py-2">Total</TableCell>
+                            <TableCell className="text-right py-2">
+                                {data?.detail?.sumOfTotalClient}
+                            </TableCell>
+                            <TableCell className="text-right py-2">
+                                {numberToMillionsString(data?.detail?.sumOfTurnover)}
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </CardContent>
         </Card>

@@ -49,7 +49,7 @@ export default function PortfolioManagement() {
     fill: "#ff3355",
     stroke: "#c3ce",
     barLabel: true,
-    rotate: 0,
+    rotate: 90,
     title:"Clients Trade vs Turnover"
   };
 

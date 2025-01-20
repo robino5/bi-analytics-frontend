@@ -119,6 +119,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             data: data.map((item) => item.activeClients),
             label: {
               show: true,
+              fontSize: 14,
               rotate: options?.rotate,
               position: "top",
               color: "white",
@@ -133,6 +134,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               show: true,
               position: "top",
               color: "white",
+              fontSize: 14,
               rotate: options?.rotate,
               formatter: (params: any) =>
                 numberToMillionsString(params.value, true),
