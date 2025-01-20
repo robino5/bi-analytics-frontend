@@ -63,8 +63,8 @@ const ActiveTradingCodesBoard = () => {
     fill: "#ff3355",
     stroke: "#c3ce",
     barLabel: true,
-    rotate:0,
-    title:"OMS Date Wise Turnover"
+    rotate:90,
+    title:"Date Wise Turnover(Internet)"
   };
 
   const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading;
