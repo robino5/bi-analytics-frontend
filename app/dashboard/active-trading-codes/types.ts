@@ -58,13 +58,17 @@ export type BranchData = {
     data: {
         detail: {
             period: string;
-            sumOfTotalClient: number;
-            sumOfTurnover: number;
+            sumOfTotalClientToday: number,
+            sumOfTurnoverToday: number,
+            sumOfTotalClientMonth: number,
+            sumOfTurnoverMonth: number
         };
         rows: {
             branch_Name: string;
-            activeClients: number;
-            turnover: number;
+            activeClientsToday:number;
+            turnoverToday:number
+            activeClientsMonth: number;
+            turnoverMonth: number;
         }[];
     };
 };

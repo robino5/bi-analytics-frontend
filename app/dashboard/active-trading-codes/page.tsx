@@ -126,9 +126,6 @@ const ActiveTradingCodesBoard = () => {
     dataKeyB: "internetRatio",
     dataKeyY: "internet"
   };
-
-  console.log("test data",transformedClients)
-
   const headerTradingDate = getFormattedHeaderDate(dayWiseSummary?.[0], "tradingDate")
 
   return (

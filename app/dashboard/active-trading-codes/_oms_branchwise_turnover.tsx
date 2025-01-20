@@ -23,23 +23,28 @@ type BranchData = {
     data: {
         detail: {
             period: string;
-            sumOfTotalClient: number;
-            sumOfTurnover: number;
+            sumOfTotalClientToday: number,
+            sumOfTurnoverToday: number,
+            sumOfTotalClientMonth: number,
+            sumOfTurnoverMonth: number
         };
         rows: {
             branch_Name: string;
-            activeClients: number;
-            turnover: number;
+            activeClientsToday:number;
+            turnoverToday:number
+            activeClientsMonth: number;
+            turnoverMonth: number;
         }[];
     };
 };
 
 export default function OmsBranchwiseTurnover({ data }: BranchData) {
+    console.log(data)
     return (
         <Card className="col-span-3 overflow-auto bg-[#0e5e6f] max-h-[600px]">
    <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
   <CardTitle className="text-white text-lg font-semibold py-2">
-    Branch Wise Turnover (Internet) As On - {data.detail.period}
+    Branch Wise Turnover (Internet)
   </CardTitle>
   <div className="text-right">
     <Link href="http://192.168.10.7:8080/api/v1/dashboards/admin-oms-branchwise-turnover-csv/" className="inline-flex items-center">
@@ -53,8 +58,10 @@ export default function OmsBranchwiseTurnover({ data }: BranchData) {
                     <TableHeader>
                         <TableRow className="bg-table-header hover:bg-table-header">
                             <TableHead className="text-black font-bold">Branch Name</TableHead>
-                            <TableHead className="text-right text-black font-bold">Active Clients</TableHead>
-                            <TableHead className="text-right text-black font-bold">Turnover</TableHead>
+                            <TableHead className="text-right text-black font-bold">Active Clients Today</TableHead>
+                            <TableHead className="text-right text-black font-bold">Turnover Today</TableHead>
+                            <TableHead className="text-center text-black font-bold">Active Clients<br />{data.detail.period}</TableHead>
+                            <TableHead className="text-center text-black font-bold">Turnover<br />{data.detail.period}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -65,9 +72,13 @@ export default function OmsBranchwiseTurnover({ data }: BranchData) {
                                     } hover:bg-table-even-row-hover transition-all duration-300`}
                             >
                                 <TableCell className="font-medium py-1">{data.branch_Name}</TableCell>
-                                <TableCell className="text-right py-1">{data.activeClients}</TableCell>
+                                <TableCell className="text-right py-1">{data.activeClientsToday}</TableCell>
                                 <TableCell className="text-right py-1">
-                                    {numberToMillionsString(data.turnover)}
+                                    {numberToMillionsString(data.turnoverToday)}
+                                </TableCell>
+                                <TableCell className="text-right py-1">{data.activeClientsMonth}</TableCell>
+                                <TableCell className="text-right py-1">
+                                    {numberToMillionsString(data.turnoverMonth)}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -76,10 +87,16 @@ export default function OmsBranchwiseTurnover({ data }: BranchData) {
                         <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
                             <TableCell className="font-medium py-2">Total</TableCell>
                             <TableCell className="text-right py-2">
-                                {data?.detail?.sumOfTotalClient}
+                                {data?.detail?.sumOfTotalClientToday}
                             </TableCell>
                             <TableCell className="text-right py-2">
-                                {numberToMillionsString(data?.detail?.sumOfTurnover)}
+                                {numberToMillionsString(data?.detail?.sumOfTurnoverToday)}
+                            </TableCell>
+                            <TableCell className="text-right py-2">
+                                {data?.detail?.sumOfTotalClientMonth}
+                            </TableCell>
+                            <TableCell className="text-right py-2">
+                                {numberToMillionsString(data?.detail?.sumOfTurnoverMonth)}
                             </TableCell>
                         </TableRow>
                     </TableFooter>
