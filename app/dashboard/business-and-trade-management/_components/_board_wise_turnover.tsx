@@ -30,16 +30,16 @@ interface Props {
   datalist: BoardWiseTurnoverData[];
 }
 export default function BoardWiseTurnover({ datalist }: Props) {
-  const totalTurnover = datalist.reduce((acc, data) => acc + data.turnover, 0);
-  const totalDsePercentage = datalist.reduce(
+  const totalTurnover = datalist?.reduce((acc, data) => acc + data.turnover, 0);
+  const totalDsePercentage = datalist?.reduce(
     (acc, data) => acc + data.dsePercentage,
     0
   );
-  const totalLbslTurnover = datalist.reduce(
+  const totalLbslTurnover = datalist?.reduce(
     (acc, data) => acc + data.lbslTurnover,
     0
   );
-  const totalLbslPercentage = datalist.reduce(
+  const totalLbslPercentage = datalist?.reduce(
     (acc, data) => acc + data.lbslPercentage,
     0
   );

@@ -1,410 +1,86 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import PageHeader from "@/components/PageHeader";
-import ClientSegmentationChart from "./_client_segmentation_chart";
-import BranchWiseClientsNumberChart from "./_branch_wise_clients_number_chart";
-import BranchWiseNonPerformerClientsChart from "./_branch_wise_non_performer_clients_chart";
-import LBSLTurnOverSegmentationChart from "./_lbsl_turnover_segmentation_chart";
-import EquityValueSegmentationChart from "./_equity_value_segmentation_chart";
-import LedgerValueSegmentationChart from "./_ledger_value_segmentation_chart";
-import DetailsMarketShareLBSLChart from "./_details_market_share_of_lbsl_chart";
-import PortfolioValueSegmentationChart from "./_portfolio_value_segmentation";
-import GsecTurnoverComparisonChart from "./_gsec_turnover_comparison_chart";
-import GsecTurnoverChart from "./_gsec_turnover_chart";
-import {
-  ClientSegmentation,
-  ClientSegmentationDetails,
-  BranchWiseClintsNumber,
-  BranchWiseClintsNumberDetails,
-  BranchWiseNonPerformerClints,
-  BranchWiseNonPerformerClintsDetails,
-  LBSLTurnoverSegmentation,
-  LBSLTurnoverSegmentationDetails,
-  EquityValueSegmentation,
-  EquityValueSegmentationDetails,
-  LedgerValueSegmentation,
-  LedgerValueSegmentationDetails,
-  DetailsMarketShareLBSL,
-  DetailsMarketShareLBSLDetails,
-  PortfolioValueSegmentation,
-  PortfolioValueSegmentationDetails,
-  GsecTurnoverDetails,
-  GsecTurnover,
-  GsecTurnoverComparisonDetails,
-  GsecTurnoverComparison
-} from "@/types/customerManagement";
-import { formatDate, successResponse } from "@/lib/utils";
-import { IResponse } from "@/types/utils";
+import ClientSegmentationChart from "./_components/_client_segmentation_chart";
+import BranchWiseClientsNumberChart from "./_components/_branch_wise_clients_number_chart";
+import BranchWiseNonPerformerClientsChart from "./_components/_branch_wise_non_performer_clients_chart";
+import LBSLTurnOverSegmentationChart from "./_components/_lbsl_turnover_segmentation_chart";
+import EquityValueSegmentationChart from "./_components/_equity_value_segmentation_chart";
+import LedgerValueSegmentationChart from "./_components/_ledger_value_segmentation_chart";
+import DetailsMarketShareLBSLChart from "./_components/_details_market_share_of_lbsl_chart";
+import PortfolioValueSegmentationChart from "./_components/_portfolio_value_segmentation";
+import GsecTurnoverComparisonChart from "./_components/_gsec_turnover_comparison_chart";
+import GsecTurnoverChart from "./_components/_gsec_turnover_chart";
 
-interface ClientSegmentationData {
-  detail: {
-    sumOfClients: number;
-  };
-  rows: ClientSegmentation[];
-}
-
-interface LBSLTurnoverSegmentationData {
-  detail: {
-    sumOfTurnovers: number;
-  };
-  rows: LBSLTurnoverSegmentation[];
-}
-
-interface EquityValueSegmentationData {
-  detail: {
-    sumOfEquity: number;
-  };
-  rows: EquityValueSegmentation[];
-}
-
-interface LedgerValueSegmentationData {
-  detail: {
-    sumOfMargin: number;
-  };
-  rows: LedgerValueSegmentation[];
-}
-
-interface LedgerValueSegmentationData {
-  detail: {
-    sumOfMargin: number;
-  };
-  rows: LedgerValueSegmentation[];
-}
-
-interface PortfolioValueSegmentationData {
-  detail: PortfolioValueSegmentationDetails;
-  rows: PortfolioValueSegmentation[];
-}
-
-interface DetailsMarketShareLBSLData {
-  detail: DetailsMarketShareLBSLDetails;
-  rows: DetailsMarketShareLBSL[];
-}
-
-interface BranchWiseClintsNumberData {
-  detail: BranchWiseClintsNumberDetails;
-  rows: BranchWiseClintsNumber[];
-}
-
-interface BranchWiseNonPerformerClintsData {
-  detail: BranchWiseNonPerformerClintsDetails;
-  rows: BranchWiseNonPerformerClints[];
-}
-
-interface GsecTurnoverType {
-  detail: GsecTurnoverDetails;
-  rows: GsecTurnover[];
-}
-
-interface GsecTurnoverComparisonType {
-  detail: GsecTurnoverComparisonDetails;
-  rows: GsecTurnoverComparison[];
-}
+import { formatDate } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { customerManagementAPI } from "./api";
+import LoadingButton from "@/components/loading";
 
 export default function CustomerManagement() {
-  const { data: session } = useSession();
-  const [clientSegmentation, setClientSegmentation] = useState<
-    ClientSegmentation[] | null
-  >(null);
-  const [clientSegmentationDetails, setClientSegmentationDetails] =
-    useState<ClientSegmentationDetails | null>(null);
-  const [branchClientRation, setBranchClientRation] = useState<
-    BranchWiseClintsNumber[] | null
-  >(null);
-  const [branchClientRationDetails, setBranchClientRationDetails] =
-    useState<BranchWiseClintsNumberDetails | null>(null);
-  const [branchNonPerformerClient, setBranchNonPerformerClient] = useState<
-    BranchWiseNonPerformerClints[] | null
-  >(null);
-  const [branchNonPerformerClientDetails, setBranchNonPerformerClientDetails] =
-    useState<BranchWiseNonPerformerClintsDetails | null>(null);
-  const [lbslTurnoverSegmentation, setLBSLTurnoverSegmentation] = useState<
-    LBSLTurnoverSegmentation[] | null
-  >(null);
-  const [lbslTurnoverSegmentationDetails, setLBSLTurnoverSegmentationDetails] =
-    useState<LBSLTurnoverSegmentationDetails | null>(null);
-  const [equityValueSegmentation, setEquityValueSegmentation] = useState<
-    EquityValueSegmentation[] | null
-  >(null);
-  const [equityValueSegmentationDetails, setEquityValueSegmentationDetails] =
-    useState<EquityValueSegmentationDetails | null>(null);
-  const [ledgerValueSegmentation, setLedgerValueSegmentation] = useState<
-    LedgerValueSegmentation[] | null
-  >(null);
-  const [ledgerValueSegmentationDetails, setLedgerValueSegmentationDetails] =
-    useState<LedgerValueSegmentationDetails | null>(null);
-  const [detailsMarketShareLBSL, setDetailsMarketShareLBSL] = useState<
-    DetailsMarketShareLBSL[] | null
-  >(null);
-  const [detailsMarketShareLBSLDetails, setDetailsMarketShareLBSLDetails] =
-    useState<DetailsMarketShareLBSLDetails | null>(null);
-  const [portfolioValueSegmentation, setPortfolioValueSegmentationL] = useState<
-    PortfolioValueSegmentation[] | null
-  >(null);
-  const [
-    portfolioValueSegmentationDetails,
-    setPortfolioValueSegmentationLDetails,
-  ] = useState<PortfolioValueSegmentationDetails | null>(null);
-  const [gsecTurmoverDetails,setGsecTurmoverDetails] = useState<GsecTurnoverDetails | null>(null);
-  const [gsecTurmover,setGsecTurmover] = useState<GsecTurnover[] | null>(null);
-  
-  const [gsecTurmoverComparisonDetails,setGsecTurmoverComparisonDetails] = useState<GsecTurnoverComparisonDetails | null>(null);
-  const [gsecTurmoverComparison,setGsecTurmoverComparison] = useState<GsecTurnoverComparison[] | null>(null);
-  // Fetch data on page load
-  useEffect(() => {
-    // fatching client segmentation
-    const fetchClientSegmentation = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/client-segmentations/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<ClientSegmentationData>;
-
-        if (successResponse(result.status)) {
-          setClientSegmentation(result.data.rows);
-          setClientSegmentationDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching Client Segmentation", error);
-      }
-    };
-    // fatching Brach wise Client Ratio
-    const fetchBranchWiseClientRatio = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/branchwise-client-ratio/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<BranchWiseClintsNumberData>;
-
-        if (successResponse(result.status)) {
-          setBranchClientRation(result.data.rows);
-          setBranchClientRationDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching Brach Wise Client Ratio", error);
-      }
-    };
-
-    // fatching Brach wise Non Performer Client
-    const fetchBranchWiseNonPerformerClient = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/branchwise-non-performers/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<BranchWiseNonPerformerClintsData>;
-
-        if (successResponse(result.status)) {
-          setBranchNonPerformerClient(result.data.rows);
-          setBranchNonPerformerClientDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching Brach Wise Non Performer Client", error);
-      }
-    };
-
-    // fatching lbsl turnover segmentation
-    const fetchLBSLTurnoverSegmentation = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/turnover-segmentation/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<LBSLTurnoverSegmentationData>;
-
-        if (successResponse(result.status)) {
-          setLBSLTurnoverSegmentation(result.data.rows);
-          setLBSLTurnoverSegmentationDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching lbsl turnover segmentation", error);
-      }
-    };
-
-    // fatching equity value segmentation
-    const fetchEquityValueSegmentation = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/equity-segmentation/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<EquityValueSegmentationData>;
-
-        if (successResponse(result.status)) {
-          setEquityValueSegmentation(result.data.rows);
-          setEquityValueSegmentationDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching equity value segmentation", error);
-      }
-    };
-
-    // fatching ledger value segmentation
-    const fetchLedgerValueSegmentation = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/ledger-segmentation/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<LedgerValueSegmentationData>;
-
-        if (successResponse(result.status)) {
-          setLedgerValueSegmentation(result.data.rows);
-          setLedgerValueSegmentationDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching ledger value segmentation", error);
-      }
-    };
-
-    // fatching market share segmentation
-    const fetchDetailsMarketShareLBSL = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/market-share-segmentation/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<DetailsMarketShareLBSLData>;
-
-        if (successResponse(result.status)) {
-          setDetailsMarketShareLBSL(result.data.rows);
-          setDetailsMarketShareLBSLDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching market share segmentation", error);
-      }
-    };
-
-    // fatching portfolio value segmentation
-    const fetchPortfolioValueSegmentation = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/tpv-segmentation/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result =
-          (await response.json()) as IResponse<PortfolioValueSegmentationData>;
-
-        if (successResponse(result.status)) {
-          setPortfolioValueSegmentationL(result.data.rows);
-          setPortfolioValueSegmentationLDetails(result.data.detail);
-        }
-      } catch (error) {
-        console.error("Error fetching portfolio value segmentation", error);
-      }
-    };
-
-        // fatching gsec turnover
-        const fetchGsecTurmover = async () => {
-          try {
-            const response = await fetch(
-              `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/gsec-turnover/`,
-              {
-                headers: {
-                  Authorization: `Bearer ${session?.user.accessToken}`,
-                  "Content-Type": "application/json",
-                },
-              },
-            );
-            const result =
-              (await response.json()) as IResponse<GsecTurnoverType>;
-    
-            if (successResponse(result.status)) {
-              setGsecTurmover(result.data.rows);
-              setGsecTurmoverDetails(result.data.detail);
-            }
-          } catch (error) {
-            console.error("Error fetching portfolio value segmentation", error);
-          }
-        };
-
-        // fatching gsec turnover
-        const fetchGsecTurmoverComparison = async () => {
-          try {
-            const response = await fetch(
-              `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/customer-management/gsec-turnover-comparison/`,
-              {
-                headers: {
-                  Authorization: `Bearer ${session?.user.accessToken}`,
-                  "Content-Type": "application/json",
-                },
-              },
-            );
-            const result =
-              (await response.json()) as IResponse<GsecTurnoverComparisonType>;
-    
-            if (successResponse(result.status)) {
-              setGsecTurmoverComparison(result.data.rows);
-              setGsecTurmoverComparisonDetails(result.data.detail);
-            }
-          } catch (error) {
-            console.error("Error fetching portfolio value segmentation", error);
-          }
-        };
-
-    fetchClientSegmentation();
-    fetchBranchWiseClientRatio();
-    fetchBranchWiseNonPerformerClient();
-    fetchLBSLTurnoverSegmentation();
-    fetchEquityValueSegmentation();
-    fetchLedgerValueSegmentation();
-    fetchDetailsMarketShareLBSL();
-    fetchPortfolioValueSegmentation();
-    fetchGsecTurmover();
-    fetchGsecTurmoverComparison();
-  }, []);
-
   const currentDate = new Date();
+  const { data: clientSegmentation, isLoading: clientSegmentationLoading, isError: clientSegmentationError } = useQuery({
+    queryKey: ["clientSegmentation"],
+    queryFn: () => customerManagementAPI.getClientSegmentation()
+  });
+
+  const { data: branchClientRation, isLoading: branchClientRationLoading, isError: branchClientRationError } = useQuery({
+    queryKey: ["branchClientRation"],
+    queryFn: () => customerManagementAPI.getBranchWiseClientRatio()
+  });
+
+  const { data: branchNonPerformerClient, isLoading: branchNonPerformerClientLoading, isError: branchNonPerformerClientError } = useQuery({
+    queryKey: ["branchNonPerformerClient"],
+    queryFn: () => customerManagementAPI.getBranchWiseNonPerformerClient()
+  });
+
+  const { data: lbslTurnoverSegmentation, isLoading: lbslTurnoverSegmentationLoading, isError: lbslTurnoverSegmentationError } = useQuery({
+    queryKey: ["lbslTurnoverSegmentation"],
+    queryFn: () => customerManagementAPI.getLBSLTurnoverSegmentation()
+  });
+  const { data: equityValueSegmentation, isLoading: equityValueSegmentationLoading, isError: equityValueSegmentationError } = useQuery({
+    queryKey: ["equityValueSegmentation"],
+    queryFn: () => customerManagementAPI.getEquityValueSegmentation()
+  });
+
+  const { data: ledgerValueSegmentation, isLoading: ledgerValueSegmentationLoading, isError: ledgerValueSegmentationError } = useQuery({
+    queryKey: ["ledgerValueSegmentation"],
+    queryFn: () => customerManagementAPI.getLedgerValueSegmentation()
+  });
+
+  const { data: detailsMarketShareLBSL, isLoading: detailsMarketShareLBSLLoading, isError: detailsMarketShareLBSLError } = useQuery({
+    queryKey: ["detailsMarketShareLBSL"],
+    queryFn: () => customerManagementAPI.getDetailsMarketShareLBSL()
+  });
+
+  const { data: portfolioValueSegmentation, isLoading: portfolioValueSegmentationLoading, isError: portfolioValueSegmentationError } = useQuery({
+    queryKey: ["portfolioValueSegmentation"],
+    queryFn: () => customerManagementAPI.getPortfolioValueSegmentation()
+  });
+
+  const { data: gsecTurmover, isLoading: gsecTurmoverLoading, isError:gsecTurmoverError } = useQuery({
+    queryKey: ["gsecTurmover"],
+    queryFn: () => customerManagementAPI.getGsecTurmover()
+  });
+  const { data: gsecTurmoverComparison, isLoading: gsecTurmoverComparisonLoading, isError:gsecTurmoverComparisonError } = useQuery({
+    queryKey: ["gsecTurmoverComparison"],
+    queryFn: () => customerManagementAPI.getGsecTurmoverComparison()
+  });
+
+  
+
+  const isLoading = clientSegmentationLoading || branchClientRationLoading || branchNonPerformerClientLoading || lbslTurnoverSegmentationLoading||equityValueSegmentationLoading
+                     || ledgerValueSegmentationLoading || detailsMarketShareLBSLLoading || portfolioValueSegmentationLoading || gsecTurmoverLoading || gsecTurmoverComparisonLoading;
+
+  const error = clientSegmentationError || branchClientRationError || branchNonPerformerClientError || lbslTurnoverSegmentationError || equityValueSegmentationError
+                 || ledgerValueSegmentationError || detailsMarketShareLBSLError || portfolioValueSegmentationError || gsecTurmoverError || gsecTurmoverComparisonError;
+
+  if (isLoading) {
+    return <LoadingButton text="Loading..." />
+  }
+
+  if (error) {
+    return <>Error...</>
+  }
 
   return (
     <div className="mx-4">
@@ -415,100 +91,100 @@ export default function CustomerManagement() {
       />
       <PageHeader name={`Customer Management (${formatDate(currentDate)})`} />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
-        {clientSegmentation ? (
+        {clientSegmentation?.data ? (
           <ClientSegmentationChart
             title="Client Segmentation"
             subtitle="Showing data for client segmentation"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={clientSegmentation as any}
-            details={clientSegmentationDetails as any}
+            data={clientSegmentation?.data?.rows as any}
+            details={clientSegmentation?.data?.detail as any}
             colors={[ "#ff6b6b ","#1e90ff ","#ffd166","#1dd1a1","#ee5253"]}
           />
         ) : null}
-        {lbslTurnoverSegmentation ? (
+        {lbslTurnoverSegmentation?.data ? (
           <LBSLTurnOverSegmentationChart
             title="LBSL TurnOver (Customer wise)"
             subtitle="Showing data for lbsl turnOver segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={lbslTurnoverSegmentation as any}
-            details={lbslTurnoverSegmentationDetails as any}
+            data={lbslTurnoverSegmentation?.data?.rows as any}
+            details={lbslTurnoverSegmentation?.data?.detail as any}
             colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
-        {equityValueSegmentation ? (
+        {equityValueSegmentation?.data ? (
           <EquityValueSegmentationChart
             title="Equity Value (Customer wise)"
             subtitle="Showing data for equity value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={equityValueSegmentation as any}
-            details={equityValueSegmentationDetails as any}
+            data={equityValueSegmentation?.data?.rows as any}
+            details={equityValueSegmentation?.data?.detail as any}
             colors={["#A4A0EB", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
-        {ledgerValueSegmentation ? (
+        {ledgerValueSegmentation?.data ? (
           <LedgerValueSegmentationChart
             title="Ledger Value (Customer wise)"
             subtitle="Showing data for ledger value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={ledgerValueSegmentation as any}
-            details={ledgerValueSegmentationDetails as any}
+            data={ledgerValueSegmentation?.data?.rows as any}
+            details={ledgerValueSegmentation?.data?.detail as any}
             colors={["#4CAF50", "#C74272", "#2196F3", "#9C27B0", "#F44336"]}
           />
         ) : null}
-        {portfolioValueSegmentation ? (
+        {portfolioValueSegmentation?.data ? (
           <PortfolioValueSegmentationChart
             title="Portfolio Value (Customer wise)"
             subtitle="Showing data for portfolio value segmentation ( customer wise)"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={portfolioValueSegmentation as any}
-            details={portfolioValueSegmentationDetails as any}
+            data={portfolioValueSegmentation?.data?.rows as any}
+            details={portfolioValueSegmentation?.data?.detail as any}
             colors={["#c200fb", "#F689A6", "#2196F3", "#9C27B0", "#F44336"]}
             colors2={["#DDB5EB", "#EB6122"]}
           />
         ) : null}
-        {detailsMarketShareLBSL ? (
+        {detailsMarketShareLBSL?.data ? (
           <DetailsMarketShareLBSLChart
             title="Details Market Share of LBSL ( Foreign )"
             subtitle="Showing data for details  market share of LBSL ( Foreign )"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={detailsMarketShareLBSL as any}
-            details={detailsMarketShareLBSLDetails as any}
+            data={detailsMarketShareLBSL?.data?.rows as any}
+            details={detailsMarketShareLBSL?.data?.detail as any}
           />
         ) : null}
-          {gsecTurmover ? (
+          {gsecTurmover?.data ? (
           <GsecTurnoverChart
             title="GSEC Turnover"
             subtitle="Showing data for details  market share of LBSL ( Foreign )"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={gsecTurmover as any}
-            details={gsecTurmoverDetails as any}
+            data={gsecTurmover?.data?.rows as any}
+            details={gsecTurmover?.data?.detail as any}
           />
         ) : null}
-          {gsecTurmoverComparison ? (
+          {gsecTurmoverComparison?.data?.rows ? (
           <GsecTurnoverComparisonChart
             title="Comparison"
             subtitle="Showing data for details  market share of LBSL ( Foreign )"
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
-            data={gsecTurmoverComparison as any}
-            details={gsecTurmoverComparisonDetails as any}
+            data={gsecTurmoverComparison?.data?.rows as any}
+            details={gsecTurmoverComparison?.data?.detail as any}
           />
         ) : null}
-        {branchClientRation ? (
+        {branchClientRation?.data ? (
           <BranchWiseClientsNumberChart
             title="Branch Wise Clients Number"
             subtitle="Showing data for branch wise clients number"
             className="col-span1 overflow-y-auto lg:col-span-6 lg:row-span-6"
-            data={branchClientRation as any}
-            details={branchClientRationDetails as any}
+            data={branchClientRation?.data?.rows as any}
+            details={branchClientRation?.data?.detail as any}
           />
         ) : null}
-        {branchNonPerformerClient ? (
+        {branchNonPerformerClient?.data ? (
           <BranchWiseNonPerformerClientsChart
             title="Non Performer Clients As on "
             subtitle="Showing data for non performer clients as on "
             className="col-span1 overflow-y-auto lg:col-span-6 lg:row-span-6"
-            data={branchNonPerformerClient as any}
-            details={branchNonPerformerClientDetails as any}
+            data={branchNonPerformerClient?.data?.rows as any}
+            details={branchNonPerformerClient?.data?.detail as any}
           />
         ) : null}
       </div>

@@ -153,7 +153,7 @@ export default function PortfolioValueSegmentationChart({
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
-          {title}-{details.sumOfTpvTotal.toLocaleString()}mn
+          {title}-{numberToMillionsString(details.sumOfTpvTotal)}
         </CardTitle>
       </CardHeader>
       <CardContent style={{ height: "500px" }}>

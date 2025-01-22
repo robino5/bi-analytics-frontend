@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, numberToMillionsString } from "@/lib/utils";
 import {
   BranchWiseClintsNumber,
   BranchWiseClintsNumberDetails,
@@ -112,7 +112,7 @@ export default function BranchWiseClientsNumberChart({
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">{title}-{details.sumOfClients.toLocaleString()}mn</CardTitle>
+        <CardTitle className="text-white text-md text-lg">{title}-{numberToMillionsString(details.sumOfClients)}</CardTitle>
       </CardHeader>
       <div className="text-end mt-2 mr-2">
           <DialogDataTable
