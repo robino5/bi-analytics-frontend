@@ -21,7 +21,7 @@ import {
 } from "./types";
 import CardBoard from "@/components/CardBoard";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
-import OmsBranchwiseTurnover from "./_oms_branchwise_turnover";
+import OmsBranchwiseTurnover from "./_components/_oms_branchwise_turnover";
 
 const ActiveTradingCodesBoard = () => {
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
@@ -33,6 +33,7 @@ const ActiveTradingCodesBoard = () => {
     queryKey: ["clientTradeSummaryByDay"],
     queryFn: () => activeTradingCodeAPI.getStatisticsByDay()
   });
+
   const { data: monthWiseDataResponse, isLoading: monthLoading, isError: monthError } = useQuery({
     queryKey: ["clientTradeSummaryByMonth"],
     queryFn: () => activeTradingCodeAPI.getStatisticsByMonth(),
@@ -52,10 +53,12 @@ const ActiveTradingCodesBoard = () => {
     queryKey: ["datewiseTurnover"],
     queryFn: () => activeTradingCodeAPI.getDatewiseTurnover()
   });
+
   const { data: branchwiseTrunover, isLoading: branchwiseTurnoverLoading, isError: branchwiseTurnoverError } = useQuery({
     queryKey: ["branchwiseTurnover"],
     queryFn: () => activeTradingCodeAPI.getBranchwiseTurnover()
   });
+  
   const biaxialChartOption = {
     dataKey: "tradingDate",
     valueKeyA: "activeClients",

@@ -7,6 +7,7 @@ import PageHeader from "@/components/PageHeader";
 import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClientTurnoverSummary";
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
+import EcrmDetails from "@/components/eCrmDetails";
 
 import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
@@ -16,6 +17,7 @@ import {
   ITargetGenerated,
   ISummaryDetails,
   ISectorExposure,
+  VisitData,
 } from "@/types/dailyTurnoverPerformance";
 import { successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
@@ -90,6 +92,10 @@ export default function DailyTradePerformance() {
     ISectorExposure[]
   >([]);
 
+  const [eCrmDetails, seteCrmDetails] = useState<
+    VisitData
+  >();
+
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
     setTrader(defaultTrader);
@@ -98,6 +104,7 @@ export default function DailyTradePerformance() {
   const handleTraderChange = async (value: string) => {
     setTrader(value);
   };
+
 
   //effect on trader change
   useEffect(() => {
@@ -206,11 +213,40 @@ export default function DailyTradePerformance() {
           console.error(`Error Happened while fetching Summary`, error);
         }
       };
+
+      const fetcheCrmDetails = async (
+        branchId: number,
+        traderId: string
+      ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/?branch=${branchId}&trader=${traderId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            VisitData
+          >;
+          if (successResponse(result.status)) {
+            seteCrmDetails(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
       const branchId = Number.parseInt(branch);
       fetchSummaryWithTraderId(branchId, trader);
       fetchDailyTurnoverPerformanceWithTraderId(branchId, trader);
       fetchCashCodeSectorExposureWithTraderId(branchId, trader);
       fetchMarginCodeSectorExposureWithTraderId(branchId, trader);
+      fetcheCrmDetails(branchId, trader)
     }
   }, [trader]);
 
@@ -334,11 +370,39 @@ export default function DailyTradePerformance() {
           );
         }
       };
+
+      // eCRM details
+      const fetcheCrmDetails = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/?branch=${branch}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            VisitData
+          >;
+          if (successResponse(result.status)) {
+            seteCrmDetails(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
       fetchTraderWithBranchId();
       fetchSummaryWithBranchId();
       fetchDailyTurnoverPerformanceWithBranchId();
       fetchMarginCodeSectorExposureWithBranchId();
       fetchCashCodeSectorExposureWithBranchId();
+      fetcheCrmDetails();
     } else {
       // Fetch Traders
       const fetchTraderWithBranchId = async () => {
@@ -422,7 +486,18 @@ export default function DailyTradePerformance() {
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
-        {/* Turnover Performance Chart */}
+        {/* e-CRM Details */}
+        {eCrmDetails &&
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"e-Crm Details"}
+            // subtitle="Shows a analytics of turnover target performance of last 7 days."
+            children={
+              <EcrmDetails visitedata={eCrmDetails}/>
+            }
+          />
+        }
+
         {turnoverPerformance ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"

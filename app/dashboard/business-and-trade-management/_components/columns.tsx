@@ -3,7 +3,7 @@
 import { cn, numberToMillionsString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { DataTableColumnHeader } from "./salable-stock/data-table-column-header";
+import { DataTableColumnHeader } from "../_components/salable-stock/data-table-column-header";
 import {
   CompanyWiseTotalSelableStock,
   SelableStockPercentage,

@@ -1,165 +1,60 @@
 "use client";
 import PageHeader from "@/components/PageHeader";
-import BoardWiseTurnover from "./_board_wise_turnover";
-import BoardWiseTurnoverBreakdown from "./_board_wise_turnover_breakdown";
-import DetailsMarketShareLBSL from "./_details_market_share_of_lbsl";
-import DetailsMarketShareSME from "./_details_market_share_of_lbsl_sme_atb";
-import { DataTableCardInvestorWiseSaleableStock } from "./investor-wise-total-saleable-stock/data-table";
-import { SalableStockPercentageDataTableCard } from "./salable-stock-percentage/data-table";
-import { useEffect, useState } from "react";
-import {
-  BoardWiseTurnoverData,
-  BoardWiseTurnoverBreakdownData,
-  MarketShareLBSl,
-  MarketShareSME,
-  CompanyWiseTotalSelableStock,
-  SelableStockPercentage,
-  InvestorWiseTotalSelableStock,
-} from "@/types/businessTradManagement";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useSession } from "next-auth/react";
-import { getHeaderDate, successResponse } from "@/lib/utils";
-import { IResponse } from "@/types/utils";
-import { SalableStockDataTableCard } from "./salable-stock/data-table";
+import BoardWiseTurnover from "./_components/_board_wise_turnover";
+import BoardWiseTurnoverBreakdown from "./_components/_board_wise_turnover_breakdown";
+import DetailsMarketShareLBSL from "./_components/_details_market_share_of_lbsl";
+import DetailsMarketShareSME from "./_components/_details_market_share_of_lbsl_sme_atb";
+import { DataTableCardInvestorWiseSaleableStock } from "./_components/investor-wise-total-saleable-stock/data-table";
+import { SalableStockPercentageDataTableCard } from "./_components/salable-stock-percentage/data-table";
+import { getHeaderDate } from "@/lib/utils";
+import { SalableStockDataTableCard } from "./_components/salable-stock/data-table";
 import {
   companyWiseSalableStock,
   SalableStockPercentage,
   InvestorWiseSalableStock,
-} from "./columns";
-import { redirect } from "next/navigation";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+} from "./_components/columns";
+import { businessTradeManagementAPI } from "./api";
+import { useQuery } from "@tanstack/react-query";
+import LoadingButton from "@/components/loading";
 
 export default function BusinessAndTradeManagement() {
-  const { data: session } = useSession();
-  const [boardTernoverData, setBoardTernoverData] = useState<
-    BoardWiseTurnoverData[] | null
-  >(null);
-  const [boardTernoverBreakdownData, setBoardTernoverBreakdownData] = useState<
-    BoardWiseTurnoverBreakdownData[] | null
-  >(null);
-  const [marketShareLBSL, setMarketShareLBSL] = useState<
-    MarketShareLBSl[] | null
-  >(null);
-  const [marketShareSME, setMarketShareSME] = useState<MarketShareSME[] | null>(
-    null,
-  );
-  // on page load
-  useEffect(() => {
-    // board ternover data
-    const fetchBoardTernoverData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/board-turnover/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        if (response.status === 401) {
-          return redirect(DEFAULT_LOGIN_REDIRECT);
-        }
-        const result = (await response.json()) as IResponse<
-          BoardWiseTurnoverData[]
-        >;
-        if (successResponse(result.status)) {
-          setBoardTernoverData(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching bord wise turnover`,
-          error,
-        );
-      }
-    };
-    // board ternover breakdown data
-    const fetchBoardTernoverBreakdownData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/board-turnovers-breakdown/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<
-          BoardWiseTurnoverBreakdownData[]
-        >;
-        if (successResponse(result.status)) {
-          setBoardTernoverBreakdownData(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching bord wise turnover breadown`,
-          error,
-        );
-      }
-    };
-    // board ternover details market share LBSL
-    const fetchMarketShareLBSL = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/market-share-details/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<MarketShareLBSl[]>;
-        if (successResponse(result.status)) {
-          setMarketShareLBSL(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching details market share LBSL`,
-          error,
-        );
-      }
-    };
-    // board ternover details market share LBSL SME
-    const fetchMarketShareSME = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/atb-market-share-details/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<MarketShareSME[]>;
-        if (successResponse(result.status)) {
-          setMarketShareSME(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching details market share LBSL SME`,
-          error,
-        );
-      }
-    };
-    fetchBoardTernoverData();
-    fetchBoardTernoverBreakdownData();
-    fetchMarketShareLBSL();
-    fetchMarketShareSME();
-  }, []);
+  const { data: boardTernoverData, isLoading: boardTernoverDataLoading, isError: boardTernoverDataError } = useQuery({
+    queryKey: ["boardTernoverData"],
+    queryFn: () => businessTradeManagementAPI.getBoardTernoverData()
+  });
+
+  const { data: boardTernoverBreakdownData, isLoading:boardTernoverBreakdownDataLoading, isError: boardTernoverBreakdownDataError } = useQuery({
+    queryKey: ["boardTernoverBreakdownData"],
+    queryFn: () => businessTradeManagementAPI.getBoardTernoverBreakdownData()
+  });
+
+  const { data: marketShareLBSL, isLoading:marketShareLBSLLoading, isError: marketShareLBSLError } = useQuery({
+    queryKey: ["marketShareLBSL"],
+    queryFn: () => businessTradeManagementAPI.getMarketShareLBSL()
+  });
+
+  const { data: marketShareSME, isLoading:marketShareSMELoading, isError: marketShareSMEError } = useQuery({
+    queryKey: ["marketShareSME"],
+    queryFn: () => businessTradeManagementAPI.getMarketShareSME()
+  });
+
+  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading;
+
+  const error = boardTernoverDataError || boardTernoverBreakdownDataError || marketShareLBSLError || marketShareSMEError ;
+
+  if (isLoading) {
+    return <LoadingButton text="Loading..." />
+  }
+
+  if (error) {
+    // TODO: Return a beautiful Error boundary component
+    return <>Error...</>
+  }
 
   let headerDate = null;
 
   if (boardTernoverData) {
-    headerDate = getHeaderDate(boardTernoverData[0], "tradingDate");
+    headerDate = getHeaderDate(boardTernoverData.data[0], "tradingDate");
   }
 
   return (
@@ -173,22 +68,22 @@ export default function BusinessAndTradeManagement() {
         name={`Business and Trade Management (${headerDate ?? ""})`}
       />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
-        {boardTernoverData ? (
-          <BoardWiseTurnover datalist={boardTernoverData as any} />
+        {boardTernoverData?.data ? (
+          <BoardWiseTurnover datalist={boardTernoverData?.data as any} />
         ) : null}
 
-        {boardTernoverBreakdownData ? (
+        {boardTernoverBreakdownData?.data ? (
           <BoardWiseTurnoverBreakdown
-            datalist={boardTernoverBreakdownData as any}
+            datalist={boardTernoverBreakdownData?.data as any}
           />
         ) : null}
 
-        {marketShareLBSL ? (
-          <DetailsMarketShareLBSL datalist={marketShareLBSL as any} />
+        {marketShareLBSL?.data ? (
+          <DetailsMarketShareLBSL datalist={marketShareLBSL?.data as any} />
         ) : null}
 
-        {marketShareSME ? (
-          <DetailsMarketShareSME datalist={marketShareSME as any} />
+        {marketShareSME?.data ? (
+          <DetailsMarketShareSME datalist={marketShareSME?.data as any} />
         ) : null}
       </div>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">

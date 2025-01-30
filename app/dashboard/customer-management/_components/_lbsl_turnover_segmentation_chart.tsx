@@ -110,7 +110,7 @@ export default function LBSLTurnOverSegmentationChart({
     <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
       <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
-          {title} - {details.sumOfTurnovers.toLocaleString()}
+          {title} - {numberToMillionsString(details.sumOfTurnovers)}
         </CardTitle>
       </CardHeader>
       <CardContent style={{ height: "500px" }}>
