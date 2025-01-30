@@ -17,6 +17,7 @@ import {
   ISummaryDetails,
   IMarginLoanUsage,
   ISectorExposure,
+  VisitData,
 } from "@/types/dailyTurnoverPerformance";
 import { getHeaderDate, successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
@@ -27,6 +28,7 @@ import { IResponse } from "@/types/utils";
 import { PiChartScatterBold } from "react-icons/pi";
 import { FaChartSimple } from "react-icons/fa6";
 import { IoPieChartSharp } from "react-icons/io5";
+import EcrmDetails from "@/components/eCrmDetails";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -103,6 +105,9 @@ export default function DailyTradePerformance() {
   const [marginCodeExposure, setMarginCodeExposure] = useState<
     ISectorExposure[] | null
   >(null);
+   const [eCrmDetails, seteCrmDetails] = useState<
+      VisitData
+    >();
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -236,12 +241,43 @@ export default function DailyTradePerformance() {
         }
       };
 
+      
+       // eCRM details
+       const fetcheCrmDetails = async (
+        branchId: number,
+       ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            VisitData
+          >;
+          if (successResponse(result.status)) {
+            seteCrmDetails(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+
       const branchId = Number.parseInt(branch);
       fetchSummaryWithBranchId(branchId);
       fetchDailyTurnoverPerformanceWithBranchId(branchId);
       fetchDailyMarginLoanUsageWithBranchId(branchId);
       fetchMarginCodeSectorExposureWithBranchId(branchId);
       fetchCashCodeSectorExposureWithBranchId(branchId);
+      fetcheCrmDetails(branchId)
     }
   }, [branch]);
 
@@ -346,11 +382,39 @@ export default function DailyTradePerformance() {
       }
     };
 
+       // eCRM details
+       const fetcheCrmDetails = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            VisitData
+          >;
+          if (successResponse(result.status)) {
+            seteCrmDetails(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+
     fetchSummary();
     fetchDailyTurnoverPerformance();
     fetchDailyMarginLoanUsage();
     fetchMarginCodeSectorExposure();
     fetchCashCodeSectorExposure();
+    fetcheCrmDetails()
   }, []);
 
   let headerDate = null;
@@ -414,6 +478,18 @@ export default function DailyTradePerformance() {
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
+
+       {/* e-CRM Details */}
+       {eCrmDetails &&
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"e-Crm Details"}
+            // subtitle="Shows a analytics of turnover target performance of last 7 days."
+            children={
+              <EcrmDetails visitedata={eCrmDetails}/>
+            }
+          />
+        }
         {/* Turnover Performance Chart */}
         {turnoverPerformance ? (
           <CardBoard

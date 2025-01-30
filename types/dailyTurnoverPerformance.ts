@@ -47,3 +47,11 @@ export interface ISectorExposure {
     name: string;
     value: number;
 }
+
+export interface VisitData {
+    total_Visits: number;
+    success: number;
+    inProgress: number;
+    discard: number;
+    existingClientVisit: number;
+  }
