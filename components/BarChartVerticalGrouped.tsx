@@ -5,6 +5,7 @@ import * as echarts from "echarts";
 import { numberToMillionsString } from "@/lib/utils";
 
 interface BarData {
+  tradingDate: any;
   label: string;
   generated: number | string;
   target: number | string;
@@ -63,10 +64,11 @@ const BarChart: React.FC<BarChartProps> = ({ data, options }) => {
       },
       xAxis: {
         type: "category",
-        data: data.map((item) => item.label),
-        axisLine: { show: false },
-        axisTick: { show: false },
-        axisLabel: { show: false },
+        data: data.map((item) => item.tradingDate),
+        axisLabel: {
+          color: "white",
+          rotate: 35,
+        },
       },
       yAxis: {
         type: "value",

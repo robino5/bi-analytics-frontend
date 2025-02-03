@@ -428,6 +428,8 @@ export default function DailyTradePerformance() {
       fetchTraderWithBranchId();
     }
   }, [branch]);
+  
+  console.log("e-crm Details",eCrmDetails)
 
   return (
     <div className="mx-4">
@@ -490,7 +492,7 @@ export default function DailyTradePerformance() {
         {eCrmDetails &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={"e-Crm Details"}
+            title={"eCRM"}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <EcrmDetails visitedata={eCrmDetails}/>
