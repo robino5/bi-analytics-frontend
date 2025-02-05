@@ -55,3 +55,13 @@ export interface VisitData {
     discard: number;
     existingClientVisit: number;
   }
+
+
+  export interface RmWiseDailyTradeData{
+    pushDate: string;
+    branchCode: number;
+    branch: string;
+    rmName: string;
+    totalClientToday: number;
+    totalTurnoverToday: number;
+  };

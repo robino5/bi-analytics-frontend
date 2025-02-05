@@ -30,17 +30,13 @@ interface BarOption {
   valueKeyA: string;
   valueKeyB: string;
   fill: string;
+  fill2: string;
   stroke: string;
   height?: number;
   barLabel?: boolean;
   legendName?: string;
   rotate?: number;
-  title?:string
-}
-
-interface BarChartProps {
-  data: BarData[];
-  option: BarOption;
+  title?: string;
 }
 
 interface BarCharHorizonalProps {
@@ -49,13 +45,15 @@ interface BarCharHorizonalProps {
 }
 
 const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
-  const chartRef = useRef<HTMLDivElement>(null);
-  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+  const activeClientsChartRef = useRef<HTMLDivElement>(null);
+  const turnoverChartRef = useRef<HTMLDivElement>(null);
+  const activeClientsChartInstanceRef = useRef<echarts.ECharts | null>(null);
+  const turnoverChartInstanceRef = useRef<echarts.ECharts | null>(null);
 
   useEffect(() => {
-    if (chartRef.current) {
-      const chartInstance = echarts.init(chartRef.current);
-      chartInstanceRef.current = chartInstance;
+    if (activeClientsChartRef.current) {
+      const chartInstance = echarts.init(activeClientsChartRef.current);
+      activeClientsChartInstanceRef.current = chartInstance;
 
       const option = {
         tooltip: {
@@ -64,17 +62,13 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
           formatter: (params: any) => {
             let tooltipHtml = `<strong>${params[0].axisValue}</strong><br/>`;
             params.forEach((item: any) => {
-              const value =
-                item.seriesName === "Turnover"
-                  ? numberToMillionsString(item.data)
-                  : item.data;
-              tooltipHtml += `${item.marker} ${item.seriesName}: ${value}<br/>`;
+              tooltipHtml += `${item.marker} ${item.seriesName}: ${item.data}<br/>`;
             });
             return tooltipHtml;
           },
         },
         legend: {
-          data: ["Active Clients", "Turnover"],
+          data: ["Active Clients"],
           textStyle: { color: "white" },
         },
         xAxis: {
@@ -85,57 +79,97 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             rotate: 35,
           },
         },
-        yAxis: [
-          {
-            type: "value",
-            name: "Active Clients",
-            nameTextStyle: {
-              color: "white",
-            },
-            axisLabel: {
-              color: "white",
-              formatter: numberToMillionsString,
-            },
-            splitLine: {
-              show: false,
-            },
+        yAxis: {
+          type: "value",
+          name: "Active Clients",
+          nameTextStyle: {
+            color: "white",
           },
-          {
-            type: "value",
-            name: "Turnover",
-            nameTextStyle: {
-              color: "white",
-            },
-            axisLabel: {
-              color: "white",
-              formatter: numberToMillionsString,
-            },
+          axisLabel: {
+            color: "white",
+            formatter: numberToMillionsString,
           },
-        ],
+          splitLine: {
+            show: true,
+          },
+        },
         series: [
           {
             name: "Active Clients",
             type: "bar",
             data: data.map((item) => item.activeClients),
+            itemStyle: {
+              color: options.fill,
+            },
             label: {
               show: true,
               fontSize: 14,
-              rotate: options?.rotate,
               position: "top",
               color: "white",
             },
           },
+        ],
+      };
+      chartInstance.setOption(option);
+    }
+
+    if (turnoverChartRef.current) {
+      const chartInstance = echarts.init(turnoverChartRef.current);
+      turnoverChartInstanceRef.current = chartInstance;
+
+      const option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: { type: "shadow" },
+          formatter: (params: any) => {
+            let tooltipHtml = `<strong>${params[0].axisValue}</strong><br/>`;
+            params.forEach((item: any) => {
+              tooltipHtml += `${item.marker} ${item.seriesName}: ${numberToMillionsString(
+                item.data
+              )}<br/>`;
+            });
+            return tooltipHtml;
+          },
+        },
+        legend: {
+          data: ["Turnover"],
+          textStyle: { color: "white" },
+        },
+        xAxis: {
+          type: "category",
+          data: data.map((item) => item.tradingDate),
+          axisLabel: {
+            color: "white",
+            rotate: 35,
+          },
+        },
+        yAxis: {
+          type: "value",
+          name: "Turnover",
+          nameTextStyle: {
+            color: "white",
+          },
+          axisLabel: {
+            color: "white",
+            formatter: numberToMillionsString,
+          },
+          splitLine: {
+            show: true,
+          },
+        },
+        series: [
           {
             name: "Turnover",
             type: "bar",
             data: data.map((item) => item.turnover),
-            yAxisIndex: 1,
+            itemStyle: {
+              color: options.fill2,
+            },
             label: {
               show: true,
               position: "top",
               color: "white",
               fontSize: 14,
-              rotate: options?.rotate,
               formatter: (params: any) =>
                 numberToMillionsString(params.value, true),
             },
@@ -143,15 +177,21 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
         ],
       };
       chartInstance.setOption(option);
-      return () => {
-        chartInstance.dispose();
-      };
     }
+
+    return () => {
+      if (activeClientsChartInstanceRef.current) {
+        activeClientsChartInstanceRef.current.dispose();
+      }
+      if (turnoverChartInstanceRef.current) {
+        turnoverChartInstanceRef.current.dispose();
+      }
+    };
   }, [data, options]);
 
-  const handleDownloadChart = (format: "png" | "svg") => {
-    if (chartInstanceRef.current) {
-      const dataURL = chartInstanceRef.current.getDataURL({
+  const handleDownloadChart = (format: "png" | "svg", chartRef: React.RefObject<echarts.ECharts | null>) => {
+    if (chartRef.current) {
+      const dataURL = chartRef.current.getDataURL({
         type: format,
         backgroundColor: "#000", // Adjust background color if needed
         pixelRatio: 2, // Optional: Increase resolution for PNG
@@ -187,7 +227,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
   };
 
   return (
-      <Card className=" col-span-3 overflow-auto bg-[#0e5e6f]">
+    <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
       <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
         <div className="text-white text-lg font-semibold">{options?.title}</div>
         <div className="text-right">
@@ -200,11 +240,17 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handleDownloadChart("png")}>
-                Download PNG
+              <DropdownMenuItem onClick={() => handleDownloadChart("png", activeClientsChartInstanceRef)}>
+                Download Active Clients PNG
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDownloadChart("svg")}>
-                Download SVG
+              <DropdownMenuItem onClick={() => handleDownloadChart("svg", activeClientsChartInstanceRef)}>
+                Download Active Clients SVG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDownloadChart("png", turnoverChartInstanceRef)}>
+                Download Turnover PNG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDownloadChart("svg", turnoverChartInstanceRef)}>
+                Download Turnover SVG
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleDownloadCSV}>
                 Download CSV
@@ -214,9 +260,10 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
         </div>
       </CardHeader>
       <CardContent>
-      <div ref={chartRef} style={{ width: "100%", height: "500px" }} />
+        <div ref={activeClientsChartRef} style={{ width: "100%", height: "250px" }} />
+        <div ref={turnoverChartRef} style={{ width: "100%", height: "250px" }} />
       </CardContent>
-      </Card>
+    </Card>
   );
 };
 
