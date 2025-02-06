@@ -15,11 +15,7 @@ import {
 } from "@/components/ui/card";
 import MarginLoanAllocationDataTable from "./_margin_loan_allocation_datatable";
 import ExposureControllingDataTable from "./_exposure_controlling_datatable";
-import {
-  IExposureSumamry,
-  IMarginLoanAllocation,
-  INetTradeClient,
-} from "@/types/marginLoanUsage";
+import { IExposureSumamry,IMarginLoanAllocation,INetTradeClient,} from "@/types/marginLoanUsage";
 import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
 import BranchFilter from "@/components/branchFilter";
 import { IResponse } from "@/types/utils";

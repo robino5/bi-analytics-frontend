@@ -16,6 +16,7 @@ import {
 import { businessTradeManagementAPI } from "./api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingButton from "@/components/loading";
+import NoDataFound from "./_components/_no_data_found";
 
 export default function BusinessAndTradeManagement() {
   const { data: boardTernoverData, isLoading: boardTernoverDataLoading, isError: boardTernoverDataError } = useQuery({
@@ -40,16 +41,12 @@ export default function BusinessAndTradeManagement() {
 
   const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading;
 
-  const error = boardTernoverDataError || boardTernoverBreakdownDataError || marketShareLBSLError || marketShareSMEError ;
 
   if (isLoading) {
     return <LoadingButton text="Loading..." />
   }
 
-  if (error) {
-    // TODO: Return a beautiful Error boundary component
-    return <>Error...</>
-  }
+
 
   let headerDate = null;
 
@@ -70,21 +67,21 @@ export default function BusinessAndTradeManagement() {
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {boardTernoverData?.data ? (
           <BoardWiseTurnover datalist={boardTernoverData?.data as any} />
-        ) : null}
+        ) : <NoDataFound title="Board Wise Turnover"/>}
 
         {boardTernoverBreakdownData?.data ? (
           <BoardWiseTurnoverBreakdown
             datalist={boardTernoverBreakdownData?.data as any}
           />
-        ) : null}
+        ) : <NoDataFound title="Main Board Wise Turnover Breakdown"/>}
 
         {marketShareLBSL?.data ? (
           <DetailsMarketShareLBSL datalist={marketShareLBSL?.data as any} />
-        ) : null}
+        ) : <NoDataFound title="Details market share of LBSL"/>}
 
         {marketShareSME?.data ? (
           <DetailsMarketShareSME datalist={marketShareSME?.data as any} />
-        ) : null}
+        ) : <NoDataFound title="Details SME-ATB market share of LBSL"/>}
       </div>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
         <SalableStockDataTableCard

@@ -20,7 +20,7 @@ const EcrmDetails = ({ visitedata }: { visitedata: Visitedata }) => {
               <Sparkles size={30} />
             </div>
             <div className="col-span-8">
-              <h2 className="text-2xl font-bold text-black">eCRM</h2>
+              <h4 className="text-xl font-bold text-black">eCRM</h4>
               <p className="text-gray-600">Electronic Customer Relationship Management</p>
             </div>
           </div>
@@ -34,7 +34,7 @@ const EcrmDetails = ({ visitedata }: { visitedata: Visitedata }) => {
               <UserPlus size={24} />
             </div>
             <div className="col-span-8">
-              <h2 className="text-2xl font-bold text-green-800">{visitedata.inProgress}</h2>
+              <h4 className="text-xl font-bold text-green-800">{visitedata.inProgress}</h4>
               <p className="text-gray-600">In Process</p>
             </div>
           </div>
@@ -47,7 +47,7 @@ const EcrmDetails = ({ visitedata }: { visitedata: Visitedata }) => {
               <UserCheck size={24} />
             </div>
             <div className="col-span-8">
-              <h2 className="text-2xl font-bold text-yellow-800">{visitedata.success}</h2>
+              <h4 className="text-xl font-bold text-yellow-800">{visitedata.success}</h4>
               <p className="text-gray-600">Success</p>
             </div>
           </div>
@@ -60,7 +60,7 @@ const EcrmDetails = ({ visitedata }: { visitedata: Visitedata }) => {
               <UserX size={24} />
             </div>
             <div className="col-span-8">
-              <h2 className="text-2xl font-bold text-red-800">{visitedata.discard}</h2>
+              <h4 className="text-xl font-bold text-red-800">{visitedata.discard}</h4>
               <p className="text-gray-600">Discard</p>
             </div>
           </div>
@@ -74,7 +74,7 @@ const EcrmDetails = ({ visitedata }: { visitedata: Visitedata }) => {
               <User size={24} />
             </div>
             <div className="col-span-4">
-              <h2 className="text-2xl font-bold text-purple-800">{visitedata.existingClientVisit}</h2>
+              <h4 className="text-xl font-bold text-purple-800">{visitedata.existingClientVisit}</h4>
               <p className="text-gray-600">Existing Client Visits</p>
             </div>
           </div>
@@ -85,7 +85,7 @@ const EcrmDetails = ({ visitedata }: { visitedata: Visitedata }) => {
               <Users size={24} />
             </div>
             <div className="col-span-4">
-              <h2 className="text-2xl font-bold text-teal-800">{visitedata.total_Visits}</h2>
+              <h4 className="text-xl font-bold text-teal-800">{visitedata.total_Visits}</h4>
               <p className="text-gray-600">Total Visits</p>
             </div>
           </div>

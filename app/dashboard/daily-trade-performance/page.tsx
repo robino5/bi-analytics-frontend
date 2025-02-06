@@ -18,6 +18,7 @@ import {
   IMarginLoanUsage,
   ISectorExposure,
   VisitData,
+  RmWiseDailyTradeData
 } from "@/types/dailyTurnoverPerformance";
 import { getHeaderDate, successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
@@ -29,6 +30,7 @@ import { PiChartScatterBold } from "react-icons/pi";
 import { FaChartSimple } from "react-icons/fa6";
 import { IoPieChartSharp } from "react-icons/io5";
 import EcrmDetails from "@/components/eCrmDetails";
+import RmWiseDailyTradingData from "./_rm_wise_daily_trade_data";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -108,6 +110,9 @@ export default function DailyTradePerformance() {
    const [eCrmDetails, seteCrmDetails] = useState<
       VisitData
     >();
+    const [rmWiseDailyTradeData, setRmWiseDailyTradeData] = useState<
+    RmWiseDailyTradeData[]
+  >();
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -271,6 +276,35 @@ export default function DailyTradePerformance() {
         }
       };
 
+        // eCRM details
+    const fetcheRmWiseDailyTradeData = async (
+      branchId: number,
+     )  => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branchId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+        RmWiseDailyTradeData[]
+        >;
+        if (successResponse(result.status)) {
+          setRmWiseDailyTradeData(result.data);
+        }
+      } catch (error) {
+        console.log(error)
+        console.error(
+          `Error Happened while ecrm Data`,
+          error
+        );
+      }
+    };
+
       const branchId = Number.parseInt(branch);
       fetchSummaryWithBranchId(branchId);
       fetchDailyTurnoverPerformanceWithBranchId(branchId);
@@ -278,6 +312,7 @@ export default function DailyTradePerformance() {
       fetchMarginCodeSectorExposureWithBranchId(branchId);
       fetchCashCodeSectorExposureWithBranchId(branchId);
       fetcheCrmDetails(branchId)
+      fetcheRmWiseDailyTradeData(branchId)
     }
   }, [branch]);
 
@@ -409,12 +444,40 @@ export default function DailyTradePerformance() {
         }
       };
 
+
+    // eCRM details
+    const fetcheRmWiseDailyTradeData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+        RmWiseDailyTradeData[]
+        >;
+        if (successResponse(result.status)) {
+          setRmWiseDailyTradeData(result.data);
+        }
+      } catch (error) {
+        console.log(error)
+        console.error(
+          `Error Happened while ecrm Data`,
+          error
+        );
+      }
+    };
     fetchSummary();
     fetchDailyTurnoverPerformance();
     fetchDailyMarginLoanUsage();
     fetchMarginCodeSectorExposure();
     fetchCashCodeSectorExposure();
-    fetcheCrmDetails()
+    fetcheCrmDetails();
+    fetcheRmWiseDailyTradeData();
   }, []);
 
   let headerDate = null;
@@ -483,13 +546,25 @@ export default function DailyTradePerformance() {
        {eCrmDetails &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={"e-Crm Details"}
+            title={"eCRM"}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <EcrmDetails visitedata={eCrmDetails}/>
             }
           />
         }
+       {/* e-CRM Details */}
+       {rmWiseDailyTradeData &&
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length>0?rmWiseDailyTradeData[0]?.pushDate:""}`}
+            // subtitle="Shows a analytics of turnover target performance of last 7 days."
+            children={
+              <RmWiseDailyTradingData data={rmWiseDailyTradeData}/>
+            }
+          />
+        }
+
         {/* Turnover Performance Chart */}
         {turnoverPerformance ? (
           <CardBoard
