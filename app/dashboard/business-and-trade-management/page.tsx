@@ -46,14 +46,6 @@ export default function BusinessAndTradeManagement() {
     return <LoadingButton text="Loading..." />
   }
 
-
-
-  let headerDate = null;
-
-  if (boardTernoverData) {
-    headerDate = getHeaderDate(boardTernoverData.data[0], "tradingDate");
-  }
-
   return (
     <div className="mx-4">
       <title>Business and Trade Management | LBSL</title>
@@ -62,7 +54,7 @@ export default function BusinessAndTradeManagement() {
         content="Showing a  usiness and trade  management"
       />
       <PageHeader
-        name={`Business and Trade Management (${headerDate ?? ""})`}
+        name={`Business and Trade Management`}
       />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {boardTernoverData?.data ? (
