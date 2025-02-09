@@ -74,10 +74,10 @@ export default function ClientTradesDataTable({ records, className }: Props) {
                   {record.channel}
                 </TableCell>
                 <TableCell className="text-right py-2">
-                  {numberToMillionsString(record.totalClients)}
+                  {record.totalClients}
                 </TableCell>
                 <TableCell className="text-right py-2">
-                  {numberToMillionsString(record.trades)}
+                  {record.trades}
                 </TableCell>
                 <TableCell className="text-right py-2">
                   {numberToMillionsString(record.totalTurnover)}

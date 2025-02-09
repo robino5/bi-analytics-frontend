@@ -18,7 +18,7 @@ import {
 import { numberToMillionsString } from "@/lib/utils";
 
 interface BoardWiseTurnoverData {
-  tradingDate: string;
+  pushDate: string;
   board: string;
   turnover: number;
   dsePercentage: number;
@@ -46,7 +46,7 @@ export default function BoardWiseTurnover({ datalist }: Props) {
   return (
     <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
       <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">Board Wise Turnover</CardTitle>
+        <CardTitle className="text-white text-md text-lg">Board Wise Turnover As On {datalist.length>0?datalist[0]?.pushDate:""}</CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the board wise turnover
         </CardDescription> */}
