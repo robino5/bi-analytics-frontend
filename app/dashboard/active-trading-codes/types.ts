@@ -72,3 +72,8 @@ export type BranchData = {
         }[];
     };
 };
+
+export type SectorWiseTurnover = { 
+    name:string;
+    value: number;
+}
