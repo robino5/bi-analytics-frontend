@@ -15,7 +15,7 @@ const Statistics: FC<StatisticsProps> = ({ label, value }) => {
           "text-red-500": value < 0,
         })}
       >
-        {numberToMillionsString(value)}
+       {label.toLowerCase().includes("client") ? value : numberToMillionsString(value)}
       </div>
     </div>
   );

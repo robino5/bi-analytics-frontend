@@ -22,6 +22,8 @@ import {
 import CardBoard from "@/components/CardBoard";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
 import OmsBranchwiseTurnover from "./_components/_oms_branchwise_turnover";
+import { BarColors } from "@/components/ui/utils/constants";
+import BarChartHorizontal from "./_components/BarChartHorizontal";
 
 const ActiveTradingCodesBoard = () => {
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
@@ -58,7 +60,12 @@ const ActiveTradingCodesBoard = () => {
     queryKey: ["branchwiseTurnover"],
     queryFn: () => activeTradingCodeAPI.getBranchwiseTurnover()
   });
-  
+
+  const { data: sectorwiseTrunover, isLoading: sectorwiseTurnoverLoading, isError: sectorwiseTurnoverError } = useQuery({
+    queryKey: ["sectorwiseTurnover"],
+    queryFn: () => activeTradingCodeAPI.getSectorwiseTurnover()
+  });
+
   const biaxialChartOption = {
     dataKey: "tradingDate",
     valueKeyA: "activeClients",
@@ -67,13 +74,13 @@ const ActiveTradingCodesBoard = () => {
     fill2: "#3498DB",
     stroke: "#c3ce",
     barLabel: true,
-    rotate:90,
-    title:"Date Wise Turnover(Internet)"
+    rotate: 90,
+    title: "Date Wise Turnover(Internet)"
   };
 
   const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading;
 
-  const error = todayError || dayError || monthError || DatewiseTurnoverError ||branchwiseTurnoverError;
+  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError;
 
   if (isLoading) {
     return <LoadingButton text="Loading..." />
@@ -131,6 +138,21 @@ const ActiveTradingCodesBoard = () => {
     dataKeyY: "internet"
   };
   const headerTradingDate = getFormattedHeaderDate(dayWiseSummary?.[0], "tradingDate")
+
+  const sectorMarginCodeExposureOption = {
+    legendName: "Quantity",
+    dataKey: "name",
+    valueKey: "value",
+    fill: BarColors.blue,
+    stroke: "purple",
+    height: 700,
+    barLabel: true,
+  };
+
+  const sectorCashCodeExposureOption = {
+    ...sectorMarginCodeExposureOption,
+    fill: BarColors.purple,
+  };
 
   return (
     <div className="mx-4">
@@ -213,15 +235,26 @@ const ActiveTradingCodesBoard = () => {
             title="Turnover (Month Wise)"
           />
         </div>
-        {datewiseTrunover?(
-            <BarChartBiAxis
-              data={datewiseTrunover?.data?.rows as any}
-              options={biaxialChartOption}
-            />):null}
+        {sectorwiseTrunover?.data ? (
+              <BarChartHorizontal
+                data={sectorwiseTrunover.data}
+                options={sectorCashCodeExposureOption}
+              />
+        ) : (
+          "No data available"
+        )}
+          {branchwiseTrunover?.data ? (
+          <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
+        ) : null}
+        
+        {datewiseTrunover ? (
+          <BarChartBiAxis
+            data={datewiseTrunover?.data?.rows as any}
+            options={biaxialChartOption}
+          />) : null}
 
-               {branchwiseTrunover?.data ? (
-                  <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
-                ) : null}
+      
+   
       </div>
     </div>
   );
