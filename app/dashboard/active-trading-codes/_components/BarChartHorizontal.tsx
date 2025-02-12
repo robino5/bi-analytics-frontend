@@ -38,13 +38,13 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
     if (chartRef.current) {
       const chartInstance = echarts.init(chartRef.current);
       const options = {
-        grid: { left: "15%", right: "10%", top: "10%", bottom: "10%" },
+        grid: { left: "18%", right: "12%", top: "10%", bottom: "10%" },
         tooltip: {
           trigger: "item",
           formatter: (params: any) => {
             const { name, value } = params.data;
             const ratio = findRatio(value, totalAmount, 0);
-            return `${name}: ${ratio}%`;
+            return `${name}: ${numberToMillionsString(value)}(${ratio}%)`;
           },
           backgroundColor: "#dee3e0",
           padding: [10, 20],
@@ -70,7 +70,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           axisLabel: {
             color: "#fff",
             fontSize: 12,
-            formatter: (value: string) => (value.length > 12 ? value.replace(/(.{12})/g, "$1\n") : value),
+            formatter: (value: string) => (value.length > 15 ? value.replace(/(.{15})/g, "$1\n") : value),
           },
         },
         series: [
@@ -90,7 +90,7 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
             label: {
               show: option.barLabel,
               position: "right",
-              formatter: (params: any) => numberToMillionsString(params.value, true),
+              formatter: (params: any) => `${numberToMillionsString(params.value)}(${findRatio(params.value, totalAmount, 0)}%)`,
               fontSize: LABEL_TICK_FONT_SIZE,
               color: "#fff",
             },
@@ -118,7 +118,7 @@ const BarChartHorizontal: FC<BarChartHorizontalProps> = ({ data, options }) => {
     <Card className="col-span-3 overflow-auto bg-[#0e5e6f] ">
       <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
         <CardTitle className="text-white text-lg font-semibold py-2">
-          Sector Wise Turnover
+          LBSL Sector Wise Turnover (Mn)
         </CardTitle>
       </CardHeader>
       <CardContent>
