@@ -80,28 +80,28 @@ export default function NewAccountOpeningDataTable({ accounts }: Props) {
                     index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
                   }`}
                 >
-                  {numberToMillionsString(account.daily)}
+                  {account.name.toLowerCase().includes('client')?account.daily:numberToMillionsString(account.daily)}
                 </TableCell>
                 <TableCell
                   className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-green-200" : "bg-green-100"
                   }`}
                 >
-                  {numberToMillionsString(account.weekly)}
+                  {account.name.toLowerCase().includes('client')?account.weekly:numberToMillionsString(account.weekly)}
                 </TableCell>
                 <TableCell
                   className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
                   }`}
                 >
-                  {numberToMillionsString(account.forthnightly)}
+                  {account.name.toLowerCase().includes('client')?account.forthnightly:numberToMillionsString(account.forthnightly)}
                 </TableCell>
                 <TableCell
                   className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
                   }`}
                 >
-                  {numberToMillionsString(account.monthly)}
+                  {account.name.toLowerCase().includes('client')?account.monthly:numberToMillionsString(account.monthly)}
                 </TableCell>
               </TableRow>
             ))}

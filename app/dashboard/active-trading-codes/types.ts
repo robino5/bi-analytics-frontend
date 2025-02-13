@@ -77,3 +77,8 @@ export type SectorWiseTurnover = {
     name:string;
     value: number;
 }
+
+export type SectorWiseTurnoverBreakdown = { 
+    name:string;
+    value: number;
+}

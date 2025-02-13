@@ -62,7 +62,7 @@ export default function PortfolioManagementStatusDataTable({ records }: Props) {
                   {record.perticular}
                 </TableCell>
                 <TableCell className="py-1 text-right">
-                  {numberToMillionsString(record.amount)}
+                  {record.perticular.toLowerCase().includes('client')?record.amount:numberToMillionsString(record.amount)}
                 </TableCell>
               </TableRow>
             ))}

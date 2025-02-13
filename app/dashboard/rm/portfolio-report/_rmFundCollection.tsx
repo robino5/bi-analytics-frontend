@@ -67,39 +67,36 @@ export default function RMFundCollectionTable({ records }: Props) {
                 className={index % 2 === 0 ? "bg-opacity-90" : "bg-opacity-70"}
               >
                 <TableCell
-                  className={`font-medium py-1 ${
-                    index % 2 === 0 ? "bg-purple-200" : "bg-purple-100"
-                  }`}
+                  className={`font-medium py-1 ${index % 2 === 0 ? "bg-purple-200" : "bg-purple-100"
+                    }`}
                 >
                   {record.name}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.daily)}
+                  {record.name.toLowerCase().includes("client") || record.name.toLowerCase().includes("share")
+                    ? record.daily
+                    : numberToMillionsString(record.daily)}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-green-200" : "bg-green-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-green-200" : "bg-green-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.weekly)}
+                  {record.name.toLowerCase().includes("client") || record.name.toLowerCase().includes("share")?record.weekly:numberToMillionsString(record.weekly)}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.forthnightly)}
+                  {record.name.toLowerCase().includes("client") || record.name.toLowerCase().includes("share")?record.forthnightly:numberToMillionsString(record.forthnightly)}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.monthly)}
+                  {record.name.toLowerCase().includes("client") || record.name.toLowerCase().includes("share")?record.monthly:numberToMillionsString(record.monthly)}
                 </TableCell>
               </TableRow>
             ))}

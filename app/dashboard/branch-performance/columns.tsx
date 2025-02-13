@@ -61,7 +61,7 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       />
     ),
     cell: ({ row }) => {
-      return <div className="text-right ml-4">{cellNumberFormatter(row, "totalClients")}</div >;
+      return <div className="text-right ml-4">{row.getValue("totalClients")}</div >;
     },
   },
   {

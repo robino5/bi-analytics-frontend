@@ -22,7 +22,9 @@ interface BarOption {
 interface BarChartProps {
   data: BarData[];
   option: BarOption;
+  colorArray: string[];
 }
+
 
 const findRatio = (
   value: string,
@@ -32,7 +34,7 @@ const findRatio = (
   return ((parseFloat(value) / totalAmount) * 100).toFixed(precision);
 };
 
-const BarChart: FC<BarChartProps> = ({ data, option }) => {
+const BarChart: FC<BarChartProps> = ({ data, option,colorArray }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   const totalAmount = data.reduce(
@@ -46,18 +48,18 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
 
       const options = {
         grid: {
-          left: "15%",
-          right: "10%",
-          top: "10%",
-          bottom: "10%",
+          left: "18%",
+          right: "12%",
+          top: "0%",
+          bottom: "0%",
         },
         tooltip: {
           trigger: "item",
           formatter: (params: any) => {
-            const { name, value } = params.data;
-            const ratio = findRatio(value, totalAmount, 0);
-            return `${name}: ${ratio}%`;
-          },
+                     const { name, value } = params.data;
+                     const ratio = findRatio(value, totalAmount, 0);
+                     return `${name}: ${numberToMillionsString(value)} (${ratio}%)`;
+                   },
           backgroundColor: "#dee3e0",
           padding: [10, 20],
           borderRadius: 10,
@@ -99,30 +101,28 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
           axisLabel: {
             color: "#fff",
             fontSize: 12,
-            formatter: (value: string) => {
-              const maxLabelLength = 12;
-              if (value.length > maxLabelLength) {
-                return value.replace(/(.{12})/g, "$1\n");
-              }
-              return value;
-            },
+            formatter: (value: string) => (value.length > 15 ? value.replace(/(.{15})/g, "$1\n") : value),
           },
         },
         series: [
           {
             type: "bar",
-            data: data, // Use sorted chart data
+             data: data.map((item, index) => ({
+                          ...item,
+                          itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                              { offset: 0, color: colorArray[index % colorArray.length] + "65" },
+                              { offset: 1, color: colorArray[index % colorArray.length] },
+                            ]),
+                          },
+                        })),
             name: option.legendName || "Data",
-            itemStyle: {
-              color: option.fill,
-              borderWidth: 1,
-            },
-            barWidth: 18,
+            barWidth: 20,
             label: {
               show: option.barLabel,
               position: "right",
               formatter: (params: any) =>
-                numberToMillionsString(params.value, true),
+                `${numberToMillionsString(params.value)} (${findRatio(params.value, totalAmount, 0)}%)`,
               fontSize: LABEL_TICK_FONT_SIZE,
               color: "#fff",
             },
@@ -137,11 +137,11 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
       };
     }
   }, [data, option]); // Include sortedData as a dependency
-
+  const calculatedHeight = Math.max(data.length * 30, 300);
   return (
     <div
       ref={chartRef}
-      style={{ height: option?.height ?? 300, width: "100%" }}
+      style={{ height: calculatedHeight, width: "100%" }}
     />
   );
 };
@@ -150,11 +150,12 @@ const BarChart: FC<BarChartProps> = ({ data, option }) => {
 interface BarChartHorizontalProps {
   data: BarData[];
   options: BarOption;
+  colorArray: string[];
 }
 
-const BarChartHorizontal: FC<BarChartHorizontalProps> = ({ data, options }) => {
+const BarChartHorizontal: FC<BarChartHorizontalProps> = ({ data, options, colorArray }) => {
   return data.length ? (
-    <BarChart data={data} option={options} />
+    <BarChart data={data} option={options} colorArray={colorArray} />
   ) : (
     <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
       <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data available
