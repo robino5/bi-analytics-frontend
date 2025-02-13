@@ -29,7 +29,7 @@ const cellNumberFormatter = (row: any, accessorKey: string) => {
       className={cn("text-right font-medium ", {
         "text-red-600": amount < 0,
       })}
-    >
+    >0
       {numberToMillionsString(amount)}
     </div>
   );

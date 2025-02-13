@@ -67,15 +67,12 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
           label: {
             show: true,
             position: "inside",
+            color: "#fff",  // Moved outside textStyle
+            fontSize: 14,   // Moved outside textStyle
             formatter: (params: any) => {
               const value =
                 dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
               return `${params.name}\n${value} (${(params.percent).toFixed(0)}%)`;
-            },
-            textStyle: {
-              color: "#fff",
-              // fontWeight: "bold",
-              fontSize: 14,
             },
           },
           emphasis: {

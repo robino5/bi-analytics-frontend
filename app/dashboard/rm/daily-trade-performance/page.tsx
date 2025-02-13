@@ -600,6 +600,7 @@ export default function DailyTradePerformance() {
               <BarChartHorizontal
                 data={marginCodeExposure}
                 options={sectorMarginCodeExposureOption}
+                colorArray={ ["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
               />
             }
           />
@@ -615,6 +616,13 @@ export default function DailyTradePerformance() {
               <BarChartHorizontal
                 data={cashCodeExposure}
                 options={sectorCashCodeExposureOption}
+                colorArray={ [
+                  "#FF5733", // Red
+                  "#3498DB", // Blue
+                  "#2ECC71", // Green
+                  "#F1C40F", // Yellow
+                  "#9B59B6"  // Purple
+                ]}
               />
             }
           />
