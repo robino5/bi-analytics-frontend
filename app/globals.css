@@ -177,10 +177,10 @@
 }
 
 .dse_table_odd_row {
-  background-color: #72BF78;
+  background-color: #76c1f3;
 }
 .dse_table_even_row{
-  background-color: #A0D683;
+  background-color: #8fc9f0;
 }
 /* .dse_table_even_row:hover,.dse_table_odd_row:hover {
   background-color: #778656;
@@ -196,11 +196,11 @@
 } */
 
 .cse_dse_summurize_odd_row{
-  background-color: #c286c7;
+  background-color: #d6b6da;
 }
 
 .cse_dse_summurize_even_row{
-  background-color: #d393b6;
+  background-color: #dbafc7;
 }
 
 

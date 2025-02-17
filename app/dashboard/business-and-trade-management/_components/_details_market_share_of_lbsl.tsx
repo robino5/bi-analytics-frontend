@@ -139,19 +139,19 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
               <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL Share(%)
               </TableCell>
-              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300">
+              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300 ">
                 {numberToMillionsString(datalist.lbslShareOfCse)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
               <TableCell
-                className="text-center py-1 border border-gray-300"
+                className="text-center py-1 border border-gray-300 dse_table_even_row"
                 colSpan={2}
               >
                 LBSL Total Turnover
               </TableCell>
               <TableCell
-                className="text-right py-1 border border-gray-300"
+                className="text-right py-1 border border-gray-300 cse_table_even_row"
                 colSpan={2}
               >
                 {numberToMillionsString(datalist.lbslTotalTurnover)}
@@ -159,13 +159,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
               <TableCell
-                className="text-center py-1 border border-gray-300"
+                className="text-center py-1 border border-gray-300 dse_table_odd_row"
                 colSpan={2}
               >
                 EXCH Total Market TO
               </TableCell>
               <TableCell
-                className="text-right py-1 border border-gray-300"
+                className="text-right py-1 border border-gray-300 cse_table_odd_row"
                 colSpan={2}
               >
                 {numberToMillionsString(datalist.exchTotalMarket)}
@@ -173,13 +173,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
               <TableCell
-                className="text-center py-1 border border-gray-300"
+                className="text-center py-1 border border-gray-300 dse_table_even_row"
                 colSpan={2}
               >
                 LBSL Market % (DSE+CSE)
               </TableCell>
               <TableCell
-                className="text-right py-1 border border-gray-300"
+                className="text-right py-1 border border-gray-300 cse_table_even_row"
                 colSpan={2}
               >
                 {numberToMillionsString(datalist.lbslMarketAll)}
@@ -187,13 +187,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
               <TableCell
-                className="text-center py-1 border border-gray-300"
+                className="text-center py-1 border border-gray-300 dse_table_odd_row"
                 colSpan={2}
               >
                 Foreign
               </TableCell>
               <TableCell
-                className="text-right py-1 border border-gray-300"
+                className="text-right py-1 border border-gray-300 cse_table_odd_row"
                 colSpan={2}
               >
                 {numberToMillionsString(datalist.foreign)}
@@ -201,13 +201,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             </TableRow>
             <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
               <TableCell
-                className="text-center py-1 border border-gray-300"
+                className="text-center py-1 border border-gray-300 dse_table_even_row"
                 colSpan={2}
               >
                 Net Income Today
               </TableCell>
               <TableCell
-                className="text-right py-1 border border-gray-300"
+                className="text-right py-1 border border-gray-300 cse_table_even_row"
                 colSpan={2}
               >
                 {numberToMillionsString(datalist.netIncome)}
