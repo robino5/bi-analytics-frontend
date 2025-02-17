@@ -176,22 +176,31 @@
   background-color: #DED0B6 !important;
 }
 
-.dse_table_header {
+.dse_table_odd_row {
   background-color: #72BF78;
 }
-.dse_table_odd_row{
+.dse_table_even_row{
   background-color: #A0D683;
 }
-.dse_table_even_row {
-  background-color: #D3EE98;
-}
-.cse_table_header {
+/* .dse_table_even_row:hover,.dse_table_odd_row:hover {
+  background-color: #778656;
+} */
+.cse_table_odd_row{
   background-color: #D0A2F7;
 }
-.cse_table_odd_row{
+.cse_table_even_row{
   background-color: #DCBFFF;
 }
-.cse_table_even_row {
-  background-color: #E5D4FF;
+/* .cse_table_even_row:hover,.cse_table_odd_row:hover {
+  background-color: #816ba0;
+} */
+
+.cse_dse_summurize_odd_row{
+  background-color: #c286c7;
 }
+
+.cse_dse_summurize_even_row{
+  background-color: #d393b6;
+}
+
 
