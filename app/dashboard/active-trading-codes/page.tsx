@@ -23,7 +23,10 @@ import CardBoard from "@/components/CardBoard";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
 import OmsBranchwiseTurnover from "./_components/_oms_branchwise_turnover";
 import { BarColors } from "@/components/ui/utils/constants";
-import BarChartHorizontal from "./_components/BarChartHorizontal";
+import BarChartHorizontalEvent from "./_components/BarChartHorizontal";
+import { SkeletonStatistics } from "@/components/skeletonCard";
+import BarChartHorizontal from "@/components/BarChartHorizontal";
+import BarChartHorizontalComparison from "@/components/BarChartHorizontalComprison";
 
 const ActiveTradingCodesBoard = () => {
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
@@ -65,6 +68,18 @@ const ActiveTradingCodesBoard = () => {
     queryKey: ["sectorwiseTurnover"],
     queryFn: () => activeTradingCodeAPI.getSectorwiseTurnover()
   });
+
+  const { data: sectorwiseTrunovertop20, isLoading: sectorwiseTurnoverLoadingtop20, isError: sectorwiseTurnoverErrortop20 } = useQuery({
+    queryKey: ["sectorwiseTurnovertop20"],
+    queryFn: () => activeTradingCodeAPI.getSectorwiseTurnoverTop20()
+  });
+
+  const { data: sectorwiseTrunoverComparison, isLoading: sectorwiseTrunoverComparisonLoading, isError: sectorwiseTrunoverComparisonError } = useQuery({
+    queryKey: ["sectorwiseTrunoverComparison"],
+    queryFn: () => activeTradingCodeAPI.getSectorWiseTurnoverComparison()
+  });
+
+
 
   const biaxialChartOption = {
     dataKey: "tradingDate",
@@ -153,7 +168,6 @@ const ActiveTradingCodesBoard = () => {
     ...sectorMarginCodeExposureOption,
     fill: BarColors.purple,
   };
-
   return (
     <div className="mx-4">
       <PageHeader
@@ -235,26 +249,54 @@ const ActiveTradingCodesBoard = () => {
             title="Turnover (Month Wise)"
           />
         </div>
-        {sectorwiseTrunover?.data ? (
-              <BarChartHorizontal
-                data={sectorwiseTrunover.data}
-                options={sectorCashCodeExposureOption}
-              />
+        {/* {sectorwiseTrunover?.data ? (
+          <BarChartHorizontalEvent
+            data={sectorwiseTrunover.data}
+            options={sectorCashCodeExposureOption}
+          />
         ) : (
           "No data available"
+        )} */}
+        {sectorwiseTrunoverComparison?.data ? (
+          <CardBoard
+            className="col-span-3  xl:col-span-3"
+            title="DSE vs LBSL Turnover Comparison Sector Wise"
+            // subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontalComparison
+                data={sectorwiseTrunoverComparison?.data}
+                options={{ legendNames: ["DSE", "LBSL"], barcolors: ["#c200fb", "#ff7a56"] }}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-3 xl:col-span-3" />
         )}
-          {branchwiseTrunover?.data ? (
-          <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
-        ) : null}
-        
+        {sectorwiseTrunovertop20?.data ? (
+          <CardBoard
+            className="col-span-3  xl:col-span-3"
+            title=" LBSL TOP 20 Shares by Value (BDT Mn)"
+            // subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={sectorwiseTrunovertop20?.data}
+                options={sectorCashCodeExposureOption}
+                colorArray={["#D1C4E9", "#03A9F4", "#FFC107", "#E91E63", "#8BC34A"]}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-3 xl:col-span-3" />
+        )}
         {datewiseTrunover ? (
           <BarChartBiAxis
             data={datewiseTrunover?.data?.rows as any}
             options={biaxialChartOption}
           />) : null}
+        {branchwiseTrunover?.data ? (
+          <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
+        ) : null}
 
-      
-   
       </div>
     </div>
   );

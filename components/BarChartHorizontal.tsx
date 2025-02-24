@@ -34,7 +34,7 @@ const findRatio = (
   return ((parseFloat(value) / totalAmount) * 100).toFixed(precision);
 };
 
-const BarChart: FC<BarChartProps> = ({ data, option,colorArray }) => {
+const BarChart: FC<BarChartProps> = ({ data, option, colorArray }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   const totalAmount = data.reduce(
@@ -56,10 +56,10 @@ const BarChart: FC<BarChartProps> = ({ data, option,colorArray }) => {
         tooltip: {
           trigger: "item",
           formatter: (params: any) => {
-                     const { name, value } = params.data;
-                     const ratio = findRatio(value, totalAmount, 0);
-                     return `${name}: ${numberToMillionsString(value)} (${ratio}%)`;
-                   },
+            const { name, value } = params.data;
+            const ratio = findRatio(value, totalAmount, 0);
+            return `${name}: ${numberToMillionsString(value)} (${ratio}%)`;
+          },
           backgroundColor: "#dee3e0",
           padding: [10, 20],
           borderRadius: 10,
@@ -88,7 +88,7 @@ const BarChart: FC<BarChartProps> = ({ data, option,colorArray }) => {
         },
         yAxis: {
           type: "category",
-          data: data.map((item) => item.name), 
+          data: data.map((item) => item.name),
           inverse: true,
           axisLine: {
             lineStyle: {
@@ -107,15 +107,15 @@ const BarChart: FC<BarChartProps> = ({ data, option,colorArray }) => {
         series: [
           {
             type: "bar",
-             data: data.map((item, index) => ({
-                          ...item,
-                          itemStyle: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                              { offset: 0, color: colorArray[index % colorArray.length] + "65" },
-                              { offset: 1, color: colorArray[index % colorArray.length] },
-                            ]),
-                          },
-                        })),
+            data: data.map((item, index) => ({
+              ...item,
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                  { offset: 0, color: colorArray[index % colorArray.length] + "65" },
+                  { offset: 1, color: colorArray[index % colorArray.length] },
+                ]),
+              },
+            })),
             name: option.legendName || "Data",
             barWidth: 20,
             label: {
@@ -136,8 +136,8 @@ const BarChart: FC<BarChartProps> = ({ data, option,colorArray }) => {
         chartInstance.dispose();
       };
     }
-  }, [data, option]); // Include sortedData as a dependency
-  const calculatedHeight = Math.max(data.length * 30, 300);
+  }, [data, option]);
+  const calculatedHeight = Math.max(data.length * 32, 300);
   return (
     <div
       ref={chartRef}

@@ -125,7 +125,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, onClick }) => {
   return <div ref={chartRef} style={{ height: option?.height ?? 200, width: "100%" }} />;
 };
 
-const BarChartHorizontal: FC<{ data: BarData[]; options: BarChartProps["option"] }> = ({ data, options }) => {
+const BarChartHorizontalEvent: FC<{ data: BarData[]; options: BarChartProps["option"] }> = ({ data, options }) => {
   const [selectedBar, setSelectedBar] = useState<BarData | null>(null);
 
   const handleBarClick = (barData: BarData) => {
@@ -138,7 +138,7 @@ const BarChartHorizontal: FC<{ data: BarData[]; options: BarChartProps["option"]
       {data.length ? (
         <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
           <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
-            <CardTitle className="text-white text-lg font-semibold py-2">
+            <CardTitle className="text-white text-lg font-semibold py-1">
               LBSL Sector Wise Turnover (Mn)
             </CardTitle>
           </CardHeader>
@@ -149,7 +149,7 @@ const BarChartHorizontal: FC<{ data: BarData[]; options: BarChartProps["option"]
       ) : (
         <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
         <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
-          <CardTitle className="text-white text-lg font-semibold py-2">
+          <CardTitle className="text-white text-lg font-semibold py-1">
             LBSL Sector Wise Turnover (Mn)
           </CardTitle>
         </CardHeader>
@@ -180,4 +180,4 @@ const BarChartHorizontal: FC<{ data: BarData[]; options: BarChartProps["option"]
   );
 };
 
-export default BarChartHorizontal;
+export default BarChartHorizontalEvent;

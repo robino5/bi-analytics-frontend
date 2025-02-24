@@ -82,3 +82,9 @@ export type SectorWiseTurnoverBreakdown = {
     name:string;
     value: number;
 }
+
+export type SectorWiseTurnoverComparison = { 
+    name:string;
+    primaryValue: number;
+    secondaryValue: number;
+}
