@@ -7,13 +7,10 @@ import CardBoard from "@/components/CardBoard";
 import { SkeletonStatistics } from "@/components/skeletonCard";
 
 
-interface BarData {
-  name: string;
-  value: number | string;
-}
+
 
 interface Props {
-  data: BarData | null;
+  data: any;
 }
 
 export const SectorTurnoverBreakdown: React.FC<Props> = ({ data }) => {

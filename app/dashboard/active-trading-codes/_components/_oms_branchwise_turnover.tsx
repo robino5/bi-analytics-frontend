@@ -30,8 +30,8 @@ type BranchData = {
         };
         rows: {
             branch_Name: string;
-            activeClientsToday:number;
-            turnoverToday:number
+            activeClientsToday: number;
+            turnoverToday: number
             activeClientsMonth: number;
             turnoverMonth: number;
         }[];
@@ -41,17 +41,17 @@ type BranchData = {
 export default function OmsBranchwiseTurnover({ data }: BranchData) {
     console.log(data)
     return (
-        <Card className="col-span-3 overflow-auto bg-[#0e5e6f] max-h-[800px]">
-   <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
-  <CardTitle className="text-white text-lg font-semibold py-2">
-    Branch Wise Turnover (Internet)
-  </CardTitle>
-  <div className="text-right">
-    <Link href="http://192.168.10.7:8080/api/v1/dashboards/admin-oms-branchwise-turnover-csv/" className="inline-flex items-center">
-      <Download className="h-5 w-5 text-white" />
-    </Link>
-  </div>
-</CardHeader>
+        <Card className="col-span-3 overflow-auto bg-[#0e5e6f] max-h-[600px]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
+                <CardTitle className="text-white text-lg font-semibold py-2">
+                    Branch Wise Turnover (Internet)
+                </CardTitle>
+                <div className="text-right">
+                    <Link href="http://192.168.10.7:8080/api/v1/dashboards/admin-oms-branchwise-turnover-csv/" className="inline-flex items-center">
+                        <Download className="h-5 w-5 text-white" />
+                    </Link>
+                </div>
+            </CardHeader>
 
             <CardContent className="mt-2">
                 <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">

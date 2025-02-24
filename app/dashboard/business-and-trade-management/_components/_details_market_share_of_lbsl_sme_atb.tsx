@@ -52,7 +52,7 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
       <CardContent className="mt-2">
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-          <TableRow className="text-center bg-destructive hover:bg-destructive text-black font-bold">
+          <TableRow className="text-center bg-blue-500 hover:bg-blue-700 text-black font-bold">
               <TableHead
                 className="text-center py-1 border border-gray-100 text-white text-lg"
                 colSpan={2}
@@ -69,86 +69,86 @@ export default function DetailsMarketShareSME({ datalist }: Props) {
           </TableHeader>
           <TableBody>
             <TableRow className="bg-table-odd-row transition-all duration-300">
-              <TableCell className="text-left py-1 border border-gray-300 w-1/4">
+              <TableCell className="dse_table_odd_row text-left py-1 border border-gray-300 w-1/4">
                 LBSL SME
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300 w-1/4">
+              <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300 w-1/4">
                 {numberToMillionsString(datalist.dseSmeTurnover)}
               </TableCell>
-              <TableCell className="text-left py-1 border border-gray-300 w-1/4">
+              <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300 w-1/4">
                 LBSL SME
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300 w-1/4">
+              <TableCell className=" cse_table_odd_row text-right py-1 border border-gray-300 w-1/4">
                 {numberToMillionsString(datalist.cseSmeTurnover)}
               </TableCell>
             </TableRow>
             <TableRow className="bg-table-even-row transition-all duration-300">
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="dse_table_even_row text-left py-1 border border-gray-300">
                 LBSL ATB
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.dseAtbTurnover)}
               </TableCell>
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="cse_table_even_row vtext-left py-1 border border-gray-300">
                 LBSL ATB
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseAtbTurnover)}
               </TableCell>
             </TableRow>
             <TableRow className="bg-table-odd-row transition-all duration-300">
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="dse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL GSEC 
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.dseGsecTurnover)}
               </TableCell>
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL GSEC 
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseGsecTurnover)}
               </TableCell>
             </TableRow>
             <TableRow className="bg-table-even-row transition-all duration-300">
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="dse_table_even_row text-left py-1 border border-gray-300">
                 LBSL Block
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.dseBlockTurnover)}
               </TableCell>
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="cse_table_even_row text-left py-1 border border-gray-300">
                 LBSL Block
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseBlockTurnover)}
               </TableCell>
             </TableRow>
             <TableRow className="bg-table-odd-row transition-all duration-300">
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="dse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL SME(%)
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.smePercent)}
               </TableCell>
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL SME(%)
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseSmePercent)}
               </TableCell>
             </TableRow>
             <TableRow className="bg-table-even-row transition-all duration-300">
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="dse_table_even_row text-left py-1 border border-gray-300">
                 LBSL ATB(%)
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.atbPercent)}
               </TableCell>
-              <TableCell className="text-left py-1 border border-gray-300">
+              <TableCell className="cse_table_even_row text-left py-1 border border-gray-300">
                 LBSL ATB(%)
               </TableCell>
-              <TableCell className="text-right py-1 border border-gray-300">
+              <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
                 {numberToMillionsString(datalist.cseAtbPercent)}
               </TableCell>
             </TableRow>

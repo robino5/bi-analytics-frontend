@@ -2,7 +2,7 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { IActiveTradingToday, IActiveTradeDayWise, IMonthWiseData,DatewiseTurnover,BranchData,SectorWiseTurnover,SectorWiseTurnoverBreakdown } from "../types";
+import { IActiveTradingToday, IActiveTradeDayWise, IMonthWiseData,DatewiseTurnover,BranchData,SectorWiseTurnover,SectorWiseTurnoverBreakdown, SectorWiseTurnoverComparison } from "../types";
 import { IResponse } from "@/types/utils";
 
 
@@ -31,8 +31,14 @@ class ActiveTradingCodeAPI extends Common {
     getSectorwiseTurnover(){
         return this.http.get<IResponse<SectorWiseTurnover[]>>("dashboards/admin-sector-wise-turnover/")
     }
+    getSectorwiseTurnoverTop20(){
+        return this.http.get<IResponse<SectorWiseTurnover[]>>("dashboards/admin-realtime-turnover-top-20/")
+    }
     getSectorwiseTurnoverBreakdown(name: string){
         return this.http.get<IResponse<SectorWiseTurnoverBreakdown[]>>(`dashboards/admin-sector-wise-turnover-breakdown/?sector_name=${name}`)
+    }
+    getSectorWiseTurnoverComparison(){
+        return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>("dashboards/admin-realtime-turnover-comparison-sector-wise/")
     }
 
 }
