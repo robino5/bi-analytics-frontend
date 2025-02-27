@@ -24,6 +24,7 @@ export interface IActiveTradingToday {
     trades: number;
     totalTurnover: number;
     tradingDate: string;
+    pushDate: string;
 }
 
 export interface IActiveTradeDayWise {
@@ -73,10 +74,24 @@ export type BranchData = {
     };
 };
 
-export type SectorWiseTurnover = { 
+export type SectorWiseTurnoverTop20 = { 
     name:string;
     value: number;
+    buy: number;
+    sell: number;   
 }
+
+export type SectorWiseTurnover = { 
+    name:string;
+    value: number;   
+}
+
+export type ExchnageSectorWiseTurnover = { 
+    name:string;
+    value: number;
+    pushDate: string;
+}
+
 
 export type SectorWiseTurnoverBreakdown = { 
     name:string;

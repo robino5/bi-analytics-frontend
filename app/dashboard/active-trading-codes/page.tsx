@@ -27,6 +27,7 @@ import BarChartHorizontalEvent from "./_components/BarChartHorizontal";
 import { SkeletonStatistics } from "@/components/skeletonCard";
 import BarChartHorizontal from "@/components/BarChartHorizontal";
 import BarChartHorizontalComparison from "@/components/BarChartHorizontalComprison";
+import TopTurnoverCompany from "./_components/_top_turnover_company_wise";
 
 const ActiveTradingCodesBoard = () => {
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
@@ -74,12 +75,17 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getSectorwiseTurnoverTop20()
   });
 
+  const { data: exchangeSectorwiseTrunovertop20, isLoading: exchangeSectorwiseTurnoverLoadingtop20, isError: exchangeSectorwiseTurnoverErrortop20 } = useQuery({
+    queryKey: ["exchangeSectorwiseTurnovertop20"],
+    queryFn: () => activeTradingCodeAPI.getExchangeSectorwiseTurnoverTop20()
+  });
+
   const { data: sectorwiseTrunoverComparison, isLoading: sectorwiseTrunoverComparisonLoading, isError: sectorwiseTrunoverComparisonError } = useQuery({
     queryKey: ["sectorwiseTrunoverComparison"],
     queryFn: () => activeTradingCodeAPI.getSectorWiseTurnoverComparison()
   });
 
-
+  console.log("daywise turnover", dayWiseSummaryResponse)
 
   const biaxialChartOption = {
     dataKey: "tradingDate",
@@ -171,7 +177,7 @@ const ActiveTradingCodesBoard = () => {
   return (
     <div className="mx-4">
       <PageHeader
-        name={`Active Trading Codes (${headerTradingDate})`}
+        name={`Active Trading Codes as on ${dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}`}
       />
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-2">
         <div className="rounded-md xl:col-span-6">
@@ -272,19 +278,12 @@ const ActiveTradingCodesBoard = () => {
         ) : (
           <SkeletonStatistics className="col-span-3 xl:col-span-3" />
         )}
-        {sectorwiseTrunovertop20?.data ? (
-          <CardBoard
-            className="col-span-3  xl:col-span-3"
-            title=" LBSL TOP 20 Shares by Value (BDT Mn)"
-            // subtitle="Shows analytics of marginal performance for comodities"
-            children={
-              <BarChartHorizontal
-                data={sectorwiseTrunovertop20?.data}
-                options={sectorCashCodeExposureOption}
-                colorArray={["#D1C4E9", "#03A9F4", "#FFC107", "#E91E63", "#8BC34A"]}
-              />
-            }
-          />
+        {sectorwiseTrunovertop20?.data && exchangeSectorwiseTrunovertop20?.data ? (
+       
+       <TopTurnoverCompany 
+       lbsldata={sectorwiseTrunovertop20.data as any}
+       exchangeData={exchangeSectorwiseTrunovertop20.data as any}
+       />
         ) : (
           <SkeletonStatistics className="col-span-3 xl:col-span-3" />
         )}
@@ -296,7 +295,6 @@ const ActiveTradingCodesBoard = () => {
         {branchwiseTrunover?.data ? (
           <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
         ) : null}
-
       </div>
     </div>
   );
