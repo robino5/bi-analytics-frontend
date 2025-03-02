@@ -36,7 +36,7 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
     };
 
     const getTitle = () => {
-        return activeTab === "LBSL" ? "LBSL-DSE Top 20 Turnover Company Wise" : "Exchange Top 20 Turnover Company Wise";
+        return activeTab === "LBSL" ? "LBSL-DSE Top 20 Turnover Company Wise" : "DSE Top 20 Turnover Company Wise";
     };
 
     return (
@@ -49,7 +49,7 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
                     <div className="text-right">
                         <TabsList className="bg-gray-200 p-1 rounded-lg text-dark">
                             <TabsTrigger value="LBSL">LBSL</TabsTrigger>
-                            <TabsTrigger value="DSE">Exchange</TabsTrigger>
+                            <TabsTrigger value="DSE">DSE</TabsTrigger>
                         </TabsList>
                     </div>
                 </CardHeader>
