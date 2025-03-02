@@ -140,9 +140,9 @@ export default function BoardWiseTurnover({ datalist }: Props) {
             </TableRow>
           </TableFooter>
         </Table>
-        {isWithinTimeRange() && (
+        {/* {isWithinTimeRange() && (
           <p className="text-destructive">Note: G-SEC Data is not Available</p>
-        )}
+        )} */}
       </CardContent>
     </Card>
   );

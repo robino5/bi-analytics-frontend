@@ -93,7 +93,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, colorArray }) => {
             formatter: (value: number) => `${findRatio(value, totalAmount, 0)}%`,
           },
           axisLine: { lineStyle: { color: "#565656" } },
-          splitLine: { show: false },
+          splitLine: { show: true },
         },
         yAxis: {
           type: "category",
