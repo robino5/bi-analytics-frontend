@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { auth } from "@/auth";
 import SessionProvider from "@/auth_provider";
 import TanStackProvider from "@/providers/tanStackProvider"
+import { ThemeProvider } from "@/components/theme-provider";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -25,11 +26,13 @@ export default async function AuthLayout({
   return (
     <html lang="en">
       <body className={cn("bg-secondary", fontSans.variable)}>
+      {/* <ThemeProvider attribute="class" defaultTheme="root" enableSystem> */}
         <SessionProvider session={session}>
           <TanStackProvider >
             {children}
           </TanStackProvider>
         </SessionProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

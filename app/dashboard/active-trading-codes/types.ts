@@ -88,7 +88,9 @@ export type SectorWiseTurnover = {
 
 export type ExchnageSectorWiseTurnover = { 
     name:string;
-    value: number;
+    primaryValue: number;
+    secondaryValue:number;
+    secondaryPercent:number;
     pushDate: string;
 }
 
