@@ -272,6 +272,7 @@ const ActiveTradingCodesBoard = () => {
               <BarChartHorizontalComparison
                 data={sectorwiseTrunoverComparison?.data}
                 options={{ legendNames: ["DSE", "LBSL"], barcolors: ["#c200fb", "#ff7a56"] }}
+                haveBreakdown={true}
               />
             }
           />
@@ -301,3 +302,4 @@ const ActiveTradingCodesBoard = () => {
 };
 
 export default ActiveTradingCodesBoard;
+

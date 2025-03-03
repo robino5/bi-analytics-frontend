@@ -19,6 +19,7 @@ interface BarData {
   name: string;
   primaryValue: number;
   secondaryValue: number;
+  secondaryPercent: number;
 }
 
 interface BarOption {
@@ -60,6 +61,12 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
             const { name, value, seriesName } = params;
             const total = seriesName === option.legendNames?.[0] ? totalPrimary : totalSecondary;
             const ratio = findRatio(value, total, 2);
+
+            // If it's the secondary series, show the secondaryPercent
+            if (seriesName === (option.legendNames?.[1] || "LBSL")) {
+              return `${name} (${seriesName}): ${numberToMillionsString(value)} (${params.data.secondaryPercent}%)`;
+            }
+
             return `${name} (${seriesName}): ${numberToMillionsString(value)} (${ratio}%)`;
           },
           backgroundColor: "#dee3e0",
@@ -71,6 +78,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
             fontFamily: "sans-serif",
           },
         },
+
         legend: {
           show: true,
           top: "0%",
@@ -136,6 +144,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
             type: "bar",
             data: data.map((item) => ({
               value: item.secondaryValue,
+              secondaryPercent: item.secondaryPercent,  
             })),
             itemStyle: { color: option.barcolors?.[1] || "#ff7a56" },
             barWidth: 10,
@@ -144,13 +153,14 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
               position: "right",
               color: "#fff",
               fontSize: 12,
-              formatter: ({ value }: { value: number }) => {
-                const percent = findRatio(value, totalSecondary, 2);
-                return `${numberToMillionsString(value)} (${percent}%)`;
+              formatter: ({ value, data }: { value: number; data: any }) => {
+                const secondaryPercent = data.secondaryPercent; 
+                return `${numberToMillionsString(value)} (${secondaryPercent}%)`;
               },
             },
           },
         ],
+
       };
 
       chartInstance.setOption(options);
@@ -176,13 +186,14 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
   return <div ref={chartRef} style={{ height: calculatedHeight, width: "100%" }} />;
 };
 
-interface BarChartHorizontalComparisonProps {
+interface BarChartHorizontalComprisonExchangeProps {
   data: BarData[];
   options: BarOption;
   haveBreakdown?: boolean;
 }
 
-const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ data, options, haveBreakdown }) => {
+const BarChartHorizontalComprisonExchange: FC<BarChartHorizontalComprisonExchangeProps> = ({ data, options, haveBreakdown }) => {
+  console.log("props data ", data);
   const [selectedBar, setSelectedBar] = useState<BarData | null>(null);
   return data.length ? (
     <>
@@ -213,5 +224,5 @@ const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ d
   );
 };
 
-export default BarChartHorizontalComparison;
+export default BarChartHorizontalComprisonExchange;
 

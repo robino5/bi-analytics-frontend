@@ -7,9 +7,9 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ExchnageSectorWiseTurnover, SectorWiseTurnoverTop20 } from "../types";
-import BarChartHorizontal from "@/components/BarChartHorizontal";
 import BarChartHorizontalStack from "@/components/BarChartHorizontalStack";
 import { BarColors } from "@/components/ui/utils/constants";
+import BarChartHorizontalComprisonExchange from "@/components/BarChartHorizontalComprisonExchange";
 
 interface TopTurnoverCompanyProps {
     lbsldata: SectorWiseTurnoverTop20[];
@@ -36,7 +36,7 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
     };
 
     const getTitle = () => {
-        return activeTab === "LBSL" ? "LBSL-DSE Top 20 Turnover Company Wise" : "DSE Top 20 Turnover Company Wise";
+        return activeTab === "LBSL" ? "LBSL-DSE Top 20 Turnover Company Wise" : "DSE vs LBSL Top 20 Turnover Comparison Company Wise";
     };
 
     return (
@@ -49,7 +49,7 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
                     <div className="text-right">
                         <TabsList className="bg-gray-200 p-1 rounded-lg text-dark">
                             <TabsTrigger value="LBSL">LBSL</TabsTrigger>
-                            <TabsTrigger value="DSE">DSE</TabsTrigger>
+                            <TabsTrigger value="DSE">DSE vs LBSL</TabsTrigger>
                         </TabsList>
                     </div>
                 </CardHeader>
@@ -62,10 +62,9 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
                         />
                     </TabsContent>
                     <TabsContent value="DSE">
-                        <BarChartHorizontal
+                        <BarChartHorizontalComprisonExchange
                             data={exchangeData}
-                            options={options}
-                            colorArray = {["#4CAF50", "#FF5722", "#2196F3", "#FFEB3B", "#9C27B0"]}
+                            options={{ legendNames: ["DSE", "LBSL"], barcolors: ["#A1DD70", "#FF4191"] }}
                         />
                     </TabsContent>
                 </CardContent>
