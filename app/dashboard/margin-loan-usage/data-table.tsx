@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-table-header hover:bg-table-header"
+                className="bg-blue-500 hover:bg-blue-700"
               >
                 {headerGroup.headers.map((header) => {
                   return (
@@ -104,8 +104,8 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={`${
-                    index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
-                  } hover:bg-green-300 transition-all duration-300`}
+                    index % 2 === 0 ? "bg-blue-300" : "bg-blue-200"
+                  } hover:bg-blue-100 transition-all duration-300`}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

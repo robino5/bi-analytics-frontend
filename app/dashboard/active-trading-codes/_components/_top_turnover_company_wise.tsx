@@ -19,7 +19,6 @@ interface TopTurnoverCompanyProps {
 export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnoverCompanyProps) {
 
     const [activeTab, setActiveTab] = useState("LBSL");
-    console.log(lbsldata);
 
     const options = {
         legendName: "Quantity",
@@ -67,6 +66,9 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
                             options={{ legendNames: ["DSE", "LBSL"], barcolors: ["#A1DD70", "#FF4191"] }}
                         />
                     </TabsContent>
+                    {activeTab === "DSE" && (
+                        <p className="text-[#FF4191] text-lg font-bold">Note: LBSL's percentage represents its share of total DSE stock turnover value, based on one-to-one comparison.</p>
+                    )}
                 </CardContent>
             </Tabs>
         </Card>
