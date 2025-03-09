@@ -61,7 +61,7 @@ export default function MarginLoanAllocationDataTable({
                 <TableCell className="font-medium py-1">
                   {record.perticular}
                 </TableCell>
-                <TableCell className="py-1 text-right">
+                <TableCell className={`py-1 text-right ${record.amount < 0 ? "text-red-500" : "text-black"}`}>
                   {numberToMillionsString(record.amount)}
                 </TableCell>
               </TableRow>

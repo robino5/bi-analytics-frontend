@@ -6,14 +6,19 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { SectorTurnoverBreakdown } from "@/app/dashboard/active-trading-codes/_components/_sector_turnover_berakdown";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Download } from "lucide-react";
 
 interface BarData {
   name: string;
@@ -40,6 +45,7 @@ const findRatio = (value: number, totalAmount: number, precision: number = 2) =>
 
 const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdown }) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const chartInstanceRef = useRef<echarts.EChartsType | null>(null);
 
   const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
   const totalSecondary = data.reduce((acc, obj) => acc + obj.secondaryValue, 0);
@@ -47,59 +53,33 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
   useEffect(() => {
     if (chartRef.current) {
       const chartInstance = echarts.init(chartRef.current);
+      chartInstanceRef.current = chartInstance;
 
       const options = {
-        grid: {
-          left: "18%",
-          right: "12%",
-          top: "4%",
-          bottom: "5%",
-        },
+        grid: { left: "18%", right: "12%", top: "4%", bottom: "5%" },
         tooltip: {
           trigger: "item",
           formatter: (params: any) => {
             const { name, value, seriesName } = params;
             const total = seriesName === option.legendNames?.[0] ? totalPrimary : totalSecondary;
             const ratio = findRatio(value, total, 2);
-
-            // If it's the secondary series, show the secondaryPercent
             if (seriesName === (option.legendNames?.[1] || "LBSL")) {
               return `${name} (${seriesName}): ${numberToMillionsString(value)} (${params.data.secondaryPercent}%)`;
             }
-
             return `${name} (${seriesName}): ${numberToMillionsString(value)} (${ratio}%)`;
           },
-          backgroundColor: "#dee3e0",
-          padding: [10, 20],
-          borderRadius: 10,
-          textStyle: {
-            color: "#000",
-            fontSize: 12,
-            fontFamily: "sans-serif",
-          },
         },
-
         legend: {
           show: true,
           top: "0%",
           left: "center",
-          textStyle: {
-            color: "#fff",
-            fontSize: 12,
-          },
+          textStyle: { color: "#fff", fontSize: 12 },
           data: option.legendNames,
         },
         xAxis: {
           type: "value",
-          axisLine: {
-            lineStyle: {
-              color: "#565656",
-            },
-          },
-          axisTick: { show: false },
           axisLabel: {
             color: "#fff",
-            fontSize: 12,
             formatter: (value: number) => `${findRatio(value, totalPrimary + totalSecondary, 0)}%`,
           },
         },
@@ -107,15 +87,8 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           type: "category",
           data: data.map((item) => item.name),
           inverse: true,
-          axisLine: {
-            lineStyle: {
-              color: "#565656",
-            },
-          },
-          axisTick: { show: false },
           axisLabel: {
             color: "#fff",
-            fontSize: 12,
             formatter: (value: string) => (value.length > 15 ? value.replace(/(.{15})/g, "$1\n") : value),
           },
         },
@@ -123,20 +96,13 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           {
             name: option.legendNames?.[0] || "DSE",
             type: "bar",
-            data: data.map((item) => ({
-              value: item.primaryValue,
-            })),
+            data: data.map((item) => ({ value: item.primaryValue })),
             itemStyle: { color: option.barcolors?.[0] || "#c200fb" },
-            barWidth: 10,
             label: {
               show: true,
               position: "right",
               color: "#fff",
-              fontSize: 12,
-              formatter: ({ value }: { value: number }) => {
-                const percent = findRatio(value, totalPrimary, 2);
-                return `${numberToMillionsString(value)} (${percent}%)`;
-              },
+              formatter: ({ value }: { value: number }) => `${numberToMillionsString(value)} (${findRatio(value, totalPrimary, 2)}%)`,
             },
           },
           {
@@ -144,37 +110,20 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
             type: "bar",
             data: data.map((item) => ({
               value: item.secondaryValue,
-              secondaryPercent: item.secondaryPercent,  
+              secondaryPercent: item.secondaryPercent,
             })),
             itemStyle: { color: option.barcolors?.[1] || "#ff7a56" },
-            barWidth: 10,
             label: {
               show: true,
               position: "right",
               color: "#fff",
-              fontSize: 12,
-              formatter: ({ value, data }: { value: number; data: any }) => {
-                const secondaryPercent = data.secondaryPercent; 
-                return `${numberToMillionsString(value)} (${secondaryPercent}%)`;
-              },
+              formatter: ({ value, data }: { value: number; data: any }) => `${numberToMillionsString(value)} (${data.secondaryPercent}%)`,
             },
           },
         ],
-
       };
 
       chartInstance.setOption(options);
-
-      // Event listener for clicking on bars
-      chartInstance.on("click", (params: any) => {
-        if (haveBreakdown === true) {
-          if (params.seriesName === (option.legendNames?.[1] || "LBSL")) {
-            const clickedData = data[params.dataIndex];
-            setSelectedBar(clickedData);
-            document.getElementById("open-dialog-sec-breakdown")?.click();
-          }
-        }
-      });
 
       return () => {
         chartInstance.dispose();
@@ -182,38 +131,74 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
     }
   }, [data, option]);
 
+
+
   const calculatedHeight = Math.max(data.length * 32, 300);
-  return <div ref={chartRef} style={{ height: calculatedHeight, width: "100%" }} />;
+
+  return <div ref={chartRef} style={{ height: calculatedHeight }} />;
 };
 
-interface BarChartHorizontalComprisonExchangeProps {
-  data: BarData[];
-  options: BarOption;
-  haveBreakdown?: boolean;
-}
-
-const BarChartHorizontalComprisonExchange: FC<BarChartHorizontalComprisonExchangeProps> = ({ data, options, haveBreakdown }) => {
-  console.log("props data ", data);
+const BarChartHorizontalComparisonExchange: FC<{ data: BarData[]; options: BarOption; haveBreakdown?: boolean }> = ({ data, options, haveBreakdown }) => {
   const [selectedBar, setSelectedBar] = useState<BarData | null>(null);
+  const chartInstanceRef = useRef<echarts.EChartsType | null>(null);
+
+  const downloadImage = (type: "png" | "svg") => {
+    if (chartInstanceRef.current) {
+      const url = chartInstanceRef.current.getDataURL({ type });
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `chart.${type}`;
+      link.click();
+    }
+  };
+
+  const downloadCSV = () => {
+    const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
+    const csvHeader = "Company,DSE Value,DSE %,LBSL Value,LBSL %\n";
+    const csvRows = data.map(
+      (item) =>
+        `${item.name},${item.primaryValue},${findRatio(item.primaryValue, totalPrimary)}%,${item.secondaryValue},${item.secondaryPercent}%`
+    );
+    const csvContent = csvHeader + csvRows.join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "dse_lbsl_companywise_turnover_comparison.csv";
+    link.click();
+  };
   return data.length ? (
     <>
+      <div className="absolute top-2 right-2">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="bg-transparent text-white px-2 py-0 rounded-md border-teal-500 hover:bg-transparent hover:border-teal-500 transition-all focus:outline-none focus:ring-0">
+              <Download className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => downloadImage("png")}>
+              Download PNG
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => downloadImage("svg")}>
+              Download SVG
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={downloadCSV}>
+              Download CSV
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <BarChart data={data} option={options} setSelectedBar={setSelectedBar} haveBreakdown={haveBreakdown} />
-
-      {/* Dialog Component */}
       <Dialog>
         <DialogTrigger asChild>
           <Button className="hidden" id="open-dialog-sec-breakdown" />
         </DialogTrigger>
         <DialogContent className="sm:max-w-[1000px] max-h-[900px] overflow-auto bg-[#0e5e6f]">
-          {/* Gradient Header */}
           <DialogHeader className="text-white">
-            <DialogTitle>Sector turnover Breakdown</DialogTitle>
+            <DialogTitle>Sector Turnover Breakdown</DialogTitle>
           </DialogHeader>
-
-          {/* Modal Content */}
-          <DialogDescription className="p-4">
-            {selectedBar ? <SectorTurnoverBreakdown data={selectedBar} /> : "No data selected."}
-          </DialogDescription>
+          <DialogDescription className="p-4">{selectedBar ? <SectorTurnoverBreakdown data={selectedBar} /> : "No data selected."}</DialogDescription>
         </DialogContent>
       </Dialog>
     </>
@@ -224,5 +209,4 @@ const BarChartHorizontalComprisonExchange: FC<BarChartHorizontalComprisonExchang
   );
 };
 
-export default BarChartHorizontalComprisonExchange;
-
+export default BarChartHorizontalComparisonExchange;

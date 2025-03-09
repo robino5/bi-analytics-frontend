@@ -15,11 +15,12 @@ import {
 } from "@/components/ui/card";
 import MarginLoanAllocationDataTable from "./_margin_loan_allocation_datatable";
 import ExposureControllingDataTable from "./_exposure_controlling_datatable";
-import { IExposureSumamry,IMarginLoanAllocation,INetTradeClient,} from "@/types/marginLoanUsage";
+import { IExposureSumamry, IMarginLoanAllocation, IMarkedClient, INetTradeClient, } from "@/types/marginLoanUsage";
 import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
 import BranchFilter from "@/components/branchFilter";
 import { IResponse } from "@/types/utils";
 import { ITargetGenerated } from "@/types/dailyTurnoverPerformance";
+import NegativeEquityInvestorCodeDataTable from "./_negative_equity_investor_code_datatable";
 
 export default function MarginLoanUsage() {
   const { data: session } = useSession();
@@ -33,6 +34,7 @@ export default function MarginLoanUsage() {
     []
   );
   const [netTradeClients, setNetTradeClients] = useState<INetTradeClient[]>([]);
+  const [negativeEquityInvestor, setNegativeEquityInvestor] = useState<IMarkedClient[]>([]);
 
   const handleBranchChange = (branchId: string) => {
     setBranch(branchId);
@@ -42,6 +44,8 @@ export default function MarginLoanUsage() {
     ITargetGenerated[]
   >([]);
 
+
+  console.log("negativeEquityInvestor", negativeEquityInvestor)
   // effect on page load
   useEffect(() => {
     const fetchMarginLoanAllocation = async () => {
@@ -127,10 +131,31 @@ export default function MarginLoanUsage() {
       }
     };
 
+    const fetchNegativeEquityInvistor = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/zonewise-investors/?investor_type=negative_equity`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<IMarkedClient[]>;
+        if (successResponse(result.status)) {
+          setNegativeEquityInvestor(result.data);
+        }
+      } catch (error) {
+        console.error(`Error Happened while fetching negative equity invistor `, error);
+      }
+    };
+
     fetchDailyTurnoverPerformance();
     fetchMarginLoanAllocation();
     fetchExposureSummary();
     fetchNetTradeClients();
+    fetchNegativeEquityInvistor();
   }, []);
   // effect on page load
   useEffect(() => {
@@ -200,9 +225,30 @@ export default function MarginLoanUsage() {
           console.error(error);
         }
       };
+
+      const fetchNegativeEquityInvistor = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/zonewise-investors/?investor_type=negative_equity&branch=${branch}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<IMarkedClient[]>;
+          if (successResponse(result.status)) {
+            setNegativeEquityInvestor(result.data);
+          }
+        } catch (error) {
+          console.error(`Error Happened while fetching negative equity invistor `, error);
+        }
+      };
       fetchMarginLoanAllocation();
       fetchExposureSummary();
       fetchNetTradeClients();
+      fetchNegativeEquityInvistor();
     }
   }, [branch]);
 
@@ -232,7 +278,12 @@ export default function MarginLoanUsage() {
           records={exposureSummary}
           branch={branch}
         />
-        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-6 bg-[#0e5e6f]">
+        {negativeEquityInvestor && (
+          <div className="col-span-3">
+                <NegativeEquityInvestorCodeDataTable records={negativeEquityInvestor} />
+          </div>
+        )}
+        <Card className="w-full col-span-1 mb-2 shadow-xl lg:col-span-3 bg-[#0e5e6f]">
           <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
             <CardTitle className="text-white text-md text-lg">RM Wise Net Trade</CardTitle>
             {/* <CardDescription className="text-white">

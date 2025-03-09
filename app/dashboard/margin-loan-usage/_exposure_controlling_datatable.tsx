@@ -87,7 +87,7 @@ export default function ExposureControllingDataTable({
                   {record.exposure}
                 </TableCell>
                 <TableCell className="py-1 text-right">
-                  {numberToMillionsString(record.investors)}
+                  {record.investors}
                 </TableCell>
                 <TableCell className="py-1 text-right">
                   {numberToMillionsString(record.loanAmount)}
