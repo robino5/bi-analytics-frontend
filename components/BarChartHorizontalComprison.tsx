@@ -14,6 +14,13 @@ import {
 } from "@/components/ui/dialog";
 import { SectorTurnoverBreakdown } from "@/app/dashboard/active-trading-codes/_components/_sector_turnover_berakdown";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Download } from "lucide-react";
 
 interface BarData {
   name: string;
@@ -175,6 +182,20 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
   const calculatedHeight = Math.max(data.length * 32, 300);
   return <div ref={chartRef} style={{ height: calculatedHeight, width: "100%" }} />;
 };
+const downloadCSV = (data: BarData[], totalPrimary: number, totalSecondary: number) => {
+  const csvContent = ["Name,DSE Value,DSE %,LBSL Value,LBSL %"];
+  data.forEach((item: { primaryValue: number; secondaryValue: number; name: any; }) => {
+    const primaryPercent = findRatio(item.primaryValue, totalPrimary);
+    const secondaryPercent = findRatio(item.secondaryValue, totalSecondary);
+    csvContent.push(`${item.name},${item.primaryValue},${primaryPercent}%,${item.secondaryValue},${secondaryPercent}%`);
+  });
+  const blob = new Blob([csvContent.join("\n")], { type: "text/csv" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "DSE_vs_LBSL_turnover_comparison_sector_wise.csv";
+  link.click();
+};
+
 
 interface BarChartHorizontalComparisonProps {
   data: BarData[];
@@ -184,8 +205,50 @@ interface BarChartHorizontalComparisonProps {
 
 const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ data, options, haveBreakdown }) => {
   const [selectedBar, setSelectedBar] = useState<BarData | null>(null);
+  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+
+  const handleDownload = (format: "png" | "svg" | "csv") => {
+    const chart = chartInstanceRef.current;
+    if (format === "csv") {
+      const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
+      const totalSecondary = data.reduce((acc, obj) => acc + obj.secondaryValue, 0);
+      downloadCSV(data, totalPrimary, totalSecondary);
+    } else if (chart) {
+      const dataURL = chart.getDataURL({
+        type: format,
+        backgroundColor: "#fff",
+      });
+
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = `barchart.${format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
   return data.length ? (
     <>
+      <div className="absolute top-1 right-1">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="bg-transparent text-white px-2 py-0 rounded-md border-teal-500 hover:bg-transparent hover:border-teal-500 transition-all focus:outline-none focus:ring-0">
+              <Download className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => handleDownload("png")}>
+              Download PNG
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDownload("svg")}>
+              Download SVG
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDownload("csv")}>
+              Download CSV
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <BarChart data={data} option={options} setSelectedBar={setSelectedBar} haveBreakdown={haveBreakdown} />
 
       {/* Dialog Component */}

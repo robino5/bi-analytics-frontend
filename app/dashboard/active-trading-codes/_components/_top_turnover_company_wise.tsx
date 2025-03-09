@@ -39,13 +39,13 @@ export default function TopTurnoverCompany({ lbsldata, exchangeData }: TopTurnov
     };
 
     return (
-        <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
+        <Card className="col-span-3 overflow-auto bg-[#0e5e6f] relative">
             <Tabs defaultValue="LBSL" onValueChange={handleTabChange} className="w-full">
                 <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-1 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
                     <CardTitle className="text-white text-lg font-semibold py-2">
                         {getTitle()}
                     </CardTitle>
-                    <div className="text-right">
+                    <div className="text-right mr-10">
                         <TabsList className="bg-gray-200 p-1 rounded-lg text-dark">
                             <TabsTrigger value="LBSL">LBSL</TabsTrigger>
                             <TabsTrigger value="DSE">DSE vs LBSL</TabsTrigger>
