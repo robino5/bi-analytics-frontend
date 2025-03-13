@@ -28,8 +28,12 @@ import { SkeletonStatistics } from "@/components/skeletonCard";
 import BarChartHorizontal from "@/components/BarChartHorizontal";
 import BarChartHorizontalComparison from "@/components/BarChartHorizontalComprison";
 import TopTurnoverCompany from "./_components/_top_turnover_company_wise";
+import TurnoverComparisonCard from "./_components/turover_comparison_sector_wise";
+import React, { useCallback, useState } from "react";
+
 
 const ActiveTradingCodesBoard = () => {
+ 
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
     queryKey: ["clientTradeSummaryByToday"],
     queryFn: () => activeTradingCodeAPI.getClientTradeSummaryByToday()
@@ -80,10 +84,6 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getExchangeSectorwiseTurnoverTop20()
   });
 
-  const { data: sectorwiseTrunoverComparison, isLoading: sectorwiseTrunoverComparisonLoading, isError: sectorwiseTrunoverComparisonError } = useQuery({
-    queryKey: ["sectorwiseTrunoverComparison"],
-    queryFn: () => activeTradingCodeAPI.getSectorWiseTurnoverComparison()
-  });
 
   console.log("daywise turnover", dayWiseSummaryResponse)
 
@@ -263,28 +263,13 @@ const ActiveTradingCodesBoard = () => {
         ) : (
           "No data available"
         )} */}
-        {sectorwiseTrunoverComparison?.data ? (
-          <CardBoard
-            className="col-span-3  xl:col-span-3"
-            title="DSE vs LBSL Turnover Comparison Sector Wise"
-            // subtitle="Shows analytics of marginal performance for comodities"
-            children={
-              <BarChartHorizontalComparison
-                data={sectorwiseTrunoverComparison?.data}
-                options={{ legendNames: ["DSE", "LBSL"], barcolors: ["#c200fb", "#ff7a56"] }}
-                haveBreakdown={true}
-              />
-            }
-          />
-        ) : (
-          <SkeletonStatistics className="col-span-3 xl:col-span-3" />
-        )}
+       <TurnoverComparisonCard default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}/>
         {sectorwiseTrunovertop20?.data && exchangeSectorwiseTrunovertop20?.data ? (
-       
-       <TopTurnoverCompany 
-       lbsldata={sectorwiseTrunovertop20.data as any}
-       exchangeData={exchangeSectorwiseTrunovertop20.data as any}
-       />
+
+          <TopTurnoverCompany
+            lbsldata={sectorwiseTrunovertop20.data as any}
+            exchangeData={exchangeSectorwiseTrunovertop20.data as any}
+          />
         ) : (
           <SkeletonStatistics className="col-span-3 xl:col-span-3" />
         )}

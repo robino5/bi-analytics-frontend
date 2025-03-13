@@ -40,8 +40,8 @@ class ActiveTradingCodeAPI extends Common {
     getSectorwiseTurnoverBreakdown(name: string){
         return this.http.get<IResponse<SectorWiseTurnoverBreakdown[]>>(`dashboards/admin-sector-wise-turnover-breakdown/?sector_name=${name}`)
     }
-    getSectorWiseTurnoverComparison(){
-        return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>("dashboards/admin-realtime-turnover-comparison-sector-wise/")
+    getSectorWiseTurnoverComparison(url: string) {
+        return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>(url);
     }
 
 }

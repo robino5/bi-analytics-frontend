@@ -55,6 +55,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
       const chartInstance = echarts.init(chartRef.current);
 
       const options = {
+        animation: false,
         grid: {
           left: "18%",
           right: "12%",
