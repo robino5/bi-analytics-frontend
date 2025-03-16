@@ -7,6 +7,9 @@ import { activeTradingCodeAPI } from "../api";
 import { useQuery } from "@tanstack/react-query";
 import { SkeletonStatistics } from "@/components/skeletonCard";
 import { FaCalendarAlt } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon } from "lucide-react";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 export default function TurnoverComparisonCard({ default: defaultProp }: { default: any }) {
     const [date, setDate] = useState<Date | null>(null);
@@ -32,9 +35,6 @@ export default function TurnoverComparisonCard({ default: defaultProp }: { defau
         return date >= tenDaysAgo && date <= today && !isWeekend(date);
     };
 
-    const toggleCalendar = useCallback(() => {
-        setIsCalendarOpen((prev) => !prev);
-    }, []);
 
     return (
         <>
@@ -45,15 +45,16 @@ export default function TurnoverComparisonCard({ default: defaultProp }: { defau
                             Turnover Comparison Sector Wise as on {date ? format(date, "dd-MMM-yyyy") : defaultProp.slice(0, 9)}
                         </CardTitle>
                         <div className="relative flex justify-end items-start mr-10">
-                            <button
-                                onClick={toggleCalendar}
-                                className="bg-white text-black px-3 py-1 rounded-md border flex items-center"
-                            >
-                                <FaCalendarAlt />
-                            </button>
-
-                            {isCalendarOpen && (
-                                <div className="absolute right-0 mt-8 z-50 bg-white border rounded-md shadow-md">
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="bg-white flex items-center space-x-2 text-gray-700"
+                                    >
+                                        <CalendarIcon className="w-5 h-5" />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 bg-white shadow-md rounded-lg">
                                     <Calendar
                                         mode="single"
                                         selected={date ?? undefined}
@@ -66,8 +67,8 @@ export default function TurnoverComparisonCard({ default: defaultProp }: { defau
                                         className="rounded-md border"
                                         disabled={(date) => !isValidDate(date)}
                                     />
-                                </div>
-                            )}
+                                </PopoverContent>
+                            </Popover>
                         </div>
 
                     </CardHeader>

@@ -74,15 +74,6 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getSectorwiseTurnover()
   });
 
-  const { data: sectorwiseTrunovertop20, isLoading: sectorwiseTurnoverLoadingtop20, isError: sectorwiseTurnoverErrortop20 } = useQuery({
-    queryKey: ["sectorwiseTurnovertop20"],
-    queryFn: () => activeTradingCodeAPI.getSectorwiseTurnoverTop20()
-  });
-
-  const { data: exchangeSectorwiseTrunovertop20, isLoading: exchangeSectorwiseTurnoverLoadingtop20, isError: exchangeSectorwiseTurnoverErrortop20 } = useQuery({
-    queryKey: ["exchangeSectorwiseTurnovertop20"],
-    queryFn: () => activeTradingCodeAPI.getExchangeSectorwiseTurnoverTop20()
-  });
 
 
   console.log("daywise turnover", dayWiseSummaryResponse)
@@ -264,15 +255,7 @@ const ActiveTradingCodesBoard = () => {
           "No data available"
         )} */}
        <TurnoverComparisonCard default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}/>
-        {sectorwiseTrunovertop20?.data && exchangeSectorwiseTrunovertop20?.data ? (
-
-          <TopTurnoverCompany
-            lbsldata={sectorwiseTrunovertop20.data as any}
-            exchangeData={exchangeSectorwiseTrunovertop20.data as any}
-          />
-        ) : (
-          <SkeletonStatistics className="col-span-3 xl:col-span-3" />
-        )}
+          <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}/>
         {datewiseTrunover ? (
           <BarChartBiAxis
             data={datewiseTrunover?.data?.rows as any}
