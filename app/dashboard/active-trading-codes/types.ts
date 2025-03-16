@@ -74,7 +74,8 @@ export type BranchData = {
     };
 };
 
-export type SectorWiseTurnoverTop20 = { 
+export type SectorWiseTurnoverTop20 = {
+    date: string; 
     name:string;
     value: number;
     buy: number;
@@ -86,7 +87,8 @@ export type SectorWiseTurnover = {
     value: number;   
 }
 
-export type ExchnageSectorWiseTurnover = { 
+export type ExchnageSectorWiseTurnover = {
+    date: string; 
     name:string;
     primaryValue: number;
     secondaryValue:number;

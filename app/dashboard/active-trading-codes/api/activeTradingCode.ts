@@ -31,11 +31,11 @@ class ActiveTradingCodeAPI extends Common {
     getSectorwiseTurnover(){
         return this.http.get<IResponse<SectorWiseTurnover[]>>("dashboards/admin-sector-wise-turnover/")
     }
-    getSectorwiseTurnoverTop20(){
-        return this.http.get<IResponse<SectorWiseTurnoverTop20[]>>("dashboards/admin-realtime-turnover-top-20/")
+    getSectorwiseTurnoverTop20(url:string){
+        return this.http.get<IResponse<SectorWiseTurnoverTop20[]>>(url)
     }
-    getExchangeSectorwiseTurnoverTop20(){
-        return this.http.get<IResponse<ExchnageSectorWiseTurnover[]>>("dashboards/admin-realtime-turnover-comparison-top20-sector-wise/")
+    getExchangeSectorwiseTurnoverTop20(url:string){
+        return this.http.get<IResponse<ExchnageSectorWiseTurnover[]>>(url)
     }
     getSectorwiseTurnoverBreakdown(name: string){
         return this.http.get<IResponse<SectorWiseTurnoverBreakdown[]>>(`dashboards/admin-sector-wise-turnover-breakdown/?sector_name=${name}`)
