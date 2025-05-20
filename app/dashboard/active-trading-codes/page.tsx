@@ -76,8 +76,6 @@ const ActiveTradingCodesBoard = () => {
 
 
 
-  console.log("daywise turnover", dayWiseSummaryResponse)
-
   const biaxialChartOption = {
     dataKey: "tradingDate",
     valueKeyA: "activeClients",
@@ -87,7 +85,8 @@ const ActiveTradingCodesBoard = () => {
     stroke: "#c3ce",
     barLabel: true,
     rotate: 90,
-    title: "Date Wise Turnover(Internet)"
+    title: "Date Wise Turnover(Internet)",
+    cardColor: "bg-[#033e4a]"
   };
 
   const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading;

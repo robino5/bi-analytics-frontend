@@ -108,7 +108,8 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={lbslTurnoverSegmentation?.data?.rows as any}
             details={lbslTurnoverSegmentation?.data?.detail as any}
-            colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            //colors={["#4CAF50", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={[ "#ff6b6b ","#1e90ff ","#ffd166","#1dd1a1","#ee5253"]}
           />
         ) : null}
         {equityValueSegmentation?.data ? (
@@ -118,7 +119,8 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={equityValueSegmentation?.data?.rows as any}
             details={equityValueSegmentation?.data?.detail as any}
-            colors={["#A4A0EB", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            //colors={["#A4A0EB", "#FF9800", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={[ "#ff6b6b ","#1e90ff ","#ffd166","#1dd1a1","#ee5253"]}
           />
         ) : null}
         {ledgerValueSegmentation?.data ? (
@@ -128,7 +130,8 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={ledgerValueSegmentation?.data?.rows as any}
             details={ledgerValueSegmentation?.data?.detail as any}
-            colors={["#4CAF50", "#C74272", "#2196F3", "#9C27B0", "#F44336"]}
+            //colors={["#4CAF50", "#C74272", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={[ "#ff6b6b ","#1e90ff ","#ffd166","#1dd1a1","#ee5253"]}
           />
         ) : null}
         {portfolioValueSegmentation?.data ? (
@@ -138,7 +141,7 @@ export default function CustomerManagement() {
             className="col-span1 overflow-y-auto lg:col-span-3 lg:row-span-3"
             data={portfolioValueSegmentation?.data?.rows as any}
             details={portfolioValueSegmentation?.data?.detail as any}
-            colors={["#c200fb", "#F689A6", "#2196F3", "#9C27B0", "#F44336"]}
+            colors={[ "#ff6b6b ","#1e90ff ","#ffd166","#1dd1a1","#ee5253"]}
             colors2={["#DDB5EB", "#EB6122"]}
           />
         ) : null}

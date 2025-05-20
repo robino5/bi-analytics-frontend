@@ -30,6 +30,14 @@ export default function PortfolioValueSegmentationChart({
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.EChartsType | null>(null);
 
+  const colorMap: Record<string, string> = {
+    Retail: "#ff6b6b",
+    Omnibus: "#1e90ff",
+    "Busi. Aggregator": "#ffd166",
+    Company:"#1dd1a1",
+    Foreign: "#c200fb"
+  };
+
   useEffect(() => {
     if (!chartRef.current) return;
 
@@ -93,7 +101,7 @@ export default function PortfolioValueSegmentationChart({
             value: item.tpvTotal,
             name: item.customerCategory,
             itemStyle: {
-              color: colors[index % colors.length],
+              color: colorMap[item.customerCategory] || "#cccccc",
             },
           })),
           label: {
@@ -150,8 +158,8 @@ export default function PortfolioValueSegmentationChart({
   }, [data, colors, colors2]);
 
   return (
-    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           {title}-{numberToMillionsString(details.sumOfTpvTotal)}
         </CardTitle>

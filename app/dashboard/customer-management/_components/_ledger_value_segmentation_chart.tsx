@@ -27,6 +27,14 @@ export default function LedgerValueSegmentationChart({
 }: PieChartComponentProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
+  const colorMap: Record<string, string> = {
+    Retail: "#ff6b6b",
+    Omnibus: "#1e90ff",
+    "Busi. Aggregator": "#ffd166",
+    Company:"#1dd1a1",
+    Foreign: "#c200fb"
+  };
+
   useEffect(() => {
     if (chartRef.current) {
       const chart = echarts.init(chartRef.current);
@@ -36,7 +44,7 @@ export default function LedgerValueSegmentationChart({
         name: `${item.customerCategory}`,
         formattedTurnover: numberToMillionsString(item.margin),
         itemStyle: {
-          color: colors[index % colors.length],
+          color: colorMap[item.customerCategory] || "#cccccc",
         },
         normalizedMargin: Math.abs(item.margin),
       }));
@@ -77,7 +85,7 @@ export default function LedgerValueSegmentationChart({
             },
             itemStyle: {
               borderRadius: 8, 
-              borderColor: "#0e5e6f",
+              borderColor: "#033e4a",
               borderWidth: 2,
             },
             emphasis: {
@@ -90,7 +98,7 @@ export default function LedgerValueSegmentationChart({
             paddingAngle: 5, // Padding between sections
           },
         ],
-        backgroundColor: "#0e5e6f", // Match your card's background
+        backgroundColor: "#033e4a", // Match your card's background
       };
 
       chart.setOption(option);
@@ -105,8 +113,8 @@ export default function LedgerValueSegmentationChart({
   }, [data, colors]);
 
   return (
-    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           {title} - ({numberToMillionsString(details.sumOfMargin)})
         </CardTitle>
@@ -114,7 +122,7 @@ export default function LedgerValueSegmentationChart({
       <CardContent style={{ height: "500px" }}>
         <div
           ref={chartRef}
-          style={{ width: "100%", height: "100%", backgroundColor: "#0e5e6f" }}
+          style={{ width: "100%", height: "100%", backgroundColor: "#033e4a" }}
         />
       </CardContent>
     </Card>
