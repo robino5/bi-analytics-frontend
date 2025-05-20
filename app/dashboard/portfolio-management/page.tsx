@@ -51,7 +51,8 @@ export default function PortfolioManagement() {
     stroke: "#c3ce",
     barLabel: true,
     rotate: 90,
-    title:"Clients Trade vs Turnover"
+    title:"Clients Trade vs Turnover",
+    cardColor: "bg-[#0e5e6f]"
   };
 
   const [branch, setBranch] = useState("");

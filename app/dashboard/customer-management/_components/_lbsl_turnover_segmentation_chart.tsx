@@ -27,6 +27,14 @@ export default function LBSLTurnOverSegmentationChart({
 }: PieChartComponentProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
+  const colorMap: Record<string, string> = {
+    Retail: "#ff6b6b",
+    Omnibus: "#1e90ff",
+    "Busi. Aggregator": "#ffd166",
+    Company:"#1dd1a1",
+    Foreign: "#c200fb"
+  };
+
   useEffect(() => {
     if (chartRef.current) {
       const chart = echarts.init(chartRef.current);
@@ -36,7 +44,7 @@ export default function LBSLTurnOverSegmentationChart({
         name: `${item.customerCategory}`,
         formattedTurnover: numberToMillionsString(item.turnover),
         itemStyle: {
-          color: colors[index % colors.length],
+          color: colorMap[item.customerCategory] || "#cccccc",
         },
       }));
 
@@ -92,7 +100,7 @@ export default function LBSLTurnOverSegmentationChart({
             // padding: 5, 
           },
         ],
-        backgroundColor: "#0e5e6f", 
+        backgroundColor: "#033e4a", 
       };
 
       chart.setOption(option);
@@ -107,8 +115,8 @@ export default function LBSLTurnOverSegmentationChart({
   }, [data, colors]);
 
   return (
-    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           {title} - {numberToMillionsString(details.sumOfTurnovers)}
         </CardTitle>
@@ -116,7 +124,7 @@ export default function LBSLTurnOverSegmentationChart({
       <CardContent style={{ height: "500px" }}>
         <div
           ref={chartRef}
-          style={{ width: "100%", height: "100%", backgroundColor: "#0e5e6f" }}
+          style={{ width: "100%", height: "100%", backgroundColor: "#033e4a" }}
         />
       </CardContent>
     </Card>

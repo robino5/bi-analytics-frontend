@@ -37,6 +37,7 @@ interface BarOption {
   legendName?: string;
   rotate?: number;
   title?: string;
+  cardColor?: string;
 }
 
 interface BarCharHorizonalProps {
@@ -227,8 +228,8 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
   };
 
   return (
-    <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
+    <Card className={`col-span-3 overflow-auto ${options?.cardColor}`}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
         <div className="text-white text-lg font-semibold">{options?.title}</div>
         <div className="text-right">
           <DropdownMenu>

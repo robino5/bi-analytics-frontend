@@ -6,7 +6,7 @@ import * as echarts from "echarts";
 import { numberToMillionsString } from "@/lib/utils";
 import { BarColors } from "@/components/ui/utils/constants";
 
-const COLORS = [BarColors.purple,BarColors.light_blue];
+const COLORS = ["#FF7F50","#00BFFF"];
 
 interface IDataType {
   channel: string;
@@ -39,7 +39,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
       title: {
         left: "center",
         textStyle: {
-          color: "#fff",
+          color: "black",
           fontSize: 18,
         },
       },
@@ -48,7 +48,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
         formatter: (params: any) => {
           const value =
             dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
-          return `${params.name} - ${value} (${(params.percent).toFixed(0)}%)`;
+          return `${params.name}-${value}(${(params.percent).toFixed(0)}%)`;
         },
       },
       legend: {
@@ -62,19 +62,20 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
         {
           name: title,
           type: "pie",
-          radius: '80%',
+          radius: ['20%', '80%'],
           avoidLabelOverlap: false,
           label: {
             show: true,
             position: "inside",
-            color: "#fff",  // Moved outside textStyle
-            fontSize: 14,   // Moved outside textStyle
+            color: "black",
+            fontSize: 14,   
             formatter: (params: any) => {
               const value =
                 dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
-              return `${params.name}\n${value} (${(params.percent).toFixed(0)}%)`;
+              return `${value}\n(${(params.percent).toFixed(0)}%)`;
             },
           },
+          
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -98,8 +99,8 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
   }, [data, dataKey, title]);
 
   return (
-    <Card className="drop-shadow-md bg-[#0e5e6f]">
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className="drop-shadow-md bg-[#033e4a]">
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
       </CardHeader>
       <CardContent className="mt-2">

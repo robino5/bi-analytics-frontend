@@ -138,7 +138,7 @@ useEffect(() => {
         stack: "total",
         data: data.map((item) => item[dataKeyA]),
         itemStyle: {
-          color: BarColors.purple,
+          color: BarColors.warm_orange,
         },
         label: {
           show: true,
@@ -149,7 +149,7 @@ useEffect(() => {
             )[dataKeyX];
             return `${params.value}%`;
           },
-          color: "white",
+          color: "black",
         },
       },
       {
@@ -158,7 +158,7 @@ useEffect(() => {
         stack: "total",
         data: data.map((item) => item[dataKeyB]),
         itemStyle: {
-          color: BarColors.light_blue,
+          color: BarColors.soft_blue,
         },
         label: {
           show: true,
@@ -169,7 +169,7 @@ useEffect(() => {
             )[dataKeyY];
             return `${params.value}%`;
           },
-          color: "white",
+          color: "black",
         },
       },
     ],
@@ -185,8 +185,8 @@ useEffect(() => {
 }, [data, title, xDataKey, dataKeyA, dataKeyX, dataKeyB, dataKeyY]);
 
 return (
-  <Card className="bg-[#0e5e6f]">
-    <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
+  <Card className="bg-[#033e4a]">
+    <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
       <div className="text-white text-lg font-semibold">{title}</div>
       <div className="text-right">
         <DropdownMenu>

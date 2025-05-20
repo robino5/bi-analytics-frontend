@@ -15,4 +15,6 @@ export const BarColors = {
   light_green:"#2ECC71",
   golden_yellow:"#FFBF00",
   light_blue:"#3498DB",
+  warm_orange:"#FF7F50",
+  soft_blue: "#00BFFF"
 };

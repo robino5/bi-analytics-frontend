@@ -8,7 +8,8 @@
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
+    --card-header-gradient: linear-gradient(to right, #8f9bb1, #707b8b);
+    --popover: 0 0% 100%; 
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
@@ -31,6 +32,7 @@
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
+    --card-header-gradient: linear-gradient(to right, #2c3e50, #4ca1af);
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     --primary: 210 40% 98%;
@@ -57,7 +59,8 @@
     --popover: 215 61.6% 5.2%;
     --popover-foreground: 215 1.7000000000000002% 97%;
     --card: 215 61.6% 5.2%;
-    --card-foreground: 215 1.7000000000000002% 97%;
+    --card-foreground: 215 1.7% 97%;
+    --card-header-gradient: linear-gradient(to right, #232526, #414345);
     --border: 215 8.5% 12%;
     --input: 215 8.5% 12%;
     --primary: 215 17% 40%;

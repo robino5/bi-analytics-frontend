@@ -121,7 +121,7 @@ export default function GsecTurnoverComparisonChart({
           bottom: "3%",
           containLabel: true,
         },
-        backgroundColor: "#0e5e6f",
+        backgroundColor: "#033e4a",
       };
   
       chartInstance.setOption(options);
@@ -134,8 +134,8 @@ export default function GsecTurnoverComparisonChart({
   
 
   return (
-    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-8 00 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">{`${title}
         -Turnover-${numberToMillionsString(details.sumOfTurnover)}
          (${((details.sumOfTurnover / (details.sumOfTurnoverGsec+details.sumOfTurnover)) * 100).toFixed(2)}%)
