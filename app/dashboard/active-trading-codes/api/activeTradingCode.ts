@@ -28,6 +28,9 @@ class ActiveTradingCodeAPI extends Common {
     getBranchwiseTurnover(){
         return this.http.get<IResponse<BranchData>>("dashboards/admin-oms-branchwise-turnover/")
     }
+      getBranchwiseDtTurnover(){
+        return this.http.get<IResponse<BranchData>>("dashboards/admin-oms-branchwise-turnover-dt/")
+    }
     getSectorwiseTurnover(){
         return this.http.get<IResponse<SectorWiseTurnover[]>>("dashboards/admin-sector-wise-turnover/")
     }
