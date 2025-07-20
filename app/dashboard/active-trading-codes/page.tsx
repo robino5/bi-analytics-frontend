@@ -30,10 +30,11 @@ import BarChartHorizontalComparison from "@/components/BarChartHorizontalCompris
 import TopTurnoverCompany from "./_components/_top_turnover_company_wise";
 import TurnoverComparisonCard from "./_components/turover_comparison_sector_wise";
 import React, { useCallback, useState } from "react";
+import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_comarison";
 
 
 const ActiveTradingCodesBoard = () => {
- 
+
   const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } = useQuery({
     queryKey: ["clientTradeSummaryByToday"],
     queryFn: () => activeTradingCodeAPI.getClientTradeSummaryByToday()
@@ -69,6 +70,11 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getBranchwiseTurnover()
   });
 
+  const { data: branchwiseTrunoverDt, isLoading: branchwiseTurnoverLoadingDt, isError: branchwiseTurnoverErrorFt } = useQuery({
+    queryKey: ["branchwiseTurnoverDt"],
+    queryFn: () => activeTradingCodeAPI.getBranchwiseDtTurnover()
+  });
+
   const { data: sectorwiseTrunover, isLoading: sectorwiseTurnoverLoading, isError: sectorwiseTurnoverError } = useQuery({
     queryKey: ["sectorwiseTurnover"],
     queryFn: () => activeTradingCodeAPI.getSectorwiseTurnover()
@@ -89,9 +95,9 @@ const ActiveTradingCodesBoard = () => {
     cardColor: "bg-[#033e4a]"
   };
 
-  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading;
+  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading || branchwiseTurnoverLoadingDt;
 
-  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError;
+  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError || branchwiseTurnoverErrorFt;
 
   if (isLoading) {
     return <LoadingButton text="Loading..." />
@@ -253,16 +259,20 @@ const ActiveTradingCodesBoard = () => {
         ) : (
           "No data available"
         )} */}
-       <TurnoverComparisonCard default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}/>
-          <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}/>
+        <TurnoverComparisonCard default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />
+        <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />
         {datewiseTrunover ? (
           <BarChartBiAxis
             data={datewiseTrunover?.data?.rows as any}
             options={biaxialChartOption}
           />) : null}
-        {branchwiseTrunover?.data ? (
-          <OmsBranchwiseTurnover data={branchwiseTrunover.data as any} />
-        ) : null}
+
+        {branchwiseTrunover?.data && branchwiseTrunoverDt?.data && (
+          <BranchWiseTurnoverComparison
+            internetTurnover={branchwiseTrunover.data as any}
+            dtTurnover={branchwiseTrunoverDt.data as any}
+          />
+        )}
       </div>
     </div>
   );
