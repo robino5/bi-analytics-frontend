@@ -6,7 +6,6 @@ import LoadingButton from "@/components/loading";
 import ClientTradesDataTable from "./_components/clientTradesDataTable";
 import PieChart from "./_components/pieChart";
 import StackBarChart from "./_components/stackedBarChart";
-import { getFormattedHeaderDate } from "@/utils";
 import { activeTradingCodeAPI } from "./api/activeTradingCode";
 import { removeKeyFromObjects } from "@/utils"
 import {
@@ -19,18 +18,12 @@ import {
   IActiveTradeDayWise,
   IActiveTradingToday,
 } from "./types";
-import CardBoard from "@/components/CardBoard";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
-import OmsBranchwiseTurnover from "./_components/_oms_branchwise_turnover";
-import { BarColors } from "@/components/ui/utils/constants";
-import BarChartHorizontalEvent from "./_components/BarChartHorizontal";
-import { SkeletonStatistics } from "@/components/skeletonCard";
-import BarChartHorizontal from "@/components/BarChartHorizontal";
-import BarChartHorizontalComparison from "@/components/BarChartHorizontalComprison";
 import TopTurnoverCompany from "./_components/_top_turnover_company_wise";
 import TurnoverComparisonCard from "./_components/turover_comparison_sector_wise";
 import React, { useCallback, useState } from "react";
 import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_comarison";
+import {Ticker} from "@/components/ticker";
 
 
 const ActiveTradingCodesBoard = () => {
@@ -154,28 +147,16 @@ const ActiveTradingCodesBoard = () => {
     dataKeyB: "internetRatio",
     dataKeyY: "internet"
   };
-  const headerTradingDate = getFormattedHeaderDate(dayWiseSummary?.[0], "tradingDate")
 
-  const sectorMarginCodeExposureOption = {
-    legendName: "Quantity",
-    dataKey: "name",
-    valueKey: "value",
-    fill: BarColors.blue,
-    stroke: "purple",
-    height: 700,
-    barLabel: true,
-  };
 
-  const sectorCashCodeExposureOption = {
-    ...sectorMarginCodeExposureOption,
-    fill: BarColors.purple,
-  };
+
   return (
     <div className="mx-4">
       <PageHeader
         name={`Active Trading Codes as on ${dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}`}
       />
-      <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-2">
+        <Ticker />
+      <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-0">
         <div className="rounded-md xl:col-span-6">
           <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} />
         </div>
