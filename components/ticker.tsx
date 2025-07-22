@@ -41,8 +41,10 @@ export function Ticker() {
 
     if (isLoading || isError || !ticker.length) {
         return (
-            <div className="px-4 py-2 text-center">
+              <div className="py-3.5 overflow-hidden whitespace-nowrap">
+            <marquee scrollAmount={5}>
                 <span>{isLoading ? "Loading ticker..." : "Error loading ticker."}</span>
+                </marquee>
             </div>
         );
     }

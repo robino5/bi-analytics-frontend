@@ -1,5 +1,4 @@
 "use client"
-
 import { useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
 import LoadingButton from "@/components/loading";
@@ -147,7 +146,6 @@ const ActiveTradingCodesBoard = () => {
     dataKeyB: "internetRatio",
     dataKeyY: "internet"
   };
-
 
 
   return (
