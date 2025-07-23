@@ -22,7 +22,8 @@ import TopTurnoverCompany from "./_components/_top_turnover_company_wise";
 import TurnoverComparisonCard from "./_components/turover_comparison_sector_wise";
 import React, { useCallback, useState } from "react";
 import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_comarison";
-import {Ticker} from "@/components/ticker";
+import { Ticker } from "@/components/ticker";
+import { DseLiveTrade } from "@/components/dse-live-trade";
 
 
 const ActiveTradingCodesBoard = () => {
@@ -153,12 +154,14 @@ const ActiveTradingCodesBoard = () => {
       <PageHeader
         name={`Active Trading Codes as on ${dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null}`}
       />
-        <Ticker />
+      <Ticker />
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-0">
-        <div className="rounded-md xl:col-span-6">
+        <div className="rounded-md xl:col-span-3">
           <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} />
         </div>
-
+        <div className="rounded-md xl:col-span-3">
+          <DseLiveTrade/>
+        </div>
         {/* client  */}
         <div className="rounded-md xl:col-span-2">
           <PieChart

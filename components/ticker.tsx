@@ -29,6 +29,7 @@ export function Ticker() {
         queryKey: ["tickerData"],
         queryFn: () => ticketAPI.getTickerData(),
         refetchInterval: 66000,
+        refetchOnWindowFocus: false,
     });
 
     const ticker: TickerItem[] = tickerResponse || [];
