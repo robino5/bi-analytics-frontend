@@ -35,7 +35,7 @@ export default function ClientTradesDataTable({ records, className }: Props) {
   // ===========================================
   return (
     <Card
-      className={cn("overflow-auto drop-shadow-md", className, "bg-[#033e4a]")}
+      className={cn("overflow-auto drop-shadow-md", className, "bg-[#033e4a] ")}
     >
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
         <CardTitle className="text-white text-md text-lg">
