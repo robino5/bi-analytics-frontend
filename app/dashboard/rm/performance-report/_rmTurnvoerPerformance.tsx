@@ -43,7 +43,7 @@ export default function RMTurnoverPerformance({ records }: Props) {
         <Table>
           <TableHeader>
             <TableRow className="bg-blue-500 hover:bg-blue-700">
-              <TableHead className="w-[200px] text-white font-bold">
+              <TableHead className="w-[300px] text-white font-bold">
                 Particular
               </TableHead>
               <TableHead className="text-right text-white font-bold">
