@@ -22,7 +22,7 @@ export default function BranchWiseTurnoverComparison({ internetTurnover, dtTurno
             <Tabs value={activeTab} defaultValue="LBSL" onValueChange={setActiveTab} className="w-full">
                 <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
                     <CardTitle className="text-white text-lg font-semibold py-2">
-                        Branch Wise Turnover ({activeTab})
+                        Client Branch Wise Turnover ({activeTab})
                     </CardTitle>
                     <div className="flex items-center space-x-4 mr-6">
                         <TabsList className="bg-gray-200 p-1 rounded-lg text-dark mr-3">
