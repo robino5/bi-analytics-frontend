@@ -2,8 +2,9 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { BoardWiseTurnoverData,BoardWiseTurnoverBreakdownData,MarketShareSME,MarketShareLBSl} from "../types";
+import { BoardWiseTurnoverData,BoardWiseTurnoverBreakdownData,MarketShareSME,MarketShareLBSl,InvestorLiveTopBuySaleInfo} from "../types";
 import { IResponse } from "@/types/utils";
+import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 
 
 class BusinessTradeManagementAPI extends Common {
@@ -22,6 +23,15 @@ class BusinessTradeManagementAPI extends Common {
     }
     getMarketShareSME() {
         return this.http.get<IResponse<MarketShareSME[]>>("/dashboards/admin/atb-market-share-details/")
+    }
+     getInvestorLiveTrade() {
+        return this.http.get<IResponse<InvestorLiveTradeInfo[]>>("/dashboards/rm/investor-live-trade-rm-wise/")
+    }
+    getInvestorLiveTopBuy() {
+        return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>("/dashboards/admin/live-investor-top-buy-rm-wise/")
+    }
+    getInvestorLiveTopSale() {
+        return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>("/dashboards/admin/live-investor-top-sale-rm-wise/")
     }
 }
 
