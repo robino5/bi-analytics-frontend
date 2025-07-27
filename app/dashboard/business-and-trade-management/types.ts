@@ -71,3 +71,12 @@ export interface InvestorWiseTotalSelableStock {
   rmName: string;         
   stockAvailable: number;  
 }
+
+export type InvestorLiveTopBuySaleInfo = {
+  branchCode: number;
+  branchName: string;
+  rmName: string;
+  investorCode: string;
+  investorName: string;
+  turnover: number;
+}

@@ -180,7 +180,7 @@ const RmPerformanceBoard = () => {
         {investorLiveTrade ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise(DSE)</CardTitle>
               {/* <CardDescription className="text-white">
                 Client Details for Regional Managers
               </CardDescription> */}
