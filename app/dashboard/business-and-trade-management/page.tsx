@@ -107,7 +107,7 @@ export default function BusinessAndTradeManagement() {
         {investorLiveTopBuy ? (
           <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top 10 Investor Buy RM wise</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Top Twenty buyer ( DSE)</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -121,7 +121,7 @@ export default function BusinessAndTradeManagement() {
         {investorLiveTopSale ? (
           <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top 10 Investor Sale RM wise</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Top Twenty Seller ( DSE)</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
