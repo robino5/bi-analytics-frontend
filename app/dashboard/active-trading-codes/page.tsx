@@ -24,6 +24,8 @@ import React, { useCallback, useState } from "react";
 import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_comarison";
 import { Ticker } from "@/components/ticker";
 import { DseLiveTrade } from "@/components/dse-live-trade";
+import DseDsexLineChart from "@/components/LiveDsexChart";
+import { dseLiveTradeAPI } from "@/lib/services/dseLiveTrade";
 
 
 const ActiveTradingCodesBoard = () => {
@@ -73,6 +75,11 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getSectorwiseTurnover()
   });
 
+  const { data: dseDsexData, isLoading: dseDsexDataLoaing, isError: dseDsexDataerror } = useQuery({
+    queryKey: ["dseDsexData"],
+    queryFn: () => dseLiveTradeAPI.getDseLiveDsexData(),
+    refetchInterval: 60000,
+  });
 
 
   const biaxialChartOption = {
@@ -160,7 +167,7 @@ const ActiveTradingCodesBoard = () => {
           <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} />
         </div>
         <div className="rounded-md xl:col-span-3">
-          <DseLiveTrade/>
+          <DseLiveTrade />
         </div>
         {/* client  */}
         <div className="rounded-md xl:col-span-2">

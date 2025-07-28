@@ -11,3 +11,8 @@ export type DseLiveTrade = {
   symbols: string;
   trades: string;
 };
+
+export type DseLiveDsex = {
+"0":number,
+"1":number,
+};

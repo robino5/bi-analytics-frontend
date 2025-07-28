@@ -80,5 +80,5 @@ export default function LiveTradeChart({ priceUp, priceDown, priceFlat }: Props)
         }
     }, [priceUp, priceFlat, priceDown]);
 
-    return <div ref={chartRef} style={{ width: "100%", height: "150px" }} />;
+    return <div ref={chartRef} style={{ width: "100%", height: "180px" }} />;
 }
