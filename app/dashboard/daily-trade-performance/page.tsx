@@ -31,6 +31,19 @@ import { FaChartSimple } from "react-icons/fa6";
 import { IoPieChartSharp } from "react-icons/io5";
 import EcrmDetails from "@/components/eCrmDetails";
 import RmWiseDailyTradingData from "./_rm_wise_daily_trade_data";
+import { InvestorLiveTopBuySaleInfo } from "../business-and-trade-management/types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { investorLiveBuySaleClientsColumns } from "./investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
+import { DataTable as InvestorLiveBuySaleDatatable } from "./investor_live_top_buya_sale/_investorLiveBuySaleTable";
+import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
+import { investorLiveTradeClientsColumns } from "./investor_live_trade/_investorLiveTradeTableColumns";
+
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -107,12 +120,22 @@ export default function DailyTradePerformance() {
   const [marginCodeExposure, setMarginCodeExposure] = useState<
     ISectorExposure[] | null
   >(null);
-   const [eCrmDetails, seteCrmDetails] = useState<
-      VisitData
-    >();
-    const [rmWiseDailyTradeData, setRmWiseDailyTradeData] = useState<
+  const [eCrmDetails, seteCrmDetails] = useState<
+    VisitData
+  >();
+  const [rmWiseDailyTradeData, setRmWiseDailyTradeData] = useState<
     RmWiseDailyTradeData[]
   >();
+
+  const [investorTopSaleData, setInvestorTopSaleData] = useState<
+    InvestorLiveTopBuySaleInfo[]
+  >();
+
+  const [investorTopBuyData, setInvestorTopBuyData] = useState<
+    InvestorLiveTopBuySaleInfo[]
+  >();
+   const [investorLiveTrade, setInvestorLiveTrade] = useState<InvestorLiveTradeInfo[]>([]);
+
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -246,11 +269,11 @@ export default function DailyTradePerformance() {
         }
       };
 
-      
-       // eCRM details
-       const fetcheCrmDetails = async (
+
+      // eCRM details
+      const fetcheCrmDetails = async (
         branchId: number,
-       ) => {
+      ) => {
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/?branch=${branchId}`,
@@ -276,35 +299,116 @@ export default function DailyTradePerformance() {
         }
       };
 
-        // eCRM details
-    const fetcheRmWiseDailyTradeData = async (
-      branchId: number,
-     )  => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branchId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
+      // eCRM details
+      const fetcheRmWiseDailyTradeData = async (
+        branchId: number,
+      ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            RmWiseDailyTradeData[]
+          >;
+          if (successResponse(result.status)) {
+            setRmWiseDailyTradeData(result.data);
           }
-        );
-        const result = (await response.json()) as IResponse<
-        RmWiseDailyTradeData[]
-        >;
-        if (successResponse(result.status)) {
-          setRmWiseDailyTradeData(result.data);
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
         }
-      } catch (error) {
-        console.log(error)
-        console.error(
-          `Error Happened while ecrm Data`,
-          error
-        );
-      }
-    };
+      };
 
+      // top 20 inverstor Sale Date
+      const fetchTopInvestorSaleData = async (
+        branchId: number,
+      ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-sale-rm-wise/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTopBuySaleInfo[]
+          >;
+          if (successResponse(result.status)) {
+            setInvestorTopSaleData(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+
+      // top 20 inverstor Buy Date
+      const fetchTopInvestorBuyData = async (
+        branchId: number,
+      ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-buy-rm-wise/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTopBuySaleInfo[]
+          >;
+          if (successResponse(result.status)) {
+            setInvestorTopBuyData(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+      const fetchInvestorLiveTradeDetails = async (
+        branchId: number,
+      ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/investor-live-trade-rm-wise/?branch=${branchId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<InvestorLiveTradeInfo[]>;
+          if (successResponse(result.status)) {
+            setInvestorLiveTrade(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
       const branchId = Number.parseInt(branch);
       fetchSummaryWithBranchId(branchId);
       fetchDailyTurnoverPerformanceWithBranchId(branchId);
@@ -313,6 +417,9 @@ export default function DailyTradePerformance() {
       fetchCashCodeSectorExposureWithBranchId(branchId);
       fetcheCrmDetails(branchId)
       fetcheRmWiseDailyTradeData(branchId)
+      fetchTopInvestorSaleData(branchId);
+      fetchTopInvestorBuyData(branchId);
+      fetchInvestorLiveTradeDetails(branchId);
     }
   }, [branch]);
 
@@ -417,32 +524,32 @@ export default function DailyTradePerformance() {
       }
     };
 
-       // eCRM details
-       const fetcheCrmDetails = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            VisitData
-          >;
-          if (successResponse(result.status)) {
-            seteCrmDetails(result.data);
+    // eCRM details
+    const fetcheCrmDetails = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
           }
-        } catch (error) {
-          console.log(error)
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
+        );
+        const result = (await response.json()) as IResponse<
+          VisitData
+        >;
+        if (successResponse(result.status)) {
+          seteCrmDetails(result.data);
         }
-      };
+      } catch (error) {
+        console.log(error)
+        console.error(
+          `Error Happened while ecrm Data`,
+          error
+        );
+      }
+    };
 
 
     // eCRM details
@@ -458,7 +565,7 @@ export default function DailyTradePerformance() {
           }
         );
         const result = (await response.json()) as IResponse<
-        RmWiseDailyTradeData[]
+          RmWiseDailyTradeData[]
         >;
         if (successResponse(result.status)) {
           setRmWiseDailyTradeData(result.data);
@@ -471,6 +578,81 @@ export default function DailyTradePerformance() {
         );
       }
     };
+    // top 20 inverstor Sale Date
+    const fetchTopInvestorSaleData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-sale-rm-wise/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+          InvestorLiveTopBuySaleInfo[]
+        >;
+        if (successResponse(result.status)) {
+          setInvestorTopSaleData(result.data);
+        }
+      } catch (error) {
+        console.log(error)
+        console.error(
+          `Error Happened while ecrm Data`,
+          error
+        );
+      }
+    };
+
+    // top 20 inverstor Buy Date
+    const fetchTopInvestorBuyData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-buy-rm-wise/`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const result = (await response.json()) as IResponse<
+          InvestorLiveTopBuySaleInfo[]
+        >;
+        if (successResponse(result.status)) {
+          setInvestorTopBuyData(result.data);
+        }
+      } catch (error) {
+        console.log(error)
+        console.error(
+          `Error Happened while ecrm Data`,
+          error
+        );
+      }
+    };
+      const fetchInvestorLiveTradeDetails = async ( ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/investor-live-trade-rm-wise/`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<InvestorLiveTradeInfo[]>;
+          if (successResponse(result.status)) {
+            setInvestorLiveTrade(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
     fetchSummary();
     fetchDailyTurnoverPerformance();
     fetchDailyMarginLoanUsage();
@@ -478,6 +660,9 @@ export default function DailyTradePerformance() {
     fetchCashCodeSectorExposure();
     fetcheCrmDetails();
     fetcheRmWiseDailyTradeData();
+    fetchTopInvestorBuyData();
+    fetchTopInvestorSaleData();
+    fetchInvestorLiveTradeDetails();
   }, []);
 
   let headerDate = null;
@@ -542,35 +727,77 @@ export default function DailyTradePerformance() {
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
 
-       {/* e-CRM Details */}
-       {eCrmDetails &&
+        {/* e-CRM Details */}
+        {eCrmDetails &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"eCRM"}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
-              <EcrmDetails visitedata={eCrmDetails}/>
+              <EcrmDetails visitedata={eCrmDetails} />
             }
           />
         }
-       {/* e-CRM Details */}
-       {rmWiseDailyTradeData &&
+        {/* e-CRM Details */}
+        {rmWiseDailyTradeData &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length>0?rmWiseDailyTradeData[0]?.pushDate:""}`}
+            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}`}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
-              <RmWiseDailyTradingData data={rmWiseDailyTradeData}/>
+              <RmWiseDailyTradingData data={rmWiseDailyTradeData} />
             }
           />
         }
+
+
+        {investorTopBuyData ? (
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Top Twenty buyer ( DSE)</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <InvestorLiveBuySaleDatatable
+                data={investorTopBuyData}
+                columns={investorLiveBuySaleClientsColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : null}
+
+        {investorTopSaleData ? (
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Top Twenty Seller ( DSE)</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <InvestorLiveBuySaleDatatable
+                data={investorTopSaleData}
+                columns={investorLiveBuySaleClientsColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : null}
+
+     {investorLiveTrade ? (
+          <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise(DSE)</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <InvestorLiveBuySaleDatatable
+                data={investorLiveTrade}
+                columns={investorLiveTradeClientsColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : null}
 
         {/* Turnover Performance Chart */}
         {turnoverPerformance ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Turnover Target"}
-            // subtitle="analytics of Turnover Target vs Generated"
             children={
               <BarChartVerticalGrouped
                 data={turnoverPerformance}
@@ -585,7 +812,6 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Margin Loan Usage"}
-            // subtitle="analytics of Total Allocated vs Daily Usage"
             children={
               <BarChartVerticalGrouped
                 data={marginLoanUsage as any}
@@ -596,6 +822,7 @@ export default function DailyTradePerformance() {
         ) : (
           <SkeletonStatistics className="col-span-6 xl:col-span-3" />
         )}
+
         {marginCodeExposure ? (
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
@@ -605,7 +832,7 @@ export default function DailyTradePerformance() {
               <BarChartHorizontal
                 data={marginCodeExposure}
                 options={sectorMarginCodeExposureOption}
-                colorArray={ ["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
+                colorArray={["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
               />
             }
           />
@@ -621,7 +848,7 @@ export default function DailyTradePerformance() {
               <BarChartHorizontal
                 data={cashCodeExposure}
                 options={sectorCashCodeExposureOption}
-                colorArray={ ["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
+                colorArray={["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
               />
             }
           />

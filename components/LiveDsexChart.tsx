@@ -23,9 +23,7 @@ const IntradayDsexChart: React.FC<Props> = ({
   const chartRef = useRef<HTMLDivElement>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const chartInstance = useRef<echarts.ECharts | null>(null);
-
   console.log("DSEX Chart Data:", dataSum);
-  // Update current time periodically
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());

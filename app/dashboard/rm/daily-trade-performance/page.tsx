@@ -491,8 +491,6 @@ export default function DailyTradePerformance() {
       fetchTraderWithBranchId();
     }
   }, [branch]);
-  
-  console.log("e-crm Details",rmWiseDailyTradeData)
 
   return (
     <div className="mx-4">

@@ -1,13 +1,10 @@
 "use client";
-
 import PageHeader from "@/components/PageHeader";
 import BranchFilter from "@/components/branchFilter";
 import TraderFilter, { ITrader } from "@/components/traderFilter";
 import { useSession } from "next-auth/react";
-
 import { useState, useEffect } from "react";
 import RMTurnoverPerformance from "./_rmTurnvoerPerformance";
-
 import { DataTable as RMClientsDataTable } from "./client/_clientsDataTable";
 import { rmWiseClientsColumns } from "./client/_clientTableColumns";
 import { DataTable as InvestorLiveTradeDataTable } from "./investor_live_trade/_investorLiveTradeTable";
@@ -23,24 +20,30 @@ import { successResponse } from "@/lib/utils";
 import { IClientDetail, InvestorLiveTradeInfo, ITurnoverPerformance } from "@/types/rmPerformance";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
+import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
+import { investorLiveBuySaleClientsColumns } from "./investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
+import { DataTable as InvestorLiveBuySaleDatatable } from "./investor_live_top_buya_sale/_investorLiveBuySaleTable";
 
 const RmPerformanceBoard = () => {
   const { data: session } = useSession();
-
   const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
-  // TODO : Need to inject BranchCode in the session object
   const defaultBranch = isRM ? "12" : "";
   const defaultTrader = isRM ? session.user.username : "";
-
   const [branch, setBranch] = useState(defaultBranch);
   const [trader, setTrader] = useState(defaultTrader);
   const [traders, setTraders] = useState<ITrader[]>([]);
-
   const [turnoverPerformance, setTurnoverPerformance] = useState<
     ITurnoverPerformance[]
   >([]);
   const [clients, setClients] = useState<IClientDetail[]>([]);
   const [investorLiveTrade, setInvestorLiveTrade] = useState<InvestorLiveTradeInfo[]>([]);
+  const [investorTopSaleData, setInvestorTopSaleData] = useState<
+    InvestorLiveTopBuySaleInfo[]
+  >();
+
+  const [investorTopBuyData, setInvestorTopBuyData] = useState<
+    InvestorLiveTopBuySaleInfo[]
+  >();
 
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -51,7 +54,6 @@ const RmPerformanceBoard = () => {
     setTrader(value);
   };
 
-  // on page load
   useEffect(() => {
     if (branch && trader) {
       const fetchTurnoverPerformance = async () => {
@@ -124,9 +126,64 @@ const RmPerformanceBoard = () => {
           );
         }
       };
+      // top 20 inverstor Sale Date
+      const fetchTopInvestorSaleData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-sale-rm-wise/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTopBuySaleInfo[]
+          >;
+          if (successResponse(result.status)) {
+            setInvestorTopSaleData(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+
+      // top 20 inverstor Buy Date
+      const fetchTopInvestorBuyData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-buy-rm-wise/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTopBuySaleInfo[]
+          >;
+          if (successResponse(result.status)) {
+            setInvestorTopBuyData(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
       fetchTurnoverPerformance();
       fetchClientDetails();
       fetchInvestorLiveTradeDetails();
+      fetchTopInvestorSaleData();
+      fetchTopInvestorBuyData();
     }
   }, [trader]);
 
@@ -157,7 +214,60 @@ const RmPerformanceBoard = () => {
           console.error(`Error fetching traders.`, error);
         }
       };
+      // top 20 inverstor Sale Date
+      const fetchTopInvestorSaleData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-sale-rm-wise/?branch=${branch}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTopBuySaleInfo[]
+          >;
+          if (successResponse(result.status)) {
+            setInvestorTopSaleData(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+      const fetchTopInvestorBuyData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-buy-rm-wise/?branch=${branch}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTopBuySaleInfo[]
+          >;
+          if (successResponse(result.status)) {
+            setInvestorTopBuyData(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
       fetchTraderWithBranchId();
+      fetchTopInvestorSaleData();
+      fetchTopInvestorBuyData();
     }
   }, [branch]);
 
@@ -176,14 +286,39 @@ const RmPerformanceBoard = () => {
         {turnoverPerformance ? (
           <RMTurnoverPerformance records={turnoverPerformance} />
         ) : null}
+
+        {investorTopBuyData ? (
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Top Twenty buyer ( DSE)</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <InvestorLiveBuySaleDatatable
+                data={investorTopBuyData}
+                columns={investorLiveBuySaleClientsColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : null}
+
+        {investorTopSaleData ? (
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Top Twenty Seller ( DSE)</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <InvestorLiveBuySaleDatatable
+                data={investorTopSaleData}
+                columns={investorLiveBuySaleClientsColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : null}
         {/* Investor Live Trade RM Wise */}
         {investorLiveTrade ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise(DSE)</CardTitle>
-              {/* <CardDescription className="text-white">
-                Client Details for Regional Managers
-              </CardDescription> */}
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveTradeDataTable
@@ -193,15 +328,10 @@ const RmPerformanceBoard = () => {
             </CardContent>
           </Card>
         ) : null}
-
-        {/* Client Details */}
         {clients ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg">Client Details</CardTitle>
-              {/* <CardDescription className="text-white">
-                Client Details for Regional Managers
-              </CardDescription> */}
             </CardHeader>
             <CardContent className="mt-3">
               <RMClientsDataTable

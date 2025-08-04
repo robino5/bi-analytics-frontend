@@ -33,7 +33,7 @@ export function DseLiveTrade() {
     });
 
 
-    if (isLoading|| dseDsexDataSumLoaing || dseDsexDataLoaing) { 
+    if (isLoading || dseDsexDataSumLoaing || dseDsexDataLoaing) {
         return (
             <Card
                 className={cn("overflow-hidden drop-shadow-md flex items-center justify-center", "bg-[#033e4a] h-[237px]")}
@@ -66,10 +66,10 @@ export function DseLiveTrade() {
                                 DSEX
                             </TabsTrigger>
                             <TabsTrigger
-                                value="sentiment"
+                                value="statistics"
                                 className=""
                             >
-                                Sentiment
+                                Statistics Bar
                             </TabsTrigger>
                         </TabsList>
                     </div>
@@ -117,10 +117,12 @@ export function DseLiveTrade() {
 
                         <div className="flex-1 h-[180px] overflow-hidden">
                             <TabsContent value="dsex" className="h-full">
-                                <DseDsexLineChart data={dseDsexData ?? []} dataSum={dseDsexSumData ?? []} />
+                                {dseDsexData && dseDsexSumData &&
+                                    <DseDsexLineChart data={dseDsexData} dataSum={dseDsexSumData} />
+                                }
                             </TabsContent>
 
-                            <TabsContent value="sentiment" className="h-full">
+                            <TabsContent value="statistics" className="h-full">
                                 <LiveTradeChart
                                     priceUp={liveTradeData?.priceupsymbols}
                                     priceFlat={liveTradeData?.priceflatsymbols}
