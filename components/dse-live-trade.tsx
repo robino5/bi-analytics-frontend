@@ -49,7 +49,7 @@ export function DseLiveTrade() {
 
     return (
         <Card
-            className={cn("overflow-hidden drop-shadow-md", "bg-[#033e4a] h-[270px]")}
+            className={cn("overflow-hidden drop-shadow-md", "bg-[#033e4a] h-[308px]")}
         >
             <Tabs defaultValue="dsex" className="w-full h-full">
                 <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
@@ -74,7 +74,7 @@ export function DseLiveTrade() {
                         </TabsList>
                     </div>
                 </CardHeader>
-                <CardContent className="text-white text-xs overflow-y-auto p-2">
+                <CardContent className="text-white text-xs overflow-y-auto p-2 mt-4">
                     <div className="flex gap-4 items-start">
                         <div className="rounded-lg overflow-hidden shadow-sm min-w-[400px] border border-gray-300">
                             <table className="text-left border-collapse text-sm w-full text-black font-semibold">

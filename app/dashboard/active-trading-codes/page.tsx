@@ -163,7 +163,7 @@ const ActiveTradingCodesBoard = () => {
       />
       <Ticker />
       <div className="grid grid-cols-1 gap-3 xl:grid-cols-6 mt-0">
-        <div className="rounded-md xl:col-span-3">
+        <div className="rounded-md xl:col-span-3 ">
           <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} />
         </div>
         <div className="rounded-md xl:col-span-3">

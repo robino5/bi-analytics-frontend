@@ -8,7 +8,6 @@ import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClie
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
 import EcrmDetails from "@/components/eCrmDetails";
-
 import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
 import { useEffect, useState } from "react";
@@ -27,11 +26,15 @@ import SummarySkeletonCard, {
 import TraderFilter, { ITrader } from "@/components/traderFilter";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
-
 import { PiChartScatterBold } from "react-icons/pi";
 import { FaChartSimple } from "react-icons/fa6";
 import { IoPieChartSharp } from "react-icons/io5";
 import RmWiseDailyTradingData from "./_rm_wise_daily_trade_data";
+import { DseLiveTrade } from "@/components/dse-live-trade";
+import { useBranchStore } from "@/lib/stores/branchStore";
+import { useTraderStore } from "@/lib/stores/rmStore";
+import { useQuery } from "@tanstack/react-query";
+import { dailyTradePerformance } from "./api";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -79,9 +82,11 @@ export default function DailyTradePerformance() {
     fill: BarColors.purple,
   };
 
-  const [branch, setBranch] = useState<string>(defaultBranch);
-  const [trader, setTrader] = useState<string>(defaultTrader);
-  const [traders, setTraders] = useState<ITrader[]>([]);
+  const branch = useBranchStore((state) => state.branch);
+  const setBranch = useBranchStore((state) => state.setBranch);
+  const trader = useTraderStore((state)=>state.trader)
+  const setTrader = useTraderStore((state) => state.setTrader);
+  //const [traders, setTraders] = useState<ITrader[]>([]);
 
   const [summary, setSummary] = useState<ISummaryDetails | null>(null);
   const [turnoverPerformance, setTurnoverPerformance] = useState<
@@ -97,7 +102,7 @@ export default function DailyTradePerformance() {
   const [eCrmDetails, seteCrmDetails] = useState<
     VisitData
   >();
-    const [rmWiseDailyTradeData, setRmWiseDailyTradeData] = useState<
+  const [rmWiseDailyTradeData, setRmWiseDailyTradeData] = useState<
     RmWiseDailyTradeData[]
   >();
 
@@ -110,6 +115,37 @@ export default function DailyTradePerformance() {
     setTrader(value);
   };
 
+    useEffect(() => {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+      setBranch(session.user.branchId);
+    }
+  }, [session, setBranch]);
+
+      useEffect(() => {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+      setTrader(session.user.username);
+    }
+  }, [session, setTrader]);
+
+    const { data: traders } = useQuery({
+    queryKey: ["traders", branch],
+    queryFn: () => dailyTradePerformance.getTraderWithBranchId(branch)
+  });
+  
+
+useEffect(() => {
+  if (!branch || branch === "") {
+    traceBranchChange('11')
+  }
+}, [branch, setBranch]);
+
+useEffect(() => {
+  if (!trader || trader === "") {
+     if (traders?.data?.length) {
+    handleTraderChange(traders.data[0].traderId);
+  }
+  }
+}, [trader, setTrader]);
 
   //effect on trader change
   useEffect(() => {
@@ -248,34 +284,34 @@ export default function DailyTradePerformance() {
       };
 
 
-    const fetcheRmWiseDailyTradeData = async (
-      branchId: number,
-      traderId: string
-     )  => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branchId}&trader=${traderId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
+      const fetcheRmWiseDailyTradeData = async (
+        branchId: number,
+        traderId: string
+      ) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branchId}&trader=${traderId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<
+            RmWiseDailyTradeData[]
+          >;
+          if (successResponse(result.status)) {
+            setRmWiseDailyTradeData(result.data);
           }
-        );
-        const result = (await response.json()) as IResponse<
-        RmWiseDailyTradeData[]
-        >;
-        if (successResponse(result.status)) {
-          setRmWiseDailyTradeData(result.data);
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
         }
-      } catch (error) {
-        console.log(error)
-        console.error(
-          `Error Happened while ecrm Data`,
-          error
-        );
-      }
-    };
+      };
       const branchId = Number.parseInt(branch);
       fetchSummaryWithTraderId(branchId, trader);
       fetchDailyTurnoverPerformanceWithTraderId(branchId, trader);
@@ -290,26 +326,7 @@ export default function DailyTradePerformance() {
   useEffect(() => {
     if (branch && !trader) {
       // Fetch Traders
-      const fetchTraderWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const result = (await response.json()) as IResponse<ITrader[]>;
-          if (successResponse(result.status)) {
-            setTraders(result.data);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
+  
       // Fetch Summary for Branch
       const fetchSummaryWithBranchId = async () => {
         try {
@@ -434,7 +451,7 @@ export default function DailyTradePerformance() {
         }
       };
 
-      const fetcheRmWiseDailyTradeData = async ()  => {
+      const fetcheRmWiseDailyTradeData = async () => {
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branch}`,
@@ -446,7 +463,7 @@ export default function DailyTradePerformance() {
             }
           );
           const result = (await response.json()) as IResponse<
-          RmWiseDailyTradeData[]
+            RmWiseDailyTradeData[]
           >;
           if (successResponse(result.status)) {
             setRmWiseDailyTradeData(result.data);
@@ -459,7 +476,6 @@ export default function DailyTradePerformance() {
           );
         }
       };
-      fetchTraderWithBranchId();
       fetchSummaryWithBranchId();
       fetchDailyTurnoverPerformanceWithBranchId();
       fetchMarginCodeSectorExposureWithBranchId();
@@ -468,29 +484,10 @@ export default function DailyTradePerformance() {
       fetcheRmWiseDailyTradeData();
     } else {
       // Fetch Traders
-      const fetchTraderWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const result = (await response.json()) as IResponse<ITrader[]>;
-          if (successResponse(result.status)) {
-            setTraders(result.data);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchTraderWithBranchId();
     }
   }, [branch]);
+
+
 
   return (
     <div className="mx-4">
@@ -503,7 +500,7 @@ export default function DailyTradePerformance() {
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
         <TraderFilter
           currentTrader={trader}
-          traders={traders}
+          traders={traders?.data ||[]}
           onChange={handleTraderChange}
         />
       </PageHeader>
@@ -549,6 +546,9 @@ export default function DailyTradePerformance() {
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
+        <div className="rounded-md xl:col-span-3">
+          <DseLiveTrade />
+        </div>
         {/* e-CRM Details */}
         {eCrmDetails &&
           <CardBoard
@@ -556,23 +556,23 @@ export default function DailyTradePerformance() {
             title={"eCRM"}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
-              <EcrmDetails visitedata={eCrmDetails}/>
+              <EcrmDetails visitedata={eCrmDetails} />
             }
           />
         }
 
-       {/* e-CRM Details */}
-       {rmWiseDailyTradeData &&
+        {/* e-CRM Details */}
+        {rmWiseDailyTradeData &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length>0?rmWiseDailyTradeData[0]?.pushDate:""}`}
+            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}`}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
-              <RmWiseDailyTradingData data={rmWiseDailyTradeData}/>
+              <RmWiseDailyTradingData data={rmWiseDailyTradeData} />
             }
           />
         }
-        
+
         {turnoverPerformance ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"
@@ -598,7 +598,7 @@ export default function DailyTradePerformance() {
               <BarChartHorizontal
                 data={marginCodeExposure}
                 options={sectorMarginCodeExposureOption}
-                colorArray={ ["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
+                colorArray={["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
               />
             }
           />
@@ -614,7 +614,7 @@ export default function DailyTradePerformance() {
               <BarChartHorizontal
                 data={cashCodeExposure}
                 options={sectorCashCodeExposureOption}
-                colorArray={ [
+                colorArray={[
                   "#FF5733", // Red
                   "#3498DB", // Blue
                   "#2ECC71", // Green

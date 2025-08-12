@@ -37,6 +37,16 @@ const LoginForm = () => {
   function onSubmit(values: z.infer<typeof LoginSchema>) {
     startTransition(async () => {
       const resp = await login(values);
+      if (!resp?.error) {
+        localStorage.setItem(
+          "branch-storage",
+          JSON.stringify({ state: { branch: "" }, version: 0 })
+        );
+        localStorage.setItem(
+          "branch-storage",
+          JSON.stringify({ state: { branch: "" }, version: 0 })
+        );
+      }
       setError(resp?.error ?? "");
     });
   }

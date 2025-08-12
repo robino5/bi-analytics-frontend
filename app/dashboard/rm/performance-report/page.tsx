@@ -23,15 +23,21 @@ import { RoleType } from "@/app/schemas";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
 import { investorLiveBuySaleClientsColumns } from "./investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
 import { DataTable as InvestorLiveBuySaleDatatable } from "./investor_live_top_buya_sale/_investorLiveBuySaleTable";
+import { useBranchStore } from "@/lib/stores/branchStore";
+import { useTraderStore } from "@/lib/stores/rmStore";
+import { useQuery } from "@tanstack/react-query";
+import { performanceReport } from "./api";
 
 const RmPerformanceBoard = () => {
   const { data: session } = useSession();
   const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
   const defaultBranch = isRM ? "12" : "";
   const defaultTrader = isRM ? session.user.username : "";
-  const [branch, setBranch] = useState(defaultBranch);
-  const [trader, setTrader] = useState(defaultTrader);
-  const [traders, setTraders] = useState<ITrader[]>([]);
+  const branch = useBranchStore((state) => state.branch);
+  const setBranch = useBranchStore((state) => state.setBranch);
+  const trader = useTraderStore((state) => state.trader)
+  const setTrader = useTraderStore((state) => state.setTrader);
+  //const [traders, setTraders] = useState<ITrader[]>([]);
   const [turnoverPerformance, setTurnoverPerformance] = useState<
     ITurnoverPerformance[]
   >([]);
@@ -47,12 +53,46 @@ const RmPerformanceBoard = () => {
 
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
-    setTrader(traders[0]?.traderId);
+    setTrader(trader);
   };
 
   const handleTraderChange = async (value: string) => {
     setTrader(value);
   };
+
+      const { data: traders } = useQuery({
+    queryKey: ["traders", branch],
+    queryFn: () => performanceReport.getTraderWithBranchId(branch)
+  });
+
+  
+    useEffect(() => {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+      setBranch(session.user.branchId);
+    }
+  }, [session, setBranch]);
+
+      useEffect(() => {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+      setTrader(session.user.username);
+    }
+  }, [session, setTrader]);
+
+
+useEffect(() => {
+  if (!branch || branch === "") {
+    handleBranchChange('11')
+  }
+}, [branch, setBranch]);
+
+useEffect(() => {
+  if (!trader || trader === "") {
+     if (traders?.data?.length) {
+    handleTraderChange(traders.data[0].traderId);
+  }
+  }
+}, [trader, setTrader]);
+
 
   useEffect(() => {
     if (branch && trader) {
@@ -187,96 +227,12 @@ const RmPerformanceBoard = () => {
     }
   }, [trader]);
 
-  useEffect(() => {
-    if (branch) {
-      // Fetch Traders
-      const fetchTraderWithBranchId = async () => {
-        try {
-          let branchUrl;
-          if (branch) {
-            branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`;
-          } else {
-            branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/`;
-          }
-          const response = await fetch(branchUrl, {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          });
-
-          const result = (await response.json()) as IResponse<ITrader[]>;
-          if (successResponse(result.status)) {
-            setTraders(result.data);
-            setTrader(result.data[0].traderId);
-          }
-        } catch (error) {
-          console.error(`Error fetching traders.`, error);
-        }
-      };
-      // top 20 inverstor Sale Date
-      const fetchTopInvestorSaleData = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-sale-rm-wise/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            InvestorLiveTopBuySaleInfo[]
-          >;
-          if (successResponse(result.status)) {
-            setInvestorTopSaleData(result.data);
-          }
-        } catch (error) {
-          console.log(error)
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
-        }
-      };
-      const fetchTopInvestorBuyData = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/live-investor-top-buy-rm-wise/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            InvestorLiveTopBuySaleInfo[]
-          >;
-          if (successResponse(result.status)) {
-            setInvestorTopBuyData(result.data);
-          }
-        } catch (error) {
-          console.log(error)
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
-        }
-      };
-      fetchTraderWithBranchId();
-      fetchTopInvestorSaleData();
-      fetchTopInvestorBuyData();
-    }
-  }, [branch]);
-
   return (
     <div className="mx-4">
       <PageHeader name="RM Performance Report">
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
         <TraderFilter
-          traders={traders}
+          traders={traders?.data || []}
           currentTrader={trader}
           onChange={handleTraderChange}
         />

@@ -31,6 +31,24 @@ export const investorLiveTradeClientsColumns: ColumnDef<InvestorLiveTradeInfo>[]
     }
   },
   {
+    accessorKey: "joinHolderName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Investor Name" />
+    ),
+    cell: ({ row }) => {
+      return <div className="text-left">{row.getValue("joinHolderName")}</div>
+    }
+  },
+    {
+      accessorKey: "investorType",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Client Type" />
+      ),
+      cell: ({ row }) => {
+        return <div className="text-left">{row.getValue("investorType")}</div>
+      }
+    },
+  {
     accessorKey: "buy",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Buy" />
@@ -52,7 +70,7 @@ export const investorLiveTradeClientsColumns: ColumnDef<InvestorLiveTradeInfo>[]
       })}>{cellNumberFormatter(row, "sell")}</div >;
     },
   },
-   {
+  {
     accessorKey: "net",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Net-amount" />
@@ -63,10 +81,10 @@ export const investorLiveTradeClientsColumns: ColumnDef<InvestorLiveTradeInfo>[]
       })}>{cellNumberFormatter(row, "net")}</div >;
     },
   },
-    {
+  {
     accessorKey: "ledgerBalance",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Ledger Balance" />
+      <DataTableColumnHeader column={column} title="Available Balance" />
     ),
     cell: ({ row }) => {
       return <div className={cn("text-right ml-4", {
@@ -74,4 +92,40 @@ export const investorLiveTradeClientsColumns: ColumnDef<InvestorLiveTradeInfo>[]
       })}>{cellNumberFormatter(row, "ledgerBalance")}</div >;
     },
   },
+  {
+    accessorKey: "branchName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="RM Branch Name" />
+    ),
+    cell: ({ row }) => {
+      return <div className="text-left">{row.getValue("branchName")}</div>
+    }
+  },
+  {
+    accessorKey: "traderId",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="RM Name" />
+    ),
+    cell: ({ row }) => {
+      return <div className="text-left">{row.getValue("traderId")}</div>
+    }
+  },
+  {
+      accessorKey: "mobile",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Phone" />
+      ),
+      cell: ({ row }) => {
+        return <div className="text-left">{row.getValue("mobile")}</div>
+      },
+    },
+      {
+      accessorKey: "email",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="E-mail" />
+      ),
+      cell: ({ row }) => {
+        return <div className="text-left">{row.getValue("email")}</div>
+      },
+    },
 ];

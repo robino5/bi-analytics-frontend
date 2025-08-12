@@ -24,7 +24,7 @@ export interface IMarginCodeSummary {
     marginDailyTurnover: IPayload;
 }
 
-export interface ISummaryDetails {
+export type ISummaryDetails ={
     shortSummary: IShortSummary;
     cashCodeSummary: ICashCodeSummary;
     marginCodeSummary: IMarginCodeSummary;

@@ -4,24 +4,17 @@ import CardBoard from "@/components/CardBoard";
 import PageHeader from "@/components/PageHeader";
 import BarChartPositiveNegative from "@/components/BarChartPositiveNegative";
 import BarChartBiAxis from "@/components/BarChartBiAxis";
-
 import NewAccountOpeningDataTable from "./_new_account_datatable";
 import TurnoverPerformanceDataTable from "./_turnover_performance_datatable";
 import PortfolioManagementStatusDataTable from "./_portfolio_management_status_datatable";
 import { BarColors } from "@/components/ui/utils/constants";
-import { useEffect, useState } from "react";
 import BranchFilter from "@/components/branchFilter";
-import { getHeaderDate, successResponse } from "@/lib/utils";
+import { getHeaderDate } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import {
-  IAccountsFundFlow,
-  INetFundFlow,
-  IPortfolioStatus,
-  ITradeVsClients,
-  ITurnoverPerformance,
-} from "@/types/portfolioManagement";
-import { IResponse } from "@/types/utils";
-import { title } from "process";
+import { useBranchStore } from "@/lib/stores/branchStore";
+import { useQuery } from "@tanstack/react-query";
+import { portfolioManagementAPI } from "./api";
+import LoadingButton from "@/components/loading";
 
 export default function PortfolioManagement() {
   // Override console.error
@@ -51,297 +44,56 @@ export default function PortfolioManagement() {
     stroke: "#c3ce",
     barLabel: true,
     rotate: 90,
-    title:"Clients Trade vs Turnover",
+    title: "Clients Trade vs Turnover",
     cardColor: "bg-[#0e5e6f]"
   };
 
-  const [branch, setBranch] = useState("");
-  const [netFundFlow, setNetFundFlow] = useState<INetFundFlow[] | null>(null);
-  const [tradeVsturnover, setTradeVsTurnover] = useState<
-    ITradeVsClients[] | null
-  >(null);
-  const [turnover, setTurnover] = useState<ITurnoverPerformance[] | null>(null);
-  const [accountsFundFlow, setAccountsFundFlow] = useState<
-    IAccountsFundFlow[] | null
-  >(null);
-  const [portfolioStatus, setPortfolioStatus] = useState<
-    IPortfolioStatus[] | null
-  >(null);
+  const branch = useBranchStore((state) => state.branch);
+  const setBranch = useBranchStore((state) => state.setBranch);
+
+  const { data: netFundFlow,isPending:netFundFlowPending } = useQuery({
+    queryKey: ["netFundFlow", branch],
+    queryFn: () => portfolioManagementAPI.getDailyNetFundFlow(branch)
+  });
+
+  const { data: tradeVsturnover,isPending:tradeVsturnoverPending } = useQuery({
+    queryKey: ["tradeVsturnover", branch],
+    queryFn: () => portfolioManagementAPI.getTradeVsClientsWithBranchId(branch)
+  });
+
+  const { data: turnover,isPending:turnoverPending } = useQuery({
+    queryKey: ["turnover", branch],
+    queryFn: () => portfolioManagementAPI.getTurnoverPerformanceWithBranchId(branch)
+  });
+
+  const { data: accountsFundFlow,isPending:accountsFundFlowPending } = useQuery({
+    queryKey: ["accountsFundFlow", branch],
+    queryFn: () => portfolioManagementAPI.getAccountsFundFlow(branch)
+  });
+
+  const { data: portfolioStatus,isPending:portfolioStatusPending } = useQuery({
+    queryKey: ["portfolioStatus", branch],
+    queryFn: () => portfolioManagementAPI.getPortfolioStatus(branch)
+  });
+  
+  const isLoading = turnoverPending || netFundFlowPending || tradeVsturnoverPending || accountsFundFlowPending || portfolioStatusPending;
+  
+  if (isLoading) {
+    return <LoadingButton text="Loading..." />
+  }
+
 
   const handleBranchChange = (branchId: string) => {
     setBranch(branchId);
   };
 
-  // on page load
-  useEffect(() => {
-    // Daily Net Fund Flow
-    const fetchDailyNetFundFlow = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<INetFundFlow[]>;
-        if (successResponse(result.status)) {
-          setNetFundFlow(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching daily net fund flow`,
-          error,
-        );
-      }
-    };
-    // Trade Vs Clients Statistics
-    const fetchTradeVsClients = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<ITradeVsClients[]>;
-        if (successResponse(result.status)) {
-          setTradeVsTurnover(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching daily net fund flow`,
-          error,
-        );
-      }
-    };
-    // Turnover Performance Statistics
-    const fetchTurnoverPerformance = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<
-          ITurnoverPerformance[]
-        >;
-        if (successResponse(result.status)) {
-          setTurnover(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching daily net fund flow`,
-          error,
-        );
-      }
-    };
 
-    // Account Fund Flow Data Table
-    const fetchAccountsFundFlow = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/accounts-fundflow/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<
-          IAccountsFundFlow[]
-        >;
-        if (successResponse(result.status)) {
-          setAccountsFundFlow(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching daily net fund flow`,
-          error,
-        );
-      }
-    };
-
-    // Portfolio Status DataTable
-    const fetchPortfolioStatus = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/portfolio-status/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const result = (await response.json()) as IResponse<IPortfolioStatus[]>;
-        if (successResponse(result.status)) {
-          setPortfolioStatus(result.data);
-        }
-      } catch (error) {
-        console.error(
-          `Error Happened while fetching daily net fund flow`,
-          error,
-        );
-      }
-    };
-    fetchDailyNetFundFlow();
-    fetchTradeVsClients();
-    fetchTurnoverPerformance();
-    fetchAccountsFundFlow();
-    fetchPortfolioStatus();
-  }, []);
-
-  // on branch change
-  useEffect(() => {
-    if (branch) {
-      const fetchNetFundFlowWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-net-fundflow/${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            },
-          );
-          const result = (await response.json()) as IResponse<INetFundFlow[]>;
-          if (successResponse(result.status)) {
-            setNetFundFlow(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching daily net fund flow with branchId = ${branch}`,
-            error,
-          );
-        }
-      };
-
-      // Trade Vs Clients Statistics
-      const fetchTradeVsClientsWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/trade-vs-clients/${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            },
-          );
-          const result = (await response.json()) as IResponse<
-            ITradeVsClients[]
-          >;
-          if (successResponse(result.status)) {
-            setTradeVsTurnover(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching trade vs clients with branchId=${branch}`,
-            error,
-          );
-        }
-      };
-
-      // Turnover Performance Statistics
-      const fetchTurnoverPerformanceWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/turnover-performance/${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            },
-          );
-          const result = (await response.json()) as IResponse<
-            ITurnoverPerformance[]
-          >;
-          if (successResponse(result.status)) {
-            setTurnover(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching daily net fund flow`,
-            error,
-          );
-        }
-      };
-      // Account Fund Flow Data Table
-      const fetchAccountsFundFlowWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/accounts-fundflow/${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            },
-          );
-          const result = (await response.json()) as IResponse<
-            IAccountsFundFlow[]
-          >;
-          if (successResponse(result.status)) {
-            setAccountsFundFlow(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching daily net fund flow`,
-            error,
-          );
-        }
-      };
-      // Portfolio Status DataTable
-      const fetchPortfolioStatusWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/portfolio-status/${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            },
-          );
-          const result = (await response.json()) as IResponse<
-            IPortfolioStatus[]
-          >;
-          if (successResponse(result.status)) {
-            setPortfolioStatus(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching daily net fund flow`,
-            error,
-          );
-        }
-      };
-      fetchNetFundFlowWithBranchId();
-      fetchTradeVsClientsWithBranchId();
-      fetchTurnoverPerformanceWithBranchId();
-      fetchAccountsFundFlowWithBranchId();
-      fetchPortfolioStatusWithBranchId();
-    }
-  }, [branch]);
 
   let headerDate = null;
 
-  if (netFundFlow) {
+  if (netFundFlow?.data) {
     headerDate = getHeaderDate(
-      netFundFlow[netFundFlow.length - 1],
+      netFundFlow?.data[netFundFlow?.data.length - 1],
       "tradingDate",
     );
   }
@@ -353,14 +105,13 @@ export default function PortfolioManagement() {
       </PageHeader>
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {/* Daily Net Fund Flow Chart */}
-        {netFundFlow ? (
+        {netFundFlow?.data ? (
           <CardBoard
             className="col-span-3"
             title="Daily Net Fund Flow"
-            // subtitle="short summary of the portfolio"
             children={
               <BarChartPositiveNegative
-                data={netFundFlow as any}
+                data={netFundFlow?.data as any}
                 options={dailyNetFundFlowOption}
               />
             }
@@ -368,23 +119,23 @@ export default function PortfolioManagement() {
         ) : null}
 
         {/* Client Trade vs Turnover Chart */}
-        {tradeVsturnover?(
-            <BarChartBiAxis
-              data={tradeVsturnover as any}
-              options={biaxialChartOption}
-            />):null}
+        {tradeVsturnover?.data ? (
+          <BarChartBiAxis
+            data={tradeVsturnover?.data as any}
+            options={biaxialChartOption}
+          />) : null}
         {/* Turnover Performance Data Table */}
-        {turnover ? (
-          <TurnoverPerformanceDataTable records={turnover as any} />
+        {turnover?.data ? (
+          <TurnoverPerformanceDataTable records={turnover?.data as any} />
         ) : null}
         {/* New Account Opening & Function Collection Data Table */}
-        {accountsFundFlow ? (
-          <NewAccountOpeningDataTable accounts={accountsFundFlow} />
+        {accountsFundFlow?.data ? (
+          <NewAccountOpeningDataTable accounts={accountsFundFlow?.data} />
         ) : null}
         {/* Portfolio Mangement Status Data Table */}
-        {portfolioStatus ? (
+        {portfolioStatus?.data ? (
           <PortfolioManagementStatusDataTable
-            records={portfolioStatus as any}
+            records={portfolioStatus?.data as any}
           />
         ) : null}
       </div>

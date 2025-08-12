@@ -10,166 +10,63 @@ import {
 } from "@/components/ui/card";
 import BranchWiseMarginDataTable from "./_branchwise_margin_datatable";
 import BranchWiseExposureDataTable from "./_branchwise_exposure_datatable";
-
 import { DataTableCard } from "./data-table";
-import {DataTableCardTurnover} from "./data-table-turnover"
+import { DataTableCardTurnover } from "./data-table-turnover"
 import { branchWiseFundColumns, branchWiseTurnoverColumns } from "./columns";
 import BranchFilter from "@/components/branchFilter";
-import { useEffect, useState } from "react";
-import {
-  IBranchWiseExposure,
-  IBranchWiseFund,
-  IBranchWiseMargin,
-  ITurnoverStatus,
-} from "@/types/branchPerformance";
 import { useSession } from "next-auth/react";
-import { formatDate, getHeaderDate, successResponse } from "@/lib/utils";
-import { IResponse } from "@/types/utils";
-import { ITargetGenerated } from "@/types/dailyTurnoverPerformance";
+import {  getHeaderDate } from "@/lib/utils";
+import { useBranchStore } from "@/lib/stores/branchStore";
+import { useQuery } from "@tanstack/react-query";
+import { branchPerformanceAPI } from "./api";
+import LoadingButton from "@/components/loading";
 
 export default function BranchPerformance() {
   const { data: session } = useSession();
 
-  const [branch, setBranch] = useState<string>("");
+  const branch = useBranchStore((state) => state.branch);
+  const setBranch = useBranchStore((state) => state.setBranch);
 
-  const [turnover, setTurnover] = useState<ITurnoverStatus[]>([]);
-  const [branchWiseFund, setBranchWiseFund] = useState<IBranchWiseFund[]>([]);
-  const [branchWiseExposure, setBranchWiseExposure] = useState<
-    IBranchWiseExposure[]
-  >([]);
-  const [branchWiseMargin, setBranchWiseMargin] = useState<IBranchWiseMargin[]>(
-    []
-  );
+  const { data: turnover, isPending:turnoverPending } = useQuery({
+    queryKey: ["turnover", branch],
+    queryFn: () => branchPerformanceAPI.getTurnoverStatus(branch)
+  });
+
+  const { data: branchWiseFund, isPending:branchWiseFundPending } = useQuery({
+    queryKey: ["branchWiseFund", branch],
+    queryFn: () => branchPerformanceAPI.getBranchWiseFundStatus(branch)
+  });
+
+  const { data: branchWiseMargin,isPending:branchWiseMarginPending } = useQuery({
+    queryKey: ["branchWiseMargin", branch],
+    queryFn: () => branchPerformanceAPI.getBranchWiseMarginStatus(branch)
+  });
+
+    const { data: branchWiseExposure,isPending:branchWiseExposurePending } = useQuery({
+    queryKey: ["branchWiseExposure", branch],
+    queryFn: () => branchPerformanceAPI.getBranchWiseExposureStatus(branch)
+  });
+
+   const { data: turnoverPerformance,isPending:turnoverPerformancePending } = useQuery({
+    queryKey: ["turnoverPerformance", branch],
+    queryFn: () => branchPerformanceAPI.getDailyTurnoverPerformance(branch)
+  });
+
+  const isLoading = turnoverPending || branchWiseFundPending || branchWiseMarginPending || branchWiseExposurePending || turnoverPerformancePending;
+  
+  if (isLoading) {
+    return <LoadingButton text="Loading..." />
+  }
 
   const handleBranchChange = (branchId: string) => {
     setBranch(branchId);
   };
 
-  const [turnoverPerformance, setTurnoverPerformance] = useState<
-    ITargetGenerated[]
-  >([]);
-
-  // on page load
-  useEffect(() => {
-    // fetch turnover status
-    const fetchTurnoverStatus = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-turnover-status/?branch=${branch}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<ITurnoverStatus[]>;
-        if (successResponse(result.status)) {
-          setTurnover(result.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    // fetch branch wise fund status
-    const fetchBranchWiseFundStatus = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-fund-status/?branch=${branch}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<IBranchWiseFund[]>;
-        if (successResponse(result.status)) {
-          setBranchWiseFund(result.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    // fetch branch wise fund status
-    const fetchBranchWiseMarginStatus = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-margin-status/?branch=${branch}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<
-          IBranchWiseMargin[]
-        >;
-        if (successResponse(result.status)) {
-          setBranchWiseMargin(result.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // fetch branch wise fund status
-    const fetchBranchWiseExposureStatus = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-exposure-status/?branch=${branch}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<
-          IBranchWiseExposure[]
-        >;
-        if (successResponse(result.status)) {
-          setBranchWiseExposure(result.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // TODO: Need to think of other way to fetch date for header
-    const fetchDailyTurnoverPerformance = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/daily-trade-performance/`,
-          {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const result = (await response.json()) as IResponse<ITargetGenerated[]>;
-        if (successResponse(result.status)) {
-          setTurnoverPerformance(result.data);
-        }
-      } catch (error) {
-        console.error(`Error Happened while fetching Summary`, error);
-      }
-    };
-
-    fetchDailyTurnoverPerformance();
-    fetchTurnoverStatus();
-    fetchBranchWiseFundStatus();
-    fetchBranchWiseMarginStatus();
-    fetchBranchWiseExposureStatus();
-  }, [branch]);
-
   let headerDate = null;
 
-  if (turnoverPerformance) {
+  if (turnoverPerformance?.data) {
     headerDate = getHeaderDate(
-      turnoverPerformance[turnoverPerformance.length - 1],
+      turnoverPerformance?.data[turnoverPerformance?.data.length - 1],
       "tradingDate"
     );
   }
@@ -188,7 +85,7 @@ export default function BranchPerformance() {
           subtitle="show data for branch wise turnover"
           className="col-span1 max-h[700px] overflow-y-auto lg:col-span-2 lg:row-span-2"
           columns={branchWiseTurnoverColumns}
-          data={turnover}
+          data={turnover?.data || []}
         />
 
         {/* Branch Wise Margin Status */}
@@ -202,7 +99,7 @@ export default function BranchPerformance() {
             </CardDescription> */}
           </CardHeader>
           <CardContent className="mt-3">
-            <BranchWiseMarginDataTable records={branchWiseMargin} />
+            <BranchWiseMarginDataTable records={branchWiseMargin?.data || []} />
           </CardContent>
         </Card>
 
@@ -217,7 +114,7 @@ export default function BranchPerformance() {
             </CardDescription> */}
           </CardHeader>
           <CardContent className="mt-3">
-            <BranchWiseExposureDataTable records={branchWiseExposure} />
+            <BranchWiseExposureDataTable records={branchWiseExposure?.data ||[]} />
           </CardContent>
         </Card>
 
@@ -227,7 +124,7 @@ export default function BranchPerformance() {
           title="Branch Wise Fund Status(Till Today)"
           subtitle="summary of fund status branch wise"
           columns={branchWiseFundColumns}
-          data={branchWiseFund}
+          data={branchWiseFund?.data || []}
         />
       </div>
     </div>
