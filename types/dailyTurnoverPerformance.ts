@@ -65,3 +65,14 @@ export interface VisitData {
     totalClientToday: number;
     totalTurnoverToday: number;
   };
+
+  export interface BranchWiseNonePerformClient {
+  branchCode: number;
+  branchName: string;
+  rmName: string;
+  investorCode: string;
+  investorName: string;
+  availableBalance: number;
+  mobile: string;
+  email: string;
+}

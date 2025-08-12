@@ -30,15 +30,6 @@ export const investorLiveTradeClientsColumns: ColumnDef<InvestorLiveTradeInfo>[]
       return <div className="text-left">{row.getValue("joinHolderName")}</div>
     }
   },
-  {
-    accessorKey: "joinHolderName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Investor Name" />
-    ),
-    cell: ({ row }) => {
-      return <div className="text-left">{row.getValue("joinHolderName")}</div>
-    }
-  },
     {
       accessorKey: "investorType",
       header: ({ column }) => (

@@ -54,15 +54,16 @@ export default function MarginLoanAllocationDataTable({
             {records.map((record, index) => (
               <TableRow
                 key={record.perticular}
-                className={`${
-                  index % 2 === 0 ? "bg-blue-300" : "bg-blue-200"
-                } hover:bg-blue-100 transition-all duration-300`}
+                className={`${index % 2 === 0 ? "bg-blue-300" : "bg-blue-200"
+                  } hover:bg-blue-100 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">
                   {record.perticular}
                 </TableCell>
                 <TableCell className={`py-1 text-right ${record.amount < 0 ? "text-red-500" : "text-black"}`}>
-                  {numberToMillionsString(record.amount)}
+                  {/\d/.test(record.perticular) && /user/i.test(record.perticular)
+                    ? record.amount
+                    : numberToMillionsString(record.amount)}
                 </TableCell>
               </TableRow>
             ))}

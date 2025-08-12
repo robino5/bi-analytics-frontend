@@ -3,7 +3,7 @@ import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
 import { IResponse } from "@/types/utils";
-import { IMarginLoanUsage, ISectorExposure, ISummaryDetails, ITargetGenerated, RmWiseDailyTradeData, VisitData } from "@/types/dailyTurnoverPerformance";
+import { BranchWiseNonePerformClient, IMarginLoanUsage, ISectorExposure, ISummaryDetails, ITargetGenerated, RmWiseDailyTradeData, VisitData } from "@/types/dailyTurnoverPerformance";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 
@@ -92,6 +92,15 @@ class DailyTradePerformanceAPI extends Common {
         }
         else{
             return this.http.get<IResponse<InvestorLiveTradeInfo[]>>("dashboards/rm/investor-live-trade-rm-wise/")
+        }
+    }
+
+       getBranchWiseNonePerforminigClients(branch: string) {
+        if(branch){
+            return this.http.get<IResponse<BranchWiseNonePerformClient[]>>(`dashboards/branchwise-none-performing-client/?branch=${branch}`)
+        }
+        else{
+            return this.http.get<IResponse<BranchWiseNonePerformClient[]>>("dashboards/branchwise-none-performing-client/")
         }
     }
 
