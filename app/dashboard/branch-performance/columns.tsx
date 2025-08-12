@@ -25,7 +25,7 @@ export type BranchWiseTurnoverDataType = {
 };
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
-  const amount = parseFloat(row.getValue(accessorKey));
+  const amount = parseFloat(row.getValue(accessorKey)||0);
   return numberToMillionsString(amount);
 };
 
@@ -110,6 +110,8 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
     },
   },
 ];
+
+
 export const branchWiseTurnoverColumns: ColumnDef<ITurnoverStatus>[] = [
   {
     accessorKey: "branchName",

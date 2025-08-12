@@ -31,6 +31,15 @@ export const investorLiveTradeClientsColumns: ColumnDef<InvestorLiveTradeInfo>[]
     }
   },
   {
+    accessorKey: "investorType",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Client Type" />
+    ),
+    cell: ({ row }) => {
+      return <div className="text-left">{row.getValue("investorType")}</div>
+    }
+  },
+  {
     accessorKey: "buy",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Buy" />

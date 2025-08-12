@@ -35,7 +35,7 @@ export default function ClientTradesDataTable({ records, className }: Props) {
   // ===========================================
   return (
     <Card
-      className={cn("overflow-auto drop-shadow-md", className, "bg-[#033e4a] ")}
+      className={cn("overflow-auto drop-shadow-md", className, "bg-[#033e4a] h-[308px]")}
     >
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
         <CardTitle className="text-white text-md text-lg">
@@ -45,7 +45,7 @@ export default function ClientTradesDataTable({ records, className }: Props) {
           short summary of todays clients and trades
         </CardDescription> */}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <Table className="border border-gray-300 rounded-md overflow-hidden mt-2">
           <TableHeader>
             <TableRow className="bg-yellow-200 hover:bg-yellow-200">
@@ -86,6 +86,10 @@ export default function ClientTradesDataTable({ records, className }: Props) {
             ))}
           </TableBody>
         </Table>
+        {/* Red Note Text */}
+        <p className="text-red-500 text-lg mt-2 font-semibold">
+          * This data is updated every 15 minutes.
+        </p>
       </CardContent>
     </Card>
   );

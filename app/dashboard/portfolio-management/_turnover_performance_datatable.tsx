@@ -76,22 +76,22 @@ export default function TurnoverPerformanceDataTable({ records }: Props) {
                 <TableCell    className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
                   }`}>
-                  {numberToMillionsString(record.daily)}
+                  {numberToMillionsString(record.daily||0)}
                 </TableCell>
                 <TableCell className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-green-200" : "bg-green-100"
                   }`}>
-                  {numberToMillionsString(record.weekly)}
+                  {numberToMillionsString(record.weekly||0)}
                 </TableCell>
                 <TableCell className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
                   }`}>
-                  {numberToMillionsString(record.forthnightly)}
+                  {numberToMillionsString(record.forthnightly||0)}
                 </TableCell>
                 <TableCell  className={`text-right py-1 ${
                     index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
                   }`}>
-                  {numberToMillionsString(record.monthly)}
+                  {numberToMillionsString(record.monthly||0)}
                 </TableCell>
               </TableRow>
             ))}

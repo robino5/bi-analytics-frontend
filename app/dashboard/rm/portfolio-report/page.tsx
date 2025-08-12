@@ -30,6 +30,10 @@ import MarkedTraderDataTable from "./_marked_traders_datatable";
 import SummarySkeletonCard from "@/components/skeletonCard";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
+import { useQuery } from "@tanstack/react-query";
+import { portfolioReport } from "./api";
+import { useBranchStore } from "@/lib/stores/branchStore";
+import { useTraderStore } from "@/lib/stores/rmStore";
 
 const RmPortfolioBoard = () => {
   // Override console.error
@@ -48,9 +52,11 @@ const RmPortfolioBoard = () => {
   const defaultBranch = isRM ? "12" : "";
   const defaultTrader = isRM ? session.user.username : "";
 
-  const [branch, setBranch] = useState(defaultBranch);
-  const [trader, setTrader] = useState(defaultTrader);
-  const [traders, setTraders] = useState<ITrader[]>([]);
+  const branch = useBranchStore((state) => state.branch);
+  const setBranch = useBranchStore((state) => state.setBranch);
+  const trader = useTraderStore((state) => state.trader)
+  const setTrader = useTraderStore((state) => state.setTrader);
+  //const [traders, setTraders] = useState<ITrader[]>([]);
 
   const [fundCollections, setFundCollection] = useState<IFundCollection[]>([]);
   const [redClients, setRedClients] = useState<IMarkedClient[]>([]);
@@ -60,11 +66,17 @@ const RmPortfolioBoard = () => {
 
   const handleBranchChange = (value: string) => {
     setBranch(value);
-    setTrader(traders[0]?.traderId);
+    setTrader(trader);
   };
   const handleTraderChange = (value: string) => {
     setTrader(value);
   };
+
+  const { data: traders } = useQuery({
+    queryKey: ["traders", branch],
+    queryFn: () => portfolioReport.getTraderWithBranchId(branch)
+  });
+
 
   const dailyNetFundFlowOption = {
     dataKey: "tradingDate",
@@ -73,6 +85,33 @@ const RmPortfolioBoard = () => {
     stroke: "#c3ce",
     barLabel: true,
   };
+
+
+  useEffect(() => {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+      setBranch(session.user.branchId);
+    }
+  }, [session, setBranch]);
+
+  useEffect(() => {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+      setTrader(session.user.username);
+    }
+  }, [session, setTrader]);
+
+useEffect(() => {
+  if (!branch || branch === "") {
+    handleBranchChange("11")
+  }
+}, [branch, setBranch]);
+
+useEffect(() => {
+  if (!trader || trader === "") {
+     if (traders?.data?.length) {
+    handleTraderChange(traders.data[0].traderId);
+  }
+  }
+}, [trader, setTrader]);
 
   useEffect(() => {
     if (branch && trader) {
@@ -199,43 +238,13 @@ const RmPortfolioBoard = () => {
     }
   }, [trader]);
 
-  useEffect(() => {
-    if (branch) {
-      // Fetch Traders
-      const fetchTraderWithBranchId = async () => {
-        try {
-          let branchUrl;
-          if (branch) {
-            branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/${branch}/`;
-          } else {
-            branchUrl = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/lov/traders/`;
-          }
-          const response = await fetch(branchUrl, {
-            headers: {
-              Authorization: `Bearer ${session?.user.accessToken}`,
-              "Content-Type": "application/json",
-            },
-          });
-
-          const result = (await response.json()) as IResponse<ITrader[]>;
-          if (successResponse(result.status)) {
-            setTraders(result.data);
-            setTrader(result.data[0].traderId);
-          }
-        } catch (error) {
-          console.error(`Error fetching traders.`, error);
-        }
-      };
-      fetchTraderWithBranchId();
-    }
-  }, [branch]);
 
   return (
     <div className="mx-4">
       <PageHeader name="RM Portfolio Report">
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
         <TraderFilter
-          traders={traders}
+          traders={traders?.data || []}
           currentTrader={trader}
           onChange={handleTraderChange}
         />

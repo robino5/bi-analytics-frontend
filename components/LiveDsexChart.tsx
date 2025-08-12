@@ -23,9 +23,7 @@ const IntradayDsexChart: React.FC<Props> = ({
   const chartRef = useRef<HTMLDivElement>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const chartInstance = useRef<echarts.ECharts | null>(null);
-
   console.log("DSEX Chart Data:", dataSum);
-  // Update current time periodically
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -62,7 +60,7 @@ const IntradayDsexChart: React.FC<Props> = ({
 
     const getLabelShowStatus = (index: number, total: number) => {
       if (total <= 3) return true;
-      return index === 0 || index === Math.floor(total / 2) || index === total - 1;
+      return index === 0 || index === Math.floor(total / 3) || index === Math.floor((2 * total) / 3) || index === total - 1;
     };
 
     const formatSigned = (value: number | string) => {
@@ -104,17 +102,28 @@ const IntradayDsexChart: React.FC<Props> = ({
             backgroundColor: "#6a7985",
           },
         },
+        backgroundColor: "rgba(0, 0, 0, 0.75)",
+        borderColor: "#ccc",
+        borderWidth: 1,
+        textStyle: {
+          fontSize: 11,
+          color: "#fff",
+          fontFamily: "Arial",
+        },
+        padding: 6,
+        extraCssText: "line-height: 1.2;",
         formatter: (params: any) => {
           const time = formatTime(todayData[params[0].dataIndex]["0"]);
           const value = params[0].value.toLocaleString("en-BD");
-          let tooltip = `<strong>${time}</strong><br/>`;
-          tooltip += `DSEX: <strong>${value}</strong>`;
+          let tooltip = `<div><span>${time}</span><br/>`;
+          tooltip += `DSEX: <span style="font-weight:600">${value}</span>`;
 
           if (params[1] && showVolume) {
             const volume = params[1].value.toLocaleString("en-BD");
-            tooltip += `<br/>Volume: <strong>${volume}</strong>`;
+            tooltip += `<br/>Volume: <span style="font-weight:600">${volume}</span>`;
           }
 
+          tooltip += `</div>`;
           return tooltip;
         },
       },
@@ -152,9 +161,9 @@ const IntradayDsexChart: React.FC<Props> = ({
             rotate: 0,
             margin: 8,
           },
-          axisLine: { onZero: true, lineStyle: { color: "#666" } },
+          axisLine: { onZero: false, lineStyle: { color: "#666" } },
           axisTick: { show: false },
-          splitLine: { show: false },
+          splitLine: { show: true, lineStyle: { color: "#666" } },
         },
         ...(showVolume
           ? [
@@ -171,9 +180,9 @@ const IntradayDsexChart: React.FC<Props> = ({
                 rotate: 0,
                 margin: 8,
               },
-              axisLine: { show: true, lineStyle: { color: "#666" } },
+              axisLine: { show: false, lineStyle: { color: "#666" } },
               axisTick: { show: false },
-              splitLine: { show: false },
+              splitLine: { show: true, lineStyle: { color: "#666" } },
             },
           ]
           : []),
@@ -198,7 +207,7 @@ const IntradayDsexChart: React.FC<Props> = ({
               axisLabel: { show: false },
               axisLine: { show: false },
               axisTick: { show: false },
-              splitLine: { show: false },
+              splitLine: { show: false, lineStyle: { color: "#666" } },
             },
           ]
           : []),

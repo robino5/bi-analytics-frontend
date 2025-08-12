@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
+import { useBranchStore } from "@/lib/stores/branchStore";
 
 export interface IBranchLov {
   branchCode: string;
@@ -31,14 +32,10 @@ export default function BranchFilter({
 }: IBranchFilterProps) {
   const { data: session } = useSession();
   const [branchesList, setBranchesList] = useState<IBranchLov[]>([]);
-  const [selectedBranch, setSelectedBranch] = useState("");
   const [isRM, setIsRM] = useState(false);
   const pathName = usePathname();
 
-  const setDefaultBranch = (branchCode: string) => {
-    setSelectedBranch(branchCode);
-    onChange(branchCode);
-  };
+
 
   useEffect(() => {
     const fetchBranches = async () => {
@@ -55,9 +52,7 @@ export default function BranchFilter({
         const result = (await response.json()) as IResponse<IBranchLov[]>;
         if (successResponse(result.status)) {
           setBranchesList(result.data);
-          // for RM Routes need to have default selected branch
           if (pathName.includes("/rm/")) {
-            setDefaultBranch(result.data[0]?.branchCode || "");
             if (session?.user.role.toString() == RoleType.REGIONAL_MANAGER) {
               setIsRM(true);
             }
@@ -72,8 +67,7 @@ export default function BranchFilter({
   return (
     <Select
       onValueChange={onChange}
-      defaultValue={selectedBranch}
-      value={currentBranch ?? ""}
+      value={currentBranch ? String(currentBranch) : ""}
       disabled={isRM}
     >
       <SelectTrigger className="w-[180px]">
@@ -81,7 +75,7 @@ export default function BranchFilter({
       </SelectTrigger>
       <SelectContent>
         {branchesList.map((lov) => (
-          <SelectItem key={lov.branchCode} value={lov.branchCode}>
+          <SelectItem key={lov.branchCode} value={String(lov.branchCode)}>
             {lov.branchName}
           </SelectItem>
         ))}
