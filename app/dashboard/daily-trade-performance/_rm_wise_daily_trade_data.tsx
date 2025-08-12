@@ -13,7 +13,7 @@ export default function RmWiseDailyTradingData({ data }: TurnoverTableProps) {
 
     return (
         <div className="w-full border border-gray-300 rounded-md overflow-hidden">
-            <div className="max-h-[420px] w-full overflow-y-auto">
+            <div className="max-h-[512px] w-full overflow-y-auto">
                 <Table className="w-full">
                     <TableHeader className="sticky top-0 bg-table-header z-10">
                         <TableRow>

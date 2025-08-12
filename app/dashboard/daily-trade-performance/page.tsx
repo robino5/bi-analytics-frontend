@@ -7,23 +7,18 @@ import PageHeader from "@/components/PageHeader";
 import StatisticsCardClientTurnoverSummary from "@/components/StatisticsCardClientTurnoverSummary";
 import StatisticsCashCodeSummary from "@/components/StatisticsCashCodeSummary";
 import StatisticsMarginCodeSummary from "@/components/StatisticsMarginCodeSummary";
-
 import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
-import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { getHeaderDate, successResponse } from "@/lib/utils";
+import { getHeaderDate } from "@/lib/utils";
 import SummarySkeletonCard, {
   SkeletonStatistics,
 } from "@/components/skeletonCard";
-import { IResponse } from "@/types/utils";
-
 import { PiChartScatterBold } from "react-icons/pi";
 import { FaChartSimple } from "react-icons/fa6";
 import { IoPieChartSharp } from "react-icons/io5";
 import EcrmDetails from "@/components/eCrmDetails";
 import RmWiseDailyTradingData from "./_rm_wise_daily_trade_data";
-import { InvestorLiveTopBuySaleInfo } from "../business-and-trade-management/types";
 import {
   Card,
   CardContent,
@@ -33,12 +28,13 @@ import {
 } from "@/components/ui/card";
 import { investorLiveBuySaleClientsColumns } from "./investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
 import { DataTable as InvestorLiveBuySaleDatatable } from "./investor_live_top_buya_sale/_investorLiveBuySaleTable";
-import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 import { investorLiveTradeClientsColumns } from "./investor_live_trade/_investorLiveTradeTableColumns";
 import { useBranchStore } from "@/lib/stores/branchStore";
 import { useQuery } from "@tanstack/react-query";
 import { dailyTradePerformanceAPI } from "./api";
 import { DseLiveTrade } from "@/components/dse-live-trade";
+import { branchWiseNonePerformingClientColumns } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientColumns";
+import { DataTable as BranchWiseNonePerformingClientDatatable } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientTable";
 
 
 export default function DailyTradePerformance() {
@@ -152,7 +148,13 @@ export default function DailyTradePerformance() {
     queryKey: ["investorLiveTrade", branch],
     queryFn: () => dailyTradePerformanceAPI.getInvestorLiveTradeDetails(branch)
   });
-  console.log(investorLiveTrade)
+
+  const { data: branchWiseNonePerforminigClients } = useQuery({
+    queryKey: ["branchWiseNonePerforminigClients", branch],
+    queryFn: () => dailyTradePerformanceAPI.getBranchWiseNonePerforminigClients(branch)
+  });
+
+
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -177,7 +179,7 @@ export default function DailyTradePerformance() {
       <PageHeader name={`Daily Trade Performance (${headerDate ?? ""})`}>
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
       </PageHeader>
-       
+
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {summarydata?.data?.shortSummary ? (
           <CardBoard
@@ -221,9 +223,9 @@ export default function DailyTradePerformance() {
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
 
-             <div className="rounded-md xl:col-span-3">
-                  <DseLiveTrade />
-                </div>
+        <div className="rounded-md xl:col-span-3">
+          <DseLiveTrade />
+        </div>
 
         {/* e-CRM Details */}
         {eCrmDetails?.data &&
@@ -237,17 +239,6 @@ export default function DailyTradePerformance() {
           />
         }
         {/* e-CRM Details */}
-        {rmWiseDailyTradeData?.data &&
-          <CardBoard
-            className="col-span-6 xl:col-span-3"
-            title={`RM Wise Trading data As on ${rmWiseDailyTradeData?.data.length > 0 ? rmWiseDailyTradeData?.data[0]?.pushDate : ""}`}
-            // subtitle="Shows a analytics of turnover target performance of last 7 days."
-            children={
-              <RmWiseDailyTradingData data={rmWiseDailyTradeData?.data} />
-            }
-          />
-        }
-
 
         {investorTopBuyData?.data ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
@@ -276,6 +267,38 @@ export default function DailyTradePerformance() {
             </CardContent>
           </Card>
         ) : null}
+
+        {rmWiseDailyTradeData?.data &&
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={`RM Wise Trading data As on ${rmWiseDailyTradeData?.data.length > 0 ? rmWiseDailyTradeData?.data[0]?.pushDate : ""}`}
+            // subtitle="Shows a analytics of turnover target performance of last 7 days."
+            children={
+              <RmWiseDailyTradingData data={rmWiseDailyTradeData?.data} />
+            }
+          />
+
+        }
+        {branchWiseNonePerforminigClients?.data ? (
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <BranchWiseNonePerformingClientDatatable
+                data={branchWiseNonePerforminigClients?.data}
+                columns={branchWiseNonePerformingClientColumns}
+              />
+            </CardContent>
+          </Card>
+        ) :       <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+             loading......
+            </CardContent>
+          </Card>}
 
         {investorLiveTrade?.data ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
