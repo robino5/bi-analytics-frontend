@@ -66,14 +66,15 @@ export default function BranchFilter({
   }, []);
   return (
     <Select
-      onValueChange={onChange}
+      onValueChange={(value) => onChange(value === "all" ? "" : value)}
       value={currentBranch ? String(currentBranch) : ""}
       disabled={isRM}
     >
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a branch" />
+        <SelectValue placeholder="All Branch" />
       </SelectTrigger>
       <SelectContent>
+        {!pathName.includes("/rm/") && <SelectItem value="all">All Branch</SelectItem>}
         {branchesList.map((lov) => (
           <SelectItem key={lov.branchCode} value={String(lov.branchCode)}>
             {lov.branchName}

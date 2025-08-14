@@ -60,12 +60,11 @@ const RmPerformanceBoard = () => {
     setTrader(value);
   };
 
-      const { data: traders } = useQuery({
+    const { data: traders } = useQuery({
     queryKey: ["traders", branch],
     queryFn: () => performanceReport.getTraderWithBranchId(branch)
   });
 
-  
     useEffect(() => {
     if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
       setBranch(session.user.branchId);
@@ -85,13 +84,14 @@ useEffect(() => {
   }
 }, [branch, setBranch]);
 
+
 useEffect(() => {
-  if (!trader || trader === "") {
+  if (!trader || trader === "" ) {
      if (traders?.data?.length) {
     handleTraderChange(traders.data[0].traderId);
   }
   }
-}, [trader, setTrader]);
+}, [trader, setTrader,traders]);
 
 
   useEffect(() => {
@@ -246,7 +246,7 @@ useEffect(() => {
         {investorTopBuyData ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty buyer ( DSE)</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Top Twenty buyer</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -260,7 +260,7 @@ useEffect(() => {
         {investorTopSaleData ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty Seller ( DSE)</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Top Twenty Seller</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -274,7 +274,7 @@ useEffect(() => {
         {investorLiveTrade ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise(DSE)</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveTradeDataTable

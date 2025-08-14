@@ -14,6 +14,7 @@ import { redirect, usePathname } from "next/navigation";
 import { useState } from "react";
 
 export interface ITrader {
+  branchCode:any;
   traderId: string;
   traderName: string;
 }

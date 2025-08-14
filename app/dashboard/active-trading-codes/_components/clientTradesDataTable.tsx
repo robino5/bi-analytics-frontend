@@ -87,9 +87,9 @@ export default function ClientTradesDataTable({ records, className }: Props) {
           </TableBody>
         </Table>
         {/* Red Note Text */}
-        <p className="text-red-500 text-lg mt-2 font-semibold">
+        {/* <p className="text-red-500 text-lg mt-2 font-semibold">
           * This data is updated every 15 minutes.
-        </p>
+        </p> */}
       </CardContent>
     </Card>
   );

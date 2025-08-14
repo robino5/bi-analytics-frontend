@@ -35,6 +35,7 @@ import { dailyTradePerformanceAPI } from "./api";
 import { DseLiveTrade } from "@/components/dse-live-trade";
 import { branchWiseNonePerformingClientColumns } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientColumns";
 import { DataTable as BranchWiseNonePerformingClientDatatable } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientTable";
+import { Ticker } from "@/components/ticker";
 
 
 export default function DailyTradePerformance() {
@@ -176,11 +177,11 @@ export default function DailyTradePerformance() {
         name="description"
         content="Showing a daily trade performance analytics"
       />
-      <PageHeader name={`Daily Trade Performance (${headerDate ?? ""})`}>
+      <PageHeader name={`Daily Trade Performance as on ${localStorage?.getItem('push-data') ?? ""}`} updateStatus="* This data is updated every 15 minutes.">
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
       </PageHeader>
-
-      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
+      <Ticker />
+      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 ">
         {summarydata?.data?.shortSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
@@ -243,7 +244,7 @@ export default function DailyTradePerformance() {
         {investorTopBuyData?.data ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty buyer ( DSE)</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Top Twenty buyer</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -257,7 +258,7 @@ export default function DailyTradePerformance() {
         {investorTopSaleData?.data ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty Seller ( DSE)</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Top Twenty Seller</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -291,19 +292,19 @@ export default function DailyTradePerformance() {
               />
             </CardContent>
           </Card>
-        ) :       <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-             loading......
-            </CardContent>
-          </Card>}
+        ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
+          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3">
+            loading......
+          </CardContent>
+        </Card>}
 
         {investorLiveTrade?.data ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise(DSE)</CardTitle>
+              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
