@@ -14,6 +14,7 @@ export interface IMarkedClient {
     branchCode: number;
     investorName: string;
     ledgerBalance: number;
+    exposure:number;
     rmName: string;
 }
 

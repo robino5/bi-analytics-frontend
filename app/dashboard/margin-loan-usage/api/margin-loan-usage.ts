@@ -37,7 +37,7 @@ class MarginLoanUsageAPI extends Common {
     }
     getNegativeEquityInvistor(branch: string) {
         if (branch) {
-            return this.http.get<IResponse<IMarkedClient[]>>(`dashboards/zonewise-investors/?investor_type=negative_equity${branch}`)
+            return this.http.get<IResponse<IMarkedClient[]>>(`dashboards/zonewise-investors/?branch=${branch}&investor_type=negative_equity`)
         }
         else {
             return this.http.get<IResponse<IMarkedClient[]>>("dashboards/zonewise-investors/?investor_type=negative_equity")

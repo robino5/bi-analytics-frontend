@@ -35,6 +35,7 @@ import { useBranchStore } from "@/lib/stores/branchStore";
 import { useTraderStore } from "@/lib/stores/rmStore";
 import { useQuery } from "@tanstack/react-query";
 import { dailyTradePerformance } from "./api";
+import { Ticker } from "@/components/ticker";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -504,7 +505,8 @@ useEffect(() => {
           onChange={handleTraderChange}
         />
       </PageHeader>
-      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
+      <Ticker />
+      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6">
         {summary?.shortSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
