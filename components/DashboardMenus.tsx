@@ -179,6 +179,23 @@ const menuList = [
       },
     ],
   },
+    {
+    id: 4,
+    codeName: "settings",
+    viewName: "Settings",
+    icon: <FaGear className="h-4 w-4" />,
+    roles: ["MANAGEMENT"],
+    subMenus: [
+      {
+        id: 1,
+        codeName: "user-list",
+        viewName: "User List",
+        urlPath: "/user-list",
+        icon: <CgUserList className="h-4 w-4" />,
+        roles: ["MANAGEMENT"],
+      },
+    ],
+  },
 ];
 
 export default function DashboardMenus() {

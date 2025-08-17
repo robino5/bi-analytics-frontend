@@ -9,28 +9,7 @@ import { DataTableRowActions } from "./_userTableRowActions";
 import { format, parseISO } from 'date-fns';
 
 export const useTableColumns: ColumnDef<IUser>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+ 
   {
     accessorKey: "username",
     header: ({ column }) => (
@@ -62,7 +41,7 @@ export const useTableColumns: ColumnDef<IUser>[] = [
         variant="outline"
         className="text-slate-600 font-medium dark:text-gray-300"
       >
-        {row.getValue("role")}
+        {row.getValue("role")=="REGIONAL_MANAGER"?"RM":row.getValue("role")}
       </Badge>
     ),
   },
@@ -152,9 +131,5 @@ export const useTableColumns: ColumnDef<IUser>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
