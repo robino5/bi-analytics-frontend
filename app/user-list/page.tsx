@@ -73,7 +73,7 @@ const Users = () => {
   const [filterUrl, setFilterUrl] = useState<string>("");
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 20,
   });
 
   if (!session) {
