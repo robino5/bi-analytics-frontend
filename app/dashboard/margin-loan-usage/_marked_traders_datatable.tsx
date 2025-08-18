@@ -79,6 +79,7 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
           <TableHead className="text-right text-black font-bold">Exposure</TableHead>
           <TableHead className="text-right text-black font-bold">Equity</TableHead>
           <TableHead className="text-right text-black font-bold">Ledger Balance</TableHead>
+          <TableHead className="text-center text-black font-bold">Loan Ratio</TableHead>
           <TableHead className="text-center text-black font-bold">RM</TableHead>
         </TableRow>
       </TableHeader>
@@ -103,6 +104,9 @@ export default function MarkedTraderDataTable({ kind, branch }: Props) {
             </TableCell>
             <TableCell className="py-1 text-right">
               {numberToMillionsString(record.ledgerBalance)}
+            </TableCell>
+               <TableCell className="py-1 text-center">
+              {record.loanRatio}
             </TableCell>
             <TableCell className="py-1 text-left">{record.rmName}</TableCell>
           </TableRow>
