@@ -44,10 +44,22 @@ export const branchWiseClintsNumber: ColumnDef<BranchWiseClintsNumber>[] = [
   {
     accessorKey: "totalClients",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Clients" />
+      <DataTableColumnHeader
+        column={column}
+        title="Total Non Performer Clients"
+      />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "totalClients");
+      const value = row.getValue<number>('totalClients'); // typed if you’re using TS
+      return (
+        <div
+          className={cn("text-center font-medium", {
+            "text-red-600": value < 0,
+          })}
+        >
+          {value}
+        </div>
+      );
     },
   },
   {
@@ -78,7 +90,16 @@ export const branchWiseNonPerformerClints: ColumnDef<BranchWiseNonPerformerClint
         />
       ),
       cell: ({ row }) => {
-        return cellNumberFormatter(row, "totalClients");
+        const value = row.getValue<number>('totalClients'); // typed if you’re using TS
+        return (
+          <div
+            className={cn("text-center font-medium", {
+              "text-red-600": value < 0,
+            })}
+          >
+            {value}
+          </div>
+        );
       },
     },
     {

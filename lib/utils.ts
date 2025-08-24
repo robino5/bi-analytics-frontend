@@ -73,6 +73,41 @@ export function numberToMillionsString(
   return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
 }
 
+export function numberToMillionsStringForQty(
+  num: number,
+  useThousand: boolean = false,
+): string {
+  if (isNaN(num)) {
+    throw Error(`${num} is not a valid number !`);
+  }
+
+  const absNumber = Math.abs(num);
+  const sign = num < 0 ? "-" : "";
+
+  if (useThousand) {
+    if (absNumber >= 1000 && absNumber < 1000000) {
+      return `${sign}${numberFormatter(absNumber / 1000)}K`;
+    } else if (absNumber < 1000) {
+      return `${sign}${numberFormatter(absNumber)}`;
+    }
+  }
+
+  if (absNumber < 1_00_0000) {
+    return `${sign}${absNumber}`;
+  }
+
+  if (absNumber < 10_00_0000) {
+    return `${sign}${numberFormatter(absNumber / 1000000)}M`;
+  }
+
+  if (absNumber < 1_00_000_0000) {
+    return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
+  }
+
+  return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
+}
+
+
 export function successResponse(key: string): boolean {
   return key === "success";
 }

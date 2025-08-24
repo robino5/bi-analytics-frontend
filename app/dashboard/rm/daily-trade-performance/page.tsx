@@ -85,7 +85,7 @@ export default function DailyTradePerformance() {
 
   const branch = useBranchStore((state) => state.branch);
   const setBranch = useBranchStore((state) => state.setBranch);
-  const trader = useTraderStore((state)=>state.trader)
+  const trader = useTraderStore((state) => state.trader)
   const setTrader = useTraderStore((state) => state.setTrader);
   //const [traders, setTraders] = useState<ITrader[]>([]);
 
@@ -116,37 +116,43 @@ export default function DailyTradePerformance() {
     setTrader(value);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
       setBranch(session.user.branchId);
     }
   }, [session, setBranch]);
 
-      useEffect(() => {
+  useEffect(() => {
     if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
       setTrader(session.user.username);
     }
   }, [session, setTrader]);
 
-    const { data: traders } = useQuery({
+  const { data: traders } = useQuery({
     queryKey: ["traders", branch],
     queryFn: () => dailyTradePerformance.getTraderWithBranchId(branch)
   });
-  
 
-useEffect(() => {
-  if (!branch || branch === "") {
-    traceBranchChange('11')
-  }
-}, [branch, setBranch]);
 
-useEffect(() => {
-  if (!trader || trader === "") {
-     if (traders?.data?.length) {
-    handleTraderChange(traders.data[0].traderId);
-  }
-  }
-}, [trader, setTrader]);
+  useEffect(() => {
+    if (!branch || branch === "") {
+      if (isRM) {
+        traceBranchChange(session?.user?.branchId || "")
+      }
+      else {
+        traceBranchChange('11')
+      }
+
+    }
+  }, [branch, setBranch]);
+
+  useEffect(() => {
+    if (!trader || trader === "") {
+      if (traders?.data?.length) {
+        handleTraderChange(traders.data[0].traderId);
+      }
+    }
+  }, [trader, setTrader]);
 
   //effect on trader change
   useEffect(() => {
@@ -321,13 +327,13 @@ useEffect(() => {
       fetcheCrmDetails(branchId, trader);
       fetcheRmWiseDailyTradeData(branchId, trader);
     }
-  }, [trader]);
+  }, [trader, branch]);
 
   // effect on branch change
   useEffect(() => {
     if (branch && !trader) {
       // Fetch Traders
-  
+
       // Fetch Summary for Branch
       const fetchSummaryWithBranchId = async () => {
         try {
@@ -497,11 +503,11 @@ useEffect(() => {
         name="description"
         content="Showing a daily trade performance analytics"
       />
-      <PageHeader name="Daily Trade Performance">
+      <PageHeader name={`Daily Trade Performance as on ${localStorage?.getItem('push-data') ?? ""}`} updateStatus="* This data is updated every 15 minutes.">
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
         <TraderFilter
           currentTrader={trader}
-          traders={traders?.data ||[]}
+          traders={traders?.data || []}
           onChange={handleTraderChange}
         />
       </PageHeader>

@@ -73,8 +73,8 @@ const BarChartPositiveNegative: FC<BarChartProps> = ({ data, options }) => {
             data: data.map((item) => item.amount),
             itemStyle: {
               color: (params: any) => {
-                return params.value > 0 ? BarColors.purple : BarColors.light_blue; 
-              },
+                return params.value > 0 ?  "#00BFFF":"#FF7F50"; 
+              }, 
             },
             label: {
               show: options.barLabel, 

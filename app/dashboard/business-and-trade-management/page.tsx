@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/card";
 import { DataTable as InvestorLiveTradeDataTable } from "./_components/investor_live_trade/_investorLiveTradeTable";
 import { investorLiveTradeClientsColumns } from "./_components/investor_live_trade/_investorLiveTradeTableColumns";
+import LiveIndicator from "@/components/ui/live-indicator";
 
 export default function BusinessAndTradeManagement() {
   const { data: boardTernoverData, isLoading: boardTernoverDataLoading, isError: boardTernoverDataError } = useQuery({
@@ -107,7 +108,10 @@ export default function BusinessAndTradeManagement() {
         {investorLiveTopBuy ? (
           <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty buyer</CardTitle>
+              <CardTitle className="text-white text-lg flex items-center gap-2">
+                Top Twenty buyer
+                <LiveIndicator />
+              </CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -121,7 +125,7 @@ export default function BusinessAndTradeManagement() {
         {investorLiveTopSale ? (
           <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#0e5e6f]">
             <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty Seller</CardTitle>
+              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -136,7 +140,7 @@ export default function BusinessAndTradeManagement() {
       {investorLiveTrade ? (
         <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f] mt-2">
           <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-            <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise</CardTitle>
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
             {/* <CardDescription className="text-white">
                       Client Details for Regional Managers
                     </CardDescription> */}
