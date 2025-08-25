@@ -573,7 +573,8 @@ export default function DailyTradePerformance() {
         {rmWiseDailyTradeData &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}`}
+            title="RM Wise Trading data As on"
+             pushdate={rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <RmWiseDailyTradingData data={rmWiseDailyTradeData} />
