@@ -12,7 +12,7 @@ const LiveIndicator = () => {
       const localMinutes = now.getUTCMinutes();
       const totalMinutes = localHours * 60 + localMinutes;
 
-      const startMinutes = 10 * 60 -30; // 10:30 AM
+      const startMinutes = 10 * 60 +30; // 10:30 AM
       const endMinutes = 14 * 60 + 30; // 2:30 PM
 
       setIsLiveTime(totalMinutes >= startMinutes && totalMinutes <= endMinutes);

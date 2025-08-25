@@ -120,8 +120,8 @@ export function SalableStockPercentageDataTableCard<TData, TValue>({
   });
 
   return (
-    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
         {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
       </CardHeader>

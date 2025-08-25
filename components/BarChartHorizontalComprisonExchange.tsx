@@ -194,7 +194,7 @@ const BarChartHorizontalComparisonExchange: FC<{ data: BarData[]; options: BarOp
         <DialogTrigger asChild>
           <Button className="hidden" id="open-dialog-sec-breakdown" />
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[1000px] max-h-[900px] overflow-auto bg-[#0e5e6f]">
+        <DialogContent className="sm:max-w-[1000px] max-h-[900px] overflow-auto bg-[#033e4a]">
           <DialogHeader className="text-white">
             <DialogTitle>Sector Turnover Breakdown</DialogTitle>
           </DialogHeader>

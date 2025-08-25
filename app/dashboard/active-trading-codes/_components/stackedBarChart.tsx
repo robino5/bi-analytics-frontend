@@ -47,7 +47,7 @@ const StackBarChart = ({
       if (chartInstance) {
         const url = chartInstance.getDataURL({
           type: format,
-          backgroundColor: "#0e5e6f",
+          backgroundColor: "#033e4a",
         });
         const link = document.createElement("a");
         link.href = url;

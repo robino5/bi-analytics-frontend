@@ -42,8 +42,8 @@ interface Props {
 
 export default function DetailsMarketShareLBSL({ datalist }: Props) {
   return (
-    <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className="col-span-3 overflow-auto bg-[#033e4a]">
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           Details market share of LBSL(Date:{datalist.tradingDate})
         </CardTitle>

@@ -106,7 +106,7 @@ const Users = () => {
     <div className="mx-4">
       <PageHeader name="User Mangement" />
       <div className="mt-4">
-        <Card className="p-4 space-y-4 bg-[#0e5e6f]">
+        <Card className="p-4 space-y-4 bg-[#033e4a]">
           <CardHeader className="relative ">
             <div>
               <CardTitle className="text-white">Manage access control of users</CardTitle>

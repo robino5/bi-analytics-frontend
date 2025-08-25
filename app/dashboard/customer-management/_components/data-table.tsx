@@ -101,7 +101,7 @@ export function DialogDataTable<TData, TValue>({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[788px] max-h-[600px] overflow-auto bg-[#0e5e6f]">
+      <DialogContent className="sm:max-w-[788px] max-h-[600px] overflow-auto bg-[#033e4a]">
         <DialogHeader>
           <DialogTitle className="text-white">{title}</DialogTitle>
           {/* <DialogDescription>{subtitle}</DialogDescription> */}

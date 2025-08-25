@@ -295,7 +295,7 @@ const RmPortfolioBoard = () => {
         )}
          {/* Zonal Marked Investors */}
         <Tabs defaultValue="red" className="col-span-3 ">
-          <TabsList className="grid w-full grid-cols-2 bg-[#0e5e6f]">
+          <TabsList className="grid w-full grid-cols-2 bg-[#033e4a]">
             <TabsTrigger
               value="red"
               className="text-white active:bg-gradient-to-r active:from-teal-700 active:via-teal-600 active:to-teal-500"
@@ -310,8 +310,8 @@ const RmPortfolioBoard = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="red">
-            <Card className="bg-[#0e5e6f]">
-              <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+            <Card className="bg-[#033e4a]">
+              <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                 <CardTitle className="text-white text-md text-lg">Red Clients</CardTitle>
                 {/* <CardDescription className="text-white">
                   red clients details
@@ -324,8 +324,8 @@ const RmPortfolioBoard = () => {
             </Card>
           </TabsContent>
           <TabsContent value="yellow">
-            <Card className="bg-[#0e5e6f]">
-              <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+            <Card className="bg-[#033e4a]">
+              <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                 <CardTitle className="text-white text-md text-lg">Yellow Clients</CardTitle>
                 {/* <CardDescription className="text-white">
                   yellow clients details
@@ -354,8 +354,8 @@ const RmPortfolioBoard = () => {
         )}
       </div>
        {nonePerformClient ? (
-          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f] mt-2">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg">Non Performing clients-{nonePerformClient?.length}</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
@@ -365,8 +365,8 @@ const RmPortfolioBoard = () => {
               />
             </CardContent>
           </Card>
-        ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f] mt-2">
-          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+        ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
             <CardTitle className="text-white text-md text-lg">Non Performing clients-{ }</CardTitle>
           </CardHeader>
           <CardContent className="mt-3">

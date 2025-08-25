@@ -69,7 +69,7 @@ export default function ClientSegmentationChart({
               itemStyle: {
                 color: colorMap[entry.customerCategory] || "#cccccc",
                 borderWidth: 2,
-                borderColor: "#0e5e6f", 
+                borderColor: "#033e4a", 
               },
             })),
             label: {
@@ -91,7 +91,7 @@ export default function ClientSegmentationChart({
             },
             itemStyle: {
               borderRadius: 8, 
-              borderColor: "#0e5e6f", 
+              borderColor: "#033e4a", 
               borderWidth: 2,
             },
             emphasis: {
