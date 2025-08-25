@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import PushDateTime from "@/components/push-date-time";
 
 interface Data {
   board: string;
@@ -75,8 +76,9 @@ export default function BoardWiseTurnover({ datalist }: Props) {
   return (
     <Card className="col-span-3 overflow-auto bg-[#033e4a]">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">
-          DSE Board Wise Turnover As On {pushDate}
+        <CardTitle className="text-white text-md flex items-center gap-2">
+          <span>DSE Board Wise Turnover As On</span>
+          <PushDateTime pushdate={pushDate} />
         </CardTitle>
       </CardHeader>
       <CardContent className="mt-2">
@@ -102,9 +104,8 @@ export default function BoardWiseTurnover({ datalist }: Props) {
             {datalist.map((data, index) => (
               <TableRow
                 key={data.board}
-                className={`${
-                  index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
-                } hover:bg-table-even-row-hover transition-all duration-300`}
+                className={`${index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                  } hover:bg-table-even-row-hover transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">{data.board}</TableCell>
                 <TableCell className="text-right py-1">

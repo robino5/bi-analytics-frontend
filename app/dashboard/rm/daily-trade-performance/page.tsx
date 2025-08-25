@@ -531,7 +531,7 @@ export default function DailyTradePerformance() {
         {summary?.cashCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Cash Code Status"
+            title="Cash Code Status (Trade Clients)"
             // subtitle="shows cash code summary"
             boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
@@ -544,7 +544,7 @@ export default function DailyTradePerformance() {
         {summary?.marginCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Margin Code Status"
+            title="Margin Code Status (Trade Clients)"
             // subtitle="shows margin code summary"
             boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
@@ -573,7 +573,8 @@ export default function DailyTradePerformance() {
         {rmWiseDailyTradeData &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
-            title={`RM Wise Trading data As on ${rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}`}
+            title="RM Wise Trading data As on"
+             pushdate={rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <RmWiseDailyTradingData data={rmWiseDailyTradeData} />

@@ -1,3 +1,4 @@
+import PushDateTime from "@/components/push-date-time";
 import {
   Card,
   CardHeader,
@@ -16,6 +17,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { numberToMillionsString } from "@/lib/utils";
+import { Clock } from "lucide-react";
 
 interface BoardWiseTurnoverBreakdownData {
   pushDate: string;
@@ -46,8 +48,9 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
   return (
     <Card className="col-span-3 overflow-auto bg-[#033e4a]">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">
-          DSE Main Board Wise Turnover Breakdown As On {datalist.length>0?datalist[0]?.pushDate:""}
+        <CardTitle className="text-white text-md text-lg flex items-center gap-2">
+          <span>DSE Board Wise Turnover As On</span>
+          <PushDateTime pushdate={datalist.length > 0 ? datalist[0]?.pushDate : ""} />
         </CardTitle>
         {/* <CardDescription className="text-white">
           short summary of the board wise turnover breakdown
@@ -76,9 +79,8 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
             {datalist.map((data, index) => (
               <TableRow
                 key={data.board}
-                className={`${
-                  index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
-                } hover:bg-table-even-row-hover transition-all duration-300`}
+                className={`${index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                  } hover:bg-table-even-row-hover transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1 ">
                   {data.board}

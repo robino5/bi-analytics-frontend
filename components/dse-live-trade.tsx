@@ -81,37 +81,59 @@ export function DseLiveTrade() {
                                 <tbody>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-100">Volume</td>
-                                        <td className="bg-yellow-100">: {liveTradeData?.volume?.toLocaleString()}</td>
+                                        <td className="bg-yellow-100">
+                                            : {Number(liveTradeData?.volume ?? 0).toLocaleString()}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-50">Value (mn.)</td>
-                                        <td className="bg-yellow-50">: {liveTradeData?.value}</td>
+                                        <td className="bg-yellow-50">
+                                            : {Number(liveTradeData?.value ?? 0).toLocaleString(undefined, {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2,
+                                            })}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-100">Trades</td>
-                                        <td className="bg-yellow-100">: {liveTradeData?.trades}</td>
+                                        <td className="bg-yellow-100">
+                                            : {Number(liveTradeData?.trades ?? 0).toLocaleString()}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-50">Listed Companies</td>
-                                        <td className="bg-yellow-50">: {liveTradeData?.listedsymbol}</td>
+                                        <td className="bg-yellow-50">
+                                            : {liveTradeData?.listedsymbol?.toLocaleString()}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-100">Symbols Traded</td>
-                                        <td className="bg-yellow-100">: {liveTradeData?.symbols}</td>
+                                        <td className="bg-yellow-100">
+                                            : {liveTradeData?.symbols?.toLocaleString()}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-50">
                                             Total Trading Day ({new Date().getFullYear()})
                                         </td>
-                                        <td className="bg-yellow-50">: {liveTradeData?.totaltradingday}</td>
+                                        <td className="bg-yellow-50">
+                                            : {liveTradeData?.totaltradingday?.toLocaleString()}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td className="p-1 text-md bg-yellow-100">
                                             Average Turnover (mn.) ({new Date().getFullYear()})
                                         </td>
-                                        <td className="bg-yellow-100">: {parseInt(liveTradeData?.avgturnover ?? "0").toFixed(2)}</td>
+                                        <td className="bg-yellow-100">
+                                            : {Number(liveTradeData?.avgturnover ?? 0).toLocaleString(undefined, {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2,
+                                            })}
+                                        </td>
                                     </tr>
                                 </tbody>
+
+
                             </table>
                         </div>
 
