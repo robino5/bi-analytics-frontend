@@ -2,8 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 const FORMATTER_OPTIONS: Intl.NumberFormatOptions = {
-  maximumFractionDigits: 2,
-  minimumFractionDigits:2
+  maximumFractionDigits: 1,
+  minimumFractionDigits:1
 };
 
 export function cn(...inputs: ClassValue[]) {
@@ -12,9 +12,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export const numberFormatter = (
   value: number,
-  options: Intl.NumberFormatOptions = FORMATTER_OPTIONS,
+  fractonalDigits: number
 ) => {
-  return new Intl.NumberFormat("en-US", options).format(value);
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: fractonalDigits,  minimumFractionDigits:fractonalDigits}).format(value);
 };
 
 export function formatDate(date: Date): string {
@@ -41,7 +41,8 @@ export function formatDate(date: Date): string {
 
 export function numberToMillionsString(
   num: number,
-  useThousand: boolean = false,
+  fractonalDigits: number = 1,
+  useThousand: boolean = false
 ): string {
   if (isNaN(num)) {
     throw Error(`${num} is not a valid number !`);
@@ -52,29 +53,30 @@ export function numberToMillionsString(
 
   if (useThousand) {
     if (absNumber >= 1000 && absNumber < 1000000) {
-      return `${sign}${numberFormatter(absNumber / 1000)}K`;
+      return `${sign}${numberFormatter(absNumber / 1000,fractonalDigits)}K`;
     } else if (absNumber < 1000) {
-      return `${sign}${numberFormatter(absNumber)}`;
+      return `${sign}${numberFormatter(absNumber,fractonalDigits)}`;
     }
   }
 
   if (absNumber < 1_00_0000) {
-    return `${sign}${numberFormatter(absNumber)}`;
+    return `${sign}${numberFormatter(absNumber,fractonalDigits)}`;
   }
 
   if (absNumber < 10_00_0000) {
-    return `${sign}${numberFormatter(absNumber / 1000000)}M`;
+    return `${sign}${numberFormatter(absNumber / 1000000,fractonalDigits)}M`;
   }
 
   if (absNumber < 1_00_000_0000) {
-    return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
+    return `${sign}${numberFormatter(absNumber / 10_00_000,fractonalDigits)}M`;
   }
 
-  return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
+  return `${sign}${numberFormatter(absNumber / 10_00_000,fractonalDigits)}M`;
 }
 
 export function numberToMillionsStringForQty(
   num: number,
+  fractonalDigits: number = 1,
   useThousand: boolean = false,
 ): string {
   if (isNaN(num)) {
@@ -86,9 +88,9 @@ export function numberToMillionsStringForQty(
 
   if (useThousand) {
     if (absNumber >= 1000 && absNumber < 1000000) {
-      return `${sign}${numberFormatter(absNumber / 1000)}K`;
+      return `${sign}${numberFormatter(absNumber / 1000,fractonalDigits)}K`;
     } else if (absNumber < 1000) {
-      return `${sign}${numberFormatter(absNumber)}`;
+      return `${sign}${numberFormatter(absNumber,fractonalDigits)}`;
     }
   }
 
@@ -97,14 +99,14 @@ export function numberToMillionsStringForQty(
   }
 
   if (absNumber < 10_00_0000) {
-    return `${sign}${numberFormatter(absNumber / 1000000)}M`;
+    return `${sign}${numberFormatter(absNumber / 1000000,fractonalDigits)}M`;
   }
 
   if (absNumber < 1_00_000_0000) {
-    return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
+    return `${sign}${numberFormatter(absNumber / 10_00_000,fractonalDigits)}M`;
   }
 
-  return `${sign}${numberFormatter(absNumber / 10_00_000)}M`;
+  return `${sign}${numberFormatter(absNumber / 10_00_000,fractonalDigits)}M`;
 }
 
 

@@ -78,13 +78,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 LBSL Buy
               </TableCell>
               <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300 w-1/4">
-                {numberToMillionsString(datalist.lbslBuyOfDse)}
+                {numberToMillionsString(datalist.lbslBuyOfDse,2)}
               </TableCell>
               <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300 w-1/4">
                 LBSL Buy
               </TableCell>
               <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300 w-1/4">
-                {numberToMillionsString(datalist.lbslBuyOfCse)}
+                {numberToMillionsString(datalist.lbslBuyOfCse,2)}
               </TableCell>
             </TableRow>
             <TableRow className="transition-all duration-300">
@@ -92,13 +92,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 LBSL Sell
               </TableCell>
               <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslSaleOfDse)}
+                {numberToMillionsString(datalist.lbslSaleOfDse,2)}
               </TableCell>
               <TableCell className="cse_table_even_row text-left py-1 border border-gray-300">
                 LBSL Sell
               </TableCell>
               <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslSaleOfCse)}
+                {numberToMillionsString(datalist.lbslSaleOfCse,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
@@ -106,13 +106,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 LBSL Total
               </TableCell>
               <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslTotalOfDse)}
+                {numberToMillionsString(datalist.lbslTotalOfDse,2)}
               </TableCell>
               <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL Total
               </TableCell>
               <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslTotalOfCse)}
+                {numberToMillionsString(datalist.lbslTotalOfCse,2)}
               </TableCell>
             </TableRow>
             <TableRow className="bg-table-even-row transition-all duration-300">
@@ -120,13 +120,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 Market Turnover
               </TableCell>
               <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.dseMarketTurnover)}
+                {numberToMillionsString(datalist.dseMarketTurnover,2)}
               </TableCell>
               <TableCell className="cse_table_even_row text-left py-1 border border-gray-300">
                 Market Turnover
               </TableCell>
               <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.cseMarketTurnover)}
+                {numberToMillionsString(datalist.cseMarketTurnover,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
@@ -134,13 +134,13 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 LBSL Share(%)
               </TableCell>
               <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslShareOfDse)}
+                {numberToMillionsString(datalist.lbslShareOfDse,2)}
               </TableCell>
               <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
                 LBSL Share(%)
               </TableCell>
               <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300 ">
-                {numberToMillionsString(datalist.lbslShareOfCse)}
+                {numberToMillionsString(datalist.lbslShareOfCse,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
@@ -154,7 +154,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 className="text-right py-1 border border-gray-300 cse_table_even_row"
                 colSpan={2}
               >
-                {numberToMillionsString(datalist.lbslTotalTurnover)}
+                {numberToMillionsString(datalist.lbslTotalTurnover,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
@@ -168,7 +168,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 className="text-right py-1 border border-gray-300 cse_table_odd_row"
                 colSpan={2}
               >
-                {numberToMillionsString(datalist.exchTotalMarket)}
+                {numberToMillionsString(datalist.exchTotalMarket,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
@@ -182,7 +182,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 className="text-right py-1 border border-gray-300 cse_table_even_row"
                 colSpan={2}
               >
-                {numberToMillionsString(datalist.lbslMarketAll)}
+                {numberToMillionsString(datalist.lbslMarketAll,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
@@ -196,7 +196,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 className="text-right py-1 border border-gray-300 cse_table_odd_row"
                 colSpan={2}
               >
-                {numberToMillionsString(datalist.foreign)}
+                {numberToMillionsString(datalist.foreign,2)}
               </TableCell>
             </TableRow>
             <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
@@ -210,7 +210,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 className="text-right py-1 border border-gray-300 cse_table_even_row"
                 colSpan={2}
               >
-                {numberToMillionsString(datalist.netIncome)}
+                {numberToMillionsString(datalist.netIncome,2)}
               </TableCell>
             </TableRow>
           </TableBody>

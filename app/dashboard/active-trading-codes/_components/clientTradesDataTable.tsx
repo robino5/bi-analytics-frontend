@@ -46,7 +46,7 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         </CardDescription> */}
       </CardHeader>
       <CardContent className="mt-3">
-        <Table className="border border-gray-300 rounded-md overflow-hidden mt-2">
+        <Table className="border border-gray-300 rounded-md overflow-hidden mt-8">
           <TableHeader>
             <TableRow className="bg-yellow-200 hover:bg-yellow-200">
               <TableHead className="w-[200px] text-black font-bold py-2">

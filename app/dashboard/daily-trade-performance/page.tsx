@@ -201,7 +201,7 @@ export default function DailyTradePerformance() {
         {summarydata?.data?.cashCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Cash Code Status"
+            title="Cash Code Status (Trade Clients)"
             // subtitle="overview of cash codes"
             boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
@@ -214,7 +214,7 @@ export default function DailyTradePerformance() {
         {summarydata?.data?.marginCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Margin Code Status"
+            title="Margin Code Status (Trade Clients)"
             // subtitle="overview of margin codes"
             boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
