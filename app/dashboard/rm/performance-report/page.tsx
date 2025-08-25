@@ -20,13 +20,15 @@ import { successResponse } from "@/lib/utils";
 import { IClientDetail, InvestorLiveTradeInfo, ITurnoverPerformance } from "@/types/rmPerformance";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
-import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
+import { InvestorLiveTopBuySaleInfo, TraderPerformance } from "../../business-and-trade-management/types";
 import { investorLiveBuySaleClientsColumns } from "./investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
 import { DataTable as InvestorLiveBuySaleDatatable } from "./investor_live_top_buya_sale/_investorLiveBuySaleTable";
 import { useBranchStore } from "@/lib/stores/branchStore";
 import { useTraderStore } from "@/lib/stores/rmStore";
 import { useQuery } from "@tanstack/react-query";
 import { performanceReport } from "./api";
+import { RMPerformance} from "./_rmPerformanceSumm";
+import LiveIndicator from "@/components/ui/live-indicator";
 
 const RmPerformanceBoard = () => {
   const { data: session } = useSession();
@@ -50,7 +52,9 @@ const RmPerformanceBoard = () => {
   const [investorTopBuyData, setInvestorTopBuyData] = useState<
     InvestorLiveTopBuySaleInfo[]
   >();
-
+    const [rmPerformaceSumm, setRMPerformanceSumm] = useState<
+    TraderPerformance[]
+  >();
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
     setTrader(trader);
@@ -219,6 +223,32 @@ useEffect(() => {
           );
         }
       };
+
+      // top 20 inverstor Buy Date
+      const fetchRMPerformanceData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/admin/rm-performance-summary/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<TraderPerformance[]>;
+          if (successResponse(result.status)) {
+            setRMPerformanceSumm(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while ecrm Data`,
+            error
+          );
+        }
+      };
+      fetchRMPerformanceData();
       fetchTurnoverPerformance();
       fetchClientDetails();
       fetchInvestorLiveTradeDetails();
@@ -226,7 +256,6 @@ useEffect(() => {
       fetchTopInvestorBuyData();
     }
   }, [trader]);
-
   return (
     <div className="mx-4">
       <PageHeader name="RM Performance Report">
@@ -242,11 +271,15 @@ useEffect(() => {
         {turnoverPerformance ? (
           <RMTurnoverPerformance records={turnoverPerformance} />
         ) : null}
+        {/* Client Details */}
+             {rmPerformaceSumm ? (
+          <RMPerformance data={rmPerformaceSumm?.[0]||{}} />
+        ) : null}
 
         {investorTopBuyData ? (
-          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty buyer</CardTitle>
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty buyer <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -258,9 +291,9 @@ useEffect(() => {
         ) : null}
 
         {investorTopSaleData ? (
-          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#0e5e6f]">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Top Twenty Seller</CardTitle>
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveBuySaleDatatable
@@ -272,9 +305,9 @@ useEffect(() => {
         ) : null}
         {/* Investor Live Trade RM Wise */}
         {investorLiveTrade ? (
-          <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Investor Live Trade RM Wise</CardTitle>
+          <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a]">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <InvestorLiveTradeDataTable
@@ -285,9 +318,9 @@ useEffect(() => {
           </Card>
         ) : null}
         {clients ? (
-          <Card className="col-span-6 mb-2 shadow-xl bg-[#0e5e6f]">
-            <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Client Details</CardTitle>
+          <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a]">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Client Details Information</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <RMClientsDataTable

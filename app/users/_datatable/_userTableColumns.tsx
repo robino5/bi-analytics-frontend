@@ -62,7 +62,7 @@ export const useTableColumns: ColumnDef<IUser>[] = [
         variant="outline"
         className="text-slate-600 font-medium dark:text-gray-300"
       >
-        {row.getValue("role")}
+        {row.getValue("role")=="REGIONAL_MANAGER"?"RM":row.getValue("role")}
       </Badge>
     ),
   },

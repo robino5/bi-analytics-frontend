@@ -33,7 +33,7 @@ export const roles = [
   },
   {
     value: "REGIONAL_MANAGER",
-    label: "REGIONAL_MANAGER",
+    label: "RM",
   },
   {
     value: "MANAGEMENT",

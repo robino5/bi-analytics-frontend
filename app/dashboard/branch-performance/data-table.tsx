@@ -59,6 +59,7 @@ export function DataTableCard<TData, TValue>({
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 20, });
 
   const table = useReactTable({
     data,
@@ -68,6 +69,7 @@ export function DataTableCard<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
+      pagination,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -83,8 +85,8 @@ export function DataTableCard<TData, TValue>({
   });
 
   return (
-    <Card className={cn("w-full shadow-md", className, "bg-[#0e5e6f]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+    <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
         {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
       </CardHeader>
@@ -97,7 +99,7 @@ export function DataTableCard<TData, TValue>({
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}
-                      className="bg-table-header hover:bg-table-header"
+                    className="bg-table-header hover:bg-table-header"
                   >
                     {headerGroup.headers.map((header) => {
                       return (
@@ -109,9 +111,9 @@ export function DataTableCard<TData, TValue>({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       );
                     })}
@@ -124,9 +126,8 @@ export function DataTableCard<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className={`${
-                        index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
-                      } hover:bg-green-300 transition-all duration-300`}
+                      className={`${index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                        } hover:bg-green-300 transition-all duration-300`}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell

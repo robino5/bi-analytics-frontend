@@ -68,8 +68,32 @@ const BarChart: React.FC<BarChartProps> = ({ data, options }) => {
         axisLabel: {
           color: "white",
           rotate: 35,
+          formatter: (value: string) => {
+            const today = new Date();
+            const options: Intl.DateTimeFormatOptions = {
+              day: "2-digit",
+              month: "short",
+              year: "2-digit",
+            };
+            const todayStr = today
+              .toLocaleDateString("en-GB", options)
+              .replace(/ /g, "-");
+
+            if (value === todayStr) {
+              return `{bold|${value}}`; 
+            }
+            return value;
+          },
+          rich: {
+            bold: {
+              fontWeight: "bold",
+              color: "#ffffffff",
+               fontSize: 14,
+            },
+          },
         },
       },
+
       yAxis: {
         type: "value",
         axisLabel: {

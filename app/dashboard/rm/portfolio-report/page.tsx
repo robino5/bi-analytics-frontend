@@ -34,6 +34,9 @@ import { useQuery } from "@tanstack/react-query";
 import { portfolioReport } from "./api";
 import { useBranchStore } from "@/lib/stores/branchStore";
 import { useTraderStore } from "@/lib/stores/rmStore";
+import { BranchWiseNonePerformClient } from "@/types/dailyTurnoverPerformance";
+import { branchWiseNonePerformingClientColumns } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientColumns";
+import { DataTable as BranchWiseNonePerformingClientDatatable } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientTable";
 
 const RmPortfolioBoard = () => {
   // Override console.error
@@ -63,6 +66,7 @@ const RmPortfolioBoard = () => {
   const [yellowClients, setYellowClients] = useState<IMarkedClient[]>([]);
   const [portfolio, setPortfolio] = useState<IPortfolioManagement[]>([]);
   const [netFundFlow, setNetFundFlow] = useState<INetFundFlow[]>([]);
+  const [nonePerformClient, setNonePerformClient] = useState<BranchWiseNonePerformClient[]>([]);
 
   const handleBranchChange = (value: string) => {
     setBranch(value);
@@ -99,19 +103,19 @@ const RmPortfolioBoard = () => {
     }
   }, [session, setTrader]);
 
-useEffect(() => {
-  if (!branch || branch === "") {
-    handleBranchChange("11")
-  }
-}, [branch, setBranch]);
+  useEffect(() => {
+    if (!branch || branch === "") {
+      handleBranchChange("11")
+    }
+  }, [branch, setBranch]);
 
-useEffect(() => {
-  if (!trader || trader === "") {
-     if (traders?.data?.length) {
-    handleTraderChange(traders.data[0].traderId);
-  }
-  }
-}, [trader, setTrader]);
+  useEffect(() => {
+    if (!trader || trader === "") {
+      if (traders?.data?.length) {
+        handleTraderChange(traders.data[0].traderId);
+      }
+    }
+  }, [trader, setTrader]);
 
   useEffect(() => {
     if (branch && trader) {
@@ -230,11 +234,34 @@ useEffect(() => {
           );
         }
       };
+      const fetchNonePerformingClient = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/branchwise-none-performing-client/?branch=${branch}&trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<BranchWiseNonePerformClient[]>;
+          if (successResponse(result.status)) {
+            setNonePerformClient(result.data);
+          }
+        } catch (error) {
+          console.error(
+            `Error Happened while fetching Turnover Performance`,
+            error
+          );
+        }
+      };
       fetchFundCollections();
       fetchRedClients();
       fetchYellowClients();
       fetchPortfolio();
       fetchINetFundFlow();
+      fetchNonePerformingClient()
     }
   }, [trader]);
 
@@ -266,9 +293,9 @@ useEffect(() => {
         ) : (
           <SummarySkeletonCard className="col-span-3" />
         )}
-        {/* Zonal Marked Investors */}
+         {/* Zonal Marked Investors */}
         <Tabs defaultValue="red" className="col-span-3 ">
-          <TabsList className="grid w-full grid-cols-2 bg-[#0e5e6f]">
+          <TabsList className="grid w-full grid-cols-2 bg-[#033e4a]">
             <TabsTrigger
               value="red"
               className="text-white active:bg-gradient-to-r active:from-teal-700 active:via-teal-600 active:to-teal-500"
@@ -283,8 +310,8 @@ useEffect(() => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="red">
-            <Card className="bg-[#0e5e6f]">
-              <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+            <Card className="bg-[#033e4a]">
+              <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                 <CardTitle className="text-white text-md text-lg">Red Clients</CardTitle>
                 {/* <CardDescription className="text-white">
                   red clients details
@@ -297,8 +324,8 @@ useEffect(() => {
             </Card>
           </TabsContent>
           <TabsContent value="yellow">
-            <Card className="bg-[#0e5e6f]">
-              <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg">
+            <Card className="bg-[#033e4a]">
+              <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                 <CardTitle className="text-white text-md text-lg">Yellow Clients</CardTitle>
                 {/* <CardDescription className="text-white">
                   yellow clients details
@@ -311,12 +338,13 @@ useEffect(() => {
             </Card>
           </TabsContent>
         </Tabs>
-        {/* Fund Collection Status */}
-        {fundCollections ? (
+           {fundCollections ? (
           <RMFundCollectionTable records={fundCollections} />
         ) : (
           <SummarySkeletonCard className="col-span-4" />
         )}
+       
+        {/* Fund Collection Status */}
 
         {/* Portfolio Management Status */}
         {portfolio ? (
@@ -325,6 +353,26 @@ useEffect(() => {
           <SummarySkeletonCard className="col-span-2" />
         )}
       </div>
+       {nonePerformClient ? (
+          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Non Performing clients-{nonePerformClient?.length}</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <BranchWiseNonePerformingClientDatatable
+                data={nonePerformClient}
+                columns={branchWiseNonePerformingClientColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg">Non Performing clients-{ }</CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3">
+            loading......
+          </CardContent>
+        </Card>}
     </div>
   );
 };

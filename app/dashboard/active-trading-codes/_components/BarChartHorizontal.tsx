@@ -136,8 +136,8 @@ const BarChartHorizontalEvent: FC<{ data: BarData[]; options: BarChartProps["opt
   return (
     <>
       {data.length ? (
-        <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-          <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
+        <Card className="col-span-3 overflow-auto bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
             <CardTitle className="text-white text-lg font-semibold py-1">
               LBSL Sector Wise Turnover (Mn)
             </CardTitle>
@@ -147,8 +147,8 @@ const BarChartHorizontalEvent: FC<{ data: BarData[]; options: BarChartProps["opt
           </CardContent>
         </Card>
       ) : (
-        <Card className="col-span-3 overflow-auto bg-[#0e5e6f]">
-        <CardHeader className="bg-gradient-to-r from-teal-700 via-teal-600 to-teal-500 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
+        <Card className="col-span-3 overflow-auto bg-[#033e4a]">
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
           <CardTitle className="text-white text-lg font-semibold py-1">
             LBSL Sector Wise Turnover (Mn)
           </CardTitle>
@@ -164,7 +164,7 @@ const BarChartHorizontalEvent: FC<{ data: BarData[]; options: BarChartProps["opt
         <DialogTrigger asChild>
           <Button className="hidden" id="open-dialog" />
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[1000px] max-h-[900px] overflow-auto bg-[#0e5e6f]">
+        <DialogContent className="sm:max-w-[1000px] max-h-[900px] overflow-auto bg-[#033e4a]">
           {/* Gradient Header */}
           <DialogHeader className="text-white">
             <DialogTitle>Sector turnover Breakdown</DialogTitle>

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, numberToMillionsString } from "@/lib/utils";
+import { cn, numberToMillionsString, numberToMillionsStringForQty } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "../_components/salable-stock/data-table-column-header";
@@ -35,6 +35,19 @@ const cellNumberFormatter = (row: any, accessorKey: string) => {
   );
 };
 
+const cellQtyFormatter = (row: any, accessorKey: string) => {
+  const amount = parseFloat(row.getValue(accessorKey));
+  return (
+    <div
+      className={cn("text-right font-medium ", {
+        "text-red-600": amount < 0,
+      })}
+    >
+      {numberToMillionsStringForQty(amount)}
+    </div>
+  );
+};
+
 export const companyWiseSalableStock: ColumnDef<CompanyWiseTotalSelableStock>[] =
   [
     {
@@ -49,7 +62,7 @@ export const companyWiseSalableStock: ColumnDef<CompanyWiseTotalSelableStock>[] 
         <DataTableColumnHeader column={column} title="Saleable Qty" />
       ),
       cell: ({ row }) => {
-        return cellNumberFormatter(row, "stockAvailable");
+        return cellQtyFormatter(row, "stockAvailable");
       },
     },
     {
@@ -84,7 +97,7 @@ export const SalableStockPercentage: ColumnDef<SelableStockPercentage>[] = [
       <DataTableColumnHeader column={column} title="Qty" />
     ),
     cell: ({ row }) => {
-      return cellNumberFormatter(row, "stockAvailable");
+      return cellQtyFormatter(row, "stockAvailable");
     },
   },
   {
@@ -137,7 +150,7 @@ export const InvestorWiseSalableStock: ColumnDef<InvestorWiseTotalSelableStock>[
         <DataTableColumnHeader column={column} title="Saleable Qty" />
       ),
       cell: ({ row }) => {
-        return cellNumberFormatter(row, "stockAvailable");
+        return cellQtyFormatter(row, "stockAvailable");
       },
     },
   ];

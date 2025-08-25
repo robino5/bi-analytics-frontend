@@ -80,3 +80,24 @@ export type InvestorLiveTopBuySaleInfo = {
   investorName: string;
   turnover: number;
 }
+
+export type TraderPerformance = {
+  branchCode: number;
+  branchName: string;
+  traderId: string;
+  traderName: string;
+  empNumber: string;
+  yearlyBo: number;
+  yearlyFund: number;
+  dailyTraded: number;
+  commission: number;
+  newBo: number;
+  totalLinkShareIn: number;
+  totalLinkShareOut: number;
+  totalNetLinkShare: number;
+  totalDeposit: number;
+  totalWithdrawal: number;
+  totalNetFund: number;
+  regionName: string;
+  clusterName: string;
+};
