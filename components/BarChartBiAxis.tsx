@@ -82,13 +82,19 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
         },
         yAxis: {
           type: "value",
-          name: "Active Clients",
+          name: "Turnover",
           nameTextStyle: {
             color: "white",
           },
           axisLabel: {
             color: "white",
-            formatter: numberToMillionsString,
+            formatter: function (value: number) {
+              let formatted = numberToMillionsString(value, 0);
+              if (typeof formatted === "string") {
+                formatted = formatted.replace(/\.0+$/, ""); 
+              }
+              return formatted;
+            },
           },
           splitLine: {
             show: true,
@@ -152,7 +158,13 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
           },
           axisLabel: {
             color: "white",
-            formatter: numberToMillionsString,
+            formatter: function (value: number) {
+              let formatted = numberToMillionsString(value, 0);
+              if (typeof formatted === "string") {
+                formatted = formatted.replace(/\.0+$/, ""); 
+              }
+              return formatted;
+            },
           },
           splitLine: {
             show: true,
@@ -172,7 +184,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               color: "white",
               fontSize: 14,
               formatter: (params: any) =>
-                numberToMillionsString(params.value, true),
+                numberToMillionsString(params.value),
             },
           },
         ],

@@ -76,7 +76,7 @@ export function numberToMillionsString(
 
 export function numberToMillionsStringForQty(
   num: number,
-  fractonalDigits: number = 1,
+  fractonalDigits: number = 0,
   useThousand: boolean = false,
 ): string {
   if (isNaN(num)) {
@@ -95,7 +95,7 @@ export function numberToMillionsStringForQty(
   }
 
   if (absNumber < 1_00_0000) {
-    return `${sign}${absNumber}`;
+    return `${sign}${numberFormatter(absNumber,fractonalDigits)}`;
   }
 
   if (absNumber < 10_00_0000) {

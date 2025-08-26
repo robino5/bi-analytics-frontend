@@ -7,14 +7,14 @@ import { numberToMillionsString } from "@/lib/utils";
 
 export function RMPerformance({ data }: { data: TraderPerformance }) {
     return (
-        <Card className="col-span-3 overflow-auto rounded-md shadow-md bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+        <Card className="col-span-2 overflow-auto rounded-md shadow-md bg-[#033e4a]">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-1 rounded-tl-lg rounded-tr-lg">
                 <CardTitle className="text-white text-md text-lg">
                     RM Performance Summary (Yearly)
                 </CardTitle>
             </CardHeader>
 
-            <CardContent className="mt-3 grid grid-cols-2 gap-4">
+            <CardContent className="mt-3 grid grid-cols-2 gap-2">
                 {/* Trader */}
                 <div className="p-3 rounded-lg shadow-sm bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300">
                     <h3 className="flex items-center gap-1 font-semibold text-gray-800 mb-2 border-b border-blue-300 pb-1">
@@ -45,13 +45,12 @@ export function RMPerformance({ data }: { data: TraderPerformance }) {
                     <p>
                         Net Fund:{" "}
                         <span
-                            className={`font-semibold ${
-                                (data.totalNetFund || 0) > 0
+                            className={`font-semibold ${(data.totalNetFund || 0) > 0
                                     ? "text-green-600"
                                     : (data.totalNetFund || 0) < 0
-                                    ? "text-red-600"
-                                    : "text-gray-700"
-                            }`}
+                                        ? "text-red-600"
+                                        : "text-gray-700"
+                                }`}
                         >
                             {numberToMillionsString(data.totalNetFund || 0)}
                         </span>
@@ -68,13 +67,12 @@ export function RMPerformance({ data }: { data: TraderPerformance }) {
                     <p>
                         Net:{" "}
                         <span
-                            className={`font-semibold ${
-                                (data.totalNetLinkShare || 0) > 0
+                            className={`font-semibold ${(data.totalNetLinkShare || 0) > 0
                                     ? "text-green-600"
                                     : (data.totalNetLinkShare || 0) < 0
-                                    ? "text-red-600"
-                                    : "text-gray-700"
-                            }`}
+                                        ? "text-red-600"
+                                        : "text-gray-700"
+                                }`}
                         >
                             {numberToMillionsString(data.totalNetLinkShare || 0)}
                         </span>

@@ -50,11 +50,11 @@ export default function OmsBranchwiseTurnover({ data }: BranchData) {
                             } hover:bg-table-even-row-hover transition-all duration-300`}
                     >
                         <TableCell className="font-medium py-1">{data.branch_Name}</TableCell>
-                        <TableCell className="text-right py-1">{data.activeClientsToday}</TableCell>
+                        <TableCell className="text-right py-1">{data.activeClientsToday.toLocaleString()}</TableCell>
                         <TableCell className="text-right py-1">
                             {numberToMillionsString(data.turnoverToday)}
                         </TableCell>
-                        <TableCell className="text-right py-1">{data.activeClientsMonth}</TableCell>
+                        <TableCell className="text-right py-1">{data.activeClientsMonth.toLocaleString()}</TableCell>
                         <TableCell className="text-right py-1">
                             {numberToMillionsString(data.turnoverMonth)}
                         </TableCell>
@@ -65,13 +65,13 @@ export default function OmsBranchwiseTurnover({ data }: BranchData) {
                 <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
                     <TableCell className="font-medium py-2">Total</TableCell>
                     <TableCell className="text-right py-2">
-                        {data?.detail?.sumOfTotalClientToday}
+                        {data?.detail?.sumOfTotalClientToday.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right py-2">
                         {numberToMillionsString(data?.detail?.sumOfTurnoverToday)}
                     </TableCell>
                     <TableCell className="text-right py-2">
-                        {data?.detail?.sumOfTotalClientMonth}
+                        {data?.detail?.sumOfTotalClientMonth.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right py-2">
                         {numberToMillionsString(data?.detail?.sumOfTurnoverMonth)}

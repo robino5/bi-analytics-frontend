@@ -24,6 +24,7 @@ interface TurnoverPerformanceData {
   weekly: number;
   forthnightly: number;
   monthly: number;
+  quarterly: number;
 }
 
 interface Props {
@@ -31,8 +32,19 @@ interface Props {
 }
 
 export default function RMTurnoverPerformance({ records }: Props) {
+
+  const vallueformat = (value: any, lebel: string) => {
+    if (lebel == "3.Achieved Turnover (times of target)") {
+      return value;
+    } else if (lebel == "4.Times of CTC (Cost to the Company)") {
+      return value.toFixed(1)
+    }
+    else {
+      return numberToMillionsString(value,1)
+    }
+  }
   return (
-    <Card className="col-span-3 overflow-auto rounded-md shadow-md bg-[#033e4a]">
+    <Card className="col-span-4 overflow-auto rounded-md shadow-md bg-[#033e4a]">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">Turnover Performance</CardTitle>
         {/* <CardDescription className="text-white">
@@ -58,6 +70,9 @@ export default function RMTurnoverPerformance({ records }: Props) {
               <TableHead className="text-right text-white font-bold">
                 Monthly
               </TableHead>
+              <TableHead className="text-right text-white font-bold">
+                Quarterly
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -67,39 +82,40 @@ export default function RMTurnoverPerformance({ records }: Props) {
                 className={index % 2 === 0 ? "bg-opacity-90" : "bg-opacity-70"}
               >
                 <TableCell
-                  className={`font-medium py-1 ${
-                    index % 2 === 0 ? "bg-purple-200" : "bg-purple-100"
-                  }`}
+                  className={`font-medium py-1 ${index % 2 === 0 ? "bg-purple-200" : "bg-purple-100"
+                    }`}
                 >
                   {record.name}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-blue-200" : "bg-blue-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.daily)}
+                  {vallueformat(record.daily, record.name)}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-green-200" : "bg-green-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-green-200" : "bg-green-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.weekly)}
+                  {vallueformat(record.weekly, record.name)}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.forthnightly)}
+                  {vallueformat(record.forthnightly, record.name)}
                 </TableCell>
                 <TableCell
-                  className={`text-right py-1 ${
-                    index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
-                  }`}
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
+                    }`}
                 >
-                  {numberToMillionsString(record.monthly)}
+                  {vallueformat(record.monthly, record.name)}
+                </TableCell>
+                <TableCell
+                  className={`text-right py-1 ${index % 2 === 0 ? "bg-lime-200" : "bg-lime-100"
+                    }`}
+                >
+                  {vallueformat(record.quarterly, record.name)}
                 </TableCell>
               </TableRow>
             ))}
