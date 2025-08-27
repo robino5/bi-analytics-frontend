@@ -63,7 +63,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
           formatter: (params: any) => {
             let tooltipHtml = `<strong>${params[0].axisValue}</strong><br/>`;
             params.forEach((item: any) => {
-              tooltipHtml += `${item.marker} ${item.seriesName}: ${item.data}<br/>`;
+              tooltipHtml += `${item.marker} ${item.seriesName}: ${item.data.toLocaleString()}<br/>`;
             });
             return tooltipHtml;
           },
@@ -82,13 +82,19 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
         },
         yAxis: {
           type: "value",
-          name: "Active Clients",
+          name: "Turnover",
           nameTextStyle: {
             color: "white",
           },
           axisLabel: {
             color: "white",
-            formatter: numberToMillionsString,
+            formatter: function (value: number) {
+              let formatted = numberToMillionsString(value, 0);
+              if (typeof formatted === "string") {
+                formatted = formatted.replace(/\.0+$/, "");
+              }
+              return formatted;
+            },
           },
           splitLine: {
             show: true,
@@ -107,6 +113,9 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               fontSize: 14,
               position: "top",
               color: "white",
+              formatter: (params: any) => {
+                return params.value.toLocaleString(); // 👈 format here
+              },
             },
           },
         ],
@@ -152,7 +161,13 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
           },
           axisLabel: {
             color: "white",
-            formatter: numberToMillionsString,
+            formatter: function (value: number) {
+              let formatted = numberToMillionsString(value, 0);
+              if (typeof formatted === "string") {
+                formatted = formatted.replace(/\.0+$/, "");
+              }
+              return formatted;
+            },
           },
           splitLine: {
             show: true,
@@ -172,7 +187,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               color: "white",
               fontSize: 14,
               formatter: (params: any) =>
-                numberToMillionsString(params.value, true),
+                numberToMillionsString(params.value),
             },
           },
         ],

@@ -47,7 +47,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
         trigger: "item",
         formatter: (params: any) => {
           const value =
-            dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
+            dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value.toLocaleString();
           return `${params.name}-${value}(${(params.percent).toFixed(0)}%)`;
         },
       },
@@ -71,7 +71,7 @@ const PieChart = ({ title, data, dataKey }: PropType) => {
             fontSize: 14,   
             formatter: (params: any) => {
               const value =
-                dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value;
+                dataKey === "totalTurnover" ? numberToMillionsString(params.value) : params.value.toLocaleString();
               return `${value}\n(${(params.percent).toFixed(0)}%)`;
             },
           },

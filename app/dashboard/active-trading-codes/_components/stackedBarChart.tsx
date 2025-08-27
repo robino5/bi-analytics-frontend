@@ -88,7 +88,7 @@ useEffect(() => {
           params.seriesName === "DT"
             ? data.find((item) => item[xDataKey] === params.name)[dataKeyX]
             : data.find((item) => item[xDataKey] === params.name)[dataKeyY];
-        return `${params.seriesName}: ${title.toLowerCase().includes("turnover")?numberToMillionsString(rawValue):rawValue}(${params.value}%)`;
+        return `${params.seriesName}: ${title.toLowerCase().includes("turnover")?numberToMillionsString(rawValue):rawValue.toLocaleString()}(${params.value}%)`;
       },
     },
     legend: {

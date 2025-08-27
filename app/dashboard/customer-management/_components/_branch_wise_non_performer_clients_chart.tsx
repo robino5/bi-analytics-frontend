@@ -75,6 +75,9 @@ export default function BranchWiseNonPerformerClientsChart({
             rotate: 90,
             color: "white",
             fontSize: 14,
+             formatter: (params:any)=>{
+              return params.value.toLocaleString()
+            }
           },
           itemStyle: {
             color: '#B3426F',

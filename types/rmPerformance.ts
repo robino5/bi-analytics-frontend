@@ -4,6 +4,7 @@ export interface ITurnoverPerformance {
     forthnightly: number;
     monthly: number;
     weekly: number;
+    quarterly: number;
 }
 
 export interface IClientDetail {

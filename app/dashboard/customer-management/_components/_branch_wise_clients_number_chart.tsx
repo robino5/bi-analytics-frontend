@@ -74,7 +74,10 @@ export default function BranchWiseClientsNumberChart({
             rotate: 90,
             color: "white",
             fontSize: 14,
-            bottom:0
+            bottom:0,
+            formatter: (params:any)=>{
+              return params.value.toLocaleString()
+            }
           },
           itemStyle: {
             color: '#f27373',

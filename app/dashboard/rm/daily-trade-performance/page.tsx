@@ -89,23 +89,11 @@ export default function DailyTradePerformance() {
   const setTrader = useTraderStore((state) => state.setTrader);
   //const [traders, setTraders] = useState<ITrader[]>([]);
 
-  const [summary, setSummary] = useState<ISummaryDetails | null>(null);
-  const [turnoverPerformance, setTurnoverPerformance] = useState<
-    ITargetGenerated[]
-  >([]);
-  const [cashCodeExposure, setCashCodeExposure] = useState<ISectorExposure[]>(
-    []
-  );
-  const [marginCodeExposure, setMarginCodeExposure] = useState<
-    ISectorExposure[]
-  >([]);
 
-  const [eCrmDetails, seteCrmDetails] = useState<
-    VisitData
-  >();
-  const [rmWiseDailyTradeData, setRmWiseDailyTradeData] = useState<
-    RmWiseDailyTradeData[]
-  >();
+  // const [eCrmDetails, seteCrmDetails] = useState<
+  //   VisitData
+  // >();
+  
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -133,6 +121,41 @@ export default function DailyTradePerformance() {
     queryFn: () => dailyTradePerformance.getTraderWithBranchId(branch)
   });
 
+const { data:summary } = useQuery({
+  queryKey: ['summary', branch, trader], // ✅ separate cache per branch+trader
+  queryFn: () => dailyTradePerformance.getSummaryWithTraderId(branch, trader),
+  enabled: !!branch, 
+});
+
+
+const { data:eCrmDetails } = useQuery({
+  queryKey: ['eCrmDetails', branch, trader], // ✅ separate cache per branch+trader
+  queryFn: () => dailyTradePerformance.getEcrmDetails(branch, trader),
+  enabled: !!branch, 
+});
+
+const { data:turnoverPerformance } = useQuery({
+  queryKey: ['turnoverPerformance', branch, trader], // ✅ separate cache per branch+trader
+  queryFn: () => dailyTradePerformance.getDailyTurnoverPerformanceWithTraderId(branch, trader),
+  enabled: !!branch, 
+});
+
+const { data:cashCodeExposure } = useQuery({
+  queryKey: ['cashCodeExposure', branch, trader], // ✅ separate cache per branch+trader
+  queryFn: () => dailyTradePerformance.getCashCodeSectorExposureWithTraderId(branch, trader),
+  enabled: !!branch, 
+});
+
+const { data:marginCodeExposure } = useQuery({
+  queryKey: ['marginCodeExposure', branch, trader], // ✅ separate cache per branch+trader
+  queryFn: () => dailyTradePerformance.getMarginCodeSectorExposureWithTraderId(branch, trader),
+  enabled: !!branch, 
+});
+const { data:rmWiseDailyTradeData } = useQuery({
+  queryKey: ['rmWiseDailyTradeData', branch, trader], // ✅ separate cache per branch+trader
+  queryFn: () => dailyTradePerformance.getRmWiseDailyTradeData(branch, trader),
+  enabled: !!branch, 
+});
 
   useEffect(() => {
     if (!branch || branch === "") {
@@ -146,356 +169,15 @@ export default function DailyTradePerformance() {
     }
   }, [branch, setBranch]);
 
-  useEffect(() => {
-    if (!trader || trader === "") {
-      if (traders?.data?.length) {
-        handleTraderChange(traders.data[0].traderId);
-      }
-    }
-  }, [trader, setTrader]);
+  // useEffect(() => {
+  //   if (!trader || trader === "") {
+  //     if (traders?.data?.length) {
+  //       handleTraderChange(traders.data[0].traderId);
+  //     }
+  //   }
+  // }, [trader, setTrader]);
 
-  //effect on trader change
-  useEffect(() => {
-    if (trader) {
-      // Fetch Summary for Branch
-      const fetchSummaryWithTraderId = async (
-        branchId: number,
-        traderId: string
-      ) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/?branch=${branchId}&trader=${traderId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<ISummaryDetails>;
-          if (successResponse(result.status)) {
-            setSummary(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Summary for BranchId=${branchId}`,
-            error
-          );
-        }
-      };
-      // daily turnover performance
-      const fetchDailyTurnoverPerformanceWithTraderId = async (
-        branchId: number,
-        traderId: string
-      ) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/?branch=${branchId}&trader=${traderId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ITargetGenerated[]
-          >;
-          if (successResponse(result.status)) {
-            setTurnoverPerformance(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching Summary for BranchId=${branchId}`,
-            error
-          );
-        }
-      };
-      // Sector Exposure Cash Code
-      const fetchCashCodeSectorExposureWithTraderId = async (
-        branchId: number,
-        traderId: string
-      ) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/?branch=${branchId}&trader=${traderId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ISectorExposure[]
-          >;
-          if (successResponse(result.status)) {
-            setCashCodeExposure(result.data);
-          }
-        } catch (error) {
-          console.error(`Error Happened while fetching Summary`, error);
-        }
-      };
-      // Sector Exposure Margin Code
-      const fetchMarginCodeSectorExposureWithTraderId = async (
-        branchId: number,
-        traderId: string
-      ) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/?branch=${branchId}&trader=${traderId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ISectorExposure[]
-          >;
-          if (successResponse(result.status)) {
-            setMarginCodeExposure(result.data);
-          }
-        } catch (error) {
-          console.error(`Error Happened while fetching Summary`, error);
-        }
-      };
-
-      const fetcheCrmDetails = async (
-        branchId: number,
-        traderId: string
-      ) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/?branch=${branchId}&trader=${traderId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            VisitData
-          >;
-          if (successResponse(result.status)) {
-            seteCrmDetails(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
-        }
-      };
-
-
-      const fetcheRmWiseDailyTradeData = async (
-        branchId: number,
-        traderId: string
-      ) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branchId}&trader=${traderId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            RmWiseDailyTradeData[]
-          >;
-          if (successResponse(result.status)) {
-            setRmWiseDailyTradeData(result.data);
-          }
-        } catch (error) {
-          console.log(error)
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
-        }
-      };
-      const branchId = Number.parseInt(branch);
-      fetchSummaryWithTraderId(branchId, trader);
-      fetchDailyTurnoverPerformanceWithTraderId(branchId, trader);
-      fetchCashCodeSectorExposureWithTraderId(branchId, trader);
-      fetchMarginCodeSectorExposureWithTraderId(branchId, trader);
-      fetcheCrmDetails(branchId, trader);
-      fetcheRmWiseDailyTradeData(branchId, trader);
-    }
-  }, [trader, branch]);
-
-  // effect on branch change
-  useEffect(() => {
-    if (branch && !trader) {
-      // Fetch Traders
-
-      // Fetch Summary for Branch
-      const fetchSummaryWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/basic-summaries/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<ISummaryDetails>;
-          if (successResponse(result.status)) {
-            setSummary(result.data);
-          }
-        } catch (error) {
-          console.error(`Error Happened while fetching Summary`, error);
-        }
-      };
-      // daily turnover performance
-      const fetchDailyTurnoverPerformanceWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-performance/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ITargetGenerated[]
-          >;
-          if (successResponse(result.status)) {
-            setTurnoverPerformance(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching daily turnover performance`,
-            error
-          );
-        }
-      };
-
-      // Sector Exposure Cash Code
-      const fetchCashCodeSectorExposureWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-cashcode/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ISectorExposure[]
-          >;
-          if (successResponse(result.status)) {
-            setCashCodeExposure(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching sector exposure cash code`,
-            error
-          );
-        }
-      };
-      // Sector Exposure Margin Code
-      const fetchMarginCodeSectorExposureWithBranchId = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/sector-exposure-margincode/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            ISectorExposure[]
-          >;
-          if (successResponse(result.status)) {
-            setMarginCodeExposure(result.data);
-          }
-        } catch (error) {
-          console.error(
-            `Error Happened while fetching sector exposure margin code`,
-            error
-          );
-        }
-      };
-
-      // eCRM details
-      const fetcheCrmDetails = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/ecrm-details/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            VisitData
-          >;
-          if (successResponse(result.status)) {
-            seteCrmDetails(result.data);
-          }
-        } catch (error) {
-          console.log(error)
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
-        }
-      };
-
-      const fetcheRmWiseDailyTradeData = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm/daily-trade-data/?branch=${branch}`,
-            {
-              headers: {
-                Authorization: `Bearer ${session?.user.accessToken}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          const result = (await response.json()) as IResponse<
-            RmWiseDailyTradeData[]
-          >;
-          if (successResponse(result.status)) {
-            setRmWiseDailyTradeData(result.data);
-          }
-        } catch (error) {
-          console.log(error)
-          console.error(
-            `Error Happened while ecrm Data`,
-            error
-          );
-        }
-      };
-      fetchSummaryWithBranchId();
-      fetchDailyTurnoverPerformanceWithBranchId();
-      fetchMarginCodeSectorExposureWithBranchId();
-      fetchCashCodeSectorExposureWithBranchId();
-      fetcheCrmDetails();
-      fetcheRmWiseDailyTradeData();
-    } else {
-      // Fetch Traders
-    }
-  }, [branch]);
-
-
-
+  
   return (
     <div className="mx-4">
       <title>Daily Trade Performance | LBSL</title>
@@ -513,7 +195,7 @@ export default function DailyTradePerformance() {
       </PageHeader>
       <Ticker />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6">
-        {summary?.shortSummary ? (
+        {summary?.data?.shortSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Summary"
@@ -521,34 +203,34 @@ export default function DailyTradePerformance() {
             boardIcon={<PiChartScatterBold className="h-7 w-7 text-gray-400" />}
             children={
               <StatisticsCardClientTurnoverSummary
-                data={summary.shortSummary}
+                data={summary?.data?.shortSummary}
               />
             }
           />
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
-        {summary?.cashCodeSummary ? (
+        {summary?.data?.cashCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Cash Code Status (Trade Clients)"
             // subtitle="shows cash code summary"
             boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
-              <StatisticsCashCodeSummary data={summary.cashCodeSummary} />
+              <StatisticsCashCodeSummary data={summary?.data?.cashCodeSummary} />
             }
           />
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
-        {summary?.marginCodeSummary ? (
+        {summary?.data?.marginCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
             title="Margin Code Status (Trade Clients)"
             // subtitle="shows margin code summary"
             boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
-              <StatisticsMarginCodeSummary data={summary.marginCodeSummary} />
+              <StatisticsMarginCodeSummary data={summary?.data?.marginCodeSummary} />
             }
           />
         ) : (
@@ -558,38 +240,38 @@ export default function DailyTradePerformance() {
           <DseLiveTrade />
         </div>
         {/* e-CRM Details */}
-        {eCrmDetails &&
+        {eCrmDetails?.data &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"eCRM"}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
-              <EcrmDetails visitedata={eCrmDetails} />
+              <EcrmDetails visitedata={eCrmDetails?.data} />
             }
           />
         }
 
         {/* e-CRM Details */}
-        {rmWiseDailyTradeData &&
+        {rmWiseDailyTradeData?.data &&
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title="RM Wise Trading data As on"
-             pushdate={rmWiseDailyTradeData.length > 0 ? rmWiseDailyTradeData[0]?.pushDate : ""}
+            pushdate={rmWiseDailyTradeData?.data.length > 0 ? rmWiseDailyTradeData?.data[0]?.pushDate : ""}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
-              <RmWiseDailyTradingData data={rmWiseDailyTradeData} />
+              <RmWiseDailyTradingData data={rmWiseDailyTradeData?.data} />
             }
           />
         }
 
-        {turnoverPerformance ? (
+        {turnoverPerformance?.data ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Turnover Target"}
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <BarChartVerticalGrouped
-                data={turnoverPerformance}
+                data={turnoverPerformance?.data||[]}
                 options={turnoverChartOptions}
               />
             }
@@ -598,14 +280,14 @@ export default function DailyTradePerformance() {
           <SkeletonStatistics className="col-span-6 xl:col-span-3" />
         )}
 
-        {marginCodeExposure ? (
+        {marginCodeExposure?.data ? (
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
             title="Sector Exposure Margin Code"
             // subtitle="Shows analytics of marginal performance for comodities"
             children={
               <BarChartHorizontal
-                data={marginCodeExposure}
+                data={marginCodeExposure?.data}
                 options={sectorMarginCodeExposureOption}
                 colorArray={["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#F44336"]}
               />
@@ -614,14 +296,14 @@ export default function DailyTradePerformance() {
         ) : (
           <SkeletonStatistics className="col-span-6 xl:col-span-3" />
         )}
-        {cashCodeExposure ? (
+        {cashCodeExposure?.data ? (
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
             title="Sector Exposure Cash Code"
             // subtitle="Shows analytics of marginal performance for comodities"
             children={
               <BarChartHorizontal
-                data={cashCodeExposure}
+                data={cashCodeExposure?.data}
                 options={sectorCashCodeExposureOption}
                 colorArray={[
                   "#FF5733", // Red
