@@ -63,7 +63,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
           formatter: (params: any) => {
             let tooltipHtml = `<strong>${params[0].axisValue}</strong><br/>`;
             params.forEach((item: any) => {
-              tooltipHtml += `${item.marker} ${item.seriesName}: ${item.data}<br/>`;
+              tooltipHtml += `${item.marker} ${item.seriesName}: ${item.data.toLocaleString()}<br/>`;
             });
             return tooltipHtml;
           },
@@ -91,7 +91,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             formatter: function (value: number) {
               let formatted = numberToMillionsString(value, 0);
               if (typeof formatted === "string") {
-                formatted = formatted.replace(/\.0+$/, ""); 
+                formatted = formatted.replace(/\.0+$/, "");
               }
               return formatted;
             },
@@ -113,6 +113,9 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
               fontSize: 14,
               position: "top",
               color: "white",
+              formatter: (params: any) => {
+                return params.value.toLocaleString(); // 👈 format here
+              },
             },
           },
         ],
@@ -161,7 +164,7 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
             formatter: function (value: number) {
               let formatted = numberToMillionsString(value, 0);
               if (typeof formatted === "string") {
-                formatted = formatted.replace(/\.0+$/, ""); 
+                formatted = formatted.replace(/\.0+$/, "");
               }
               return formatted;
             },

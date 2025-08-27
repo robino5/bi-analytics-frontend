@@ -74,7 +74,7 @@ export default function ClientSegmentationChart({
             })),
             label: {
               formatter: (params: { value: number; name: any; percent: any; }) => {
-                const formattedValue = params.value;
+                const formattedValue = params.value.toLocaleString();
                 return `${params.name}\n${formattedValue} (${params.percent}%)`;
               },
               color: "#ffffff",
@@ -128,7 +128,7 @@ export default function ClientSegmentationChart({
     <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
-          {title}-{details.sumOfClients}
+          {title}-{details.sumOfClients.toLocaleString()}
         </CardTitle>
       </CardHeader>
       

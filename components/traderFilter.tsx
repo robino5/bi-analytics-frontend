@@ -43,8 +43,7 @@ export default function TraderFilter({
 
   return (
     <Select
-      onValueChange={onChange}
-      defaultValue={"all"}
+      onValueChange={(value) => onChange(value === "all" ? "" : value)}
       value={currentTrader}
       disabled={traderLocked}
     >

@@ -4,7 +4,7 @@ import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
 import { IResponse } from "@/types/utils";
 import { ITrader } from "@/components/traderFilter";
-import { ISummaryDetails } from "@/types/dailyTurnoverPerformance";
+import { ISectorExposure, ISummaryDetails, ITargetGenerated, RmWiseDailyTradeData, VisitData } from "@/types/dailyTurnoverPerformance";
 
 
 class DailyTradePerformance extends Common {
@@ -16,13 +16,47 @@ class DailyTradePerformance extends Common {
             return this.http.get<IResponse<ITrader[]>>(`dashboards/lov/traders/${branch}/`)
         }
     }
-     getSummaryWithTraderId(branch: string,trader:string) {
-        if (branch) {
-            return this.http.get<IResponse<ISummaryDetails>>(`dashboards/rm/basic-summaries/?branch=${branch}`)
+    getSummaryWithTraderId(branch: string, trader?: string) {
+        let url = `dashboards/rm/basic-summaries/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
         }
-        else if (branch && trader){
-            return this.http.get<IResponse<ISummaryDetails>>(`dashboards/rm/basic-summaries/?branch=${branch}/&trader=${trader}`)
+        return this.http.get<IResponse<ISummaryDetails>>(url)
+    }
+    getEcrmDetails(branch: string, trader?: string) {
+        let url = `dashboards/rm/ecrm-details/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
         }
+        return this.http.get<IResponse<VisitData>>(url)
+    }
+    getDailyTurnoverPerformanceWithTraderId(branch: string, trader?: string) {
+        let url = `dashboards/rm/daily-trade-performance/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
+        }
+        return this.http.get<IResponse<ITargetGenerated[]>>(url)
+    }
+    getCashCodeSectorExposureWithTraderId(branch: string, trader?: string) {
+        let url = `dashboards/rm/sector-exposure-cashcode/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
+        }
+        return this.http.get<IResponse<ISectorExposure[]>>(url)
+    }
+    getMarginCodeSectorExposureWithTraderId(branch: string, trader?: string) {
+        let url = `dashboards/rm/sector-exposure-margincode/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
+        }
+        return this.http.get<IResponse<ISectorExposure[]>>(url)
+    }
+    getRmWiseDailyTradeData(branch: string, trader?: string) {
+        let url = `dashboards/rm/daily-trade-data/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
+        }
+        return this.http.get<IResponse<RmWiseDailyTradeData[]>>(url)
     }
 }
 

@@ -74,10 +74,10 @@ export default function ClientTradesDataTable({ records, className }: Props) {
                   {record.channel}
                 </TableCell>
                 <TableCell className="text-right py-2">
-                  {record.totalClients}
+                  {record.totalClients.toLocaleString()}
                 </TableCell>
                 <TableCell className="text-right py-2">
-                  {record.trades}
+                  {record.trades.toLocaleString()}
                 </TableCell>
                 <TableCell className="text-right py-2">
                   {numberToMillionsString(record.totalTurnover)}
