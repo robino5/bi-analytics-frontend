@@ -12,14 +12,6 @@ import { BarColors } from "@/components/ui/utils/constants";
 import BranchFilter from "@/components/branchFilter";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import {
-  ITargetGenerated,
-  ISummaryDetails,
-  ISectorExposure,
-  VisitData,
-  RmWiseDailyTradeData,
-} from "@/types/dailyTurnoverPerformance";
-import { successResponse } from "@/lib/utils";
 import SummarySkeletonCard, {
   SkeletonStatistics,
 } from "@/components/skeletonCard";
@@ -36,6 +28,7 @@ import { useTraderStore } from "@/lib/stores/rmStore";
 import { useQuery } from "@tanstack/react-query";
 import { dailyTradePerformance } from "./api";
 import { Ticker } from "@/components/ticker";
+import BarChartHorizontalComparison from "@/components/BarChartHorizontalComprison";
 
 export default function DailyTradePerformance() {
   // Override console.error
@@ -93,7 +86,7 @@ export default function DailyTradePerformance() {
   // const [eCrmDetails, seteCrmDetails] = useState<
   //   VisitData
   // >();
-  
+
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -121,42 +114,47 @@ export default function DailyTradePerformance() {
     queryFn: () => dailyTradePerformance.getTraderWithBranchId(branch)
   });
 
-const { data:summary } = useQuery({
-  queryKey: ['summary', branch, trader], // ✅ separate cache per branch+trader
-  queryFn: () => dailyTradePerformance.getSummaryWithTraderId(branch, trader),
-  enabled: !!branch, 
-});
+  const { data: summary } = useQuery({
+    queryKey: ['summary', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getSummaryWithTraderId(branch, trader),
+    enabled: !!branch,
+  });
 
 
-const { data:eCrmDetails } = useQuery({
-  queryKey: ['eCrmDetails', branch, trader], // ✅ separate cache per branch+trader
-  queryFn: () => dailyTradePerformance.getEcrmDetails(branch, trader),
-  enabled: !!branch, 
-});
+  const { data: eCrmDetails } = useQuery({
+    queryKey: ['eCrmDetails', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getEcrmDetails(branch, trader),
+    enabled: !!branch,
+  });
 
-const { data:turnoverPerformance } = useQuery({
-  queryKey: ['turnoverPerformance', branch, trader], // ✅ separate cache per branch+trader
-  queryFn: () => dailyTradePerformance.getDailyTurnoverPerformanceWithTraderId(branch, trader),
-  enabled: !!branch, 
-});
+  const { data: turnoverPerformance } = useQuery({
+    queryKey: ['turnoverPerformance', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getDailyTurnoverPerformanceWithTraderId(branch, trader),
+    enabled: !!branch,
+  });
 
-const { data:cashCodeExposure } = useQuery({
-  queryKey: ['cashCodeExposure', branch, trader], // ✅ separate cache per branch+trader
-  queryFn: () => dailyTradePerformance.getCashCodeSectorExposureWithTraderId(branch, trader),
-  enabled: !!branch, 
-});
+  const { data: cashCodeExposure } = useQuery({
+    queryKey: ['cashCodeExposure', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getCashCodeSectorExposureWithTraderId(branch, trader),
+    enabled: !!branch,
+  });
 
-const { data:marginCodeExposure } = useQuery({
-  queryKey: ['marginCodeExposure', branch, trader], // ✅ separate cache per branch+trader
-  queryFn: () => dailyTradePerformance.getMarginCodeSectorExposureWithTraderId(branch, trader),
-  enabled: !!branch, 
-});
-const { data:rmWiseDailyTradeData } = useQuery({
-  queryKey: ['rmWiseDailyTradeData', branch, trader], // ✅ separate cache per branch+trader
-  queryFn: () => dailyTradePerformance.getRmWiseDailyTradeData(branch, trader),
-  enabled: !!branch, 
-});
+  const { data: marginCodeExposure } = useQuery({
+    queryKey: ['marginCodeExposure', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getMarginCodeSectorExposureWithTraderId(branch, trader),
+    enabled: !!branch,
+  });
+  const { data: rmWiseDailyTradeData } = useQuery({
+    queryKey: ['rmWiseDailyTradeData', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getRmWiseDailyTradeData(branch, trader),
+    enabled: !!branch,
+  });
 
+  const { data: sectorwiseTrunoverComparison } = useQuery({
+    queryKey: ['sectorwiseTrunoverComparison', branch, trader], // ✅ separate cache per branch+trader
+    queryFn: () => dailyTradePerformance.getRmWLiveTurnoverSectorWise(branch, trader),
+    enabled: !!branch,
+  });
   useEffect(() => {
     if (!branch || branch === "") {
       if (isRM) {
@@ -177,7 +175,7 @@ const { data:rmWiseDailyTradeData } = useQuery({
   //   }
   // }, [trader, setTrader]);
 
-  
+
   return (
     <div className="mx-4">
       <title>Daily Trade Performance | LBSL</title>
@@ -271,7 +269,7 @@ const { data:rmWiseDailyTradeData } = useQuery({
             // subtitle="Shows a analytics of turnover target performance of last 7 days."
             children={
               <BarChartVerticalGrouped
-                data={turnoverPerformance?.data||[]}
+                data={turnoverPerformance?.data || []}
                 options={turnoverChartOptions}
               />
             }
@@ -279,6 +277,53 @@ const { data:rmWiseDailyTradeData } = useQuery({
         ) : (
           <SkeletonStatistics className="col-span-6 xl:col-span-3" />
         )}
+
+
+        {sectorwiseTrunoverComparison?.data ? (
+          <CardBoard
+            className="col-span-6 row-span-2 xl:col-span-3"
+            title="DSE Live Sector Wise Turnover"
+            liveIndicator={true}
+            // subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={(sectorwiseTrunoverComparison?.data ?? []).map((item: any) => ({
+                  name: item.name,
+                  value: item.primaryValue,   // taking primaryValue as value
+                }))}
+                options={sectorMarginCodeExposureOption}
+                colorArray={["#c200fb",]}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
+
+        {sectorwiseTrunoverComparison?.data ? (
+          <CardBoard
+            className="col-span-6 row-span-2 xl:col-span-3"
+            title="LBSL Live Sector Wise Turnover"
+            liveIndicator={true}
+            // subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={sectorwiseTrunoverComparison?.data
+                  ?.map((item: any) => ({
+                    name: item.name,
+                    value: item.secondaryValue,
+                  }))
+                  .sort((a: any, b: any) => b.value - a.value) // sort descending
+                }
+                options={sectorMarginCodeExposureOption}
+                colorArray={["#ff7a56",]}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
+
 
         {marginCodeExposure?.data ? (
           <CardBoard

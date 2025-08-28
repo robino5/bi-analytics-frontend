@@ -6,6 +6,7 @@ import { IResponse } from "@/types/utils";
 import { BranchWiseNonePerformClient, IMarginLoanUsage, ISectorExposure, ISummaryDetails, ITargetGenerated, RmWiseDailyTradeData, VisitData } from "@/types/dailyTurnoverPerformance";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
+import { SectorWiseTurnoverComparison } from "../../active-trading-codes/types";
 
 
 class DailyTradePerformanceAPI extends Common {
@@ -14,93 +15,102 @@ class DailyTradePerformanceAPI extends Common {
     }
 
     getSummary(branch: string) {
-        if(branch){
+        if (branch) {
             return this.http.get<IResponse<ISummaryDetails>>(`dashboards/basic-summaries/${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<ISummaryDetails>>("dashboards/basic-summaries/")
         }
     }
 
     getDailyTurnoverPerformance(branch: string) {
-        if(branch){
+        if (branch) {
             return this.http.get<IResponse<ITargetGenerated[]>>(`dashboards/daily-trade-performance/${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<ITargetGenerated[]>>("dashboards/daily-trade-performance/")
         }
     }
     getDailyMarginLoanUsageWithBranchId(branch: string) {
-        if(branch){
+        if (branch) {
             return this.http.get<IResponse<IMarginLoanUsage[]>>(`dashboards/margin-loan-usage/${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<IMarginLoanUsage[]>>("dashboards/margin-loan-usage/")
         }
     }
-      getCashCodeSectorExposureWithBranchId (branch: string) {
-        if(branch){
+    getCashCodeSectorExposureWithBranchId(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<ISectorExposure[]>>(`dashboards/sector-exposure-cashcode/${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<ISectorExposure[]>>("dashboards/sector-exposure-cashcode/")
         }
     }
-      getMarginCodeSectorExposureWithBranchId (branch: string) {
-        if(branch){
+    getMarginCodeSectorExposureWithBranchId(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<ISectorExposure[]>>(`dashboards/sector-exposure-margincode/${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<ISectorExposure[]>>("dashboards/sector-exposure-margincode/")
         }
     }
-      geteCrmDetails (branch: string) {
-        if(branch){
+    geteCrmDetails(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<VisitData>>(`dashboards/rm/ecrm-details/?branch=${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<VisitData>>("dashboards/rm/ecrm-details/")
         }
     }
-        getRmWiseDailyTradeData (branch: string) {
-        if(branch){
+    getRmWiseDailyTradeData(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<RmWiseDailyTradeData[]>>(`dashboards/rm/daily-trade-data/?branch=${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<RmWiseDailyTradeData[]>>("dashboards/rm/daily-trade-data/")
         }
     }
-        getTopInvestorSaleData (branch: string) {
-        if(branch){
+    getTopInvestorSaleData(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>(`dashboards/admin/live-investor-top-sale-rm-wise/?branch=${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>("dashboards/admin/live-investor-top-sale-rm-wise/")
         }
     }
-       getTopInvestorBuyData  (branch: string) {
-        if(branch){
+    getTopInvestorBuyData(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>(`dashboards/admin/live-investor-top-buy-rm-wise/?branch=${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>("dashboards/admin/live-investor-top-buy-rm-wise/")
         }
     }
-        getInvestorLiveTradeDetails (branch: string) {
-        if(branch){
+    getInvestorLiveTradeDetails(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<InvestorLiveTradeInfo[]>>(`dashboards/rm/investor-live-trade-rm-wise/?branch=${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<InvestorLiveTradeInfo[]>>("dashboards/rm/investor-live-trade-rm-wise/")
         }
     }
 
-       getBranchWiseNonePerforminigClients(branch: string) {
-        if(branch){
+    getBranchWiseNonePerforminigClients(branch: string) {
+        if (branch) {
             return this.http.get<IResponse<BranchWiseNonePerformClient[]>>(`dashboards/branchwise-none-performing-client/?branch=${branch}`)
         }
-        else{
+        else {
             return this.http.get<IResponse<BranchWiseNonePerformClient[]>>("dashboards/branchwise-none-performing-client/")
+        }
+    }
+
+    getRmWLiveTurnoverSectorWise(branch: string) {
+        if (branch) {
+            return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>(`dashboards/rm/rm-live-turnover-sectorwise/?branch=${branch}`)
+        }
+        else {
+            return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>("dashboards/rm/rm-live-turnover-sectorwise/")
         }
     }
 
