@@ -85,8 +85,8 @@ export default function TopTurnoverCompany({ default: defaultProp }: { default: 
                         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-1 rounded-tl-lg rounded-tr-lg grid grid-cols-[3fr_2fr] items-center">
                             <CardTitle className="text-white text-lg font-semibold py-2">
                                 {activeTab === "LBSL"
-                                    ? `Top 20 Turnover Company Wise ${lbsDate ? format(lbsDate, "dd-MMM-yyyy") : defaultProp.slice(0, 9)}`
-                                    : `Top 20 Turnover Company Wise ${dseDate ? format(dseDate, "dd-MMM-yyyy") : defaultProp.slice(0, 9)}`}
+                                    ? `Top 20 Turnover Company Wise ${lbsDate ? format(lbsDate, "dd-MMM-yyyy") : defaultProp?.slice(0, 9)}`
+                                    : `Top 20 Turnover Company Wise ${dseDate ? format(dseDate, "dd-MMM-yyyy") : defaultProp?.slice(0, 9)}`}
                             </CardTitle>
                             <div className="flex items-center space-x-4">
                                 {/* Popover for the calendar */}

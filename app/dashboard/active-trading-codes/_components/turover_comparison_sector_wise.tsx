@@ -42,7 +42,7 @@ export default function TurnoverComparisonCard({ default: defaultProp }: { defau
                 <Card className="drop-shadow-md bg-[#033e4a] col-span-3 xl:col-span-3">
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-1 rounded-tl-lg rounded-tr-lg grid grid-cols-[4fr_1fr] items-center">
                         <CardTitle className="text-white text-lg font-semibold py-2">
-                            Turnover Comparison Sector Wise as on {date ? format(date, "dd-MMM-yyyy") : defaultProp.slice(0, 9)}
+                            Turnover Comparison Sector Wise as on {date ? format(date, "dd-MMM-yyyy") : defaultProp?.slice(0, 9)}
                         </CardTitle>
                         <div className="relative flex justify-end items-start mr-10">
                             <Popover>
