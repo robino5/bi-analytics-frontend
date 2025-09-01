@@ -86,16 +86,16 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
                   {data.board}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.turnover)}
+                  {numberToMillionsString(data.turnover,2)}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.dsePercentage)}
+                  {numberToMillionsString(data.dsePercentage,2)}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.lbslTurnover)}
+                  {numberToMillionsString(data.lbslTurnover,2)}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.lbslPercentage)}
+                  {numberToMillionsString(data.lbslPercentage,2)}
                 </TableCell>
               </TableRow>
             ))}
@@ -104,16 +104,16 @@ export default function BoardWiseTurnoverBreakdown({ datalist }: Props) {
             <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
               <TableCell className="font-medium py-2">Total</TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalTurnover)}
+                {numberToMillionsString(totalTurnover,2)}
               </TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalDsePercentage)}
+                {numberToMillionsString(totalDsePercentage,2)}
               </TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalLbslTurnover)}
+                {numberToMillionsString(totalLbslTurnover,2)}
               </TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalLbslPercentage)}
+                {numberToMillionsString(totalLbslPercentage,2)}
               </TableCell>
             </TableRow>
           </TableFooter>

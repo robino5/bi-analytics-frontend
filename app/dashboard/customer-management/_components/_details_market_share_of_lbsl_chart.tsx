@@ -45,7 +45,7 @@ export default function DetailsMarketShareLBSLChart({
       xAxis: [
         {
           type: "category",
-          data: data.map((item) => item.month.slice(0, 3)),
+          data: data.map((item) => item.month?.slice(0, 3)),
           position: "bottom", 
           axisTick: { alignWithLabel: true },
           axisLabel: {
