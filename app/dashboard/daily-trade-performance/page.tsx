@@ -156,6 +156,11 @@ export default function DailyTradePerformance() {
     queryFn: () => dailyTradePerformanceAPI.getBranchWiseNonePerforminigClients(branch)
   });
 
+    const { data: sectorwiseTrunoverComparison } = useQuery({
+      queryKey: ['sectorwiseTrunoverComparison', branch], // ✅ separate cache per branch+trader
+      queryFn: () => dailyTradePerformanceAPI.getRmWLiveTurnoverSectorWise(branch),
+    });
+
 
 
   const traceBranchChange = async (branchId: string) => {
@@ -240,6 +245,50 @@ export default function DailyTradePerformance() {
             }
           />
         }
+            {sectorwiseTrunoverComparison?.data ? (
+          <CardBoard
+            className="col-span-6 row-span-2 xl:col-span-3"
+            title="DSE Live Sector Wise Turnover"
+            liveIndicator={true}
+            // subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={(sectorwiseTrunoverComparison?.data ?? []).map((item: any) => ({
+                  name: item.name,
+                  value: item.primaryValue,   // taking primaryValue as value
+                }))}
+                options={sectorMarginCodeExposureOption}
+                colorArray={["#c200fb",]}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
+
+        {sectorwiseTrunoverComparison?.data ? (
+          <CardBoard
+            className="col-span-6 row-span-2 xl:col-span-3"
+            title="LBSL Live Sector Wise Turnover"
+            liveIndicator={true}
+            // subtitle="Shows analytics of marginal performance for comodities"
+            children={
+              <BarChartHorizontal
+                data={sectorwiseTrunoverComparison?.data
+                  ?.map((item: any) => ({
+                    name: item.name,
+                    value: item.secondaryValue,
+                  }))
+                  .sort((a: any, b: any) => b.value - a.value) // sort descending
+                }
+                options={sectorMarginCodeExposureOption}
+                colorArray={["#ff7a56",]}
+              />
+            }
+          />
+        ) : (
+          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
+        )}
         {/* e-CRM Details */}
         {rmWiseDailyTradeData?.data &&
           <CardBoard

@@ -22,6 +22,7 @@ import { LoginSchema } from "@/app/schemas";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/app/actions/login";
+import MarketSentiment from "../market-sentiment";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -60,14 +61,7 @@ const LoginForm = () => {
           width={300}
           alt="logo"
         />
-        <Image
-          src="/business_analytics.svg"
-          priority={true}
-          height={500}
-          width={400}
-          alt="analytics-img"
-          style={{ objectFit: "cover" }}
-        />
+        <MarketSentiment/>
       </div>
       <div>
         <Separator orientation="vertical" className="mt-4 h-[350px]" />

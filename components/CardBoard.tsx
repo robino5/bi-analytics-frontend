@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import React from "react";
 import PushDateTime from "./push-date-time";
+import LiveIndicator from "./ui/live-indicator";
 
 interface CardBoardProps {
   title: string;
@@ -16,6 +17,7 @@ interface CardBoardProps {
   className?: string;
   boardIcon?: React.ReactNode;
   pushdate?: any;
+  liveIndicator?: boolean
 }
 
 const CardBoard: React.FC<CardBoardProps> = ({
@@ -24,7 +26,8 @@ const CardBoard: React.FC<CardBoardProps> = ({
   children,
   className,
   boardIcon,
-  pushdate
+  pushdate,
+  liveIndicator
 }) => {
   return (
     <Card className={cn("drop-shadow-md", className, "bg-[#033e4a]")}>
@@ -32,6 +35,7 @@ const CardBoard: React.FC<CardBoardProps> = ({
         <CardTitle className="text-white text-md text-lg flex items-center gap-2">
           {title}
           {pushdate&& <PushDateTime pushdate={pushdate} />}
+          {liveIndicator&&<LiveIndicator />}
         </CardTitle>
         <CardDescription className="text-white">
           {subtitle ?? ""}

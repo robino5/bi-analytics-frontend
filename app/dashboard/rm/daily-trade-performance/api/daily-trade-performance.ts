@@ -5,6 +5,7 @@ import { authService } from "@/lib/auth";
 import { IResponse } from "@/types/utils";
 import { ITrader } from "@/components/traderFilter";
 import { ISectorExposure, ISummaryDetails, ITargetGenerated, RmWiseDailyTradeData, VisitData } from "@/types/dailyTurnoverPerformance";
+import { SectorWiseTurnoverComparison } from "@/app/dashboard/active-trading-codes/types";
 
 
 class DailyTradePerformance extends Common {
@@ -57,6 +58,14 @@ class DailyTradePerformance extends Common {
             url += `&trader=${trader}`;
         }
         return this.http.get<IResponse<RmWiseDailyTradeData[]>>(url)
+    }
+
+    getRmWLiveTurnoverSectorWise(branch: string, trader?: string) {
+        let url = `dashboards/rm/rm-live-turnover-sectorwise/?branch=${branch}`;
+        if (trader) {
+            url += `&trader=${trader}`;
+        }
+        return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>(url)
     }
 }
 

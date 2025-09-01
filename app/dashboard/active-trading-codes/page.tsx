@@ -25,18 +25,19 @@ import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_co
 import { Ticker } from "@/components/ticker";
 import { DseLiveTrade } from "@/components/dse-live-trade";
 import { dseLiveTradeAPI } from "@/lib/services/dseLiveTrade";
+import NoDataFound from "./_components/_no_data_found";
 
 const ActiveTradingCodesBoard = () => {
 
-const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } =
-  useQuery({
-    queryKey: ["clientTradeSummaryByToday"],
-    queryFn: async () => {
-      const data = await activeTradingCodeAPI.getClientTradeSummaryByToday();
-      localStorage.setItem("push-data", data?.data[0]?.pushDate ?? null);
-      return data;
-    }
-  });
+  const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayError } =
+    useQuery({
+      queryKey: ["clientTradeSummaryByToday"],
+      queryFn: async () => {
+        const data = await activeTradingCodeAPI.getClientTradeSummaryByToday();
+        localStorage.setItem("push-data", data?.data[0]?.pushDate ?? null);
+        return data;
+      }
+    });
 
   const { data: dayWiseDataResponse, isLoading: dayLoading, isError: dayError } = useQuery({
     queryKey: ["clientTradeSummaryByDay"],
@@ -73,16 +74,8 @@ const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayErr
     queryFn: () => activeTradingCodeAPI.getBranchwiseDtTurnover()
   });
 
-  const { data: sectorwiseTrunover, isLoading: sectorwiseTurnoverLoading, isError: sectorwiseTurnoverError } = useQuery({
-    queryKey: ["sectorwiseTurnover"],
-    queryFn: () => activeTradingCodeAPI.getSectorwiseTurnover()
-  });
 
-  const { data: dseDsexData, isLoading: dseDsexDataLoaing, isError: dseDsexDataerror } = useQuery({
-    queryKey: ["dseDsexData"],
-    queryFn: () => dseLiveTradeAPI.getDseLiveDsexData(),
-    refetchInterval: 60000,
-  });
+ 
 
 
   const biaxialChartOption = {
@@ -174,76 +167,110 @@ const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayErr
           <DseLiveTrade />
         </div>
         {/* client  */}
-        <div className="rounded-md xl:col-span-2">
-          <PieChart
-            title="Clients (Today)"
-            dataKey="totalClients"
-            data={sanitizedDayWiseSummary}
-          />
-        </div>
-        <div className="rounded-md xl:col-span-2">
-          <PieChart
-            title="Trades (Today)"
-            dataKey="trades"
-            data={sanitizedDayWiseSummary}
-          />
-        </div>
-        <div className="rounded-md xl:col-span-2">
-          <PieChart
-            title="Turnover (Today)"
-            dataKey="totalTurnover"
-            data={sanitizedDayWiseSummary}
-          />
-        </div>
+        {sanitizedDayWiseSummary ? (
+          <div className="rounded-md xl:col-span-2">
+            <PieChart
+              title="Clients (Today)"
+              dataKey="totalClients"
+              data={sanitizedDayWiseSummary}
+            />
+          </div>
+        ) :
+          <NoDataFound title="Clients (Today)" />}
+        {sanitizedDayWiseSummary ? (
+          <div className="rounded-md xl:col-span-2">
+            <PieChart
+              title="Trades (Today)"
+              dataKey="trades"
+              data={sanitizedDayWiseSummary}
+            />
+          </div>
+        ) : <NoDataFound title="Trades (Today)" />}
+
+        {sanitizedDayWiseSummary ? (
+          <div className="rounded-md xl:col-span-2">
+            <PieChart
+              title="Turnover (Today)"
+              dataKey="totalTurnover"
+              data={sanitizedDayWiseSummary}
+            />
+          </div>
+        ) : <NoDataFound title="Turnover (Today)" />}
+
 
         {/* clients day wise */}
-        <div className="rounded-md xl:col-span-3">
-          <StackBarChart
-            {...fixedProps}
-            data={transformedClients}
-            title="Clients (Day Wise)"
-          />
-        </div>
+        {transformedClients ?
+          (<div className="rounded-md xl:col-span-3">
+            <StackBarChart
+              {...fixedProps}
+              data={transformedClients}
+              title="Clients (Day Wise)"
+            />
+          </div>)
+          :
+          <NoDataFound title="Clients (Day Wise)" />}
+
         {/* clients month wise */}
-        <div className="rounded-md xl:col-span-3">
-          <StackBarChart
-            {...fixedProps}
-            data={transformedMonthWiseClients}
-            title="Clients (Month Wise)"
-          />
-        </div>
+        {transformedMonthWiseClients ? (
+          <div className="rounded-md xl:col-span-3">
+            <StackBarChart
+              {...fixedProps}
+              data={transformedMonthWiseClients}
+              title="Clients (Month Wise)"
+            />
+          </div>)
+          :
+          <NoDataFound title="Clients (Month Wise)" />
+        }
+
         {/* trades day wise */}
-        <div className="rounded-md xl:col-span-3">
-          <StackBarChart
-            {...fixedProps}
-            data={transformedTrades}
-            title="Trades (Day Wise)"
-          />
-        </div>
+        {
+          transformedTrades ? (
+            <div className="rounded-md xl:col-span-3">
+              <StackBarChart
+                {...fixedProps}
+                data={transformedTrades}
+                title="Trades (Day Wise)"
+              />
+            </div>) :
+            <NoDataFound title="Trades (Day Wise)" />
+        }
+
         {/* trades month wise */}
-        <div className="rounded-md xl:col-span-3">
-          <StackBarChart
-            {...fixedProps}
-            data={transformedMonthWiseTrades}
-            title="Trades (Month Wise)"
-          />
-        </div>
+
+        {transformedMonthWiseTrades ? (
+          <div className="rounded-md xl:col-span-3">
+            <StackBarChart
+              {...fixedProps}
+              data={transformedMonthWiseTrades}
+              title="Trades (Month Wise)"
+            />
+          </div>
+        ) : <NoDataFound title="Trades (Month Wise)" />
+        }
+
         {/* turnover  day wise */}
-        <div className="rounded-md xl:col-span-3">
-          <StackBarChart
-            {...fixedProps}
-            data={transformedTurnover}
-            title="Turnover (Day Wise)"
-          />
-        </div>
+        {transformedTurnover ? (
+          <div className="rounded-md xl:col-span-3">
+            <StackBarChart
+              {...fixedProps}
+              data={transformedTurnover}
+              title="Turnover (Day Wise)"
+            />
+          </div>
+        ) : <NoDataFound title="Turnover (Day Wise)" />}
+
         {/* turnover month wise */}
-        <div className="rounded-md xl:col-span-3">
-          <StackBarChart
-            {...fixedProps}
-            data={transformedMonthWiseTurnover}
-            title="Turnover (Month Wise)"
-          />
-        </div>
+        {transformedMonthWiseTurnover ? (
+          <div className="rounded-md xl:col-span-3">
+            <StackBarChart
+              {...fixedProps}
+              data={transformedMonthWiseTurnover}
+              title="Turnover (Month Wise)"
+            />
+          </div>
+        ) : <NoDataFound title="Turnover (Month Wise)" />}
+
         {/* {sectorwiseTrunover?.data ? (
           <BarChartHorizontalEvent
             data={sectorwiseTrunover.data}
@@ -252,20 +279,28 @@ const { data: dayWiseSummaryResponse, isLoading: todayLoading, isError: todayErr
         ) : (
           "No data available"
         )} */}
-        <TurnoverComparisonCard default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />
-        <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />
+        {dayWiseSummaryResponse?.data ? (
+          <TurnoverComparisonCard default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />)
+          : <NoDataFound title="Sector Wise Turnover Comparison" />}
+
+
+        {dayWiseSummaryResponse?.data ? (
+          <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />) 
+          : <NoDataFound title="Top Turnover Company" />}
         {datewiseTrunover ? (
           <BarChartBiAxis
             data={datewiseTrunover?.data?.rows as any}
             options={biaxialChartOption}
-          />) : null}
+          />) :
+          <NoDataFound title="Date Wise Turnover(Internet)" />}
 
-        {branchwiseTrunover?.data && branchwiseTrunoverDt?.data && (
+        {branchwiseTrunover?.data && branchwiseTrunoverDt?.data ? (
           <BranchWiseTurnoverComparison
             internetTurnover={branchwiseTrunover.data as any}
             dtTurnover={branchwiseTrunoverDt.data as any}
           />
-        )}
+        )
+          : <NoDataFound title="Branch Wise Turnover Comparison" />}
       </div>
     </div>
   );

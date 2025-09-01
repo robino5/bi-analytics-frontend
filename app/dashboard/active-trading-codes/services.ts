@@ -5,7 +5,7 @@ import {
 import { DataType, TransformedDataItem, PayloadType } from "./types"
 
 export const removeKeyFromObjects = (data: any[], ignoreKey: string) => {
-    return data.filter((item) => item.channel.trim() !== ignoreKey);
+    return data?.filter((item) => item.channel.trim() !== ignoreKey);
 };
 
 
@@ -27,7 +27,7 @@ export function sortByMonthYearDescending(data: DataType[]) {
     };
 
     // Sort the array by the specified field in descending order
-    return data.sort((a, b) => {
+    return data?.sort((a, b) => {
         const [monthA, yearA] = a.tradingDate.split(" ");
         const [monthB, yearB] = b.tradingDate.split(" ");
 
@@ -45,7 +45,7 @@ export const transformData = (
     data: IActiveTradeDayWise[],
     key: string,
 ): TransformedDataItem[] => {
-    const transformedData: TransformedDataItem[] = data.reduce(
+    const transformedData: TransformedDataItem[] = data?.reduce(
         (acc: TransformedDataItem[], curr: IActiveTradeDayWise) => {
             const existingItemIndex = acc.findIndex(
                 (item) => item.tradingDate === curr.tradingDate,
@@ -73,7 +73,7 @@ export const transformData = (
 };
 
 export const ratioMaker = (data: TransformedDataItem[]) => {
-    return data.map((d) => {
+    return data?.map((d) => {
         const total = d.dt + d.internet;
         return {
             ...d,
@@ -84,14 +84,14 @@ export const ratioMaker = (data: TransformedDataItem[]) => {
 };
 
 const parseDateOfMonthWise = (date: string) => {
-    return date.slice(3);
+    return date?.slice(3);
 };
 
 export const ratioMakerMonthWise = (
     data: PayloadType[],
     dateParse: boolean = true,
 ) => {
-    return data.map((d) => {
+    return data?.map((d) => {
         const total = d.DT + d.INTERNET;
         return {
             dt: d.DT,
