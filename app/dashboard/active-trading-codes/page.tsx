@@ -75,7 +75,7 @@ const ActiveTradingCodesBoard = () => {
   });
 
 
- 
+
 
 
   const biaxialChartOption = {
@@ -285,7 +285,7 @@ const ActiveTradingCodesBoard = () => {
 
 
         {dayWiseSummaryResponse?.data ? (
-          <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />) 
+          <TopTurnoverCompany default={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? null} />)
           : <NoDataFound title="Top Turnover Company" />}
         {datewiseTrunover ? (
           <BarChartBiAxis

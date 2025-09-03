@@ -156,11 +156,6 @@ export default function DailyTradePerformance() {
     queryFn: () => dailyTradePerformanceAPI.getBranchWiseNonePerforminigClients(branch)
   });
 
-    const { data: sectorwiseTrunoverComparison } = useQuery({
-      queryKey: ['sectorwiseTrunoverComparison', branch], // ✅ separate cache per branch+trader
-      queryFn: () => dailyTradePerformanceAPI.getRmWLiveTurnoverSectorWise(branch),
-    });
-
 
 
   const traceBranchChange = async (branchId: string) => {
@@ -186,8 +181,7 @@ export default function DailyTradePerformance() {
       <PageHeader name={`Daily Trade Performance as on ${localStorage?.getItem('push-data') ?? ""}`} updateStatus="* This data is updated every 15 minutes.">
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
       </PageHeader>
-      <Ticker />
-      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 ">
+      <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
         {summarydata?.data?.shortSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
@@ -206,7 +200,7 @@ export default function DailyTradePerformance() {
         {summarydata?.data?.cashCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Cash Code Status (Trade Clients)"
+            title="Cash Code Status (Traded Clients)"
             // subtitle="overview of cash codes"
             boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
@@ -219,7 +213,7 @@ export default function DailyTradePerformance() {
         {summarydata?.data?.marginCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Margin Code Status (Trade Clients)"
+            title="Margin Code Status (Traded Clients)"
             // subtitle="overview of margin codes"
             boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
@@ -229,11 +223,6 @@ export default function DailyTradePerformance() {
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
-
-        <div className="rounded-md xl:col-span-3">
-          <DseLiveTrade />
-        </div>
-
         {/* e-CRM Details */}
         {eCrmDetails?.data &&
           <CardBoard
@@ -245,50 +234,6 @@ export default function DailyTradePerformance() {
             }
           />
         }
-            {sectorwiseTrunoverComparison?.data ? (
-          <CardBoard
-            className="col-span-6 row-span-2 xl:col-span-3"
-            title="DSE Live Sector Wise Turnover"
-            liveIndicator={true}
-            // subtitle="Shows analytics of marginal performance for comodities"
-            children={
-              <BarChartHorizontal
-                data={(sectorwiseTrunoverComparison?.data ?? []).map((item: any) => ({
-                  name: item.name,
-                  value: item.primaryValue,   // taking primaryValue as value
-                }))}
-                options={sectorMarginCodeExposureOption}
-                colorArray={["#c200fb",]}
-              />
-            }
-          />
-        ) : (
-          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
-        )}
-
-        {sectorwiseTrunoverComparison?.data ? (
-          <CardBoard
-            className="col-span-6 row-span-2 xl:col-span-3"
-            title="LBSL Live Sector Wise Turnover"
-            liveIndicator={true}
-            // subtitle="Shows analytics of marginal performance for comodities"
-            children={
-              <BarChartHorizontal
-                data={sectorwiseTrunoverComparison?.data
-                  ?.map((item: any) => ({
-                    name: item.name,
-                    value: item.secondaryValue,
-                  }))
-                  .sort((a: any, b: any) => b.value - a.value) // sort descending
-                }
-                options={sectorMarginCodeExposureOption}
-                colorArray={["#ff7a56",]}
-              />
-            }
-          />
-        ) : (
-          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
-        )}
         {/* e-CRM Details */}
         {rmWiseDailyTradeData?.data &&
           <CardBoard
@@ -302,28 +247,6 @@ export default function DailyTradePerformance() {
           />
 
         }
-        {branchWiseNonePerforminigClients?.data ? (
-          <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <BranchWiseNonePerformingClientDatatable
-                data={branchWiseNonePerforminigClients?.data}
-                columns={branchWiseNonePerformingClientColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
-          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-            <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
-          </CardHeader>
-          <CardContent className="mt-3">
-            loading......
-          </CardContent>
-        </Card>}
-
-        
         {investorTopBuyData?.data ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
@@ -365,6 +288,26 @@ export default function DailyTradePerformance() {
             </CardContent>
           </Card>
         ) : null}
+        {branchWiseNonePerforminigClients?.data ? (
+          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
+            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+              <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
+            </CardHeader>
+            <CardContent className="mt-3">
+              <BranchWiseNonePerformingClientDatatable
+                data={branchWiseNonePerforminigClients?.data}
+                columns={branchWiseNonePerformingClientColumns}
+              />
+            </CardContent>
+          </Card>
+        ) : <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3">
+            loading......
+          </CardContent>
+        </Card>}
 
         {/* Turnover Performance Chart */}
         {turnoverPerformance?.data ? (
