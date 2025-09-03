@@ -105,15 +105,6 @@ class DailyTradePerformanceAPI extends Common {
         }
     }
 
-    getRmWLiveTurnoverSectorWise(branch: string) {
-        if (branch) {
-            return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>(`dashboards/rm/rm-live-turnover-sectorwise/?branch=${branch}`)
-        }
-        else {
-            return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>("dashboards/rm/rm-live-turnover-sectorwise/")
-        }
-    }
-
 
 
 }

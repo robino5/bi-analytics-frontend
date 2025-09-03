@@ -150,11 +150,7 @@ export default function DailyTradePerformance() {
     enabled: !!branch,
   });
 
-  const { data: sectorwiseTrunoverComparison } = useQuery({
-    queryKey: ['sectorwiseTrunoverComparison', branch, trader], // ✅ separate cache per branch+trader
-    queryFn: () => dailyTradePerformance.getRmWLiveTurnoverSectorWise(branch, trader),
-    enabled: !!branch,
-  });
+
   useEffect(() => {
     if (!branch || branch === "") {
       if (isRM) {
@@ -211,7 +207,7 @@ export default function DailyTradePerformance() {
         {summary?.data?.cashCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Cash Code Status (Trade Clients)"
+            title="Cash Code Status (Traded Clients)"
             // subtitle="shows cash code summary"
             boardIcon={<FaChartSimple className="h-7 w-7 text-gray-400" />}
             children={
@@ -224,7 +220,7 @@ export default function DailyTradePerformance() {
         {summary?.data?.marginCodeSummary ? (
           <CardBoard
             className="col-span-6 xl:col-span-2"
-            title="Margin Code Status (Trade Clients)"
+            title="Margin Code Status (Traded Clients)"
             // subtitle="shows margin code summary"
             boardIcon={<IoPieChartSharp className="h-7 w-7 text-gray-400" />}
             children={
@@ -234,9 +230,6 @@ export default function DailyTradePerformance() {
         ) : (
           <SummarySkeletonCard className="col-span-6 xl:col-span-2" />
         )}
-        <div className="rounded-md xl:col-span-3">
-          <DseLiveTrade />
-        </div>
         {/* e-CRM Details */}
         {eCrmDetails?.data &&
           <CardBoard
@@ -271,52 +264,6 @@ export default function DailyTradePerformance() {
               <BarChartVerticalGrouped
                 data={turnoverPerformance?.data || []}
                 options={turnoverChartOptions}
-              />
-            }
-          />
-        ) : (
-          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
-        )}
-
-
-        {sectorwiseTrunoverComparison?.data ? (
-          <CardBoard
-            className="col-span-6 row-span-2 xl:col-span-3"
-            title="DSE Live Sector Wise Turnover"
-            liveIndicator={true}
-            // subtitle="Shows analytics of marginal performance for comodities"
-            children={
-              <BarChartHorizontal
-                data={(sectorwiseTrunoverComparison?.data ?? []).map((item: any) => ({
-                  name: item.name,
-                  value: item.primaryValue,   // taking primaryValue as value
-                }))}
-                options={sectorMarginCodeExposureOption}
-                colorArray={["#c200fb",]}
-              />
-            }
-          />
-        ) : (
-          <SkeletonStatistics className="col-span-6 xl:col-span-3" />
-        )}
-
-        {sectorwiseTrunoverComparison?.data ? (
-          <CardBoard
-            className="col-span-6 row-span-2 xl:col-span-3"
-            title="LBSL Live Sector Wise Turnover"
-            liveIndicator={true}
-            // subtitle="Shows analytics of marginal performance for comodities"
-            children={
-              <BarChartHorizontal
-                data={sectorwiseTrunoverComparison?.data
-                  ?.map((item: any) => ({
-                    name: item.name,
-                    value: item.secondaryValue,
-                  }))
-                  .sort((a: any, b: any) => b.value - a.value) // sort descending
-                }
-                options={sectorMarginCodeExposureOption}
-                colorArray={["#ff7a56",]}
               />
             }
           />

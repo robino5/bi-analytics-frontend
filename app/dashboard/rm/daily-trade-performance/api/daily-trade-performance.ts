@@ -60,13 +60,6 @@ class DailyTradePerformance extends Common {
         return this.http.get<IResponse<RmWiseDailyTradeData[]>>(url)
     }
 
-    getRmWLiveTurnoverSectorWise(branch: string, trader?: string) {
-        let url = `dashboards/rm/rm-live-turnover-sectorwise/?branch=${branch}`;
-        if (trader) {
-            url += `&trader=${trader}`;
-        }
-        return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>(url)
-    }
 }
 
 const httpAuthService = new HttpAuthService(config.apiURL, authService);

@@ -23,9 +23,11 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 const CustomHeaderGroup = (props: { icon: ReactNode; name: string }) => {
   const { icon, name } = props;
   return (
-    <div className="flex gap-2 justify-start items-center">
-      {icon}
-      <p className="text-md">{name}</p>
+    <div className="flex items-center gap-3 px-2 py-1 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 shadow-sm mb-1">
+      <div className="text-2xl text-blue-600">{icon}</div>
+      <p className="text-lg font-semibold text-gray-800 tracking-wide">
+        {name}
+      </p>
     </div>
   );
 };
@@ -73,6 +75,14 @@ const menuList = [
     subMenus: [
       {
         id: 1,
+        codeName: "live_trade_status",
+        viewName: "Live Trade Status",
+        urlPath: "/dashboard/live-trade-status",
+        icon: <GrBarChart className="h-4 w-4" />,
+        roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
+      },
+      {
+        id: 2,
         codeName: "daily_trade_performance",
         viewName: "Daily Trade Performance",
         urlPath: "/dashboard/daily-trade-performance",
@@ -80,7 +90,7 @@ const menuList = [
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
-        id: 2,
+        id: 3,
         codeName: "portfolio_management",
         viewName: "Portfolio Management",
         urlPath: "/dashboard/portfolio-management",
@@ -88,7 +98,7 @@ const menuList = [
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
-        id: 3,
+        id: 4,
         codeName: "margin_loan_usage",
         viewName: "Margin Loan Usage",
         urlPath: "/dashboard/margin-loan-usage",
@@ -96,7 +106,7 @@ const menuList = [
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
-        id: 4,
+        id: 5,
         codeName: "branch_performance",
         viewName: "Branch Performance",
         urlPath: "/dashboard/branch-performance",
@@ -118,8 +128,22 @@ const menuList = [
       "REGIONAL_MANAGER",
     ],
     subMenus: [
-      {
+            {
         id: 1,
+        codeName: "live_trade_status",
+        viewName: "Live Trade Status",
+        urlPath: "/dashboard/rm/live-trade-status",
+        icon: <GrBraille className="h-4 w-4" />,
+        roles: [
+          "ADMIN",
+          "MANAGEMENT",
+          "BRANCH_MANAGER",
+          "CLUSTER_MANAGER",
+          "REGIONAL_MANAGER",
+        ],
+      },
+      {
+        id: 2,
         codeName: "daily_trade_performance",
         viewName: "Daily Trade Performance",
         urlPath: "/dashboard/rm/daily-trade-performance",
@@ -133,7 +157,7 @@ const menuList = [
         ],
       },
       {
-        id: 2,
+        id: 3,
         codeName: "rm_performance",
         viewName: "RM Performance",
         urlPath: "/dashboard/rm/performance-report",
@@ -147,7 +171,7 @@ const menuList = [
         ],
       },
       {
-        id: 3,
+        id: 4,
         codeName: "rm_portfolio",
         viewName: "RM Portfolio",
         urlPath: "/dashboard/rm/portfolio-report",
@@ -179,7 +203,7 @@ const menuList = [
       },
     ],
   },
-    {
+  {
     id: 4,
     codeName: "settings",
     viewName: "Settings",
@@ -221,42 +245,44 @@ export default function DashboardMenus() {
   };
 
   return (
-    <Command>
-      <CommandList className="max-h-full bg-[#FAF7F0]">
-        {menus.map((menu) => {
-          return (
-            <div key={menu.codeName}>
-              <CommandGroup
-                value={menu.codeName}
-                heading={
-                  <CustomHeaderGroup icon={menu.icon} name={menu.viewName} />
-                }
-              >
-                {menu.subMenus.map((subMenu) => (
-                  <CommandItem
-                    onSelect={visitUrl}
-                    key={subMenu.id}
-                    value={subMenu.urlPath}
-                    className={cn(
-                      "ml-4 flex justify-between items-center gap-3",
-                      {
-                        "bg-gray-300 text-gray-800 font-bold":
-                          subMenu.urlPath === pathName,
-                      },
-                    )}
-                  >
-                    <div className="flex justify-between items-center gap-3">
-                      {subMenu.icon}
-                      {subMenu.viewName}
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              <CommandSeparator />
-            </div>
-          );
-        })}
-      </CommandList>
-    </Command>
+    <aside className="h-[680px] w-68 bg-white shadow-lg rounded-r-2xl overflow-y-auto border-r border-gray-200">
+      <Command>
+        <CommandList className="max-h-full px-2 py-2">
+          {menus.map((menu) => {
+            return (
+              <div key={menu.codeName} className="mb-2">
+                <CommandGroup
+                  value={menu.codeName}
+                  heading={
+                    <CustomHeaderGroup icon={menu.icon} name={menu.viewName} />
+                  }
+                >
+                  {menu.subMenus.map((subMenu) => (
+                    <CommandItem
+                      onSelect={visitUrl}
+                      key={subMenu.id}
+                      value={subMenu.urlPath}
+                      className={cn(
+                        "ml-2 flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-blue-50 hover:scale-[1.02] ",
+                        {
+                          "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:text-white":
+                            subMenu.urlPath === pathName,
+                        }
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        {subMenu.icon}
+                        <span className="text-sm font-medium">{subMenu.viewName}</span>
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+                <CommandSeparator className="my-2" />
+              </div>
+            );
+          })}
+        </CommandList>
+      </Command>
+    </aside>
   );
 }
