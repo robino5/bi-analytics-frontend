@@ -19,6 +19,17 @@ import { LiaUserShieldSolid } from "react-icons/lia";
 import { FcBearish } from "react-icons/fc";
 import { useSession } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { AiOutlineUser, AiOutlineDashboard, AiOutlineShop } from "react-icons/ai";
+import { MdAdminPanelSettings } from "react-icons/md";
+import { BsGraphUpArrow } from "react-icons/bs";
+import { RiProfileLine } from "react-icons/ri";
+import { GiTakeMyMoney } from "react-icons/gi";
+import { FcSalesPerformance } from "react-icons/fc";
+import { FaStore } from "react-icons/fa";
+import { CgPerformance } from "react-icons/cg";
+import { ImProfile } from "react-icons/im";
+import { TbChartHistogram } from "react-icons/tb";
+
 
 const CustomHeaderGroup = (props: { icon: ReactNode; name: string }) => {
   const { icon, name } = props;
@@ -37,7 +48,7 @@ const menuList = [
     id: 1,
     codeName: "admin_dashboards",
     viewName: "Admin Analytics",
-    icon: <LiaUserShieldSolid className="h-5 w-5" />,
+    icon: <MdAdminPanelSettings className="h-6 w-6" />,
     roles: ["ADMIN", "MANAGEMENT"],
     subMenus: [
       {
@@ -45,7 +56,7 @@ const menuList = [
         codeName: "active_trading_codes",
         viewName: "Active Trading Codes",
         urlPath: "/dashboard/active-trading-codes",
-        icon: <FcBearish className="h-4 w-4" />,
+        icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
         roles: ["ADMIN", "MANAGEMENT"],
       },
       {
@@ -53,7 +64,7 @@ const menuList = [
         codeName: "business_and_trade_management",
         viewName: "Business and Trade Management",
         urlPath: "/dashboard/business-and-trade-management",
-        icon: <FcBearish className="h-4 w-4" />,
+        icon: <AiOutlineShop className="h-6 w-6 text-green-500" />,
         roles: ["ADMIN", "MANAGEMENT"],
       },
       {
@@ -61,7 +72,7 @@ const menuList = [
         codeName: "customer_management",
         viewName: "Customer Management",
         urlPath: "/dashboard/customer-management",
-        icon: <FcBearish className="h-4 w-4" />,
+        icon: <AiOutlineUser className="h-5 w-5 text-purple-500" />,
         roles: ["ADMIN", "MANAGEMENT"],
       },
     ],
@@ -70,7 +81,7 @@ const menuList = [
     id: 2,
     codeName: "branch_dashboards",
     viewName: "Branch Analytics",
-    icon: <DiGoogleAnalytics className="h-5 w-5" />,
+    icon: <FaStore className="h-6 w-6" />,
     roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
     subMenus: [
       {
@@ -78,7 +89,7 @@ const menuList = [
         codeName: "live_trade_status",
         viewName: "Live Trade Status",
         urlPath: "/dashboard/live-trade-status",
-        icon: <GrBarChart className="h-4 w-4" />,
+        icon: <GrBarChart className="h-4 w-4 text-fuchsia-500" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
@@ -86,7 +97,7 @@ const menuList = [
         codeName: "daily_trade_performance",
         viewName: "Daily Trade Performance",
         urlPath: "/dashboard/daily-trade-performance",
-        icon: <GrBarChart className="h-4 w-4" />,
+        icon: <BsGraphUpArrow className="h-5 w-5 text-lime-500" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
@@ -94,7 +105,7 @@ const menuList = [
         codeName: "portfolio_management",
         viewName: "Portfolio Management",
         urlPath: "/dashboard/portfolio-management",
-        icon: <GrBarChart className="h-4 w-4" />,
+        icon: <RiProfileLine className="h-5 w-5 text-rose-500" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
@@ -102,7 +113,7 @@ const menuList = [
         codeName: "margin_loan_usage",
         viewName: "Margin Loan Usage",
         urlPath: "/dashboard/margin-loan-usage",
-        icon: <GrBarChart className="h-4 w-4" />,
+        icon: <GiTakeMyMoney className="h-5 w-5 text-teal-500" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
       {
@@ -110,7 +121,7 @@ const menuList = [
         codeName: "branch_performance",
         viewName: "Branch Performance",
         urlPath: "/dashboard/branch-performance",
-        icon: <GrBarChart className="h-4 w-4" />,
+        icon: <FcSalesPerformance className="h-5 w-5" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
     ],
@@ -128,12 +139,12 @@ const menuList = [
       "REGIONAL_MANAGER",
     ],
     subMenus: [
-            {
+      {
         id: 1,
         codeName: "live_trade_status",
         viewName: "Live Trade Status",
         urlPath: "/dashboard/rm/live-trade-status",
-        icon: <GrBraille className="h-4 w-4" />,
+        icon: <GrBraille className="h-5 w-5 text-red-500" />,
         roles: [
           "ADMIN",
           "MANAGEMENT",
@@ -147,7 +158,7 @@ const menuList = [
         codeName: "daily_trade_performance",
         viewName: "Daily Trade Performance",
         urlPath: "/dashboard/rm/daily-trade-performance",
-        icon: <GrBraille className="h-4 w-4" />,
+        icon: <CgPerformance className="h-5 w-5 text-violet-500" />,
         roles: [
           "ADMIN",
           "MANAGEMENT",
@@ -161,7 +172,7 @@ const menuList = [
         codeName: "rm_performance",
         viewName: "RM Performance",
         urlPath: "/dashboard/rm/performance-report",
-        icon: <GrBraille className="h-4 w-4" />,
+        icon: <TbChartHistogram className="h-5 w-5 text-pink-500" />,
         roles: [
           "ADMIN",
           "MANAGEMENT",
@@ -175,7 +186,7 @@ const menuList = [
         codeName: "rm_portfolio",
         viewName: "RM Portfolio",
         urlPath: "/dashboard/rm/portfolio-report",
-        icon: <GrBraille className="h-4 w-4" />,
+        icon: <ImProfile className="h-5 w-5 text-indigo-500" />,
         roles: [
           "ADMIN",
           "MANAGEMENT",
@@ -198,7 +209,7 @@ const menuList = [
         codeName: "users",
         viewName: "Users",
         urlPath: "/users",
-        icon: <CgUserList className="h-4 w-4" />,
+        icon: <CgUserList className="h-5 w-5 text-purple-500" />,
         roles: ["ADMIN"],
       },
     ],
@@ -215,7 +226,7 @@ const menuList = [
         codeName: "user-list",
         viewName: "User List",
         urlPath: "/user-list",
-        icon: <CgUserList className="h-4 w-4" />,
+        icon: <CgUserList className="h-5 w-5 text-purple-500" />,
         roles: ["MANAGEMENT"],
       },
     ],
@@ -263,16 +274,32 @@ export default function DashboardMenus() {
                       key={subMenu.id}
                       value={subMenu.urlPath}
                       className={cn(
-                        "ml-2 flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-blue-50 hover:scale-[1.02] ",
+                        "ml-2 flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-blue-200 hover:scale-[1.02] group",
                         {
-                          "bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-md hover:text-white":
-                            subMenu.urlPath === pathName,
+                          "bg-gradient-to-r from-blue-500 to-indigo-500 shadow-md": subMenu.urlPath === pathName,
                         }
                       )}
                     >
-                      <div className="flex items-center gap-3">
-                        {subMenu.icon}
-                        <span className="text-sm font-medium">{subMenu.viewName}</span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={cn("transition-colors duration-200", {
+                            "text-white": subMenu.urlPath === pathName,
+                            "group-hover:text-white": subMenu.urlPath === pathName, // icon also white
+                          })}
+                        >
+                          {subMenu.icon}
+                        </span>
+                        <span
+                          className={cn(
+                            "text-sm font-medium transition-colors duration-200",
+                            {
+                              "text-white": subMenu.urlPath === pathName,
+                              "group-hover:text-white": subMenu.urlPath === pathName,
+                            }
+                          )}
+                        >
+                          {subMenu.viewName}
+                        </span>
                       </div>
                     </CommandItem>
                   ))}
