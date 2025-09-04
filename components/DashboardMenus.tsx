@@ -256,7 +256,7 @@ export default function DashboardMenus() {
   };
 
   return (
-    <aside className="h-[680px] w-68 bg-white shadow-lg rounded-r-2xl overflow-y-auto border-r border-gray-200">
+    <aside className="h-full w-68 bg-white shadow-lg rounded-r-xl overflow-y-auto border-r border-gray-200">
       <Command>
         <CommandList className="max-h-full px-2 py-2">
           {menus.map((menu) => {
