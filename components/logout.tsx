@@ -23,17 +23,37 @@ export default function LogoutForm() {
   };
 
   return (
-    <form onSubmit={handleLogout}>
-      {isPending ? (
-        <Button className="text-lg w-[270px]" variant="destructive" disabled>
-          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-          Please Wait...
-        </Button>
-      ) : (
-        <Button type="submit" variant="destructive" className="text-lg w-[270px]">
-          <LogOut className="h-4 w-4 mr-2" /> Logout
-        </Button>
-      )}
-    </form>
+    // <form onSubmit={handleLogout}>
+    //   {isPending ? (
+    //     <Button className="text-lg w-[270px]" variant="destructive" disabled>
+    //       <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+    //       Please Wait...
+    //     </Button>
+    //   ) : (
+    //     <Button type="submit" variant="destructive" className="text-lg w-[270px]">
+    //       <LogOut className="h-4 w-4 mr-2" /> Logout
+    //     </Button>
+    //   )}
+    // </form>
+     <form onSubmit={handleLogout} className="w-full">
+          {isPending ? (
+            <Button
+              className="text-sm w-full"
+              variant="destructive"
+              disabled
+            >
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Please Wait...
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              variant="destructive"
+              className="text-sm w-full"
+            >
+              <LogOut className="h-4 w-4 mr-2" /> Logout
+            </Button>
+          )}
+        </form>
   );
 }

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function DashboardLayout({
   children,
@@ -25,6 +26,7 @@ export default function DashboardLayout({
       <div className="flex-grow h-full transition-all duration-300">
         {children}
       </div>
+       <Toaster/>
     </section>
   );
 }

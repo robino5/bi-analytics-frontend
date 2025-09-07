@@ -16,6 +16,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import { numberToMillionsString } from "@/lib/utils";
+import { useState } from "react";
 
 interface MarketShareLBSl {
   tradingDate: string;
@@ -41,6 +42,14 @@ interface Props {
 }
 
 export default function DetailsMarketShareLBSL({ datalist }: Props) {
+  const [showSummary, setShowSummary] = useState(false);
+  const summaryRows = [
+    { label: "LBSL Total Turnover", value: datalist.lbslTotalTurnover },
+    { label: "EXCH Total Market TO", value: datalist.exchTotalMarket },
+    { label: "LBSL Market % (DSE+CSE)", value: datalist.lbslMarketAll },
+    { label: "Foreign", value: datalist.foreign },
+    { label: "Net Income Today", value: datalist.netIncome },
+  ];
   return (
     <Card className="col-span-3 overflow-auto bg-[#033e4a]">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
@@ -54,165 +63,92 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
       <CardContent className="mt-2">
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-          <TableRow className="text-center bg-blue-500 hover:bg-blue-700 text-white text-lg">
-              <TableHead
-                className="text-center py-1 border border-gray-300 text-white text-bold"
-                colSpan={2}
-              >
-                DSE
-              </TableHead>
-              <TableHead
-                className="text-center py-1 border border-gray-300 text-white text-lg"
-                colSpan={2}
-              >
-                CSE
-              </TableHead>
+            <TableRow className="text-center bg-blue-500 text-white text-lg hover:bg-blue-500">
+              <TableHead className="text-left py-1 border border-gray-300"></TableHead>
+              <TableHead className="text-right py-1 border border-gray-300 text-white">DSE</TableHead>
+              <TableHead className="text-right py-1 border border-gray-300 text-white">CSE</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow className="text-center text-lg bg-blue-500 hover:bg-blue-700 text-white font-bold">
-         
-            </TableRow>
-            <TableRow className="transition-all duration-300">
-              <TableCell className="dse_table_odd_row text-left py-1 border border-gray-300 w-1/4">
-                LBSL Buy
-              </TableCell>
-              <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300 w-1/4">
-                {numberToMillionsString(datalist.lbslBuyOfDse,2)}
-              </TableCell>
-              <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300 w-1/4">
-                LBSL Buy
-              </TableCell>
-              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300 w-1/4">
-                {numberToMillionsString(datalist.lbslBuyOfCse,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="transition-all duration-300">
-              <TableCell className="dse_table_even_row text-left py-1 border border-gray-300">
-                LBSL Sell
-              </TableCell>
-              <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslSaleOfDse,2)}
-              </TableCell>
-              <TableCell className="cse_table_even_row text-left py-1 border border-gray-300">
-                LBSL Sell
-              </TableCell>
-              <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslSaleOfCse,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
-              <TableCell className="dse_table_odd_row text-left py-1 border border-gray-300">
-                LBSL Total
-              </TableCell>
-              <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslTotalOfDse,2)}
-              </TableCell>
-              <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
-                LBSL Total
-              </TableCell>
-              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslTotalOfCse,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="bg-table-even-row transition-all duration-300">
-              <TableCell className="dse_table_even_row text-left py-1 border border-gray-300">
-                Market Turnover
-              </TableCell>
-              <TableCell className="dse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.dseMarketTurnover,2)}
-              </TableCell>
-              <TableCell className="cse_table_even_row text-left py-1 border border-gray-300">
-                Market Turnover
-              </TableCell>
-              <TableCell className="cse_table_even_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.cseMarketTurnover,2)}
+            {/* DSE & CSE Section */}
+            {[
+              { label: "LBSL Buy", dse: datalist.lbslBuyOfDse, cse: datalist.lbslBuyOfCse },
+              { label: "LBSL Sell", dse: datalist.lbslSaleOfDse, cse: datalist.lbslSaleOfCse },
+              { label: "LBSL Total", dse: datalist.lbslTotalOfDse, cse: datalist.lbslTotalOfCse },
+              { label: "Market Turnover", dse: datalist.dseMarketTurnover, cse: datalist.cseMarketTurnover },
+              { label: "LBSL Share (%)", dse: datalist.lbslShareOfDse, cse: datalist.lbslShareOfCse },
+            ].map((row, index) => {
+              // Alternating row gradient for the label column
+              const labelGradient = index % 2 === 0
+                ? "bg-gradient-to-r from-purple-100 via-purple-200 to-purple-300"
+                : "bg-gradient-to-r from-purple-200 via-purple-300 to-purple-400";
+
+              // DSE column gradient
+              const dseGradient = index % 2 === 0
+                ? "bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300"
+                : "bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400";
+
+              // CSE column gradient
+              const cseGradient = index % 2 === 0
+                ? "bg-gradient-to-r from-green-100 via-green-200 to-green-300"
+                : "bg-gradient-to-r from-green-200 via-green-300 to-green-400";
+
+              return (
+                <TableRow key={row.label} className="text-center transition-all duration-300">
+                  <TableCell className={`text-left py-1 border border-gray-300 font-semibold ${labelGradient}`}>
+                    {row.label}
+                  </TableCell>
+                  <TableCell className={`text-right py-1 border border-gray-300 font-medium ${dseGradient}`}>
+                    {numberToMillionsString(row.dse, 2)}
+                  </TableCell>
+                  <TableCell className={`text-right py-1 border border-gray-300 font-medium ${cseGradient}`}>
+                    {numberToMillionsString(row.cse, 2)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+
+            {/* Collapsible Summary Header */}
+            <TableRow
+              className="text-center cursor-pointer font-bold text-black bg-gradient-to-r from-violet-100 via-violet-200 to-violet-300 transition-all duration-300 hover:scale-[1.01]"
+              onClick={() => setShowSummary(!showSummary)}
+            >
+              <TableCell colSpan={3} className="py-2 border border-gray-300">
+                {showSummary ? "Hide Summary ▲" : "Show Summary ▼"}
               </TableCell>
             </TableRow>
-            <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
-              <TableCell className="dse_table_odd_row text-left py-1 border border-gray-300">
-                LBSL Share(%)
-              </TableCell>
-              <TableCell className="dse_table_odd_row text-right py-1 border border-gray-300">
-                {numberToMillionsString(datalist.lbslShareOfDse,2)}
-              </TableCell>
-              <TableCell className="cse_table_odd_row text-left py-1 border border-gray-300">
-                LBSL Share(%)
-              </TableCell>
-              <TableCell className="cse_table_odd_row text-right py-1 border border-gray-300 ">
-                {numberToMillionsString(datalist.lbslShareOfCse,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
-              <TableCell
-                className="text-center py-1 border border-gray-300 dse_table_even_row"
-                colSpan={2}
-              >
-                LBSL Total Turnover
-              </TableCell>
-              <TableCell
-                className="text-right py-1 border border-gray-300 cse_table_even_row"
-                colSpan={2}
-              >
-                {numberToMillionsString(datalist.lbslTotalTurnover,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
-              <TableCell
-                className="text-center py-1 border border-gray-300 dse_table_odd_row"
-                colSpan={2}
-              >
-                EXCH Total Market TO
-              </TableCell>
-              <TableCell
-                className="text-right py-1 border border-gray-300 cse_table_odd_row"
-                colSpan={2}
-              >
-                {numberToMillionsString(datalist.exchTotalMarket,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
-              <TableCell
-                className="text-center py-1 border border-gray-300 dse_table_even_row"
-                colSpan={2}
-              >
-                LBSL Market % (DSE+CSE)
-              </TableCell>
-              <TableCell
-                className="text-right py-1 border border-gray-300 cse_table_even_row"
-                colSpan={2}
-              >
-                {numberToMillionsString(datalist.lbslMarketAll,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cse_dse_summurize_odd_row  transition-all duration-300">
-              <TableCell
-                className="text-center py-1 border border-gray-300 dse_table_odd_row"
-                colSpan={2}
-              >
-                Foreign
-              </TableCell>
-              <TableCell
-                className="text-right py-1 border border-gray-300 cse_table_odd_row"
-                colSpan={2}
-              >
-                {numberToMillionsString(datalist.foreign,2)}
-              </TableCell>
-            </TableRow>
-            <TableRow className="cse_dse_summurize_even_row transition-all duration-300">
-              <TableCell
-                className="text-center py-1 border border-gray-300 dse_table_even_row"
-                colSpan={2}
-              >
-                Net Income Today
-              </TableCell>
-              <TableCell
-                className="text-right py-1 border border-gray-300 cse_table_even_row"
-                colSpan={2}
-              >
-                {numberToMillionsString(datalist.netIncome,2)}
-              </TableCell>
-            </TableRow>
+
+            {/* Collapsible Summary Container */}
+            {showSummary && (
+              <TableRow>
+                <TableCell colSpan={3} className="p-0">
+                  <Table className="w-full">
+                    <TableBody>
+                      {summaryRows.map((row, index) => {
+                        const gradient =
+                          index % 2 === 0
+                            ? "bg-gradient-to-r from-fuchsia-50 via-fuchsia-100 to-fuchsia-200"
+                            : "bg-gradient-to-r from-fuchsia-200 via-fuchsia-300 to-fuchsia-400";
+
+                        return (
+                          <TableRow
+                            key={row.label}
+                            className={`text-left font-semibold transition-all duration-300 ${gradient}`}
+                          >
+                            <TableCell colSpan={1} className="py-1 border border-gray-300">
+                              {row.label}
+                            </TableCell>
+                            <TableCell colSpan={2} className="text-right py-1 border border-gray-300 font-medium">
+                              {numberToMillionsString(row.value, 2)}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </CardContent>
