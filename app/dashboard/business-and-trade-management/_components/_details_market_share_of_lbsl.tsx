@@ -63,7 +63,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
       <CardContent className="mt-2">
         <Table className="min-w-[453px] border border-gray-300 rounded-md overflow-hidden">
           <TableHeader>
-            <TableRow className="text-center bg-blue-500 text-white text-lg">
+            <TableRow className="text-center bg-blue-500 text-white text-lg hover:bg-blue-500">
               <TableHead className="text-left py-1 border border-gray-300"></TableHead>
               <TableHead className="text-right py-1 border border-gray-300 text-white">DSE</TableHead>
               <TableHead className="text-right py-1 border border-gray-300 text-white">CSE</TableHead>
@@ -150,10 +150,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
               </TableRow>
             )}
           </TableBody>
-
-
         </Table>
-
       </CardContent>
     </Card>
   );

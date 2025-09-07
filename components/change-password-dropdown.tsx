@@ -1,35 +1,34 @@
 "use client";
-
-import { useState, useTransition } from "react";
-import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useTransition } from "react";
+import { useToast } from "./ui/use-toast";
+import { ChangePasswordSchema } from "@/app/schemas";
+import { z } from "zod";
+import { changePasswordAction } from "@/app/actions/user";
+import { ChangePasswordForm } from "@/app/user-list/forms";
 import { TbPasswordUser } from "react-icons/tb";
 import { RiErrorWarningLine } from "react-icons/ri";
-import { useToast } from "@/components/ui/use-toast";
 
-import { ChangePasswordSchema } from "@/app/schemas";
-import { ChangePasswordForm } from "@/app/users/forms/change-Password-form";
-import { changePasswordAction } from "@/app/actions/user";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+type FormValues = {
+  password: string;
+  confirmPassword: string;
+};
 
-interface ChangePasswordProps {
-  username: string;
-}
+type Props = {
+  open: boolean;
+  setOpen: (val: boolean) => void;
+  username : string
+};
 
-const ChangePasswordModalDropdown = ({ username }: ChangePasswordProps) => {
-  const [open, setOpen] = useState(false);
+const ChangePassword = ({ open, setOpen,username }: Props) => {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
   const handleFormSubmit = (formdata: z.infer<typeof ChangePasswordSchema>) => {
+    console.log(formdata,username)
     startTransition(async () => {
       const event = await changePasswordAction(username, formdata);
       if (event.status === "success") {
@@ -46,19 +45,11 @@ const ChangePasswordModalDropdown = ({ username }: ChangePasswordProps) => {
       }
     });
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DropdownMenuItem
-        onSelect={(e) => {
-          e.preventDefault();
-          setOpen(true);
-        }}
-        className="flex items-center gap-2 w-full cursor-pointer"
-      >
-        <TbPasswordUser className="h-4 w-4" /> Change Password
-      </DropdownMenuItem>
-      <DialogContent className="sm:max-w-[480px]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[450px]">
+             <DialogHeader>
           <DialogTitle>
             <div className="flex justify-start items-center">
               <TbPasswordUser className="h-4 w-4 mr-2" /> Update Password
@@ -80,4 +71,4 @@ const ChangePasswordModalDropdown = ({ username }: ChangePasswordProps) => {
   );
 };
 
-export default ChangePasswordModalDropdown;
+export default ChangePassword;
