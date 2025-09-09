@@ -60,7 +60,7 @@ export function numberToMillionsString(
   }
 
   if (absNumber < 1_00_0000) {
-    return `${sign}${numberFormatter(absNumber,fractonalDigits)}`;
+    return `${sign}${numberFormatter(absNumber / 1000000,fractonalDigits)}M`;
   }
 
   if (absNumber < 10_00_0000) {
