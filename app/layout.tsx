@@ -27,13 +27,13 @@ export default async function AuthLayout({
   return (
     <html lang="en">
       <body className={cn("bg-secondary", fontSans.variable)}>
-      {/* <ThemeProvider attribute="class" defaultTheme="root" enableSystem> */}
+      <ThemeProvider attribute="class" defaultTheme="root" enableSystem>
         <SessionProvider session={session}>
           <TanStackProvider >
             {children}
           </TanStackProvider>
         </SessionProvider>
-        {/* </ThemeProvider> */}
+        </ThemeProvider>
       </body>
     </html>
   );

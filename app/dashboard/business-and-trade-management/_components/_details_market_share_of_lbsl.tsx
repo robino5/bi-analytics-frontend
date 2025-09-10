@@ -94,15 +94,30 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                 : "bg-gradient-to-r from-green-200 via-green-300 to-green-400";
 
               return (
-                <TableRow key={row.label} className="text-center transition-all duration-300">
-                  <TableCell className={`text-left py-1 border border-gray-300 font-semibold ${labelGradient}`}>
+                <TableRow
+                  key={row.label}
+                  className="text-center transition-all duration-300"
+                >
+                  <TableCell
+                    className={`text-left py-1 border border-gray-300 font-semibold ${labelGradient}`}
+                  >
                     {row.label}
                   </TableCell>
-                  <TableCell className={`text-right py-1 border border-gray-300 font-medium ${dseGradient}`}>
-                    {numberToMillionsString(row.dse, 2)}
+
+                  <TableCell
+                    className={`text-right py-1 border border-gray-300 font-medium ${dseGradient}`}
+                  >
+                    {row.label.includes("%")
+                      ? row.dse.toFixed(2)
+                      : numberToMillionsString(row.dse, 2)}
                   </TableCell>
-                  <TableCell className={`text-right py-1 border border-gray-300 font-medium ${cseGradient}`}>
-                    {numberToMillionsString(row.cse, 2)}
+
+                  <TableCell
+                    className={`text-right py-1 border border-gray-300 font-medium ${cseGradient}`}
+                  >
+                    {row.label.includes("%")
+                      ? row.cse.toFixed(2)
+                      : numberToMillionsString(row.cse, 2)}
                   </TableCell>
                 </TableRow>
               );
@@ -139,7 +154,9 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                               {row.label}
                             </TableCell>
                             <TableCell colSpan={2} className="text-right py-1 border border-gray-300 font-medium">
-                              {numberToMillionsString(row.value, 2)}
+                              {row.label.includes("%")
+                                ? row.value.toFixed(2)
+                                : numberToMillionsString(row.value, 2)}
                             </TableCell>
                           </TableRow>
                         );

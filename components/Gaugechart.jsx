@@ -10,6 +10,16 @@ const GaugeChart = ({ data }) => {
     const chart = echarts.init(chartRef.current);
     const roundedValue = Math.round(data);
 
+    // 🔑 Helper: convert CSS variable into valid hsl/hex
+    const getCssVarColor = (varName) => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      if (!raw) return "#000"; // fallback
+      if (raw.includes(" ")) return `hsl(${raw})`; // for values like 222.2 84% 4.9%
+      return raw;
+    };
+
+    const textColor = getCssVarColor("--foreground");
+
     const option = {
       grid: { top: 5, bottom: 5, left: 5, right: 5 },
       series: [
@@ -31,8 +41,16 @@ const GaugeChart = ({ data }) => {
               ],
             },
           },
+          axisLabel: {
+            color: textColor,
+          },
           axisTick: { show: false },
           splitLine: { show: false },
+          title: {
+            show: true,
+            color: textColor,
+            fontSize: 14,
+          },
           detail: {
             formatter: (value) => {
               const roundedValue = Math.round(value);
@@ -45,7 +63,9 @@ const GaugeChart = ({ data }) => {
               return `${label} (${roundedValue})`;
             },
             fontSize: 20,
+            color: textColor,
           },
+
           data: [{ value: roundedValue, name: "Sentiment" }],
         },
       ],
@@ -56,45 +76,31 @@ const GaugeChart = ({ data }) => {
     const handleResize = () => chart.resize();
     window.addEventListener("resize", handleResize);
 
+    const observer = new MutationObserver(() => {
+      const updatedColor = getCssVarColor("--foreground");
+      chart.setOption({
+        series: [
+          {
+            title: { color: updatedColor },
+            detail: { color: updatedColor },
+          },
+        ],
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     return () => {
       window.removeEventListener("resize", handleResize);
+      observer.disconnect();
       chart.dispose();
     };
   }, [data]);
 
-  return (
-<div style={{ width: "100%" }}>
-  <div ref={chartRef} style={{ width: "100%", height: "300px" }} />
-  
-  {/* HTML Legend Below */}
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: "-50px", // negative margin brings legend up closer
-      fontWeight: "bold",
-      fontSize: "14px",
-    }}
-  >
-    <div style={{ color: "#d32f2f", textAlign: "center", flex: 1 }}>
-      Ex. Bear<br />0~20
-    </div>
-    <div style={{ color: "#f57c00", textAlign: "center", flex: 1 }}>
-      Bear<br />20~40
-    </div>
-    <div style={{ color: "#fbc02d", textAlign: "center", flex: 1 }}>
-      Neutral<br />40~60
-    </div>
-    <div style={{ color: "#388e3c", textAlign: "center", flex: 1 }}>
-      Bull<br />60~80
-    </div>
-    <div style={{ color: "#2e7d32", textAlign: "center", flex: 1 }}>
-      Ex. Bull<br />80~100
-    </div>
-  </div>
-</div>
-
-  );
+  return <div ref={chartRef} style={{ width: "100%", height: "300px" }} />;
 };
 
 export default GaugeChart;
