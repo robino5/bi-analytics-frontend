@@ -25,7 +25,7 @@ export default function BranchWiseTurnoverComparison({ internetTurnover, dtTurno
                         Client Branch Wise Turnover ({activeTab})
                     </CardTitle>
                     <div className="flex items-center space-x-4 mr-6">
-                        <TabsList className="bg-gray-200 p-1 rounded-lg text-dark mr-3">
+                        <TabsList className="bg-gray-200 p-1 rounded-lg text-black mr-3">
                             <TabsTrigger value="Internet">Internet</TabsTrigger>
                             <TabsTrigger value="DT">DT</TabsTrigger>
                         </TabsList>

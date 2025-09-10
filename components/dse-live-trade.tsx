@@ -58,7 +58,7 @@ export function DseLiveTrade() {
                             Live DSE Trade Statistics
                         </CardTitle>
 
-                        <TabsList className="flex space-x-1 bg-gray-200 text-dark">
+                        <TabsList className="flex space-x-1 bg-gray-200 text-black">
                             <TabsTrigger
                                 value="dsex"
                                 className=""

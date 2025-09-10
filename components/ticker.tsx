@@ -42,9 +42,9 @@ export function Ticker() {
 
     if (isLoading || isError || !ticker.length) {
         return (
-              <div className="py-3.5 overflow-hidden whitespace-nowrap">
-            <marquee scrollAmount={5}>
-                <span>{isLoading ? "Loading ticker..." : "Error loading ticker."}</span>
+            <div className="py-3.5 overflow-hidden whitespace-nowrap">
+                <marquee scrollAmount={5}>
+                    <span>{isLoading ? "Loading ticker..." : "Error loading ticker."}</span>
                 </marquee>
             </div>
         );
@@ -69,13 +69,11 @@ export function Ticker() {
                         return (
                             <div
                                 key={index}
-                                className="bg-white rounded px-2 py-1 text-xs w-36 shadow flex-shrink-0 border border-gray-300"
+                                className="bg-card text-card-foreground rounded px-2 py-1 text-xs w-36 shadow flex-shrink-0 border border-border"
                             >
                                 {/* Top Row */}
                                 <div className="flex justify-between">
-                                    <span className="font-bold text-black">
-                                        {mkistaT_INSTRUMENT_CODE}
-                                    </span>
+                                    <span className="font-bold">{mkistaT_INSTRUMENT_CODE}</span>
                                     <span className={`${priceColor} font-semibold`}>
                                         {mkistaT_PUB_LAST_TRADED_PRICE.toFixed(2)}
                                     </span>
@@ -86,13 +84,14 @@ export function Ticker() {
                                     <span className={`flex items-center gap-1 ${changeColor}`}>
                                         {priceChange > 0 && <MoveUp size={12} />}
                                         {priceChange < 0 && <MoveDown size={12} />}
-                                         {priceChange.toFixed(2)}
+                                        {priceChange.toFixed(2)}
                                     </span>
-                                    <span className={`${percentColor}`}>
+                                    <span className={percentColor}>
                                         {priceChangePCT.toFixed(2)}%
                                     </span>
                                 </div>
                             </div>
+
                         );
                     })}
                 </div>

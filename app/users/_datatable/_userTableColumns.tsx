@@ -144,9 +144,9 @@ export const useTableColumns: ColumnDef<IUser>[] = [
 
       // Return "Yes" if the timestamp is today, otherwise return "No"
       return isToday ? (
-        <Badge variant="outline">Yes</Badge>
+        <Badge variant="outline" className="text-black">Yes</Badge>
       ) : (
-        <Badge variant="outline">No</Badge>
+        <Badge variant="outline" className="text-black">No</Badge>
       );
     },
     filterFn: (row, id, value) => {

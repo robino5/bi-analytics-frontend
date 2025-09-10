@@ -150,6 +150,12 @@
     @apply bg-background text-foreground;
     @apply font-sans;
   }
+
+  /* ✅ Force table cell text always black */
+  td,
+  th {
+    @apply text-black;
+  }
 }
 
 [data-state="closed"] .Button:hover {

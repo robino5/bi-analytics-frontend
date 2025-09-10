@@ -110,7 +110,7 @@ export default function TopTurnoverCompany({ default: defaultProp }: { default: 
                                     </PopoverContent>
                                 </Popover>
 
-                                <TabsList className="bg-gray-200 p-1 rounded-lg text-dark">
+                                <TabsList className="bg-gray-200 p-1 rounded-lg text-black">
                                     <TabsTrigger value="LBSL">LBSL</TabsTrigger>
                                     <TabsTrigger value="DSE">DSE vs LBSL</TabsTrigger>
                                 </TabsList>
