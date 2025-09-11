@@ -29,6 +29,7 @@ import { FaStore } from "react-icons/fa";
 import { CgPerformance } from "react-icons/cg";
 import { ImProfile } from "react-icons/im";
 import { TbChartHistogram } from "react-icons/tb";
+import { GiTrade } from "react-icons/gi";
 
 
 const CustomHeaderGroup = (props: { icon: ReactNode; name: string }) => {
@@ -65,6 +66,14 @@ const menuList = [
         viewName: "Business and Trade Management",
         urlPath: "/dashboard/business-and-trade-management",
         icon: <AiOutlineShop className="h-6 w-6 text-green-500" />,
+        roles: ["ADMIN", "MANAGEMENT"],
+      },
+      {
+        id: 2,
+        codeName: "trade_insights",
+        viewName: "Trade Insights",
+        urlPath: "/dashboard/trade-insights",
+        icon: <GiTrade  className="h-6 w-6 text-yellow-400" />,
         roles: ["ADMIN", "MANAGEMENT"],
       },
       {
