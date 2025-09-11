@@ -141,7 +141,7 @@ const ActiveTradingCodesBoard = () => {
                                     .sort((a: any, b: any) => b.value - a.value) // sort descending
                                 }
                                 options={sectorMarginCodeExposureOption}
-                                colorArray={["#FF6B6B",]}
+                                colorArray={["#FFD93D", "#4D96FF"]} 
                             />
                         }
                     />
@@ -153,7 +153,7 @@ const ActiveTradingCodesBoard = () => {
             {investorLiveTrade ? (
                 <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a] mt-2">
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top RM Turnover <LiveIndicator /></CardTitle>
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Investor Turnover <LiveIndicator /></CardTitle>
                         {/* <CardDescription className="text-white">
                       Client Details for Regional Managers
                     </CardDescription> */}
