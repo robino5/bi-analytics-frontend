@@ -8,8 +8,7 @@ import { DataTableCardInvestorWiseSaleableStock } from "./_components/investor-w
 import { SalableStockPercentageDataTableCard } from "./_components/salable-stock-percentage/data-table";
 import { getHeaderDate } from "@/lib/utils";
 import { SalableStockDataTableCard } from "./_components/salable-stock/data-table";
-import { investorLiveBuySaleClientsColumns } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
-import { DataTable as InvestorLiveBuySaleDatatable } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTable";
+
 import {
   companyWiseSalableStock,
   SalableStockPercentage,
@@ -19,16 +18,7 @@ import { businessTradeManagementAPI } from "./api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingButton from "@/components/loading";
 import NoDataFound from "./_components/_no_data_found";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { DataTable as InvestorLiveTradeDataTable } from "./_components/investor_live_trade/_investorLiveTradeTable";
-import { investorLiveTradeClientsColumns } from "./_components/investor_live_trade/_investorLiveTradeTableColumns";
-import LiveIndicator from "@/components/ui/live-indicator";
+
 
 export default function BusinessAndTradeManagement() {
   const { data: boardTernoverData, isLoading: boardTernoverDataLoading, isError: boardTernoverDataError } = useQuery({
@@ -51,24 +41,8 @@ export default function BusinessAndTradeManagement() {
     queryFn: () => businessTradeManagementAPI.getMarketShareSME()
   });
 
-  const { data: investorLiveTrade, isLoading: investorLiveTradeLoading, isError: investorLiveTradeError } = useQuery({
-    queryKey: ["investorLiveTrade"],
-    queryFn: () => businessTradeManagementAPI.getInvestorLiveTrade()
-  });
 
-
-  const { data: investorLiveTopBuy, isLoading: investorLiveTopBuyLoading, isError: investorLiveTopBuyError } = useQuery({
-    queryKey: ["investorLiveTopBuy"],
-    queryFn: () => businessTradeManagementAPI.getInvestorLiveTopBuy()
-  });
-
-
-  const { data: investorLiveTopSale, isLoading: investorLiveTopSaleLoading, isError: investorLiveTopSaleError } = useQuery({
-    queryKey: ["investorLiveTopSale"],
-    queryFn: () => businessTradeManagementAPI.getInvestorLiveTopSale()
-  });
-
-  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading || investorLiveTradeLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading;
+  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading;
 
 
   if (isLoading) {
@@ -104,55 +78,7 @@ export default function BusinessAndTradeManagement() {
           <DetailsMarketShareSME datalist={marketShareSME?.data as any} />
         ) : <NoDataFound title="Details SME-ATB market share of LBSL" />}
       </div>
-      <div className="grid grid-cols-12 gap-3 mt-2">
-        {investorLiveTopBuy ? (
-          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-lg flex items-center gap-2">
-                Top Twenty buyer
-                <LiveIndicator />
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorLiveTopBuy?.data}
-                columns={investorLiveBuySaleClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
 
-        {investorLiveTopSale ? (
-          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorLiveTopSale?.data}
-                columns={investorLiveBuySaleClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-      </div>
-
-      {investorLiveTrade ? (
-        <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a] mt-2">
-          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-            <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
-            {/* <CardDescription className="text-white">
-                      Client Details for Regional Managers
-                    </CardDescription> */}
-          </CardHeader>
-          <CardContent className="mt-3">
-            <InvestorLiveTradeDataTable
-              data={investorLiveTrade?.data}
-              columns={investorLiveTradeClientsColumns}
-            />
-          </CardContent>
-        </Card>
-      ) : null}
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
         <SalableStockDataTableCard
           title="CompanyWise Total Saleable Stock"

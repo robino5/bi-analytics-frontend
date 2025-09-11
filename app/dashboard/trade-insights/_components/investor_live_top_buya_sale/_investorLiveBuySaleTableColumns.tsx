@@ -4,7 +4,8 @@ import { cn, numberToMillionsString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "./_investorLiveBuySaleTableHeader";
-import { InvestorLiveTopBuySaleInfo } from "../../types";
+import { InvestorLiveTopBuySaleInfo } from "@/app/dashboard/business-and-trade-management/types";
+
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
