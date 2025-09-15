@@ -110,7 +110,7 @@ const ActiveTradingCodesBoard = () => {
 
                 <div className="grid grid-cols-12 gap-3 mt-2">
                 {realtimeTopRMTurnover ? (
-                    <Card className="col-span-12 md:col-span-8 bg-[#033e4a]">
+                    <Card className="col-span-12 md:col-span-7 bg-[#033e4a]">
                         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                             <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top RM Turnover<LiveIndicator /></CardTitle>
                             {/* <CardDescription className="text-white">
@@ -127,7 +127,7 @@ const ActiveTradingCodesBoard = () => {
                 ) : <NoDataFound title={"Investor Live Trade RM Wise "} />}
                    {realtimeTopRMTurnover?.data ? (
                     <CardBoard
-                        className="col-span-6 xl:col-span-4"
+                        className="col-span-5 xl:col-span-5"
                         title="Top RM Total Turnover (Today)"
                         liveIndicator={true}
                         // subtitle="Shows analytics of marginal performance for comodities"
