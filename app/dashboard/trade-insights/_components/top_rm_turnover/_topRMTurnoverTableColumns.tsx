@@ -38,7 +38,7 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title={"Total Turnover(Today)"}
+        title={"Today TO"}
       />
     ),
     cell: ({ row }) => {
@@ -56,7 +56,7 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
   {
     accessorKey: "totalYearlyComm",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title={"Total Commission(Yearly)"} />
+      <DataTableColumnHeader column={column} title={"Commission as on"} />
     ),
     cell: ({ row }) => {
       return <div className={cn("text-right ml-4", {
@@ -67,7 +67,7 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
   {
     accessorKey: "maxTurnOver",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Highest TurnOver" />
+      <DataTableColumnHeader column={column} title="Highest TO" />
     ),
     cell: ({ row }) => {
       return <div className={cn("text-right ml-4", {
@@ -80,7 +80,7 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
     header: () => <span className="text-black">Highest TO Date</span>,
     cell: ({ row }) => {
       const date = parseISO(row.original.tradingDate); // parse ISO string
-      return format(date, "dd-MMM-yyyy"); // format like 30-Sep-2021
+      return format(date, "dd-MM-yy"); // format like 30-Sep-2021
     },
   },
 
