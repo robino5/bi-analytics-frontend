@@ -4,13 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import { tradeInsightAPI } from "./api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingButton from "@/components/loading";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card";
 import { DataTable as InvestorLiveTradeDataTable } from "./_components/investor_live_trade/_investorLiveTradeTable";
 import { investorLiveTradeClientsColumns } from "./_components/investor_live_trade/_investorLiveTradeTableColumns";
 import LiveIndicator from "@/components/ui/live-indicator";
@@ -23,18 +17,20 @@ import BarChartHorizontal from "./_components/BarChartHorizontal";
 import CardBoard from "@/components/CardBoard";
 import { SkeletonStatistics } from "@/components/skeletonCard";
 import { BarColors } from "@/components/ui/utils/constants";
+import TradingSummaryBoard from "./_components/_tradingSummary";
+import CompanyPeRationBoard from "./_components/_companyPeRation";
 
 const ActiveTradingCodesBoard = () => {
 
-        const sectorMarginCodeExposureOption = {
-            legendName: "Quantity",
-            dataKey: "name",
-            valueKey: "value",
-            fill: BarColors.blue,
-            stroke: "purple",
-            height: 700,
-            barLabel: true,
-        };
+    const sectorMarginCodeExposureOption = {
+        legendName: "Quantity",
+        dataKey: "name",
+        valueKey: "value",
+        fill: BarColors.blue,
+        stroke: "purple",
+        height: 700,
+        barLabel: true,
+    };
 
     const { data: investorLiveTrade, isLoading: investorLiveTradeLoading, isError: investorLiveTradeError } = useQuery({
         queryKey: ["investorLiveTrade"],
@@ -58,8 +54,24 @@ const ActiveTradingCodesBoard = () => {
         queryFn: () => tradeInsightAPI.getRealtimeTopRMTurnover()
     });
 
-    const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading;
-    const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError;
+    const { data: clientTradeSummaryByToday, isLoading: clientTradeSummaryByTodayLoading, isError: clientTradeSummaryByTodayError } = useQuery({
+        queryKey: ["clientTradeSummaryByToday"],
+        queryFn: () => tradeInsightAPI.getClientTradeSummaryByToday()
+    });
+    const { data: sectorwiseTrunoverComparison, isLoading: sectorwiseTrunoverComparisonLoading, isError: sectorwiseTrunoverComparisonError } = useQuery({
+        queryKey: ["sectorwiseTrunoverComparison"],
+        queryFn: () => tradeInsightAPI.getSectorwiseTurnoverTop20()
+    });
+    const { data: companyPeRation, isLoading: companyPeRationLoading, isError: companyPeRationError } = useQuery({
+        queryKey: ["companyPeRation"],
+        queryFn: () => tradeInsightAPI.getCompanyPERation()
+    });
+
+    const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
+        clientTradeSummaryByTodayLoading || sectorwiseTrunoverComparisonLoading || companyPeRationLoading;
+    const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError ||
+        clientTradeSummaryByTodayError || sectorwiseTrunoverComparisonError || companyPeRationError;
+
 
     if (isLoading) {
         return <LoadingButton text="Loading..." />
@@ -76,11 +88,51 @@ const ActiveTradingCodesBoard = () => {
                 name={`Trade Insights`}
             />
             <div className="grid grid-cols-12 gap-3 mt-2">
+                <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
+                    <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+                        <CardTitle className="text-white text-lg flex items-center gap-2">
+                            LBSL Trade at a Glance (Today)
+                            <LiveIndicator />
+                        </CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="mt-3 gap-3">
+                        <TradingSummaryBoard
+                            clientTradeSummaryByToday={clientTradeSummaryByToday}
+                            sectorwiseTrunoverComparison={sectorwiseTrunoverComparison}
+                            realtimeTopRMTurnover={realtimeTopRMTurnover}
+                            investorLiveTrade={investorLiveTrade}
+                        />
+                    </CardContent>
+
+                </Card>
+                <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
+                    <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
+                    </CardHeader>
+                    <CardContent className="mt-3">
+                
+                    </CardContent>
+                </Card>
+
+                <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
+                    <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Company Wise PE Ration <LiveIndicator /></CardTitle>
+                    </CardHeader>
+                    <CardContent className="mt-3">
+                        <CompanyPeRationBoard
+                            sectorwiseTrunoverComparison={sectorwiseTrunoverComparison}
+                            companyPiRation={companyPeRation}
+                        />
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="grid grid-cols-12 gap-3 mt-2">
                 {investorLiveTopBuy ? (
                     <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
                         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                             <CardTitle className="text-white text-lg flex items-center gap-2">
-                                Top Twenty buyer
+                                Top Twenty Buyer
                                 <LiveIndicator />
                             </CardTitle>
                         </CardHeader>
@@ -108,7 +160,7 @@ const ActiveTradingCodesBoard = () => {
                 ) : null}
             </div>
 
-                <div className="grid grid-cols-12 gap-3 mt-2">
+            <div className="grid grid-cols-12 gap-3 mt-2">
                 {realtimeTopRMTurnover ? (
                     <Card className="col-span-12 md:col-span-7 bg-[#033e4a]">
                         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
@@ -125,7 +177,7 @@ const ActiveTradingCodesBoard = () => {
                         </CardContent>
                     </Card>
                 ) : <NoDataFound title={"Investor Live Trade RM Wise "} />}
-                   {realtimeTopRMTurnover?.data ? (
+                {realtimeTopRMTurnover?.data ? (
                     <CardBoard
                         className="col-span-5 xl:col-span-5"
                         title="Top RM Total Turnover (Today)"
@@ -141,7 +193,7 @@ const ActiveTradingCodesBoard = () => {
                                     .sort((a: any, b: any) => b.value - a.value) // sort descending
                                 }
                                 options={sectorMarginCodeExposureOption}
-                                colorArray={["#FFD93D", "#4D96FF"]} 
+                                colorArray={["#FFD93D", "#4D96FF"]}
                             />
                         }
                     />

@@ -108,7 +108,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                     className={`text-right py-1 border border-gray-300 font-medium ${dseGradient}`}
                   >
                     {row.label.includes("%")
-                      ? row.dse.toFixed(2)
+                      ? row?.dse?.toFixed(2)
                       : numberToMillionsString(row.dse, 2)}
                   </TableCell>
 
@@ -116,7 +116,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                     className={`text-right py-1 border border-gray-300 font-medium ${cseGradient}`}
                   >
                     {row.label.includes("%")
-                      ? row.cse.toFixed(2)
+                      ? row?.cse?.toFixed(2)
                       : numberToMillionsString(row.cse, 2)}
                   </TableCell>
                 </TableRow>

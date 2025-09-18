@@ -6,6 +6,7 @@ import { AdminRealtimeTopRmTurnover } from "../types";
 import { IResponse } from "@/types/utils";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
+import { IActiveTradingToday, SectorWiseTurnoverComparison, SectorWiseTurnoverTop20 } from "../../active-trading-codes/types";
 
 
 class TradeInsightAPI extends Common {
@@ -24,6 +25,15 @@ class TradeInsightAPI extends Common {
     }
     getInvestorLiveTopSale() {
         return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>("/dashboards/admin/live-investor-top-sale-rm-wise/")
+    }
+    getClientTradeSummaryByToday() {
+        return this.http.get<IResponse<IActiveTradingToday[]>>("dashboards/active-trading-today/")
+    }
+    getSectorwiseTurnoverTop20() {
+        return this.http.get<IResponse<SectorWiseTurnoverTop20[]>>("dashboards/admin-realtime-turnover-top-20/")
+    }
+    getCompanyPERation() {
+        return this.http.get<IResponse<any[]>>("dashboards/live-market-stock-pe-ration/")
     }
 }
 
