@@ -42,6 +42,7 @@ export function formatDate(date: Date): string {
 export function numberToMillionsString(
   num: number,
   fractonalDigits: number = 1,
+  showMillionSymbol:boolean=true,
   useThousand: boolean = false
 ): string {
   if (isNaN(num)) {
@@ -61,18 +62,18 @@ export function numberToMillionsString(
 
 
   if (absNumber < 1_00_0000) {
-    return `${sign}${numberFormatter(absNumber / 1000000, fractonalDigits)}M`;
+    return `${sign}${numberFormatter(absNumber / 1000000, fractonalDigits)} ${showMillionSymbol?'M':''}`;
   }
 
   if (absNumber < 10_00_0000) {
-    return `${sign}${numberFormatter(absNumber / 1000000, fractonalDigits)}M`;
+    return `${sign}${numberFormatter(absNumber / 1000000, fractonalDigits)}${showMillionSymbol?'M':''}`;
   }
 
   if (absNumber < 1_00_000_0000) {
-    return `${sign}${numberFormatter(absNumber / 10_00_000, fractonalDigits)}M`;
+    return `${sign}${numberFormatter(absNumber / 10_00_000, fractonalDigits)}${showMillionSymbol?'M':''}`;
   }
 
-  return `${sign}${numberFormatter(absNumber / 10_00_000, fractonalDigits)}M`;
+  return `${sign}${numberFormatter(absNumber / 10_00_000, fractonalDigits)}${showMillionSymbol?'M':''}`;
 }
 
 export function numberToMillionsStringForQty(

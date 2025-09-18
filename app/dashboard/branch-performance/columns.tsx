@@ -42,7 +42,7 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       <DataTableColumnHeader
         className="place-content-center"
         column={column}
-        title="Total Portfolio Value"
+        title="Portfolio Value"
       />
     ),
     cell: ({ row }) => {
@@ -57,7 +57,7 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       <DataTableColumnHeader
         className="place-content-center"
         column={column}
-        title="Total Clients"
+        title="Clients"
       />
     ),
     cell: ({ row }) => {
@@ -85,7 +85,7 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       <DataTableColumnHeader
         className="place-content-center"
         column={column}
-        title="Fund Withdraw"
+        title="Withdraw"
       />
     ),
     cell: ({ row }) => {
@@ -100,7 +100,7 @@ export const branchWiseFundColumns: ColumnDef<IBranchWiseFund>[] = [
       <DataTableColumnHeader
         className="place-content-center"
         column={column}
-        title="Net Fund Inflow/(Outflow)"
+        title="Net Inflow"
       />
     ),
     cell: ({ row }) => {

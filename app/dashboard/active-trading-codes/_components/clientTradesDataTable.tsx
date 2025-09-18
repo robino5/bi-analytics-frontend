@@ -53,7 +53,7 @@ export default function ClientTradesDataTable({ records, className }: Props) {
                 Channel
               </TableHead>
               <TableHead className="text-right text-black font-bold py-2">
-                Total Client
+                Client
               </TableHead>
               <TableHead className="text-right text-black font-bold py-2">
                 Trades
