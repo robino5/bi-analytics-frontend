@@ -38,9 +38,9 @@ export default function NegativeEquityInvestorCodeDataTable({
         </CardTitle>
       </CardHeader>
       <CardContent className="mt-3">
-        <Table>
+        <Table className="w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
           <TableHeader>
-            <TableRow className="text-center bg-blue-500 hover:bg-blue-700 text-white font-bold">
+            <TableRow className="bg-gradient-to-r from-blue-600 to-blue-700">
               <TableHead className="w-auto text-white font-bold">Code</TableHead>
               <TableHead className="text-left text-white font-bold">Investor Name</TableHead>
               <TableHead className="text-right text-white font-bold">Ledger Balance</TableHead>
@@ -52,8 +52,8 @@ export default function NegativeEquityInvestorCodeDataTable({
               <TableRow
                 key={record.investorCode}
                 className={`${
-                  index % 2 === 0 ? "bg-blue-300" : "bg-blue-200"
-                } hover:bg-blue-100 transition-all duration-300`}
+                  index % 2 === 0 ? "bg-teal-300" : "bg-teal-200"
+                } hover:bg-teal-100 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-1">
                   {record.investorCode}
@@ -69,8 +69,8 @@ export default function NegativeEquityInvestorCodeDataTable({
             ))}
 
             {/* Footer row for sum */}
-            <TableRow className="bg-blue-500 hover:bg-blue-700 font-bold text-white">
-              <TableCell colSpan={2} className="text-right">
+            <TableRow className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+              <TableCell colSpan={2} className="text-right text-white">
                 Total:
               </TableCell>
               <TableCell className="text-right text-red-500">

@@ -39,28 +39,34 @@ export default function MarginLoanAllocationDataTable({
         </CardDescription> */}
       </CardHeader>
       <CardContent className="mt-3">
-        <Table className="border border-gray-300 rounded-md overflow-hidden">
-          <TableHeader >
-            <TableRow className="bg-blue-500 hover:bg-blue-700">
-              <TableHead className="text-left py-1 border border-gray-300 text-white font-bold">
+        <Table className="w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+          <TableHeader>
+            <TableRow className="bg-gradient-to-r from-blue-600 to-blue-700">
+              <TableHead className="text-left py-3 px-4 text-white font-semibold tracking-wide border-r border-blue-500">
                 Particular
               </TableHead>
-              <TableHead className="text-right py-1 border border-gray-300 text-white font-bold">
+              <TableHead className="text-right py-3 px-4 text-white font-semibold tracking-wide">
                 Amount
               </TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {records.map((record, index) => (
               <TableRow
                 key={record.perticular}
-                className={`${index % 2 === 0 ? "bg-blue-300" : "bg-blue-200"
-                  } hover:bg-blue-100 transition-all duration-300`}
+                className={`transition-colors duration-300 hover:bg-teal-100 ${index % 2 === 0
+                  ? "bg-teal-300 "
+                  : "bg-teal-200"
+                  }`}
               >
-                <TableCell className="font-medium py-1">
+                <TableCell className="py-2 px-4 font-medium text-black border-b border-gray-200">
                   {record.perticular}
                 </TableCell>
-                <TableCell className={`py-1 text-right ${record.amount < 0 ? "text-red-500" : "text-black"}`}>
+                <TableCell
+                  className={`py-2 px-4 text-right font-semibold border-b border-gray-200 ${record.amount < 0 ? "text-red-500" : "text-black"
+                    }`}
+                >
                   {/\d/.test(record.perticular) && /user/i.test(record.perticular)
                     ? record.amount
                     : numberToMillionsString(record.amount)}
@@ -68,7 +74,9 @@ export default function MarginLoanAllocationDataTable({
               </TableRow>
             ))}
           </TableBody>
+
         </Table>
+
       </CardContent>
     </Card>
   );
