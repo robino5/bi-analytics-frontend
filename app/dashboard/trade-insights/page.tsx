@@ -106,18 +106,18 @@ const ActiveTradingCodesBoard = () => {
                     </CardContent>
 
                 </Card>
-                <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
+                {/* <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2"> <LiveIndicator /></CardTitle>
                     </CardHeader>
                     <CardContent className="mt-3">
                 
                     </CardContent>
-                </Card>
+                </Card> */}
 
-                <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
+                <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Company Wise PE Ration <LiveIndicator /></CardTitle>
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Company Wise PE Ratio</CardTitle>
                     </CardHeader>
                     <CardContent className="mt-3">
                         <CompanyPeRationBoard

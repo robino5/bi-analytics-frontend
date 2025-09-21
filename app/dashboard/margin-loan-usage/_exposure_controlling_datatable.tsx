@@ -57,9 +57,9 @@ export default function ExposureControllingDataTable({
         </CardDescription> */}
       </CardHeader>
       <CardContent className="mt-3">
-        <Table>
+        <Table className="w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
           <TableHeader>
-            <TableRow className="bg-blue-500 hover:bg-blue-700">
+            <TableRow className="bg-gradient-to-r from-blue-600 to-blue-700">
               <TableHead className="w-auto text-white font-bold">
                 Exposure
               </TableHead>

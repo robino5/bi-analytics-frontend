@@ -35,41 +35,44 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
   );
   return (
     <div className="space-y-5">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className="w-full justify-between"
-          >
-            {selectedObj ? selectedObj.StockName : "Select a stock..."}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-[250px] p-0">
-          <Command>
-            <CommandInput placeholder="Search stock..." />
-            <CommandList>
-              <CommandEmpty>No stock found.</CommandEmpty>
-              <CommandGroup>
-                {data.map((item: any, idx: number) => (
-                  <CommandItem
-                    key={idx}
-                    value={item.StockName}
-                    onSelect={() => {
-                      setSelectedObj(item);
-                      setOpen(false);
-                    }}
-                  >
-                    {item.StockName}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-      <CompanyPeChart selectedObj={selectedObj} colorArray={["#4facfe","#43e97b","#fa709a"]} />
+      <div className="w-[250px]">
+        <Popover open={open} onOpenChange={setOpen} >
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-full justify-between"
+            >
+              {selectedObj ? selectedObj.StockName : "Select a stock..."}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[250px] p-0">
+            <Command>
+              <CommandInput placeholder="Search stock..." />
+              <CommandList>
+                <CommandEmpty>No stock found.</CommandEmpty>
+                <CommandGroup>
+                  {data.map((item: any, idx: number) => (
+                    <CommandItem
+                      key={idx}
+                      value={item.StockName}
+                      onSelect={() => {
+                        setSelectedObj(item);
+                        setOpen(false);
+                      }}
+                    >
+                      {item.StockName}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <CompanyPeChart selectedObj={selectedObj} colorArray={["#4facfe", "#43e97b", "#fa709a"]} />
     </div>
   );
 };

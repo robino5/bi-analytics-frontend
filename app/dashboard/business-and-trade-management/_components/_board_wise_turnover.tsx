@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PushDateTime from "@/components/push-date-time";
+import { numberToMillionsString } from "@/lib/utils";
 
 interface Data {
   board: string;
@@ -29,9 +30,6 @@ interface Props {
   datalist: Data[];
 }
 
-const numberToMillionsString = (num: number) => {
-  return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-};
 
 export default function BoardWiseTurnover({ datalist }: Props) {
   const totalTurnover = datalist?.reduce((acc, data) => acc + data.turnover, 0);
@@ -109,16 +107,16 @@ export default function BoardWiseTurnover({ datalist }: Props) {
               >
                 <TableCell className="font-medium py-1">{data.board}</TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.turnover)}
+                  {numberToMillionsString(data.turnover,2,false)}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.dsePercentage)}
+                  {numberToMillionsString(data.dsePercentage,2,false)}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.lbslTurnover)}
+                  {numberToMillionsString(data.lbslTurnover,2,false)}
                 </TableCell>
                 <TableCell className="text-right py-1">
-                  {numberToMillionsString(data.lbslPercentage)}
+                  {numberToMillionsString(data.lbslPercentage,2,false)}
                 </TableCell>
               </TableRow>
             ))}
@@ -127,16 +125,16 @@ export default function BoardWiseTurnover({ datalist }: Props) {
             <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
               <TableCell className="font-medium py-2">Total</TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalTurnover)}
+                {numberToMillionsString(totalTurnover,2,false)}
               </TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalDsePercentage)}
+                {numberToMillionsString(totalDsePercentage,2,false)}
               </TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalLbslTurnover)}
+                {numberToMillionsString(totalLbslTurnover,2,false)}
               </TableCell>
               <TableCell className="text-right py-2">
-                {numberToMillionsString(totalLbslPercentage)}
+                {numberToMillionsString(totalLbslPercentage,2,false)}
               </TableCell>
             </TableRow>
           </TableFooter>

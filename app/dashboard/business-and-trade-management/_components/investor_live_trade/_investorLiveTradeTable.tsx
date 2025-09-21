@@ -25,8 +25,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { DataTablePagination } from "./data-table-pagination";
-import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTablePagination } from "./_investorLiveTradeTablePagination";
+import { DataTableToolbar } from "./_investorLiveTradeTableToolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,12 +71,12 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4">
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
-        <Table >
-          <TableHeader className="text-left">
+        <Table>
+          <TableHeader className="text-md">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-gradient-to-r from-blue-600 to-blue-700"
+                   className="bg-table-header hover:bg-table-header"
               >
                 {headerGroup.headers.map((header) => {
                   return (
@@ -97,15 +97,15 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="border border-gray-200">
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row, index) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={`${
-                    index % 2 === 0 ? "bg-teal-300" : "bg-teal-200"
-                  } hover:bg-teal-100 transition-all duration-300`}
+                    index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                  } hover:bg-green-300 transition-all duration-300`}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -122,7 +122,10 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
