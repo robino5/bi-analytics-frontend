@@ -16,6 +16,9 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import CompanyPeChart from "./CompanyPeChart";
+import { tradeInsightAPI } from "../api";
+import { useQuery } from "@tanstack/react-query";
+import RsiProgressBar from "@/components/RsiProgressBar";
 
 interface CompanyPeRationBoardProps {
   sectorwiseTrunoverComparison?: any;
@@ -26,13 +29,21 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
   sectorwiseTrunoverComparison,
   companyPiRation,
 }) => {
-  const data = companyPiRation?.CompareMarket[0] ?? [];
+  const data = companyPiRation?.items ?? [];
   const defaultValue = sectorwiseTrunoverComparison?.data?.[0]?.name;
 
   const [open, setOpen] = React.useState(false);
   const [selectedObj, setSelectedObj] = React.useState<any>(
-    data.find((item: any) => item.StockName === defaultValue) || null
+    data.find((item: any) => item.mkistaT_INSTRUMENT_CODE === defaultValue) || null
   );
+
+  const { data: companyPeRSI } = useQuery({
+    queryKey: ["companyPeRSI", selectedObj?.companyID],
+    queryFn: () => tradeInsightAPI.getCompanyPERSI(selectedObj.companyID)
+  });
+
+  console.log("companyPeRSI", companyPeRSI);
+
   return (
     <div className="space-y-5">
       <div className="w-[250px]">
@@ -44,7 +55,7 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
               aria-expanded={open}
               className="w-full justify-between"
             >
-              {selectedObj ? selectedObj.StockName : "Select a stock..."}
+              {selectedObj ? selectedObj.mkistaT_INSTRUMENT_CODE : "Select a stock..."}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[250px] p-0">
@@ -56,13 +67,13 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
                   {data.map((item: any, idx: number) => (
                     <CommandItem
                       key={idx}
-                      value={item.StockName}
+                      value={item.mkistaT_INSTRUMENT_CODE}
                       onSelect={() => {
                         setSelectedObj(item);
                         setOpen(false);
                       }}
                     >
-                      {item.StockName}
+                      {item.mkistaT_INSTRUMENT_CODE}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -71,8 +82,9 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
           </PopoverContent>
         </Popover>
       </div>
+      {companyPeRSI && <CompanyPeChart companyPeRSI={companyPeRSI} colorArray={["#4facfe", "#43e97b", "#fa709a"]} />}
+      {companyPeRSI?.rsi !== null && <RsiProgressBar value={companyPeRSI?.rsi} />}
 
-      <CompanyPeChart selectedObj={selectedObj} colorArray={["#4facfe", "#43e97b", "#fa709a"]} />
     </div>
   );
 };

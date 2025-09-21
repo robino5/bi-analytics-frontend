@@ -4,18 +4,14 @@ import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
 interface CompanyPeChartProps {
-    selectedObj: {
-        MarketName: string;
-        MarketPE: number;
-        SectorName: string;
-        SectorPE: number;
-        StockName: string;
-        StockPE: number;
+    companyPeRSI: {
+      pe_ratio: number;
+      rsi: number
     } | null;
     colorArray: string[];
 }
 
-const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ selectedObj, colorArray }) => {
+const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ companyPeRSI, colorArray }) => {
     const chartRef = useRef<HTMLDivElement | null>(null);
     const chartInstance = useRef<echarts.ECharts | null>(null);
 
@@ -27,14 +23,14 @@ const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ selectedObj, colorArray
             chartInstance.current = echarts.init(chartRef.current);
         }
 
-        if (!selectedObj) {
+        if (!companyPeRSI) {
             chartInstance.current.clear();
             return;
         }
 
         // Data & labels
-        const categories = [selectedObj.StockName, selectedObj.SectorName, selectedObj.MarketName];
-        const values = [selectedObj.StockPE, selectedObj.SectorPE, selectedObj.MarketPE];
+        const categories = ["PE Ratio", "RSI"];
+        const values = [companyPeRSI.pe_ratio, companyPeRSI.rsi];
 
         const option: echarts.EChartsOption = {
             tooltip: {
@@ -42,11 +38,11 @@ const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ selectedObj, colorArray
                 axisPointer: { type: "shadow" },
                 formatter: (params: any) => {
                     return params
-                        .map((item: any) => `${item.name}: <b>${item.value.toFixed(2)}</b>`)
+                        .map((item: any) => `${item?.name}: <b>${item?.value?.toFixed(2)}</b>`)
                         .join("<br/>");
                 },
             },
-            grid: { left: "24%", right: "10%", top: "5%", bottom: "10%" },
+            grid: { left: "10%", right: "10%", top: "5%", bottom: "10%" },
             xAxis: {
                 type: "value",
                 axisLabel: { show: false },
@@ -60,7 +56,7 @@ const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ selectedObj, colorArray
                 axisLabel: {
                     color: "#fff",
                     fontSize: 12,
-                     formatter: (value: string) => (value.length > 10 ? value.replace(/(.{10})/g, "$1\n") : value),
+                     formatter: (value: string) => (value?.length > 10 ? value.replace(/(.{10})/g, "$1\n") : value),
                 },
             },
             series: [
@@ -82,7 +78,7 @@ const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ selectedObj, colorArray
                         color: "#fff",
                         fontSize: 12,
                         fontWeight: "bold", // ✅ make labels bold
-                        formatter: (params: any) => params.value.toFixed(2),
+                        formatter: (params: any) => params?.value?.toFixed(2),
                     },
                 },
             ],
@@ -95,9 +91,9 @@ const CompanyPeChart: React.FC<CompanyPeChartProps> = ({ selectedObj, colorArray
             chartInstance.current?.dispose();
             chartInstance.current = null;
         };
-    }, [selectedObj, colorArray]);
+    }, [companyPeRSI, colorArray]);
 
-    return <div ref={chartRef} style={{ width: "100%", height: "200px" }} />;
+    return <div ref={chartRef} style={{ width: "100%", height: "150px" }} />;
 };
 
 export default CompanyPeChart;

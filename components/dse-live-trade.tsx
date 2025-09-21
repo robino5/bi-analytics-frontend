@@ -142,7 +142,7 @@ export function DseLiveTrade() {
                                 {dseDsexData && dseDsexSumData &&
                                     <DseDsexLineChart data={dseDsexData} dataSum={dseDsexSumData} />
                                 }
-                            </TabsContent>
+                            </TabsContent>l
 
                             <TabsContent value="statistics" className="h-full">
                                 <LiveTradeChart
