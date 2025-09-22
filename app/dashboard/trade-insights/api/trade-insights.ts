@@ -33,7 +33,10 @@ class TradeInsightAPI extends Common {
         return this.http.get<IResponse<SectorWiseTurnoverTop20[]>>("dashboards/admin-realtime-turnover-top-20/")
     }
     getCompanyPERation() {
-        return this.http.get<IResponse<any[]>>("dashboards/live-market-stock-pe-ration/")
+        return this.http.get<IResponse<any[]>>("dashboards/dse-traded-company-list/")
+    }
+    getCompanyPERSI(companyID: any) {
+        return this.http.get<any>(`dashboards/portal-pe-rsi-company-wise/?company_code=${companyID}`)
     }
 }
 
