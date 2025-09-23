@@ -36,4 +36,5 @@ export type InvestorLiveTradeInfo = {
   sell: number;
   net: number;
   ledgerBalance: number;
+  turnover: number;
 };

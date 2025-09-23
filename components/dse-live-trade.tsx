@@ -11,6 +11,7 @@ import {
 import LiveTradeChart from "./LiveTradeChart";
 import DseDsexLineChart from "./LiveDsexChart";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { SkeletonStatistics } from "./skeletonCard";
 
 export function DseLiveTrade() {
 
@@ -35,11 +36,7 @@ export function DseLiveTrade() {
 
     if (isLoading || dseDsexDataSumLoaing || dseDsexDataLoaing) {
         return (
-            <Card
-                className={cn("overflow-hidden drop-shadow-md flex items-center justify-center", "bg-[#033e4a] h-[237px]")}
-            >
-                <div className="text-white text-lg font-semibold">Loading...</div>
-            </Card>
+          <SkeletonStatistics/>
         );
     }
 

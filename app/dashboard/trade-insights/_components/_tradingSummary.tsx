@@ -15,6 +15,7 @@ const TradingSummaryBoard: React.FC<TradingSummaryBoardProps> = ({
     realtimeTopRMTurnover,
     investorLiveTrade,
 }) => {
+    console.log("Client Trade Summary:", investorLiveTrade);
     return (
         <div className="grid grid-cols-12 gap-3">
             {/* Total Trade */}
@@ -62,7 +63,7 @@ const TradingSummaryBoard: React.FC<TradingSummaryBoardProps> = ({
                 </h2>
                 <p className="text-lg font-semibold text-black">
                     Turnover:{" "}
-                    {numberToMillionsString(investorLiveTrade?.data?.[0]?.net ?? 0)}
+                    {numberToMillionsString(investorLiveTrade?.data?.[0]?.turnover ?? 0)}
                 </p>
                 <p className="text-sm text-black">Top Investor (Turnover)</p>
             </div>
