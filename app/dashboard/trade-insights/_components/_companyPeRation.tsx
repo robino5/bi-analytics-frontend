@@ -19,6 +19,7 @@ import CompanyPeChart from "./CompanyPeChart";
 import { tradeInsightAPI } from "../api";
 import { useQuery } from "@tanstack/react-query";
 import RsiProgressBar from "@/components/RsiProgressBar";
+import { SkeletonStatisticsRatio } from "@/components/skeletonCard";
 
 interface CompanyPeRationBoardProps {
   sectorwiseTrunoverComparison?: any;
@@ -34,20 +35,26 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
 
   const [open, setOpen] = React.useState(false);
   const [selectedObj, setSelectedObj] = React.useState<any>(
-    data.find((item: any) => item.mkistaT_INSTRUMENT_CODE === defaultValue) || null
+    data.find((item: any) => item.mkistaT_INSTRUMENT_CODE === defaultValue) ||
+      null
   );
 
-  const { data: companyPeRSI } = useQuery({
+  const { data: companyPeRSI, isLoading } = useQuery({
     queryKey: ["companyPeRSI", selectedObj?.companyID],
-    queryFn: () => tradeInsightAPI.getCompanyPERSI(selectedObj.companyID)
+    queryFn: () => tradeInsightAPI.getCompanyPERSI(selectedObj.companyID),
   });
 
   console.log("companyPeRSI", companyPeRSI);
 
+  if (isLoading) {
+    return <SkeletonStatisticsRatio />;
+  }
+
   return (
     <div className="space-y-5">
+      {/* Dropdown */}
       <div className="w-[250px]">
-        <Popover open={open} onOpenChange={setOpen} >
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -55,7 +62,9 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
               aria-expanded={open}
               className="w-full justify-between"
             >
-              {selectedObj ? selectedObj.mkistaT_INSTRUMENT_CODE : "Select a stock..."}
+              {selectedObj
+                ? selectedObj.mkistaT_INSTRUMENT_CODE
+                : "Select a stock..."}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[250px] p-0">
@@ -82,9 +91,19 @@ const CompanyPeRationBoard: React.FC<CompanyPeRationBoardProps> = ({
           </PopoverContent>
         </Popover>
       </div>
-      {companyPeRSI && <CompanyPeChart companyPeRSI={companyPeRSI} colorArray={["#4facfe", "#43e97b", "#fa709a"]} />}
-      {companyPeRSI?.rsi !== null && <RsiProgressBar value={companyPeRSI?.rsi} />}
 
+      {/* Chart */}
+      {companyPeRSI && (
+        <CompanyPeChart
+          companyPeRSI={companyPeRSI}
+          colorArray={["#4facfe", "#43e97b", "#fa709a"]}
+        />
+      )}
+
+      {/* RSI Progress */}
+      {companyPeRSI?.rsi !== null && (
+        <RsiProgressBar value={companyPeRSI?.rsi} />
+      )}
     </div>
   );
 };

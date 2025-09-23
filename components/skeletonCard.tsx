@@ -51,4 +51,26 @@ export const SkeletonStatistics: React.FC<CardBoardProps> = ({ className }) => {
   );
 };
 
+
+export const SkeletonStatisticsRatio: React.FC<CardBoardProps> = ({ className }) => {
+  return (
+    <div className="space-y-5">
+      {/* Dropdown skeleton */}
+      <div className="w-[120px]">
+        <Skeleton className="h-10 w-full rounded-lg" />
+      </div>
+
+      {/* Chart skeleton */}
+      <div className="w-full h-[178px]">
+        <Skeleton className="h-full w-full rounded-xl" />
+      </div>
+
+      {/* RSI Progress skeleton */}
+      <div className="w-full">
+        <Skeleton className="h-6 w-[130px] rounded-full" />
+      </div>
+    </div>
+  );
+};
+
 export default SummarySkeletonCard;
