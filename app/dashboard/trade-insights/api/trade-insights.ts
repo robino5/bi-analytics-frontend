@@ -20,6 +20,9 @@ class TradeInsightAPI extends Common {
     getInvestorLiveTrade() {
         return this.http.get<IResponse<InvestorLiveTradeInfo[]>>("/dashboards/rm/investor-live-trade-rm-wise/")
     }
+    getTopTurnoverInvestor() {
+        return this.http.get<IResponse<InvestorLiveTradeInfo[]>>("/dashboards/rm/top-turnover-investor/")
+    }
     getInvestorLiveTopBuy() {
         return this.http.get<IResponse<InvestorLiveTopBuySaleInfo[]>>("/dashboards/admin/live-investor-top-buy-rm-wise/")
     }

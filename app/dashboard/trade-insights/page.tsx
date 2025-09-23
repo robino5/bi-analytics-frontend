@@ -37,6 +37,11 @@ const ActiveTradingCodesBoard = () => {
         queryFn: () => tradeInsightAPI.getInvestorLiveTrade()
     });
 
+      const { data: topTurnoverInvestor, isLoading: topTurnoverInvestorLoading, isError: topTurnoverInvestorError } = useQuery({
+        queryKey: ["topTurnoverInvestor"],
+        queryFn: () => tradeInsightAPI.getTopTurnoverInvestor()
+    });
+
 
     const { data: investorLiveTopBuy, isLoading: investorLiveTopBuyLoading, isError: investorLiveTopBuyError } = useQuery({
         queryKey: ["investorLiveTopBuy"],
@@ -68,9 +73,9 @@ const ActiveTradingCodesBoard = () => {
     });
 
     const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
-        clientTradeSummaryByTodayLoading || sectorwiseTrunoverComparisonLoading || companyPeRationLoading;
+        clientTradeSummaryByTodayLoading || sectorwiseTrunoverComparisonLoading || companyPeRationLoading || topTurnoverInvestorLoading;
     const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError ||
-        clientTradeSummaryByTodayError || sectorwiseTrunoverComparisonError || companyPeRationError;
+        clientTradeSummaryByTodayError || sectorwiseTrunoverComparisonError || companyPeRationError || topTurnoverInvestorError;
 
 
     if (isLoading) {
@@ -101,7 +106,7 @@ const ActiveTradingCodesBoard = () => {
                             clientTradeSummaryByToday={clientTradeSummaryByToday}
                             sectorwiseTrunoverComparison={sectorwiseTrunoverComparison}
                             realtimeTopRMTurnover={realtimeTopRMTurnover}
-                            investorLiveTrade={investorLiveTrade}
+                            investorLiveTrade={topTurnoverInvestor}
                         />
                     </CardContent>
 
