@@ -38,6 +38,7 @@ const LoginForm = () => {
   function onSubmit(values: z.infer<typeof LoginSchema>) {
     startTransition(async () => {
       const resp = await login(values);
+      console.log("Login response:", resp);
       if (!resp?.error) {
         localStorage.setItem(
           "branch-storage",
