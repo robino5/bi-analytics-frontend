@@ -27,6 +27,8 @@ export const {
         session.user.branchId = token?.me?.profile?.branchId
         // @ts-ignore
         session.expires = token?.me?.expires
+        // @ts-ignore
+        session.user.boardPermissions = token?.me?.boardPermissions
       }
       return session
     },

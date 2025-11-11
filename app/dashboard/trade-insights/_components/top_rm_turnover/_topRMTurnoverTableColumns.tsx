@@ -19,19 +19,39 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
       <DataTableColumnHeaderRank className="text-red-500 hover:text-red-500" column={column} title="Rank" />
     ),
     cell: ({ row }) => {
-      return <div className="text-center text-red-500 font-bold ml-4">{row.getValue("rankNo")}</div>
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
+      return <div
+        className={cn("text-center font-bold ml-4", {
+          "text-green-600 text-lg": isHigher,
+          "text-red-500": !isHigher,
+        })}>
+        {row.getValue("rankNo")}
+      </div>
     }
   },
   {
     accessorKey: "rmName",
     header: () => <span className="text-black">RM</span>,
     cell: ({ row }) => {
-      return <div className="font-bold">{row.getValue("rmName")}</div>
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
+      return <div className={cn("text-center font-bold ml-4", {
+        "text-green-600 text-lg": isHigher,
+      })}>
+        {row.getValue("rmName")}
+      </div>
     }
   },
   {
     accessorKey: "branchName",
     header: () => <span className="text-black">Branch</span>,
+    cell: ({ row }) => {
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
+      return (
+        <div className={cn({ "text-green-600 text-lg font-bold": isHigher })}>
+          {row.getValue("branchName")}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "totalTurnOverToday",
@@ -42,9 +62,11 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
       />
     ),
     cell: ({ row }) => {
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
       return (
         <div
           className={cn("text-right ml-4", {
+            "text-green-600 text-lg font-bold ": isHigher,
             "text-red-600": row.getValue("totalTurnOverToday") as number < 0,
           })}
         >
@@ -59,9 +81,14 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
       <DataTableColumnHeader column={column} title={"Commission as on"} />
     ),
     cell: ({ row }) => {
-      return <div className={cn("text-right ml-4", {
-        "text-red-600": row.getValue("totalYearlyComm") as number < 0,
-      })}>{cellNumberFormatter(row, "totalYearlyComm")}</div >;
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
+      return <div
+        className={cn("text-right ml-4", {
+          "text-green-600 text-lg font-bold": isHigher,
+          "text-red-600": row.getValue("totalYearlyComm") as number < 0,
+        })}>
+        {cellNumberFormatter(row, "totalYearlyComm")}
+      </div >;
     },
   },
   {
@@ -70,17 +97,26 @@ export const adminRealTimeTopTurnoverColumns: ColumnDef<AdminRealtimeTopRmTurnov
       <DataTableColumnHeader column={column} title="Highest TO" />
     ),
     cell: ({ row }) => {
-      return <div className={cn("text-right ml-4", {
-        "text-red-600": row.getValue("maxTurnOver") as number < 0,
-      })}>{cellNumberFormatter(row, "maxTurnOver")}</div >;
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
+      return <div
+        className={cn("text-right ml-4", {
+          "text-green-600 text-lg font-bold": isHigher,
+          "text-red-600": row.getValue("maxTurnOver") as number < 0,
+        })}>
+        {cellNumberFormatter(row, "maxTurnOver")}</div >;
     },
   },
   {
     accessorKey: "tradingDate",
     header: () => <span className="text-black">Highest TO Date</span>,
     cell: ({ row }) => {
+      const isHigher = row.original.totalTurnOverToday > row.original.maxTurnOver;
       const date = parseISO(row.original.tradingDate); // parse ISO string
-      return format(date, "dd-MM-yy"); // format like 30-Sep-2021
+      return (
+        <div className={cn({ "text-green-600 text-lg font-bold": isHigher })}>
+          {format(date, "dd-MM-yy")}
+        </div>
+      );
     },
   },
 

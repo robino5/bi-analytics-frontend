@@ -17,7 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
 
   return (
     <div
-      className={`fixed flex flex-col p-4 py-2 min-h-screen bg-[#5a6c82] transition-all duration-300 ${collapsed ? "w-[50px] min-w-[50px]" : "w-[300px] min-w-[300px]"}`}
+      className={`fixed flex flex-col p-4 py-2 min-h-screen bg-[#5a6c82]  transition-all duration-300 ${collapsed ? "w-[50px] min-w-[50px]" : "w-[300px] min-w-[300px]"}`}
     >
       {/* Arrow button */}
       <div className="absolute" style={{ top: '48px', right: '-9px' }}>
