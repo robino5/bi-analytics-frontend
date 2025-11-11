@@ -21,6 +21,7 @@ type LoginResponse = {
     accessToken: string;
     refreshToken: string;
     expires: number;
+    boardPermissions: any;
   };
 };
 

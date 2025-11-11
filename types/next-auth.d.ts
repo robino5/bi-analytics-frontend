@@ -7,6 +7,7 @@ export type ExtendedUser = DefaultSession["user"] & {
     role: "ADMIN" | "BRANCH_MANAGER" | "REGINOAL_MANAGER" | "CLUSTER_MANAGER";
     accessToken: string;
     branchId: string;
+    boardPermissions: any;
 }
 
 declare module "next-auth" {
