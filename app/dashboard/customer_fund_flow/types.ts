@@ -49,7 +49,7 @@ export interface BranchWithdrawal {
   cashWithdrawal: number;
   chequeWithdrawal: number;
   onlineRequisition: number;
-  rtsg: number;
+  rtgs: number;
   payOrder: number;
   cashDividendDeduction: number;
   ipoMode: number;

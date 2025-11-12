@@ -34,10 +34,13 @@ const ModeWiseDeposite: React.FC<ModeWiseDepositeProps> = ({
     .filter((item) => item.value > 0 && item.name !== "totalDeposit");
 
   // Optional: format the key nicely (e.g., "cashDeposit" → "Cash Deposit")
-  const formatName = (key: string) =>
-    key
-      .replace(/([A-Z])/g, " $1") // add space before capital letters
-      .replace(/^./, (str) => str.toUpperCase()); // capitalize first letter
+ const formatName = (key: string) =>
+  key
+    .replace(/Deposit/gi, "")              // remove 'Deposit' (case-insensitive)
+    .replace(/([A-Z])/g, " $1")            // add space before capital letters
+    .replace(/^./, (str) => str.toUpperCase()) // capitalize first letter
+    .trim();                               // remove extra spaces
+
 
   return (
     <Card className={`border-2 border-cyan-500 shadow-lg bg-[#033e4a]`}>

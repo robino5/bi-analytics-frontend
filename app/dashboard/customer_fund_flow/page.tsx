@@ -11,6 +11,7 @@ import DepositPieChart from "./_component/deposit_pie_chart";
 import WithdrawalPieChart from "./_component/withdrawal_pie_chart";
 import { DataTableCard } from "./_component/_branch_wise_total_fund/data-table";
 import { branchWisetotalFundColumns } from "./_component/_branch_wise_total_fund/columns";
+import { numberToMillionsString } from "@/lib/utils";
 
 
 export default function CustomerFundFlowDashboardPage() {
@@ -46,57 +47,57 @@ export default function CustomerFundFlowDashboardPage() {
   });
 
   const withdrawalTotalToday = withdrawalToday?.data?.rows?.map((item) => ({
-  branchName: item.branchName,
-  total:
-    item.cashDividendDeduction +
-    item.cashWithdrawal +
-    item.chequeWithdrawal +
-    item.ipoMode +
-    item.onlineRequisition +
-    item.payOrder+
-    item.rtsg,
-}));
+    branchName: item.branchName,
+    total:
+      item.cashDividendDeduction +
+      item.cashWithdrawal +
+      item.chequeWithdrawal +
+      item.ipoMode +
+      item.onlineRequisition +
+      item.payOrder +
+      item.rtgs,
+  }));
 
 
   const depositTotalToday = depositToday?.data?.rows?.map((item) => ({
-  branchName: item.branchName,
-  total:
-    item.cashDeposit +
-    item.chequeDeposit +
-    item.scbDeposit +
-    item.payOrder +
-    item.cashDividend +
-    item.ipoMode
-}));
+    branchName: item.branchName,
+    total:
+      item.cashDeposit +
+      item.chequeDeposit +
+      item.scbDeposit +
+      item.payOrder +
+      item.cashDividend +
+      item.ipoMode
+  }));
 
   return (
     <div className="p-6">
       <PageHeader name="Customer Fund Flow Dashboard" />
       <div className="grid grid-cols-4 gap-4 mt-3">
         <FinancialStatistic
-          title="Deposit Today"
+          title="Total Deposit Today"
           amount={depositToday?.data?.detail?.totalDeposit ?? 0}
           color="border-blue-500"
         />
         <FinancialStatistic
-          title="Deposit This Year"
+          title="Total Deposit This Year"
           amount={deposithisYear?.data?.detail?.totalDeposit ?? 0}
           color="border-green-500"
         />
         <FinancialStatistic
-          title="Withdrawal Today"
+          title="Total Withdrawal Today"
           amount={withdrawalToday?.data?.detail?.totalWithdrawal ?? 0}
           color="border-red-500"
         />
         <FinancialStatistic
-          title="Withdrawal This Year"
+          title="Total Withdrawal This Year"
           amount={withdrawalThisYear?.data?.detail?.totalWithdrawal ?? 0}
           color="border-orange-500"
         />
       </div>
       <div className="grid grid-cols-4 gap-4 mt-3">
         <ModeWiseDeposite
-          title="Deposit Today"
+          title="Deposit Today - Type Wise"
           data={depositToday?.data?.detail ?? {
             cashDeposit: 0,
             chequeDeposit: 0,
@@ -110,7 +111,7 @@ export default function CustomerFundFlowDashboardPage() {
         <div>
           <Card className=" border-[2px] border-green-500 shadow-md  bg-[#033e4a]">
             <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 ">
-              <CardTitle className="text-lg font-semibold text-white">Deposit Today</CardTitle>
+              <CardTitle className="text-lg font-semibold text-white">Deposit Today - Type Wise (%)</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
               <DepositPieChart data={depositToday?.data?.detail ?? {}} />
@@ -118,7 +119,7 @@ export default function CustomerFundFlowDashboardPage() {
           </Card>
         </div>
         <ModeWiseWithdraw
-          title="Withdrawal Today"
+          title="Withdrawal Today - Type Wise "
           data={withdrawalToday?.data?.detail ?? {
             cashWithdrawal: 0,
             chequeWithdrawal: 0,
@@ -133,9 +134,9 @@ export default function CustomerFundFlowDashboardPage() {
         <div>
           <Card className=" border-[2px] border-orange-500 shadow-md  bg-[#033e4a]">
             <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 ">
-              <CardTitle className="text-lg font-semibold text-white">Withdraw Today</CardTitle>
+              <CardTitle className="text-lg font-semibold text-white">Withdraw Today - Type Wise (%)</CardTitle>
             </CardHeader>
-            <CardContent className="">
+            <CardContent className="p-4">
               <WithdrawalPieChart data={withdrawalToday?.data?.detail ?? {}} />
             </CardContent>
           </Card>
@@ -162,8 +163,8 @@ export default function CustomerFundFlowDashboardPage() {
 
         {/* Right Section — New Content (4 Columns) */}
         <div className="col-span-3">
-        <DataTableCard
-            title="Branch Wise Deposit Today"
+          <DataTableCard
+            title={`Branch Wise Deposit Today-${numberToMillionsString(depositToday?.data?.detail?.totalDeposit ?? 0) }`}
             subtitle="show data for branch wise turnover"
             className="col-span-1  lg:col-span-1"
             columns={branchWisetotalFundColumns}
@@ -194,7 +195,7 @@ export default function CustomerFundFlowDashboardPage() {
         {/* Right Section — New Content (4 Columns) */}
         <div className="col-span-3">
           <DataTableCard
-            title="Branch Wise Withdraw Today"
+            title={`Branch Wise Withdraw Today-${numberToMillionsString(withdrawalToday?.data?.detail?.totalWithdrawal ?? 0)}`}
             subtitle="show data for branch wise turnover"
             className="col-span-1  lg:col-span-1"
             columns={branchWisetotalFundColumns}

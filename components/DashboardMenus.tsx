@@ -119,7 +119,7 @@ const menuList = [
     codeName: "financial_info",
     viewName: "Financial Info",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
-    roles: ["ADMIN", "MANAGEMENT"],
+    roles: ["ADMIN"],
     subMenus: [
       {
         id: 1,
@@ -127,7 +127,7 @@ const menuList = [
         viewName: "Customer Fund Flow",
         urlPath: "/dashboard/customer_fund_flow",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN", "MANAGEMENT"],
+        roles: ["ADMIN"],
       }
     ],
   },
@@ -360,11 +360,11 @@ menus = menus.map((menu) => {
   return (
     <aside
       className={cn(
-        "min-h-[100vh] w-68 shadow-lg rounded-r-xl border-r border-gray-200 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100"
+        "min-h-[850px] w-68 shadow-lg rounded-r-xl border-r border-gray-200 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100"
       )}
     >
       <Command>
-        <CommandList className="min-h-[100vh] px-1 py-1">
+        <CommandList className="min-h-[850px] px-1 py-1">
           {menus.map((menu) => {
             const isOpen = openMenus.includes(menu.codeName);
             return (
