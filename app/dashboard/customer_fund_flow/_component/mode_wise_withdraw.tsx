@@ -36,10 +36,13 @@ const ModeWiseWithdraw: React.FC<ModeWiseWithdrawProps> = ({
     .filter((item) => item.value > 0 && item.name !== "totalWithdrawal");
 
   // Format camelCase keys to readable labels
-  const formatName = (key: string) =>
-    key
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase());
+ const formatName = (key: string) =>
+  key
+    .replace(/Withdrawal/gi, "")              // remove 'Deposit' (case-insensitive)
+    .replace(/([A-Z])/g, " $1")            // add space before capital letters
+    .replace(/^./, (str) => str.toUpperCase()) // capitalize first letter
+    .trim();                               // remove extra spaces
+
 
   return (
     <Card className={`border-[2px] border-${color} shadow-md bg-[#033e4a]`}>

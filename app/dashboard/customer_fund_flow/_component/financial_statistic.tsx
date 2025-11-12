@@ -22,7 +22,7 @@ const FinancialStatistic: React.FC<FinancialStatisticProps> = ({
       {/* Animated gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/20 via-cyan-400/10 to-indigo-500/20 opacity-60"></div>
 
-      <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 ">
+      <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-2 ">
         <CardTitle className="text-lg font-semibold text-white tracking-wide drop-shadow-md">
           {title}
         </CardTitle>
