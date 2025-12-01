@@ -87,6 +87,8 @@ const ActiveTradingCodesBoard = () => {
         return <>Error...</>
     }
 
+    console.log("sectorwiseTrunoverComparison", investorLiveTopBuy?.data,investorLiveTopSale?.data);
+
     return (
         <div className="mx-4">
             <PageHeader

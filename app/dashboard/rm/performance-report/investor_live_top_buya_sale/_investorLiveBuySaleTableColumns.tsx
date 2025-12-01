@@ -35,8 +35,15 @@ export const investorLiveBuySaleClientsColumns: ColumnDef<InvestorLiveTopBuySale
     }
   },
   {
+    accessorKey: "clientType",
+    header: "Client Type",
+    cell: ({ row }) => {
+      return <div className="text-left">{row.getValue("clientType")}</div>
+    }
+  },
+  {
     accessorKey: "turnover",
-     header: "Turnover",
+    header: "Turnover",
     cell: ({ row }) => {
       return <div className={cn("text-right ml-4", {
         "text-red-600": row.getValue("turnover") as number < 0,
