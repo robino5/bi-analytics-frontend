@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "./_clientTableHeader";
 import { IClientDetail } from "@/types/rmPerformance";
+import { Star } from "lucide-react";
 
 const cellNumberFormatter = (row: any, accessorKey: string) => {
   const amount = parseFloat(row.getValue(accessorKey));
@@ -12,15 +13,28 @@ const cellNumberFormatter = (row: any, accessorKey: string) => {
 };
 
 export const rmWiseClientsColumns: ColumnDef<IClientDetail>[] = [
-  {
-    accessorKey: "investorCode",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Investor Code" />
-    ),
-    cell: ({ row }) => {
-      return <div className="text-left ml-4">{row.getValue("investorCode")}</div>
-    }
-  },
+ {
+  accessorKey: "investorCode",
+  header: "Investor Code",
+  cell: ({ row }) => {
+    const clientType = String(row.getValue("clientType") || "").toUpperCase();
+    const isMargin = clientType === "MARGIN";
+
+    return (
+      <div className="text-left flex items-center gap-2">
+        {isMargin ? (
+          // show red star
+          <Star className="w-3 h-3 text-red-500 fill-red-500" />
+        ) : (
+          // invisible placeholder keeps alignment
+          <span className="w-3 h-3 inline-block"></span>
+        )}
+
+        {row.getValue("investorCode")}
+      </div>
+    );
+  }
+},
   {
     accessorKey: "joinHolderName",
     header: ({ column }) => (

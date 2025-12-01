@@ -79,6 +79,7 @@ export type InvestorLiveTopBuySaleInfo = {
   investorCode: string;
   investorName: string;
   turnover: number;
+  clientType: string;
 }
 
 export type TraderPerformance = {
