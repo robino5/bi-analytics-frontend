@@ -74,7 +74,7 @@ export default function BranchFilter({
         <SelectValue placeholder="All Branch" />
       </SelectTrigger>
       <SelectContent>
-        {!pathName.includes("/rm/") && <SelectItem value="all">All Branch</SelectItem>}
+        {!pathName.includes("/rm/") || session?.user.role.toString() != RoleType.BRANCH_MANGAER && <SelectItem value="all">All Branch</SelectItem>}
         {branchesList.map((lov) => (
           <SelectItem key={lov.branchCode} value={String(lov.branchCode)}>
             {lov.branchName}

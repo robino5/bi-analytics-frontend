@@ -69,8 +69,6 @@ const BranchActiveTradingCodesBoard = () => {
         "TOTAL (DT+INTERNET)",
 
     );
-
-    console.log("short", dayWiseSummary)
     return (
         <div className="mx-4">
             <PageHeader
