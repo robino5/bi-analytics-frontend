@@ -7,7 +7,8 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 
 export type IBranchWiseFund = {
   branchName: string;
-  total: number;
+  totalDeposit: number;
+  totalWithdrawal: number;
 };
 
 
@@ -25,18 +26,33 @@ export const branchWisetotalFundColumns: ColumnDef<IBranchWiseFund>[] = [
     ),
   },
   {
-    accessorKey: "total",
+    accessorKey: "totalDeposit",
     header: ({ column }) => (
       <DataTableColumnHeader
         className="place-content-center"
         column={column}
-        title="Total"
+        title="Deposit"
       />
     ),
     cell: ({ row }) => {
       return <div className={cn("text-right ml-4", {
-        "text-red-600": row.getValue("total") as number < 0,
-      })}>{cellNumberFormatter(row, "total")}</div >;
+        "text-red-600": row.getValue("totalDeposit") as number < 0,
+      })}>{cellNumberFormatter(row, "totalDeposit")}</div >;
+    },
+  },
+  {
+    accessorKey: "totalWithdrawal",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="place-content-center"
+        column={column}
+        title="Withdrawal"
+      />
+    ),
+    cell: ({ row }) => {
+      return <div className={cn("text-right ml-4", {
+        "text-red-600": row.getValue("totalWithdrawal") as number < 0,
+      })}>{cellNumberFormatter(row, "totalWithdrawal")}</div >;
     },
   },
 ];

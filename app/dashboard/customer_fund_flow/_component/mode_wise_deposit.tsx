@@ -44,7 +44,7 @@ const ModeWiseDeposite: React.FC<ModeWiseDepositeProps> = ({
 
   return (
     <Card className={`border-2 border-cyan-500 shadow-lg bg-[#033e4a]`}>
-      <CardHeader className="relative z-10 bg-gradient-to-r from-teal-600 via-cyan-500 to-sky-600 p-3 rounded-t-md">
+      <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md">
         <CardTitle className="text-lg font-semibold text-white tracking-wide">{title}</CardTitle>
       </CardHeader>
       <CardContent>

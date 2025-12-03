@@ -128,6 +128,14 @@ const menuList = [
         urlPath: "/dashboard/customer_fund_flow",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
         roles: ["ADMIN"],
+      },
+      {
+        id: 1,
+        codeName: "regional-business-performance",
+        viewName: "Regional Business Performance",
+        urlPath: "/dashboard/regional-business-performance",
+        icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
+        roles: ["ADMIN"],
       }
     ],
   },

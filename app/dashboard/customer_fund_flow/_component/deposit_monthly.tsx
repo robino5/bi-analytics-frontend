@@ -20,10 +20,11 @@ type MonthlyData = {
 };
 
 interface LineChartProps {
-  monthlyWise: any;
+  DepositmonthlyWise: any;
+  withdrawalmonthlyWise?: any;
 }
 
-const MonthlyLineChart: React.FC<LineChartProps> = ({ monthlyWise }) => {
+const MonthlyLineChart: React.FC<LineChartProps> = ({ DepositmonthlyWise, withdrawalmonthlyWise }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<echarts.EChartsType | null>(null);
 
@@ -49,32 +50,53 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ monthlyWise }) => {
       "December",
     ];
 
-    const values = months.map(
-      (m) => monthlyWise[m.toLowerCase() as keyof MonthlyData]
+    const depositValues = months.map(
+      (m) => DepositmonthlyWise[m.toLowerCase() as keyof MonthlyData]
+    );
+
+    const withdrawalValues = months.map(
+      (m) => withdrawalmonthlyWise?.[m.toLowerCase() as keyof MonthlyData] ?? 0
     );
 
     const option: echarts.EChartsOption = {
-      backgroundColor: "#033e4a", 
+      backgroundColor: "#033e4a",
       tooltip: {
         trigger: "axis",
         formatter: (params: any) => {
-          const data = params[0];
-          return `
-            <div style="padding: 6px 10px;">
-              <strong>${data.name}</strong><br/>
-              Value: <b>${numberToMillionsString(data.value)}</b>
-            </div>
-          `;
+          let tooltipHtml = `
+      <div style="padding: 6px 10px;">
+        <strong>${params[0].name}</strong><br/>
+      `;
+          params.forEach((item: any) => {
+            tooltipHtml += `
+          ${item.marker} ${item.seriesName}: 
+          <b>${numberToMillionsString(item.value)}</b><br/>
+        `;
+          });
+          tooltipHtml += `</div>`;
+          return tooltipHtml;
         },
       },
-      // ✅ Tight grid with no padding around chart
+
+      legend: {
+        show: true,
+        bottom: 0, // places legend at the bottom
+        left: "center", // centers the legend horizontally
+        textStyle: {
+          color: "#ffffff",
+          fontSize: 14,
+        },
+        itemGap: 20, // spacing between legend items
+      },
+
       grid: {
         left: 10,
         right: 10,
         top: 10,
-        bottom: 10,
+        bottom: 50, // give some space for the legend
         containLabel: true,
       },
+
       xAxis: {
         type: "category",
         data: months,
@@ -83,66 +105,40 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ monthlyWise }) => {
           fontSize: 14,
           color: "#ffffffff",
         },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: "#9ca3af",
-            width: 1.5,
-          },
-        },
-        axisTick: {
-          show: true,
-          alignWithLabel: true,
-          lineStyle: {
-            color: "#ffffffff",
-          },
-        },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: "#c2bfbfff",
-          },
-        },
+        axisLine: { lineStyle: { color: "#9ca3af", width: 1.5 } },
+        axisTick: { show: true, alignWithLabel: true, lineStyle: { color: "#ffffffff" } },
+        splitLine: { show: true, lineStyle: { color: "#c2bfbfff" } },
       },
+
       yAxis: {
         type: "value",
-        axisLabel: {
-          formatter: (value) => `${numberToMillionsString(value)}`,
-          color: "#ffffffff",
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: "#9ca3af",
-            width: 1.5,
-          },
-        },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: "#c2bfbfff",
-          },
-        },
+        axisLabel: { formatter: (value) => `${numberToMillionsString(value)}`, color: "#ffffffff" },
+        axisLine: { lineStyle: { color: "#9ca3af", width: 1.5 } },
+        splitLine: { lineStyle: { color: "#c2bfbfff" } },
       },
+
       series: [
         {
-          name: "Total Deposit",
-          data: values,
+          name: "Deposit",
+          data: depositValues,
           type: "line",
           smooth: true,
           lineStyle: { width: 3, color: "#0cf058ff" },
           itemStyle: { color: "#e71708ff" },
-          label: {
-            show: true,
-            position: "top",
-            formatter: (params: any) => numberToMillionsString(params.value),
-            fontSize: 12,
-            color: "#ffffffff",
-            fontWeight: 600,
-          },
+          label: { show: false, position: "top", formatter: (params: any) => numberToMillionsString(params.value) },
         },
-      ],
+        {
+          name: "Withdrawal",
+          data: withdrawalValues,
+          type: "line",
+          smooth: true,
+          lineStyle: { width: 3, color: "#ff9800" },
+          itemStyle: { color: "#f00cd2ff" },
+          label: { show: false, position: "bottom", formatter: (params: any) => numberToMillionsString(params.value) },
+        },
+      ]
     };
+
 
     chartInstance.current.setOption(option);
 
@@ -154,12 +150,12 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ monthlyWise }) => {
       chartInstance.current?.dispose();
       chartInstance.current = null;
     };
-  }, [monthlyWise]);
+  }, [DepositmonthlyWise, withdrawalmonthlyWise]);
 
   return (
     <div
       ref={chartRef}
-      className="w-full h-[360px] sm:h-[300px] lg:h-[420px] bg-white rounded-2xl shadow-sm"
+      className="w-full h-[300px] sm:h-[240px] lg:h-[360px] bg-white rounded-2xl shadow-sm"
     />
   );
 };

@@ -70,30 +70,69 @@ export default function CustomerFundFlowDashboardPage() {
       item.ipoMode
   }));
 
+
+  const totals: Record<string, { branchName: string; totalWithdrawal: number; totalDeposit: number }> = {};
+
+  withdrawalTotalToday?.forEach(item => {
+    totals[item.branchName] = {
+      branchName: item.branchName,
+      totalWithdrawal: item.total,
+      totalDeposit: 0
+    };
+  });
+
+  depositTotalToday?.forEach(item => {
+    if (!totals[item.branchName]) {
+      totals[item.branchName] = {
+        branchName: item.branchName,
+        totalWithdrawal: 0,
+        totalDeposit: item.total
+      };
+    } else {
+      totals[item.branchName].totalDeposit = item.total;
+    }
+  });
+
+  const combinedTotals = Object.values(totals).map(item => ({
+    branchName: item.branchName,
+    totalDeposit: item.totalDeposit,
+    totalWithdrawal: item.totalWithdrawal
+  }));
+
+
+  console.log("depositTotalToday", depositTotalToday);
+  console.log("withdrawalTotalToday", withdrawalTotalToday);
+  console.log("combinedTotals", combinedTotals);
+
   return (
     <div className="p-6">
       <PageHeader name="Customer Fund Flow Dashboard" />
-      <div className="grid grid-cols-4 gap-4 mt-3">
-        <FinancialStatistic
-          title="Total Deposit Today"
-          amount={depositToday?.data?.detail?.totalDeposit ?? 0}
-          color="border-blue-500"
-        />
-        <FinancialStatistic
-          title="Total Deposit This Year"
-          amount={deposithisYear?.data?.detail?.totalDeposit ?? 0}
-          color="border-green-500"
-        />
-        <FinancialStatistic
-          title="Total Withdrawal Today"
-          amount={withdrawalToday?.data?.detail?.totalWithdrawal ?? 0}
-          color="border-red-500"
-        />
-        <FinancialStatistic
-          title="Total Withdrawal This Year"
-          amount={withdrawalThisYear?.data?.detail?.totalWithdrawal ?? 0}
-          color="border-orange-500"
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mt-3">
+          <FinancialStatistic
+            title="Total Deposit Today"
+            amount={depositToday?.data?.detail?.totalDeposit ?? 0}
+            color="border-blue-500"
+          />
+          <FinancialStatistic
+            title="Total Deposit This Year"
+            amount={deposithisYear?.data?.detail?.totalDeposit ?? 0}
+            color="border-green-500"
+          />
+          <FinancialStatistic
+            title="Total Withdrawal Today"
+            amount={withdrawalToday?.data?.detail?.totalWithdrawal ?? 0}
+            color="border-red-500"
+          />
+          <FinancialStatistic
+            title="Total Withdrawal This Year"
+            amount={withdrawalThisYear?.data?.detail?.totalWithdrawal ?? 0}
+            color="border-orange-500"
+          />
+        </div>
+        <div className="grid grid-cols-2">
+
+        </div>
       </div>
       <div className="grid grid-cols-4 gap-4 mt-3">
         <ModeWiseDeposite
@@ -109,8 +148,8 @@ export default function CustomerFundFlowDashboardPage() {
           color="blue-500"
         />
         <div>
-          <Card className=" border-[2px] border-green-500 shadow-md  bg-[#033e4a]">
-            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 ">
+          <Card className=" border-[2px] border-green-500 shadow-md  bg-[#033e4a] rounded-t-md">
+            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md">
               <CardTitle className="text-lg font-semibold text-white">Deposit Today - Type Wise (%)</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
@@ -144,47 +183,19 @@ export default function CustomerFundFlowDashboardPage() {
       </div>
       <div className="grid grid-cols-12 gap-4 mt-3">
         {/* Left Section — Chart (8 Columns) */}
-        <div className="col-span-9">
+        <div className="col-span-8">
           <Card className=" w-full shadow-md border border-gray-200  bg-[#033e4a]">
-            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3">
+            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md">
               <CardTitle className="text-lg font-semibold text-white">
                 Monthly Deposit Overview
               </CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
               <MonthlyLineChart
-                monthlyWise={
+                DepositmonthlyWise={
                   (TotalDepositBranchWiseMonthly?.data as any)?.monthlyWise ?? {}
                 }
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right Section — New Content (4 Columns) */}
-        <div className="col-span-3">
-          <DataTableCard
-            title={`Branch Wise Deposit Today-${numberToMillionsString(depositToday?.data?.detail?.totalDeposit ?? 0) }`}
-            subtitle="show data for branch wise turnover"
-            className="col-span-1  lg:col-span-1"
-            columns={branchWisetotalFundColumns}
-            data={depositTotalToday ?? []}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-12 gap-4 mt-3">
-        {/* Left Section — Chart (8 Columns) */}
-        <div className="col-span-9">
-          <Card className=" w-full shadow-md border border-gray-200  bg-[#033e4a]">
-            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3">
-              <CardTitle className="text-lg font-semibold text-white">
-                Monthly Withdraw Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="mt-2">
-              <MonthlyLineChart
-                monthlyWise={
+                withdrawalmonthlyWise={
                   (TotalWithdrawBranchWiseMonthly?.data as any)?.monthlyWise ?? {}
                 }
               />
@@ -193,6 +204,37 @@ export default function CustomerFundFlowDashboardPage() {
         </div>
 
         {/* Right Section — New Content (4 Columns) */}
+        <div className="col-span-4">
+          <DataTableCard
+            title={`Branch Wise Today Deposit-${numberToMillionsString(depositToday?.data?.detail?.totalDeposit ?? 0)} & Withdrawal-${numberToMillionsString(withdrawalToday?.data?.detail?.totalWithdrawal ?? 0)}`}
+            subtitle="show data for branch wise turnover"
+            className="col-span-1  lg:col-span-1"
+            columns={branchWisetotalFundColumns}
+            data={combinedTotals ?? []}
+          />
+        </div>
+      </div>
+
+      {/* <div className="grid grid-cols-12 gap-4 mt-3">
+        <div className="col-span-8">
+          <Card className=" w-full shadow-md border border-gray-200  bg-[#033e4a]">
+            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3">
+              <CardTitle className="text-lg font-semibold text-white">
+                Monthly Withdraw Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="mt-2">
+              <MonthlyLineChart
+                DepositmonthlyWise={
+                  (TotalDepositBranchWiseMonthly?.data as any)?.monthlyWise ?? {}
+                }
+                withdrawalmonthlyWise={
+                  (TotalWithdrawBranchWiseMonthly?.data as any)?.monthlyWise ?? {}
+                }
+              />
+            </CardContent>
+          </Card>
+        </div>
         <div className="col-span-3">
           <DataTableCard
             title={`Branch Wise Withdraw Today-${numberToMillionsString(withdrawalToday?.data?.detail?.totalWithdrawal ?? 0)}`}
@@ -202,9 +244,7 @@ export default function CustomerFundFlowDashboardPage() {
             data={withdrawalTotalToday ?? []}
           />
         </div>
-      </div>
-
-
+      </div> */}
     </div>
   );
 }
