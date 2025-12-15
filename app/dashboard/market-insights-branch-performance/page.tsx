@@ -2,13 +2,11 @@
 
 import { useState, useMemo } from "react";
 import PageHeader from "@/components/PageHeader";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { regionalBusinessPerformanceAPI } from "./api/regional-business-performance";
+import { regionalBusinessPerformanceAPI } from "./api/market-insights-branch-performance";
 import { useQuery } from "@tanstack/react-query";
 import FilterSection from "./_component/FilterSection";
+import MarketStatistics from "./_component/MarketStatistics";
 
 export default function RegionalBusinessPerformancePage() {
   const [region, setRegion] = useState("");
@@ -34,6 +32,16 @@ export default function RegionalBusinessPerformancePage() {
     return Array.isArray(regionsBranch?.data) ? regionsBranch.data.filter((x) => x.regionName === region) : [];
   }, [region, regionsBranch]);
 
+  const { data: exchangeWiseMarketStatistics } = useQuery({
+    queryKey: ['exchangeWiseMarketStatistics'],
+    queryFn: () => regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
+  });
+
+  const { data: branchWiseMarketStatistics } = useQuery({
+    queryKey: ['branchWiseMarketStatistics', branch, region],
+    queryFn: () => regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(branch, region),
+  });
+
   return (
     <div className="p-6">
       <PageHeader name="Regional Business Performance" />
@@ -56,7 +64,14 @@ export default function RegionalBusinessPerformancePage() {
         </CardContent>
       </Card>
 
+      {exchangeWiseMarketStatistics && branchWiseMarketStatistics &&
 
+        <MarketStatistics
+          exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data}
+          branchWiseMarketStatistics={branchWiseMarketStatistics?.data}
+          SelectedRegion={region}
+        />
+      }
     </div>
   );
 }
