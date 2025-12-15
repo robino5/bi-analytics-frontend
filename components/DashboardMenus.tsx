@@ -133,6 +133,31 @@ const menuList = [
   },
   {
     id: 3,
+    codeName: "regional_operations_analytics",
+    viewName: "Regional Operations Analytics",
+    icon: <MdAdminPanelSettings className="h-6 w-6" />,
+    roles: ["ADMIN"],
+    subMenus: [
+         {
+        id: 1,
+        codeName: "management-insights",
+        viewName: " Management Insights",
+        urlPath: "/dashboard/management-insights",
+        icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
+        roles: ["ADMIN"],
+      },
+      {
+        id: 2,
+        codeName: "market-insights-branch-performance",
+        viewName: " Market Insights & Branch Performance",
+        urlPath: "/dashboard/market-insights-branch-performance",
+        icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
+        roles: ["ADMIN"],
+      }
+    ],
+  },
+  {
+    id: 4,
     codeName: "branch_dashboards",
     viewName: "Branch Analytics",
     icon: <FaStore className="h-5 w-5" />,
@@ -181,7 +206,7 @@ const menuList = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     codeName: "rm_dashboards",
     viewName: "RM Analytics",
     icon: <BiBarChartAlt2 className="h-5 w-5" />,
@@ -252,7 +277,7 @@ const menuList = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     codeName: "settings",
     viewName: "Settings",
     icon: <FaGear className="h-4 w-4" />,
@@ -269,7 +294,7 @@ const menuList = [
     ],
   },
   {
-    id: 4,
+    id: 7,
     codeName: "settings",
     viewName: "Settings",
     icon: <FaGear className="h-4 w-4" />,
@@ -306,33 +331,33 @@ export default function DashboardMenus() {
       item.subMenus?.some((s) => s.roles.includes(userRole))
   );
 
-menus = menus.map((menu) => {
-  if (menu.codeName === "admin_dashboards" && Array.isArray(menu.subMenus)) {
-    const filteredSubMenus = menu.subMenus.filter((sub) => {
-      switch (sub.codeName) {
-        case "active_trading_codes":
-          return boardPermissions.activeTradingCodes; // show only if true
-        case "business_and_trade_management":
-          return boardPermissions.businessAndTradeManagement; // show only if true
-        case "trade_insights":
-          return boardPermissions.tradeInsights; // show only if true
-        case "customer_management":
-          return boardPermissions.customerManagement; // show only if true
-        default:
-          return true;
-      }
-    });
+  menus = menus.map((menu) => {
+    if (menu.codeName === "admin_dashboards" && Array.isArray(menu.subMenus)) {
+      const filteredSubMenus = menu.subMenus.filter((sub) => {
+        switch (sub.codeName) {
+          case "active_trading_codes":
+            return boardPermissions.activeTradingCodes; // show only if true
+          case "business_and_trade_management":
+            return boardPermissions.businessAndTradeManagement; // show only if true
+          case "trade_insights":
+            return boardPermissions.tradeInsights; // show only if true
+          case "customer_management":
+            return boardPermissions.customerManagement; // show only if true
+          default:
+            return true;
+        }
+      });
 
-    return {
-      ...menu,
-      subMenus: filteredSubMenus,
-    };
-  }
+      return {
+        ...menu,
+        subMenus: filteredSubMenus,
+      };
+    }
 
-  return menu;
-});
-  
-   
+    return menu;
+  });
+
+
 
 
   // ✅ Automatically open menu if current path matches any submenu URL
