@@ -67,6 +67,58 @@ class ManagementInsights extends Common {
     }
 
 
+    getRegionalChannelWiseTrade(branch?: string, region?: string) {
+        let url = `dashboards/branch-wise-regional-channel-wise-trades/?`;
+
+        if (region) {
+            url += `region_name=${region}&`;
+        }
+        if (branch) {
+            url += `branch_code=${branch}&`;
+        }
+
+        return this.http.get<IResponse<any>>(url);
+    }
+
+    getRegionalPartyTurnoverCommission(branch?: string, region?: string) {
+        let url = `dashboards/branch-wise-regional-party-wise-turnover-commission/?`;
+
+        if (region) {
+            url += `region_name=${region}&`;
+        }
+        if (branch) {
+            url += `branch_code=${branch}&`;
+        }
+
+        return this.http.get<IResponse<any>>(url);
+    }
+
+    getRegionalDepositWithdrawDetails(branch?: string, region?: string) {
+        let url = `dashboards/branch-wise-regional-deposit-withdraw-details/?`;
+
+        if (region) {
+            url += `region_name=${region}&`;
+        }
+        if (branch) {
+            url += `branch_code=${branch}&`;
+        }
+
+        return this.http.get<IResponse<any>>(url);
+    }
+
+    getRegionalExposureDetails(branch?: string, region?: string) {
+        let url = `dashboards/branch-wise-regional-exposure-details/?`;
+
+        if (region) {
+            url += `region_name=${region}&`;
+        }
+        if (branch) {
+            url += `branch_code=${branch}&`;
+        }
+
+        return this.http.get<IResponse<any>>(url);
+    }
+
 }
 
 const httpAuthService = new HttpAuthService(config.apiURL, authService);

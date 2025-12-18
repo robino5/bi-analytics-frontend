@@ -18,39 +18,37 @@ export default function EkycInfo({ eKYC }: { eKYC: any }) {
                 </div>
                 <div className="grid grid-cols-3 gap-4 w-full mt-2">
                     {/* Green Card */}
-                    <div className="w-full p-4 py-2 rounded-xl shadow-md bg-teal-100">
+                    <div className="w-full p-4 py-2 rounded-xl shadow-md bg-lime-100">
                         <div className="grid grid-cols-12 gap-4 items-center">
-                            <div className="col-span-4 flex justify-center items-center p-2 rounded-md text-white bg-teal-500">
+                            <div className="col-span-4 flex justify-center items-center p-2 rounded-md text-white bg-lime-500">
                                 <UserPlus size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-teal-800">  {eKYC?.detail?.sumOfTotalInvestor || 0}</h4>
+                                <h4 className="text-lg font-bold text-lime-800">  {eKYC?.detail?.sumOfTotalInvestor || 0}</h4>
                                 <p className="text-gray-600">Total</p>
                             </div>
                         </div>
                     </div>
-
                     {/* Yellow Card */}
-                    <div className="w-full p-4 py-2 rounded-xl shadow-md bg-green-100">
+                    <div className="w-full p-4 py-2 rounded-xl shadow-md bg-indigo-100">
                         <div className="grid grid-cols-12 gap-4 items-center">
-                            <div className="col-span-4 flex justify-center items-center p-2 rounded-md text-white bg-green-500">
+                            <div className="col-span-4 flex justify-center items-center p-2 rounded-md text-white bg-indigo-500">
                                 <UserCheck size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-green-800">{eKYC?.detail?.sumOfTotalSubmitted || 0}</h4>
+                                <h4 className="text-lg font-bold text-indigo-800">{eKYC?.detail?.sumOfTotalSubmitted || 0}</h4>
                                 <p className="text-gray-600">Submitted</p>
                             </div>
                         </div>
                     </div>
-
                     {/* Red Card */}
-                    <div className="w-full p-4 py-2 rounded-xl shadow-md bg-red-100">
+                    <div className="w-full p-4 py-2 rounded-xl shadow-md bg-orange-100">
                         <div className="grid grid-cols-12 gap-4 items-center">
-                            <div className="col-span-4 flex justify-center items-center p-2 rounded-md text-white bg-red-500">
+                            <div className="col-span-4 flex justify-center items-center p-2 rounded-md text-white bg-orange-500">
                                 <UserX size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-red-800"> {eKYC?.detail?.sumOfDue || 0}</h4>
+                                <h4 className="text-lg font-bold text-orange-800"> {eKYC?.detail?.sumOfDue || 0}</h4>
                                 <p className="text-gray-600">Due</p>
                             </div>
                         </div>

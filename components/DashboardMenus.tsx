@@ -134,7 +134,7 @@ const menuList = [
   {
     id: 3,
     codeName: "regional_operations_analytics",
-    viewName: "Regional Operations Analytics",
+    viewName: "Regional Analytics",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
     roles: ["ADMIN"],
     subMenus: [
