@@ -1,18 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { numberToMillionsString } from "@/lib/utils";
 
 export default function ThirdPartyInfo({ thirdPartyInfo }: { thirdPartyInfo: any }) {
   return (
-    <Card className="p-0 bg-[#033e4a] text-white border border-teal-800">
-      
-      {/* Card Header */}
-      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-700 to-teal-800 p-2 rounded-t-lg">
-        <CardTitle className="text-white text-lg">
-          Third Party Information
-        </CardTitle>
-      </CardHeader>
 
-      <CardContent className="p-3">
         <table className="w-full border-collapse rounded-lg overflow-hidden">
           
           {/* Main Table Header */}
@@ -22,7 +12,7 @@ export default function ThirdPartyInfo({ thirdPartyInfo }: { thirdPartyInfo: any
                 colSpan={2}
                 className="bg-green-300 text-center font-semibold py-2 border border-teal-700"
               >
-                Third Party
+                Total Busi. Aggregator
               </th>
               <th className="bg-green-300 text-center font-semibold border border-teal-700">
                 {thirdPartyInfo?.detail?.sumOfTotalParty || 0}
@@ -61,9 +51,7 @@ export default function ThirdPartyInfo({ thirdPartyInfo }: { thirdPartyInfo: any
               </td>
             </tr>
           </tbody>
-
         </table>
-      </CardContent>
-    </Card>
+
   );
 }

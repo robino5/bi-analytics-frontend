@@ -59,18 +59,11 @@ export default function ClientInfo({ clientData }: { clientData: any }) {
   }, [active, inactive]);
 
   return (
-    <Card className="w-full bg-[#033e4a]">
-      {/* CARD HEADER */}
-         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Client Overview</CardTitle>
-      </CardHeader>
 
-      {/* CARD CONTENT */}
-      <CardContent>
-        <div className="grid grid-cols-12 gap-4">
+        <div className="grid grid-cols-12 gap-4 w-full overflow-hidden">
           {/* LEFT – TABLE */}
-          <div className="col-span-12 md:col-span-6">
-            <table className="w-full text-sm rounded-lg overflow-hidden mt-5">
+          <div className="col-span-12 md:col-span-6 mt-4">
+            <table className="w-full text-sm rounded-lg overflow-hidden mt-5 min-h-[310px] ">
               <tbody>
                 <tr className="bg-green-300">
                   <td colSpan={2} className="text-center font-bold py-3">
@@ -85,15 +78,15 @@ export default function ClientInfo({ clientData }: { clientData: any }) {
                 </tr>
 
                 <tr className="bg-yellow-200">
-                  <td className="text-center py-2 font-bold">Active</td>
+                  <td className="text-center py-2  font-bold">Active</td>
                   <td className="text-center py-2 font-bold">Inactive</td>
                 </tr>
 
                 <tr className="odd:bg-green-50 even:bg-green-100">
-                  <td className="text-center py-2 font-semibold">
+                  <td className="text-center py-2 text-lg font-semibold">
                     {active}
                   </td>
-                  <td className="text-center py-2 font-semibold">
+                  <td className="text-center py-2 text-lg font-semibold">
                     {inactive}
                   </td>
                 </tr>
@@ -107,10 +100,10 @@ export default function ClientInfo({ clientData }: { clientData: any }) {
                 </tr>
 
                 <tr className="odd:bg-green-50 even:bg-green-100">
-                  <td className="text-center py-2 font-semibold">
+                  <td className="text-center py-2 text-lg font-semibold">
                     {clientData?.detail?.sumOfIbrokerInvestor || 0}
                   </td>
-                  <td className="text-center py-2 font-semibold">
+                  <td className="text-center py-2 text-lg font-semibold">
                     {clientData?.detail?.sumOfTexpressInvestor || 0}
                   </td>
                 </tr>
@@ -123,7 +116,6 @@ export default function ClientInfo({ clientData }: { clientData: any }) {
             <div ref={chartRef} className="w-full h-[300px]" />
           </div>
         </div>
-      </CardContent>
-    </Card>
+
   );
 }

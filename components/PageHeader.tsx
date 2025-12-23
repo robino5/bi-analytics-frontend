@@ -9,9 +9,10 @@ interface PageHeaderProps {
   name: string;
   children?: ReactNode;
   updateStatus?: string;
+  period?: string;
 }
 
-const PageHeader: FC<PageHeaderProps> = ({ name, children, updateStatus }) => {
+const PageHeader: FC<PageHeaderProps> = ({ name, children, updateStatus, period }) => {
   ;
 
   return (
@@ -23,6 +24,9 @@ const PageHeader: FC<PageHeaderProps> = ({ name, children, updateStatus }) => {
         {/* Center Title */}
         <div className="text-center flex-1">
           <div className="text-2xl font-bold text-heading">{name}</div>
+          {period && (
+            <p className="font-bold text-heading">{period}</p>
+          )}
           {updateStatus && (
             <p className="text-red-500 text-lg font-medium">{updateStatus}</p>
           )}

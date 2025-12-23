@@ -36,6 +36,19 @@ class MarketInsightsBranchPerformance extends Common {
     return this.http.get<IResponse<any>>(url);
 }
 
+   getBranchWiseRegionalBusinessPerformance(branch?: string, region?: string) {
+    let url = `dashboards/branch-wise-regional-business-performance/?`;
+
+    if (region) {
+        url += `region_name=${region}&`;
+    }
+    if (branch) {
+        url += `branch_code=${branch}&`;
+    }
+
+    return this.http.get<IResponse<any>>(url);
+}
+
 
 
 }

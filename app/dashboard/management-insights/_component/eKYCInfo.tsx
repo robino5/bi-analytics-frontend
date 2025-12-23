@@ -2,8 +2,8 @@ import { UserCheck, UserPlus, UserX, Sparkles } from "lucide-react";
 
 export default function EkycInfo({ eKYC }: { eKYC: any }) {
     return (
-        <div className="w-full">
-             <div >
+        <div className="w-full overflow-hidden">
+             <div className="mt-5 mb-12" >
                 <div className="grid grid-cols-12 gap-4 w-full">
                     <div className="col-span-12 w-full p-4 py-2 rounded-xl shadow-md bg-white/90 backdrop-blur-lg">
                         <div className="grid grid-cols-12 gap-4 items-center">

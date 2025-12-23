@@ -3,7 +3,7 @@ import { UserCheck, UserPlus, UserX, Sparkles, Users, User } from "lucide-react"
 
 export default function EcrmInfo({ eCRM }: { eCRM: any }) {
     return (
-        <div className="w-full">
+        <div className="w-full overflow-hidden">
             <div >
                 <div className="grid grid-cols-12 gap-4 w-full">
                     <div className="col-span-12 w-full p-4 py-2 rounded-xl shadow-md bg-white/90 backdrop-blur-lg">

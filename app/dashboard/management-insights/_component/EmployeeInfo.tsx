@@ -74,7 +74,7 @@ export default function EmployeePieChart({
     }, [permanent, withSalary, withoutSalary]);
 
     return (
-        <div className="w-full max-w-md mx-auto bg-transparent">
+        <div className="w-full max-w-md mx-auto bg-transparent overflow-hidden">
             <div
                 ref={chartRef}
                 className="h-[350px] w-full"
