@@ -3,44 +3,20 @@ import { numberToMillionsString } from "@/lib/utils";
 
 export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdraw: any }) {
   return (
-    <Card className="p-0 bg-[#033e4a] text-white border border-teal-800">
-
-      {/* Card Header */}
-      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-700 to-teal-800 p-2 rounded-t-lg">
-        <CardTitle className="text-white text-lg">
-         Portfolio, Cash, Margin, Deposit & Withdraw Information
-        </CardTitle>
-      </CardHeader>
-
-      <CardContent className="p-3">
+    
         <table className="w-full border-collapse rounded-lg overflow-hidden">
 
           {/* Main Table Header */}
-          {/* <thead>
-            <tr>
-              <th
-                colSpan={2}
-                className="bg-green-300 text-center font-semibold py-2 border border-teal-700"
-              >
-                Third Party
+          <thead>
+            <tr className="bg-gradient-to-r from-blue-600 to-blue-700">
+              <th className="text-white text-center py-2 border border-teal-600">
+                Particular
               </th>
-              <th className="bg-green-300 text-center font-semibold border border-teal-700">
-                {thirdPartyInfo?.detail?.sumOfTotalParty || 0}
+              <th className="text-white text-center py-2 border border-teal-600">
+                Amount
               </th>
             </tr>
-
-            <tr>
-              <th className="bg-yellow-200 text-center py-2 border border-teal-600">
-                No of Client
-              </th>
-              <th className="bg-yellow-200 text-center py-2 border border-teal-600">
-                Turnover
-              </th>
-              <th className="bg-yellow-200  text-center py-2 border border-teal-600">
-                Net Commission
-              </th>
-            </tr>
-          </thead> */}
+          </thead>
 
           {/* Table Body */}
           <tbody>
@@ -99,7 +75,6 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
           </tbody>
 
         </table>
-      </CardContent>
-    </Card>
+  
   );
 }
