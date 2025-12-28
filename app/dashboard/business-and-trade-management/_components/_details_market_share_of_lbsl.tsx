@@ -155,7 +155,7 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
                             </TableCell>
                             <TableCell colSpan={2} className="text-right py-1 border border-gray-300 font-medium">
                               {row.label.includes("%")
-                                ? row.value.toFixed(2)
+                                ? row?.value?.toFixed(2) || 0.00
                                 : numberToMillionsString(row.value, 2)}
                             </TableCell>
                           </TableRow>
