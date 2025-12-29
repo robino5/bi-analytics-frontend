@@ -118,7 +118,19 @@ class ManagementInsights extends Common {
 
         return this.http.get<IResponse<any>>(url);
     }
+    
+    getRegionalOfficeSpace(branch?: string, region?: string) {
+        let url = `dashboards/branch-wise-regional-office-space/?`;
 
+        if (region) {
+            url += `region_name=${region}&`;
+        }
+        if (branch) {
+            url += `branch_code=${branch}&`;
+        }
+
+        return this.http.get<IResponse<any>>(url);
+    }
 }
 
 const httpAuthService = new HttpAuthService(config.apiURL, authService);

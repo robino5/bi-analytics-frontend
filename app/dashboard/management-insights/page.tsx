@@ -107,8 +107,14 @@ export default function RegionalBusinessPerformancePage() {
         queryFn: () => ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
     });
 
+    const { data: branchOfficeSpaceInfo, isPending: branchOfficeSpaceInfoPending } = useQuery({
+        queryKey: ['branchOfficeSpaceInfo', branch, region],
+        queryFn: () => ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
+    });
+
     const isLoading = regionsBranchLoading || branchClientInfoPending || branchEmployeeInfoPending || branchEcrmInfoPending ||
-        branchEkycInfoPending || branchChannelWiseTradeInfoPending || branchDepositWithdrawDetailsInfoPending || branchPartyTurnoverCommissionInfoPending || branchExposureInfoPending;
+        branchEkycInfoPending || branchChannelWiseTradeInfoPending || branchDepositWithdrawDetailsInfoPending || branchPartyTurnoverCommissionInfoPending || branchExposureInfoPending
+        || branchOfficeSpaceInfoPending;
 
     if (isLoading) {
         return <LoadingButton text="Loading..." />
@@ -130,10 +136,24 @@ export default function RegionalBusinessPerformancePage() {
                 </CardContent>
             </Card>
 
-            {/* Title Bar */}
-            <div className="bg-yellow-400 text-center py-3 rounded-sm mb-2 mt-3">
-                <h2 className="text-lg font-bold">  &nbsp;<span className="font-bold">&nbsp;</span></h2>
+            <div className="bg-yellow-400 rounded-sm mb-2 mt-3 flex items-stretch border border-black">
+                {/* Left side */}
+                <div className="w-1/2 text-center border-r border-black flex items-center justify-center py-3">
+                    <span className="text-lg font-semibold">
+                        Regional Size of office space
+                    </span>
+                </div>
+
+                {/* Right side */}
+                <div className="w-1/2 text-center flex items-center justify-center py-3">
+                    <h2 className="text-lg font-bold">
+                        {branchOfficeSpaceInfo?.data?.detail?.sumOfTotalOfficeArea || 0}
+                        <span className="font-bold"> SFT</span>
+                    </h2>
+                </div>
             </div>
+
+
             <div className="grid grid-cols-12">
                 {/* Col 4 */}
                 <div className="col-span-6 p-4 rounded">

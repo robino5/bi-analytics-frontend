@@ -133,11 +133,11 @@ const BusinessPerformance = (businessPerformance: { businessPerformance: any }) 
                                         </td>
                                         <td className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-blue-100" : "bg-blue-200"}`}>
-                                            {item.totalNetFund}
+                                            {numberToMillionsString(item.totalNetFund)}
                                         </td>
                                         <td className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-blue-100" : "bg-blue-200"}`}>
-                                            {item.totalNetLinkShare}
+                                            {numberToMillionsString(item.totalNetLinkShare)}
                                         </td>
                                         <td className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-blue-100" : "bg-blue-200"}`}>

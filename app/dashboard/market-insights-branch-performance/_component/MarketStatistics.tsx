@@ -120,13 +120,13 @@ export default function MarketStatistics({ exchangeWiseMarketStatistics, branchW
                                     <tr className="even:bg-green-100 odd:bg-green-50 border-b">
                                         <td className="px-4 py-2 font-medium">LBSL to DSE</td>
                                         <td className="px-4 py-2 text-right font-semibold">
-                                            {((exchangeWiseMarketStatistics?.rows?.[1].lbslTotalTurnover / exchangeWiseMarketStatistics?.rows?.[1].totalTurnover) * 100).toFixed(2)}
+                                            {(((exchangeWiseMarketStatistics?.rows?.[1].lbslTotalTurnover / exchangeWiseMarketStatistics?.rows?.[1].totalTurnover) * 100)/2).toFixed(2)}
                                         </td>
                                     </tr>
                                     <tr className="even:bg-green-100 odd:bg-green-50 border-b">
                                         <td className="px-4 py-2 font-medium">LBSL to CSE</td>
                                         <td className="px-4 py-2 text-right font-semibold">
-                                            {((exchangeWiseMarketStatistics?.rows?.[0].lbslTotalTurnover / exchangeWiseMarketStatistics?.rows?.[0].totalTurnover) * 100).toFixed(2)}
+                                            {(((exchangeWiseMarketStatistics?.rows?.[0].lbslTotalTurnover / exchangeWiseMarketStatistics?.rows?.[0].totalTurnover) * 100)/2).toFixed(2)}
                                         </td>
                                     </tr>
                                 </tbody>
