@@ -119,7 +119,7 @@ const menuList = [
     codeName: "financial_info",
     viewName: "Financial Info",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
-    roles: ["ADMIN"],
+    roles: ["ADMIN","MANAGEMENT"],
     subMenus: [
       {
         id: 1,
@@ -127,7 +127,7 @@ const menuList = [
         viewName: "Customer Fund Flow",
         urlPath: "/dashboard/customer_fund_flow",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN"],
+        roles: ["ADMIN","MANAGEMENT"],
       }
     ],
   },
@@ -136,7 +136,7 @@ const menuList = [
     codeName: "regional_operations_analytics",
     viewName: "Regional Analytics",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
-    roles: ["ADMIN"],
+    roles: ["ADMIN","MANAGEMENT","CLUSTER_MANAGER"],
     subMenus: [
          {
         id: 1,
@@ -144,7 +144,7 @@ const menuList = [
         viewName: " Management Insights",
         urlPath: "/dashboard/management-insights",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN"],
+        roles: ["ADMIN","MANAGEMENT","CLUSTER_MANAGER"],
       },
       {
         id: 2,
@@ -152,7 +152,7 @@ const menuList = [
         viewName: " Market Insights & Branch Performance",
         urlPath: "/dashboard/market-insights-branch-performance",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN"],
+        roles: ["ADMIN","MANAGEMENT","CLUSTER_MANAGER"],
       }
     ],
   },

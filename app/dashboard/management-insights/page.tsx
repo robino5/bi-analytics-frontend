@@ -112,17 +112,10 @@ export default function RegionalBusinessPerformancePage() {
         queryFn: () => ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
     });
 
-    const isLoading = regionsBranchLoading || branchClientInfoPending || branchEmployeeInfoPending || branchEcrmInfoPending ||
-        branchEkycInfoPending || branchChannelWiseTradeInfoPending || branchDepositWithdrawDetailsInfoPending || branchPartyTurnoverCommissionInfoPending || branchExposureInfoPending
-        || branchOfficeSpaceInfoPending;
-
-    if (isLoading) {
-        return <LoadingButton text="Loading..." />
-    }
 
     return (
         <div className="p-6">
-            <PageHeader name="Regional Business Performance" period={getFiscalQuarterRange()} />
+            <PageHeader name="Management Insights" period={"Oct-2025 to Dec-2025 (QTR-4)"} />
             <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
                 <CardContent className="p-6">
                     <FilterSection
@@ -140,14 +133,14 @@ export default function RegionalBusinessPerformancePage() {
                 {/* Left side */}
                 <div className="w-1/2 text-center border-r border-black flex items-center justify-center py-3">
                     <span className="text-lg font-semibold">
-                        Regional Size of office space
+                        Size of office space
                     </span>
                 </div>
 
                 {/* Right side */}
                 <div className="w-1/2 text-center flex items-center justify-center py-3">
                     <h2 className="text-lg font-bold">
-                        {branchOfficeSpaceInfo?.data?.detail?.sumOfTotalOfficeArea || 0}
+                         {(branchOfficeSpaceInfo?.data?.officeSpace|| 0).toLocaleString()}
                         <span className="font-bold"> SFT</span>
                     </h2>
                 </div>
@@ -165,7 +158,7 @@ export default function RegionalBusinessPerformancePage() {
                     {branchEmployeeInfo &&
                         <CardBoard
                             className="col-span-6 xl:col-span-3"
-                            title={`Employee Structure-${branchEmployeeInfo.data?.detail?.sumOfPermanentTrader + branchEmployeeInfo.data?.detail?.sumOfContractualWithSalary + branchEmployeeInfo.data?.detail?.sumOfContractualWithoutSalary} As on Date`}
+                            title={`Employee Structure-${branchEmployeeInfo.data?.permanentTrader + branchEmployeeInfo.data?.contractualWithSalary + branchEmployeeInfo.data?.contractualWithoutSalary} As on Date`}
                             children={
                                 <EmployeeInfo employeeData={branchEmployeeInfo.data} />
                             }
@@ -227,7 +220,7 @@ export default function RegionalBusinessPerformancePage() {
                     {branchExposureInfo &&
                         <CardBoard
                             className="col-span-6 xl:col-span-3"
-                            title={"Exposure Information"}
+                            title={"Exposure Information as on Date"}
                             children={
                                 <ExposureInfo exposureInfo={branchExposureInfo.data} />
                             }

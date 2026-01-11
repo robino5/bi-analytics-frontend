@@ -17,9 +17,7 @@ import { numberToMillionsString } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  records: {
-    rows: any[];
-  };
+  records: any[];
   className?: string;
 }
 
@@ -36,7 +34,7 @@ export default function ClientTradesDataTable({
   };
   // ===========================================
 
-  const rows = records?.rows ?? [];
+  const rows = records ?? [];
 
   /* -------------------------------------------------
      STEP 1: Remove duplicate rows
@@ -106,7 +104,7 @@ export default function ClientTradesDataTable({
     >
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
         <CardTitle className="text-white text-lg">
-          Channel Wise Clients & Trades (Today)
+          Channel Wise Clients & Trades
         </CardTitle>
       </CardHeader>
 

@@ -25,7 +25,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <UserPlus size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-green-800">  {eCRM?.detail?.sumOfTotalInProgress || 0}</h4>
+                                <h4 className="text-lg font-bold text-green-800">  {eCRM?.totalInProgress || 0}</h4>
                                 <p className="text-gray-600">In Process</p>
                             </div>
                         </div>
@@ -38,7 +38,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <UserCheck size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-yellow-800">{eCRM?.detail?.sumOfTotalSuccess || 0}</h4>
+                                <h4 className="text-lg font-bold text-yellow-800">{eCRM?.totalSuccess || 0}</h4>
                                 <p className="text-gray-600">Success</p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <UserX size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-red-800"> {eCRM?.detail?.sumOfTotalDiscard || 0}</h4>
+                                <h4 className="text-lg font-bold text-red-800"> {eCRM?.totalDiscard || 0}</h4>
                                 <p className="text-gray-600">Discard</p>
                             </div>
                         </div>
@@ -65,7 +65,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <User size={20} />
                             </div>
                             <div className="col-span-4">
-                                <h4 className="text-lg font-bold text-purple-800">{eCRM?.detail?.sumOfTotalExistingClientVisit || 0}</h4>
+                                <h4 className="text-lg font-bold text-purple-800">{eCRM?.detail?.totalExistingClientVisit || 0}</h4>
                                 <p className="text-gray-600">Existing Client Visits</p>
                             </div>
                         </div>
@@ -76,7 +76,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <Users size={20} />
                             </div>
                             <div className="col-span-4">
-                                <h4 className="text-lg font-bold text-teal-800">{eCRM?.detail?.sumOfTotalVisits || 0}</h4>
+                                <h4 className="text-lg font-bold text-teal-800">{eCRM?.totalVisits || 0}</h4>
                                 <p className="text-gray-600">Total Visits</p>
                             </div>
                         </div>
