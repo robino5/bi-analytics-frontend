@@ -22,31 +22,31 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
           <tbody>
             <tr className="bg-yellow-100">
               <td className="text-center font-semibold py-2 border border-teal-700">
-                Portfolio Size
+                Portfolio Size (as on Date)
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  depositWithdraw?.detail?.sumOfTotalPortfolio || 0
+                  depositWithdraw?.totalPortfolio|| 0
                 )}
               </td>
             </tr>
             <tr className="bg-yellow-50">
               <td className="text-center font-semibold py-2 border border-teal-700">
-                Cash Balance
+                Cash Balance (as on Date)
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  depositWithdraw?.detail?.sumOfCashAvailable || 0
+                  depositWithdraw?.cashAvailable || 0
                 )}
               </td>
             </tr>
             <tr className="bg-yellow-100">
               <td className="text-center font-semibold py-2 border border-teal-700">
-                Margin Loan
+                Margin Loan (as on Date)
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  depositWithdraw?.detail?.sumOfMarginNegative || 0
+                  depositWithdraw?.marginNegative|| 0
                 )}
               </td>
             </tr>
@@ -57,7 +57,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  depositWithdraw?.detail?.sumOfTotalDeposit || 0
+                  depositWithdraw?.totalDeposit || 0
                 )}
               </td>
             </tr>
@@ -68,7 +68,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  depositWithdraw?.detail?.sumOfTotalWithdrawal || 0
+                  depositWithdraw?.totalWithdrawal || 0
                 )}
               </td>
             </tr>

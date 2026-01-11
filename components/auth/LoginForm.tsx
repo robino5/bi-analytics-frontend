@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -51,6 +51,10 @@ const LoginForm = () => {
       setError(resp?.error ?? "");
     });
   }
+
+    useEffect(() => {
+    fetch("/api/auth/clear", { method: "GET" });
+  }, []);
   return (
     <div className="grid grid-flow-col grid-columns-3 gap-2 place-items-center p-4">
       <div className="h-full w-full grid place-items-center">

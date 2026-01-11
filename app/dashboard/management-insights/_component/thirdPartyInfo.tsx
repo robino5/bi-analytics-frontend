@@ -14,8 +14,8 @@ export default function ThirdPartyInfo({ thirdPartyInfo }: { thirdPartyInfo: any
               >
                 Total Busi. Aggregator
               </th>
-              <th className="bg-green-300 text-center font-semibold border border-teal-700">
-                {thirdPartyInfo?.detail?.sumOfTotalParty || 0}
+              <th className="bg-green-300 text-center font-bold border border-teal-700 text-xl">
+                {thirdPartyInfo?.totalParty || 0}
               </th>
             </tr>
 
@@ -37,16 +37,16 @@ export default function ThirdPartyInfo({ thirdPartyInfo }: { thirdPartyInfo: any
           <tbody>
             <tr className="bg-yellow-100">
               <td className="text-center font-semibold py-2 border border-teal-700">
-                {thirdPartyInfo?.detail?.sumOfTotalInvestor || 0}
+                {thirdPartyInfo?.totalInvestor || 0}
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  thirdPartyInfo?.detail?.sumOfTotalTurnover || 0
+                  thirdPartyInfo?.totalTurnover || 0
                 )}
               </td>
               <td className="text-center py-2 border border-teal-700">
                 {numberToMillionsString(
-                  thirdPartyInfo?.detail?.sumOfTotalCommission || 0
+                  thirdPartyInfo?.totalCommission || 0
                 )}
               </td>
             </tr>

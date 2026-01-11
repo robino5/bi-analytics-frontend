@@ -24,7 +24,7 @@ export default function EkycInfo({ eKYC }: { eKYC: any }) {
                                 <UserPlus size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-lime-800">  {eKYC?.detail?.sumOfTotalInvestor || 0}</h4>
+                                <h4 className="text-lg font-bold text-lime-800">  {eKYC?.totalInvestor || 0}</h4>
                                 <p className="text-gray-600">Total</p>
                             </div>
                         </div>
@@ -36,7 +36,7 @@ export default function EkycInfo({ eKYC }: { eKYC: any }) {
                                 <UserCheck size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-indigo-800">{eKYC?.detail?.sumOfTotalSubmitted || 0}</h4>
+                                <h4 className="text-lg font-bold text-indigo-800">{eKYC?.totalSubmitted || 0}</h4>
                                 <p className="text-gray-600">Submitted</p>
                             </div>
                         </div>
@@ -48,7 +48,7 @@ export default function EkycInfo({ eKYC }: { eKYC: any }) {
                                 <UserX size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-orange-800"> {eKYC?.detail?.sumOfDue || 0}</h4>
+                                <h4 className="text-lg font-bold text-orange-800"> {eKYC?.due || 0}</h4>
                                 <p className="text-gray-600">Due</p>
                             </div>
                         </div>
