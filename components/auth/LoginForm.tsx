@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ReloadIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import { EyeOpenIcon, EyeNoneIcon } from "@radix-ui/react-icons";
+
 import {
   Form,
   FormControl,
@@ -26,6 +28,8 @@ import MarketSentiment from "../market-sentiment";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
+
   const [error, setError] = useState("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -41,18 +45,18 @@ const LoginForm = () => {
       if (!resp?.error) {
         localStorage.setItem(
           "branch-storage",
-          JSON.stringify({ state: { branch: "" }, version: 0 })
+          JSON.stringify({ state: { branch: "" }, version: 0 }),
         );
         localStorage.setItem(
           "branch-storage",
-          JSON.stringify({ state: { branch: "" }, version: 0 })
+          JSON.stringify({ state: { branch: "" }, version: 0 }),
         );
       }
       setError(resp?.error ?? "");
     });
   }
 
-    useEffect(() => {
+  useEffect(() => {
     fetch("/api/auth/clear", { method: "GET" });
   }, []);
   return (
@@ -65,7 +69,7 @@ const LoginForm = () => {
           width={300}
           alt="logo"
         />
-        <MarketSentiment/>
+        <MarketSentiment />
       </div>
       <div>
         <Separator orientation="vertical" className="mt-4 h-[350px]" />
@@ -98,7 +102,26 @@ const LoginForm = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input disabled={isPending} type="password" {...field} />
+                      <div className="relative">
+                        <Input
+                          disabled={isPending}
+                          type={showPassword ? "text" : "password"}
+                          {...field}
+                          className="pr-10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          tabIndex={-1}
+                        >
+                          {showPassword ? (
+                            <EyeNoneIcon className="h-4 w-4" />
+                          ) : (
+                            <EyeOpenIcon className="h-4 w-4" />
+                          )}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

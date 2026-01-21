@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 
 import authConfig from "@/auth.config";
+import { cookies } from "next/headers";
 
 
 export const {
@@ -39,6 +40,14 @@ export const {
       return token;
     }
   },
-  session: { strategy: "jwt", maxAge: 60 * 60 * 1 },
+  //session: { strategy: "jwt", maxAge: 60 * 60 * 1 },
+    events: {
+    async signOut() {
+      // ✅ CLEAR MANUAL COOKIES
+      const cookieStore = cookies();
+      cookieStore.delete("accessToken");
+      cookieStore.delete("expiresAt");
+    },
+  },
   ...authConfig,
 });
