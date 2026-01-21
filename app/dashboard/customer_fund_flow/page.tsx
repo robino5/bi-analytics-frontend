@@ -12,38 +12,80 @@ import WithdrawalPieChart from "./_component/withdrawal_pie_chart";
 import { DataTableCard } from "./_component/_branch_wise_total_fund/data-table";
 import { branchWisetotalFundColumns } from "./_component/_branch_wise_total_fund/columns";
 import { numberToMillionsString } from "@/lib/utils";
-
+import DailySSLTransactionDataTable from "./_component/daily_ssl_transection_data";
+import YearlySSLTransactionDataTable from "./_component/yearly_ssl_transection_data";
 
 export default function CustomerFundFlowDashboardPage() {
-
-  const { data: depositToday, isLoading: depositTodayLoading, isError: depositTodayError } = useQuery({
+  const {
+    data: depositToday,
+    isLoading: depositTodayLoading,
+    isError: depositTodayError,
+  } = useQuery({
     queryKey: ["depositToday"],
-    queryFn: () => customerFundFlowAPI.getTotalDepositToday()
+    queryFn: () => customerFundFlowAPI.getTotalDepositToday(),
   });
 
-  const { data: deposithisYear, isLoading: deposithisYearLoading, isError: deposithisYearError } = useQuery({
+  const {
+    data: deposithisYear,
+    isLoading: deposithisYearLoading,
+    isError: deposithisYearError,
+  } = useQuery({
     queryKey: ["deposithisYear"],
-    queryFn: () => customerFundFlowAPI.getTotalDepositThisYear()
+    queryFn: () => customerFundFlowAPI.getTotalDepositThisYear(),
   });
 
-  const { data: withdrawalToday, isLoading: withdrawalTodayLoading, isError: withdrawalTodayError } = useQuery({
+  const {
+    data: withdrawalToday,
+    isLoading: withdrawalTodayLoading,
+    isError: withdrawalTodayError,
+  } = useQuery({
     queryKey: ["withdrawalToday"],
-    queryFn: () => customerFundFlowAPI.getTotalWithdrawalToday()
+    queryFn: () => customerFundFlowAPI.getTotalWithdrawalToday(),
   });
 
-  const { data: withdrawalThisYear, isLoading: withdrawalThisYearLoading, isError: withdrawalThisYearError } = useQuery({
+  const {
+    data: withdrawalThisYear,
+    isLoading: withdrawalThisYearLoading,
+    isError: withdrawalThisYearError,
+  } = useQuery({
     queryKey: ["withdrawalThisYear"],
-    queryFn: () => customerFundFlowAPI.getTotalWithdrawalThisYear()
+    queryFn: () => customerFundFlowAPI.getTotalWithdrawalThisYear(),
   });
 
-  const { data: TotalDepositBranchWiseMonthly, isLoading: TotalDepositBranchWiseMonthlyLoading, isError: TotalDepositBranchWiseMonthlyError } = useQuery({
+  const {
+    data: TotalDepositBranchWiseMonthly,
+    isLoading: TotalDepositBranchWiseMonthlyLoading,
+    isError: TotalDepositBranchWiseMonthlyError,
+  } = useQuery({
     queryKey: ["TotalDepositBranchWiseMonthly"],
-    queryFn: () => customerFundFlowAPI.getTotalDepositBranchWiseMonthly()
+    queryFn: () => customerFundFlowAPI.getTotalDepositBranchWiseMonthly(),
   });
 
-  const { data: TotalWithdrawBranchWiseMonthly, isLoading: TotalWithdrawBranchWiseMonthlyLoading, isError: TotalWithdrawBranchWiseMonthlyError } = useQuery({
+  const {
+    data: TotalWithdrawBranchWiseMonthly,
+    isLoading: TotalWithdrawBranchWiseMonthlyLoading,
+    isError: TotalWithdrawBranchWiseMonthlyError,
+  } = useQuery({
     queryKey: ["TotalWithdrawBranchWiseMonthly"],
-    queryFn: () => customerFundFlowAPI.getTotalWithdrawBranchWiseMonthly()
+    queryFn: () => customerFundFlowAPI.getTotalWithdrawBranchWiseMonthly(),
+  });
+
+  const {
+    data: DailySSLTransactionData,
+    isLoading: DailySSLTransactionDataLoading,
+    isError: DailySSLTransactionDataError,
+  } = useQuery({
+    queryKey: ["DailySSLTransactionData"],
+    queryFn: () => customerFundFlowAPI.getDailySSLTransactionData(),
+  });
+
+  const {
+    data: YearSSLTransactionData,
+    isLoading: YearSSLTransactionDataLoading,
+    isError: YearSSLTransactionDataError,
+  } = useQuery({
+    queryKey: ["YearSSLTransactionData"],
+    queryFn: () => customerFundFlowAPI.getYearSSLTransactionData(),
   });
 
   const withdrawalTotalToday = withdrawalToday?.data?.rows?.map((item) => ({
@@ -58,7 +100,6 @@ export default function CustomerFundFlowDashboardPage() {
       item.rtgs,
   }));
 
-
   const depositTotalToday = depositToday?.data?.rows?.map((item) => ({
     branchName: item.branchName,
     total:
@@ -67,42 +108,39 @@ export default function CustomerFundFlowDashboardPage() {
       item.scbDeposit +
       item.payOrder +
       item.cashDividend +
-      item.ipoMode
+      item.ipoMode,
   }));
 
+  const totals: Record<
+    string,
+    { branchName: string; totalWithdrawal: number; totalDeposit: number }
+  > = {};
 
-  const totals: Record<string, { branchName: string; totalWithdrawal: number; totalDeposit: number }> = {};
-
-  withdrawalTotalToday?.forEach(item => {
+  withdrawalTotalToday?.forEach((item) => {
     totals[item.branchName] = {
       branchName: item.branchName,
       totalWithdrawal: item.total,
-      totalDeposit: 0
+      totalDeposit: 0,
     };
   });
 
-  depositTotalToday?.forEach(item => {
+  depositTotalToday?.forEach((item) => {
     if (!totals[item.branchName]) {
       totals[item.branchName] = {
         branchName: item.branchName,
         totalWithdrawal: 0,
-        totalDeposit: item.total
+        totalDeposit: item.total,
       };
     } else {
       totals[item.branchName].totalDeposit = item.total;
     }
   });
 
-  const combinedTotals = Object.values(totals).map(item => ({
+  const combinedTotals = Object.values(totals).map((item) => ({
     branchName: item.branchName,
     totalDeposit: item.totalDeposit,
-    totalWithdrawal: item.totalWithdrawal
+    totalWithdrawal: item.totalWithdrawal,
   }));
-
-
-  console.log("depositTotalToday", depositTotalToday);
-  console.log("withdrawalTotalToday", withdrawalTotalToday);
-  console.log("combinedTotals", combinedTotals);
 
   return (
     <div className="p-6">
@@ -130,50 +168,66 @@ export default function CustomerFundFlowDashboardPage() {
             color="border-orange-500"
           />
         </div>
-        <div className="grid grid-cols-2">
-
+        <div className="grid grid-cols-2 mt-3 gap-4">
+          <ModeWiseDeposite
+            title="Deposit Today - Type Wise"
+            data={
+              depositToday?.data?.detail ?? {
+                cashDeposit: 0,
+                chequeDeposit: 0,
+                scbDeposit: 0,
+                payOrder: 0,
+                cashDividend: 0,
+                ipoMode: 0,
+              }
+            }
+            color="blue-500"
+          />
+          <ModeWiseWithdraw
+            title="Withdrawal Today - Type Wise "
+            data={
+              withdrawalToday?.data?.detail ?? {
+                cashWithdrawal: 0,
+                chequeWithdrawal: 0,
+                onlineRequisition: 0,
+                rtsg: 0,
+                payOrder: 0,
+                cashDividendDeduction: 0,
+                ipoMode: 0,
+              }
+            }
+            color="red-500"
+          />
+          <div className="grid grid-cols-2 gap-4 mt-3">
+            {/* <DailySSLTransactionData data={YearSSLTransactionData?.data?.rows ?? []} /> */}
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4 mt-3">
-        <ModeWiseDeposite
-          title="Deposit Today - Type Wise"
-          data={depositToday?.data?.detail ?? {
-            cashDeposit: 0,
-            chequeDeposit: 0,
-            scbDeposit: 0,
-            payOrder: 0,
-            cashDividend: 0,
-            ipoMode: 0
-          }}
-          color="blue-500"
+        <DailySSLTransactionDataTable
+          data={DailySSLTransactionData?.data ?? []}
+        />
+        <YearlySSLTransactionDataTable
+          data={YearSSLTransactionData?.data ?? []}
         />
         <div>
           <Card className=" border-[2px] border-green-500 shadow-md  bg-[#033e4a] rounded-t-md">
             <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md">
-              <CardTitle className="text-lg font-semibold text-white">Deposit Today - Type Wise (%)</CardTitle>
+              <CardTitle className="text-lg font-semibold text-white">
+                Deposit Today - Type Wise (%)
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
               <DepositPieChart data={depositToday?.data?.detail ?? {}} />
             </CardContent>
           </Card>
         </div>
-        <ModeWiseWithdraw
-          title="Withdrawal Today - Type Wise "
-          data={withdrawalToday?.data?.detail ?? {
-            cashWithdrawal: 0,
-            chequeWithdrawal: 0,
-            onlineRequisition: 0,
-            rtsg: 0,
-            payOrder: 0,
-            cashDividendDeduction: 0,
-            ipoMode: 0
-          }}
-          color="red-500"
-        />
         <div>
           <Card className=" border-[2px] border-orange-500 shadow-md  bg-[#033e4a]">
             <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 ">
-              <CardTitle className="text-lg font-semibold text-white">Withdraw Today - Type Wise (%)</CardTitle>
+              <CardTitle className="text-lg font-semibold text-white">
+                Withdraw Today - Type Wise (%)
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-4">
               <WithdrawalPieChart data={withdrawalToday?.data?.detail ?? {}} />
@@ -193,10 +247,12 @@ export default function CustomerFundFlowDashboardPage() {
             <CardContent className="mt-3">
               <MonthlyLineChart
                 DepositmonthlyWise={
-                  (TotalDepositBranchWiseMonthly?.data as any)?.monthlyWise ?? {}
+                  (TotalDepositBranchWiseMonthly?.data as any)?.monthlyWise ??
+                  {}
                 }
                 withdrawalmonthlyWise={
-                  (TotalWithdrawBranchWiseMonthly?.data as any)?.monthlyWise ?? {}
+                  (TotalWithdrawBranchWiseMonthly?.data as any)?.monthlyWise ??
+                  {}
                 }
               />
             </CardContent>
