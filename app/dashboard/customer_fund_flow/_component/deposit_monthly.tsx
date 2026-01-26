@@ -24,7 +24,10 @@ interface LineChartProps {
   withdrawalmonthlyWise?: any;
 }
 
-const MonthlyLineChart: React.FC<LineChartProps> = ({ DepositmonthlyWise, withdrawalmonthlyWise }) => {
+const MonthlyLineChart: React.FC<LineChartProps> = ({
+  DepositmonthlyWise,
+  withdrawalmonthlyWise,
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<echarts.EChartsType | null>(null);
 
@@ -51,11 +54,11 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ DepositmonthlyWise, withdr
     ];
 
     const depositValues = months.map(
-      (m) => DepositmonthlyWise[m.toLowerCase() as keyof MonthlyData]
+      (m) => DepositmonthlyWise[m.toLowerCase() as keyof MonthlyData],
     );
 
     const withdrawalValues = months.map(
-      (m) => withdrawalmonthlyWise?.[m.toLowerCase() as keyof MonthlyData] ?? 0
+      (m) => withdrawalmonthlyWise?.[m.toLowerCase() as keyof MonthlyData] ?? 0,
     );
 
     const option: echarts.EChartsOption = {
@@ -106,13 +109,20 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ DepositmonthlyWise, withdr
           color: "#ffffffff",
         },
         axisLine: { lineStyle: { color: "#9ca3af", width: 1.5 } },
-        axisTick: { show: true, alignWithLabel: true, lineStyle: { color: "#ffffffff" } },
+        axisTick: {
+          show: true,
+          alignWithLabel: true,
+          lineStyle: { color: "#ffffffff" },
+        },
         splitLine: { show: true, lineStyle: { color: "#c2bfbfff" } },
       },
 
       yAxis: {
         type: "value",
-        axisLabel: { formatter: (value) => `${numberToMillionsString(value)}`, color: "#ffffffff" },
+        axisLabel: {
+          formatter: (value) => `${numberToMillionsString(value)}`,
+          color: "#ffffffff",
+        },
         axisLine: { lineStyle: { color: "#9ca3af", width: 1.5 } },
         splitLine: { lineStyle: { color: "#c2bfbfff" } },
       },
@@ -121,24 +131,39 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ DepositmonthlyWise, withdr
         {
           name: "Deposit",
           data: depositValues,
-          type: "line",
-          smooth: true,
-          lineStyle: { width: 3, color: "#0cf058ff" },
-          itemStyle: { color: "#e71708ff" },
-          label: { show: false, position: "top", formatter: (params: any) => numberToMillionsString(params.value) },
+          type: "bar",
+          barWidth: "40%",
+          itemStyle: {
+            color: "#0cf058ff",
+            borderRadius: [6, 6, 0, 0],
+          },
+          label: {
+            show: true,
+            position: "top",
+            color: "#ffffff",
+            fontSize: 10,
+            formatter: (params: any) => numberToMillionsString(params.value),
+          },
         },
         {
           name: "Withdrawal",
           data: withdrawalValues,
-          type: "line",
-          smooth: true,
-          lineStyle: { width: 3, color: "#ff9800" },
-          itemStyle: { color: "#f00cd2ff" },
-          label: { show: false, position: "bottom", formatter: (params: any) => numberToMillionsString(params.value) },
+          type: "bar",
+          barWidth: "40%",
+          itemStyle: {
+            color: "#ff9800",
+            borderRadius: [6, 6, 0, 0],
+          },
+          label: {
+            show: true,
+            position: "top",
+            color: "#ffffff",
+            fontSize: 10,
+            formatter: (params: any) => numberToMillionsString(params.value),
+          },
         },
-      ]
+      ],
     };
-
 
     chartInstance.current.setOption(option);
 
@@ -155,7 +180,7 @@ const MonthlyLineChart: React.FC<LineChartProps> = ({ DepositmonthlyWise, withdr
   return (
     <div
       ref={chartRef}
-      className="w-full h-[300px] sm:h-[240px] lg:h-[360px] bg-white rounded-2xl shadow-sm"
+      className="w-full h-96 sm:h-80 lg:h-96 rounded-2xl shadow-sm"
     />
   );
 };

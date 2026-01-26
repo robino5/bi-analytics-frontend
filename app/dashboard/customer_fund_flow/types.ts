@@ -33,7 +33,7 @@ export interface withdrawalData {
     branchName: string;
     cashWithdrawal: number;
     chequeWithdrawal: number;
-    onlineRequisition: number;
+    online: number;
     rtsg: number;
     payOrder: number;
     cashDividendDeduction: number;

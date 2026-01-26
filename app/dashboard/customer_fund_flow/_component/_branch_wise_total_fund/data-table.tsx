@@ -94,8 +94,9 @@ export function DataTableCard<TData, TValue>({
       <CardContent className="mt-3">
         <div className="space-y-4">
           <DataTableToolbar table={table} />
-          <div className="rounded-md border">
-            <Table>
+          <div className="rounded-md border overflow-x-auto">
+            <div className="min-w-full">
+              <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
@@ -154,7 +155,8 @@ export function DataTableCard<TData, TValue>({
                   </TableRow>
                 )}
               </TableBody>
-            </Table>
+              </Table>
+            </div>
           </div>
           <DataTablePagination table={table} />
         </div>

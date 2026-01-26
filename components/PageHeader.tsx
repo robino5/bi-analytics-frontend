@@ -17,13 +17,13 @@ const PageHeader: FC<PageHeaderProps> = ({ name, children, updateStatus, period 
 
   return (
     <Card className="mt-2 flex justify-center items-center shadow-md bg-card text-card-foreground">
-      <CardContent className="w-full p-4 flex justify-between items-center gap-4">
+    <CardContent className="w-full p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
         {/* Left side content */}
         <div className="flex gap-2">{children}</div>
 
         {/* Center Title */}
         <div className="text-center flex-1">
-          <div className="text-2xl font-bold text-heading">{name}</div>
+          <div className="text-lg sm:text-2xl font-bold text-heading">{name}</div>
           {period && (
             <p className="font-bold text-heading">{period}</p>
           )}

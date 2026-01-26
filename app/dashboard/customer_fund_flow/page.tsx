@@ -14,6 +14,7 @@ import { branchWisetotalFundColumns } from "./_component/_branch_wise_total_fund
 import { numberToMillionsString } from "@/lib/utils";
 import DailySSLTransactionDataTable from "./_component/daily_ssl_transection_data";
 import YearlySSLTransactionDataTable from "./_component/yearly_ssl_transection_data";
+import TodayTransactionData from "./_component/today_transection_data";
 
 export default function CustomerFundFlowDashboardPage() {
   const {
@@ -145,15 +146,16 @@ export default function CustomerFundFlowDashboardPage() {
   return (
     <div className="p-6">
       <PageHeader name="Customer Fund Flow Dashboard" />
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid grid-cols-2 gap-4 mt-3">
+      <div className="grid md:grid-cols-1 2xl:grid-cols-2 gap-6">
+        {/* LEFT COLUMN */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
           <FinancialStatistic
             title="Total Deposit Today"
             amount={depositToday?.data?.detail?.totalDeposit ?? 0}
             color="border-blue-500"
           />
           <FinancialStatistic
-            title="Total Deposit This Year"
+            title="Total Deposit Yearly"
             amount={deposithisYear?.data?.detail?.totalDeposit ?? 0}
             color="border-green-500"
           />
@@ -163,81 +165,84 @@ export default function CustomerFundFlowDashboardPage() {
             color="border-red-500"
           />
           <FinancialStatistic
-            title="Total Withdrawal This Year"
+            title="Total Withdrawal Yearly"
             amount={withdrawalThisYear?.data?.detail?.totalWithdrawal ?? 0}
             color="border-orange-500"
           />
+
+          <DailySSLTransactionDataTable
+            data={DailySSLTransactionData?.data ?? []}
+          />
+          <YearlySSLTransactionDataTable
+            data={YearSSLTransactionData?.data ?? []}
+          />
         </div>
-        <div className="grid grid-cols-2 mt-3 gap-4">
-          <ModeWiseDeposite
-            title="Deposit Today - Type Wise"
-            data={
-              depositToday?.data?.detail ?? {
-                cashDeposit: 0,
-                chequeDeposit: 0,
-                scbDeposit: 0,
-                payOrder: 0,
-                cashDividend: 0,
-                ipoMode: 0,
+
+        {/* RIGHT COLUMN */}
+        <div className="mt-3 p-2 rounded-xl border-2 border-red-500 shadow-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ModeWiseDeposite
+              title="Deposit Today - Type Wise"
+              data={
+                depositToday?.data?.detail ?? {
+                  cashDeposit: 0,
+                  chequeDeposit: 0,
+                  scbDeposit: 0,
+                  payOrder: 0,
+                  cashDividend: 0,
+                  ipoMode: 0,
+                }
               }
-            }
-            color="blue-500"
-          />
-          <ModeWiseWithdraw
-            title="Withdrawal Today - Type Wise "
-            data={
-              withdrawalToday?.data?.detail ?? {
-                cashWithdrawal: 0,
-                chequeWithdrawal: 0,
-                onlineRequisition: 0,
-                rtsg: 0,
-                payOrder: 0,
-                cashDividendDeduction: 0,
-                ipoMode: 0,
+              color="blue-500"
+            />
+
+            <ModeWiseWithdraw
+              title="Withdrawal Today - Type Wise"
+              data={
+                withdrawalToday?.data?.detail ?? {
+                  cashWithdrawal: 0,
+                  chequeWithdrawal: 0,
+                  online: 0,
+                  rtsg: 0,
+                  payOrder: 0,
+                  cashDividendDeduction: 0,
+                  ipoMode: 0,
+                  totalWithdraw: 0,
+                }
               }
-            }
-            color="red-500"
-          />
-          <div className="grid grid-cols-2 gap-4 mt-3">
-            {/* <DailySSLTransactionData data={YearSSLTransactionData?.data?.rows ?? []} /> */}
+              color="red-500"
+            />
+
+            <Card className="border-[2px] border-green-500 bg-[#033e4a]">
+              <CardHeader className="bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3">
+                <CardTitle className="text-lg text-white">
+                  Deposit Today - Type Wise (%)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <DepositPieChart data={depositToday?.data?.detail ?? {}} />
+              </CardContent>
+            </Card>
+
+            <Card className="border-[2px] border-orange-500 bg-[#033e4a]">
+              <CardHeader className="bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3">
+                <CardTitle className="text-lg text-white">
+                  Withdraw Today - Type Wise (%)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <WithdrawalPieChart
+                  data={withdrawalToday?.data?.detail ?? {}}
+                />
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4 mt-3">
-        <DailySSLTransactionDataTable
-          data={DailySSLTransactionData?.data ?? []}
-        />
-        <YearlySSLTransactionDataTable
-          data={YearSSLTransactionData?.data ?? []}
-        />
-        <div>
-          <Card className=" border-[2px] border-green-500 shadow-md  bg-[#033e4a] rounded-t-md">
-            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md">
-              <CardTitle className="text-lg font-semibold text-white">
-                Deposit Today - Type Wise (%)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <DepositPieChart data={depositToday?.data?.detail ?? {}} />
-            </CardContent>
-          </Card>
-        </div>
-        <div>
-          <Card className=" border-[2px] border-orange-500 shadow-md  bg-[#033e4a]">
-            <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 ">
-              <CardTitle className="text-lg font-semibold text-white">
-                Withdraw Today - Type Wise (%)
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-              <WithdrawalPieChart data={withdrawalToday?.data?.detail ?? {}} />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-      <div className="grid grid-cols-12 gap-4 mt-3">
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-3">
         {/* Left Section — Chart (8 Columns) */}
-        <div className="col-span-8">
+        <div className="lg:col-span-7 xxl:col-span-8">
           <Card className=" w-full shadow-md border border-gray-200  bg-[#033e4a]">
             <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md">
               <CardTitle className="text-lg font-semibold text-white">
@@ -260,12 +265,9 @@ export default function CustomerFundFlowDashboardPage() {
         </div>
 
         {/* Right Section — New Content (4 Columns) */}
-        <div className="col-span-4">
-          <DataTableCard
-            title={`Branch Wise Today Deposit-${numberToMillionsString(depositToday?.data?.detail?.totalDeposit ?? 0)} & Withdrawal-${numberToMillionsString(withdrawalToday?.data?.detail?.totalWithdrawal ?? 0)}`}
-            subtitle="show data for branch wise turnover"
-            className="col-span-1  lg:col-span-1"
-            columns={branchWisetotalFundColumns}
+        <div className="lg:col-span-5 xxl:col-span-4">
+          <TodayTransactionData
+            title={`Today Deposit-${numberToMillionsString(depositToday?.data?.detail?.totalDeposit ?? 0)} & Withdrawal-${numberToMillionsString(withdrawalToday?.data?.detail?.totalWithdrawal ?? 0)}`}
             data={combinedTotals ?? []}
           />
         </div>
