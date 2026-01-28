@@ -23,7 +23,7 @@ import {
 
 export default function BranchWiseMarginDataTable({ records }: Props) {
   return (
-    <Card className="col-span-1  lg:col-span-2 shadow-md bg-[#033e4a] max-h-[807px] overflow-auto">
+    <Card className="col-span-1  lg:col-span-2 shadow-md bg-[#033e4a]">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           Branch Wise Margin Status
@@ -31,12 +31,12 @@ export default function BranchWiseMarginDataTable({ records }: Props) {
         {/* <CardDescription className="text-white">
                   shows the grid for margin status
                 </CardDescription> */}
-      </CardHeader>
-      <CardContent className="mt-3">
-      <Table className="">
-        <TableHeader>
+      </CardHeader>         
+      <CardContent className="mt-16">
+      <Table wrapperClassName="max-h-[620px] overflow-y-auto rounded-md">
+        <TableHeader className="sticky top-0 z-10 bg-blue-500">
           <TableRow className="bg-blue-500 hover:bg-blue-700">
-            <TableHead rowSpan={2} className="border text-white font-bold">
+            <TableHead rowSpan={2} className="border border-black text-white font-bold">
               Branch
             </TableHead>
             <TableHead rowSpan={2} className="border text-white font-bold">

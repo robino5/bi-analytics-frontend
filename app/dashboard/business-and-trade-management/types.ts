@@ -102,3 +102,4 @@ export type TraderPerformance = {
   regionName: string;
   clusterName: string;
 };
+

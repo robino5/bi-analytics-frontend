@@ -4,8 +4,13 @@ import PageHeader from "@/components/PageHeader";
 import BranchWiseMarginDataTable from "./_branchwise_margin_datatable";
 import BranchWiseExposureDataTable from "./_branchwise_exposure_datatable";
 import { DataTableCard } from "./data-table";
-import { DataTableCardTurnover } from "./data-table-turnover"
+import { DataTableCard as ActonAndOffMarketDataTale } from "./_component/offmarket_auctionmarket/data-table";
+import { DataTableCardTurnover } from "./data-table-turnover";
 import { branchWiseFundColumns, branchWiseTurnoverColumns } from "./columns";
+import {
+  RMAuctionDataColumns,
+  RMOffMarketDataColumns,
+} from "./_component/offmarket_auctionmarket/columns";
 import BranchFilter from "@/components/branchFilter";
 import { useSession } from "next-auth/react";
 import { getHeaderDate } from "@/lib/utils";
@@ -13,42 +18,67 @@ import { useBranchStore } from "@/lib/stores/branchStore";
 import { useQuery } from "@tanstack/react-query";
 import { branchPerformanceAPI } from "./api";
 import LoadingButton from "@/components/loading";
+import { useState } from "react";
 
 export default function BranchPerformance() {
   const { data: session } = useSession();
+  const [yearAuctionMarket, setYearActionMarket] = useState(2025);
+  const [yearOffMarket, setYearOffMarket] = useState(2025);
 
   const branch = useBranchStore((state) => state.branch);
   const setBranch = useBranchStore((state) => state.setBranch);
 
   const { data: turnover, isPending: turnoverPending } = useQuery({
     queryKey: ["turnover", branch],
-    queryFn: () => branchPerformanceAPI.getTurnoverStatus(branch)
+    queryFn: () => branchPerformanceAPI.getTurnoverStatus(branch),
   });
 
   const { data: branchWiseFund, isPending: branchWiseFundPending } = useQuery({
     queryKey: ["branchWiseFund", branch],
-    queryFn: () => branchPerformanceAPI.getBranchWiseFundStatus(branch)
+    queryFn: () => branchPerformanceAPI.getBranchWiseFundStatus(branch),
   });
 
-  const { data: branchWiseMargin, isPending: branchWiseMarginPending } = useQuery({
-    queryKey: ["branchWiseMargin", branch],
-    queryFn: () => branchPerformanceAPI.getBranchWiseMarginStatus(branch)
-  });
+  const { data: branchWiseMargin, isPending: branchWiseMarginPending } =
+    useQuery({
+      queryKey: ["branchWiseMargin", branch],
+      queryFn: () => branchPerformanceAPI.getBranchWiseMarginStatus(branch),
+    });
 
-  const { data: branchWiseExposure, isPending: branchWiseExposurePending } = useQuery({
-    queryKey: ["branchWiseExposure", branch],
-    queryFn: () => branchPerformanceAPI.getBranchWiseExposureStatus(branch)
-  });
+  const { data: branchWiseExposure, isPending: branchWiseExposurePending } =
+    useQuery({
+      queryKey: ["branchWiseExposure", branch],
+      queryFn: () => branchPerformanceAPI.getBranchWiseExposureStatus(branch),
+    });
 
-  const { data: turnoverPerformance, isPending: turnoverPerformancePending } = useQuery({
-    queryKey: ["turnoverPerformance", branch],
-    queryFn: () => branchPerformanceAPI.getDailyTurnoverPerformance(branch)
-  });
+  const { data: turnoverPerformance, isPending: turnoverPerformancePending } =
+    useQuery({
+      queryKey: ["turnoverPerformance", branch],
+      queryFn: () => branchPerformanceAPI.getDailyTurnoverPerformance(branch),
+    });
 
-  const isLoading = turnoverPending || branchWiseFundPending || branchWiseMarginPending || branchWiseExposurePending || turnoverPerformancePending;
+  const { data: rmWiseAuctionMarket, isPending: rmWiseAuctionMarketPending } =
+    useQuery({
+      queryKey: ["rmWiseAuctionMarket", branch, yearAuctionMarket],
+      queryFn: () => branchPerformanceAPI.getRMWiseAuctionMarket(branch, yearAuctionMarket),
+    });
+
+  const { data: rmWiseOffMarket, isPending: rmWiseOffMarketPending } = useQuery(
+    {
+      queryKey: ["rmWiseOffMarket", branch, yearOffMarket],
+      queryFn: () => branchPerformanceAPI.getRMWiseOffMarket(branch, yearOffMarket),
+    },
+  );
+
+  const isLoading =
+    turnoverPending ||
+    branchWiseFundPending ||
+    branchWiseMarginPending ||
+    branchWiseExposurePending ||
+    rmWiseAuctionMarketPending ||
+    rmWiseOffMarketPending;
 
   if (isLoading) {
-    return <LoadingButton text="Loading..." />
+    return <LoadingButton text="Loading..." />;
   }
 
   const handleBranchChange = (branchId: string) => {
@@ -60,7 +90,7 @@ export default function BranchPerformance() {
   if (turnoverPerformance?.data) {
     headerDate = getHeaderDate(
       turnoverPerformance?.data[turnoverPerformance?.data.length - 1],
-      "tradingDate"
+      "tradingDate",
     );
   }
 
@@ -72,6 +102,28 @@ export default function BranchPerformance() {
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
+        {/* RM Wise Auction Market Data Table */}
+        <ActonAndOffMarketDataTale
+          className="col-span-2 mb-2"
+          title="Auction Market (Gsec)"
+          subtitle="summary of fund status branch wise"
+          columns={RMAuctionDataColumns}
+          data={rmWiseAuctionMarket?.data || []}
+          setYear={setYearActionMarket}
+          year={yearAuctionMarket}
+        />
+
+        {/* RM Wise Off Market Data Table */}
+        <ActonAndOffMarketDataTale
+          className="col-span-2 mb-2"
+          title="Off Market (Gsec)"
+          subtitle="summary of fund status branch wise"
+          columns={RMOffMarketDataColumns}
+          data={rmWiseOffMarket?.data || []}
+           setYear={setYearOffMarket}
+          year={yearOffMarket}
+        />
+
         {/* Branch Wise Turnover Status */}
         <DataTableCardTurnover
           title="Branch Wise Turnover Status"
@@ -83,15 +135,16 @@ export default function BranchPerformance() {
 
         {/* Branch Wise Margin Status */}
 
-        {branchWiseMargin?.data &&
+        {branchWiseMargin?.data && (
           <BranchWiseMarginDataTable records={branchWiseMargin?.data || []} />
-        }
-
+        )}
 
         {/* Branch Wise Exposure Status */}
-        {branchWiseExposure?.data &&
-          <BranchWiseExposureDataTable records={branchWiseExposure?.data || []} />
-        }
+        {branchWiseExposure?.data && (
+          <BranchWiseExposureDataTable
+            records={branchWiseExposure?.data || []}
+          />
+        )}
         {/* Branch Wise Fund Status */}
         <DataTableCard
           className="col-span-2 mb-2"

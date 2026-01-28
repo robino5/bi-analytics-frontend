@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { successResponse } from "@/lib/utils";
-import { IClientDetail, InvestorLiveTradeInfo, ITurnoverPerformance } from "@/types/rmPerformance";
+import { IClientDetail, InvestorLiveTradeInfo, ITurnoverPerformance,RMAuctionInfo,RMOffMarketInfo } from "@/types/rmPerformance";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
 import { InvestorLiveTopBuySaleInfo, TraderPerformance } from "../../business-and-trade-management/types";
@@ -54,6 +54,12 @@ const RmPerformanceBoard = () => {
   >();
     const [rmPerformaceSumm, setRMPerformanceSumm] = useState<
     TraderPerformance[]
+  >();
+      const [rmAuctionMarket, setRMAuctionMarket] = useState<
+    RMAuctionInfo[]
+  >();
+  const [rmOffMarket, setRMOffMarket] = useState<
+    RMOffMarketInfo[]
   >();
   const handleBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -248,12 +254,62 @@ useEffect(() => {
           );
         }
       };
+      // RM Auction Market Data
+      const fetchRMAuctionMarketData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm-wise-auction-market/?trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<RMAuctionInfo[]>;
+          if (successResponse(result.status)) {
+            setRMAuctionMarket(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while auction Data`,
+            error
+          );
+        }
+      };
+          // RM Off Market Data
+      const fetchRMOffMarketData = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/rm-wise-off-market/?trader=${trader}`,
+            {
+              headers: {
+                Authorization: `Bearer ${session?.user.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const result = (await response.json()) as IResponse<RMOffMarketInfo[]>;
+          if (successResponse(result.status)) {
+            setRMOffMarket(result.data);
+          }
+        } catch (error) {
+          console.log(error)
+          console.error(
+            `Error Happened while off market Data`,
+            error
+          );
+        }
+      };
       fetchRMPerformanceData();
       fetchTurnoverPerformance();
       fetchClientDetails();
       fetchInvestorLiveTradeDetails();
       fetchTopInvestorSaleData();
       fetchTopInvestorBuyData();
+      fetchRMAuctionMarketData();
+      fetchRMOffMarketData();
     }
   }, [trader]);
   return (
@@ -268,12 +324,12 @@ useEffect(() => {
       </PageHeader>
       <div className="grid grid-col-6 gap-3 xl:grid-cols-6 mt-2">
         {/* Turnover Performance */}
-        {turnoverPerformance ? (
+        {turnoverPerformance && turnoverPerformance ? (
           <RMTurnoverPerformance records={turnoverPerformance} />
         ) : null}
         {/* Client Details */}
-             {rmPerformaceSumm ? (
-          <RMPerformance data={rmPerformaceSumm?.[0]||{}} />
+             {rmPerformaceSumm && rmAuctionMarket && rmOffMarket ? (
+          <RMPerformance data={rmPerformaceSumm?.[0]||{}} auctionData={rmAuctionMarket} offMarketData={rmOffMarket} />
         ) : null}
 
         {investorTopBuyData ? (

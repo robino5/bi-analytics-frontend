@@ -38,3 +38,23 @@ export type InvestorLiveTradeInfo = {
   ledgerBalance: number;
   turnover: number;
 };
+
+export interface RMAuctionInfo {
+  regionName: string;
+  branchCode: number;
+  branchName: string;
+  rmName: string;
+  auctionFund: number;
+  auctionIncome: number;
+  year: number;
+}
+
+export interface RMOffMarketInfo {
+  regionName: string;
+  branchCode: number;
+  branchName: string;
+  rmName: string;
+  offMarketFund: number;
+  offMarketIncome: number;
+  year: number;
+}
