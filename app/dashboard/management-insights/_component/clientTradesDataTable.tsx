@@ -96,19 +96,8 @@ export default function ClientTradesDataTable({
 
   // ===========================================
   return (
-    <Card
-      className={cn(
-        "overflow-hidden drop-shadow-md bg-[#033e4a] h-[308px]",
-        className
-      )}
-    >
-      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
-        <CardTitle className="text-white text-lg">
-          Channel Wise Clients & Trades
-        </CardTitle>
-      </CardHeader>
 
-      <CardContent className="mt-3">
+    
         <Table className="border border-gray-300 rounded-md overflow-hidden mt-8">
           <TableHeader>
             <TableRow className="bg-yellow-200">
@@ -171,7 +160,5 @@ export default function ClientTradesDataTable({
             </TableRow>
           </TableBody>
         </Table>
-      </CardContent>
-    </Card>
   );
 }

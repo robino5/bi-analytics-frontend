@@ -129,7 +129,7 @@ class ManagementInsights extends Common {
             url += `&branch_code=${branch}`;
         }
 
-        return this.http.get<IResponse<any>>(url);
+        return this.http.get<IResponse<any[]>>(url);
     }
 }
 

@@ -170,18 +170,47 @@ export default function RegionalBusinessPerformancePage() {
     queryFn: () => ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
   });
 
-  const totalBranchSpace = branchOfficeSpaceInfo?.data.reduce(
-    (sum: number, item: { officeSpace: any; }) => sum + Number(item.officeSpace || 0),
+  const data = Array.isArray(branchOfficeSpaceInfo?.data)
+    ? branchOfficeSpaceInfo.data
+    : [];
+
+  const totalBranchSpace = data.reduce(
+    (sum: number, item: any) => sum + Number(item?.officeSpace ?? 0),
     0,
   );
-
   const [officeSpaceOpen, setOfficeSpaceOpen] = useState(false);
+
+  const getBusinessDate = () => {
+    const date = new Date();
+    const day = date.getDay();
+    // 0 = Sunday, 5 = Friday, 6 = Saturday
+
+    if (day === 0) {
+      // Sunday → go back to Thursday
+      date.setDate(date.getDate() - 3);
+    } else if (day === 5) {
+      // Friday → go back to Thursday
+      date.setDate(date.getDate() - 1);
+    } else if (day === 6) {
+      // Saturday → go back to Thursday
+      date.setDate(date.getDate() - 2);
+    } else {
+      // Normal day → yesterday
+      date.setDate(date.getDate() - 1);
+    }
+
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   return (
     <div className="p-6">
       <PageHeader
         name="Management Insights"
-        period={"Oct-2025 to Dec-2025 (QTR-4)"}
+        period={`As on Date: ${getBusinessDate()}`}
       />
       <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
         <CardContent className="p-6">
@@ -204,16 +233,18 @@ export default function RegionalBusinessPerformancePage() {
 
         {/* Right side */}
         <div className="w-1/2 text-center flex items-center justify-center py-3">
-          <Dialog open={officeSpaceOpen} onOpenChange={setOfficeSpaceOpen} >
+          <Dialog open={officeSpaceOpen} onOpenChange={setOfficeSpaceOpen}>
             <DialogTrigger asChild>
               <button className="text-lg font-bold underline">
                 {(totalBranchSpace || 0).toLocaleString()}
                 <span className="font-bold"> SFT</span>
               </button>
-            </DialogTrigger> 
+            </DialogTrigger>
             <DialogContent className="sm:max-w-3xl bg-[#033e4a]">
-              <DialogHeader >
-                <DialogTitle className="text-white">Branch Office Space Details</DialogTitle>
+              <DialogHeader>
+                <DialogTitle className="text-white">
+                  Branch Office Space Details
+                </DialogTitle>
               </DialogHeader>
               <div className="mt-4 max-h-[60vh] overflow-y-auto">
                 <table className="w-full table-auto border-collapse">
@@ -221,21 +252,33 @@ export default function RegionalBusinessPerformancePage() {
                     <tr className="bg-yellow-200">
                       <th className="px-3 py-2 text-left border">Region</th>
                       <th className="px-3 py-2 text-left border">Branch</th>
-                      <th className="px-3 py-2 text-right border">Office Space (SFT)</th>
+                      <th className="px-3 py-2 text-right border">
+                        Office Space (SFT)
+                      </th>
                     </tr>
                   </thead>
-                  <tbody >
-                    {Array.isArray(branchOfficeSpaceInfo?.data) && branchOfficeSpaceInfo.data.length ? (
+                  <tbody>
+                    {Array.isArray(branchOfficeSpaceInfo?.data) &&
+                    branchOfficeSpaceInfo.data.length ? (
                       branchOfficeSpaceInfo.data.map((b: any, idx: number) => (
-                        <tr key={idx} className={idx % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"}>
+                        <tr
+                          key={idx}
+                          className={
+                            idx % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
+                          }
+                        >
                           <td className="px-3 py-2 border">{b.regionName}</td>
                           <td className="px-3 py-2 border">{b.branchName}</td>
-                          <td className="px-3 py-2 text-right border">{Number(b.officeSpace || 0).toLocaleString()}</td>
+                          <td className="px-3 py-2 text-right border">
+                            {Number(b.officeSpace || 0).toLocaleString()}
+                          </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={3} className="px-3 py-4 text-center">No data available</td>
+                        <td colSpan={3} className="px-3 py-4 text-center">
+                          No data available
+                        </td>
                       </tr>
                     )}
                   </tbody>
@@ -246,51 +289,37 @@ export default function RegionalBusinessPerformancePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-12">
+      <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {/* Col 4 */}
-        <div className="col-span-6 p-4 rounded">
           {branchChannelWiseTradeInfo && (
-            <ClientTradesDataTable records={branchChannelWiseTradeInfo.data} />
-          )}
-          <br></br>
-          {branchEmployeeInfo && (
             <CardBoard
-              className="col-span-6 xl:col-span-3"
-              title={`Employee Structure-${branchEmployeeInfo.data?.permanentTrader + branchEmployeeInfo.data?.contractualWithSalary + branchEmployeeInfo.data?.contractualWithoutSalary} As on Date`}
-              children={<EmployeeInfo employeeData={branchEmployeeInfo.data} />}
-            />
-          )}
-          <br></br>
-          {branchEkycInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3"
-              title={"eKYC"}
-              children={<EkycInfo eKYC={branchEkycInfo.data} />}
-            />
-          )}
-          <br></br>
-          {branchPartyTurnoverCommissionInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3"
-              title={"Busi. Aggregator Details Information"}
+              className="col-span-6 xl:col-span-3 overflow-hidden"
+              title={"Channel Wise Clients & Trades"}
               children={
-                <ThirdPartyInfo
-                  thirdPartyInfo={branchPartyTurnoverCommissionInfo.data}
+                <ClientTradesDataTable
+                  records={branchChannelWiseTradeInfo.data}
                 />
               }
             />
           )}
-        </div>
-        {/* Col 5 */}
-        <div className="col-span-6 p-4 rounded">
+          
           {branchEcrmInfo && (
             <CardBoard
-              className="col-span-6 xl:col-span-3"
+              className="col-span-6 xl:col-span-3 overflow-hidden"
               title={"eCRM"}
               children={<EcrmInfo eCRM={branchEcrmInfo.data} />}
             />
           )}
-          <br></br>
+        <div className="rounded-md col-span-3 xl:col-span-3">
+          {branchEmployeeInfo && (
+            <CardBoard
+              className="col-span-6 xl:col-span-3 overflow-hidden"
+              title={`Employee Structure-${branchEmployeeInfo.data?.permanentTrader + branchEmployeeInfo.data?.contractualWithSalary + branchEmployeeInfo.data?.contractualWithoutSalary} As on Date`}
+              children={<EmployeeInfo employeeData={branchEmployeeInfo.data} />}
+            />
+          )}
+        </div>
+        <div className="rounded-md col-span-3 xl:col-span-3">
           {branchClientInfo && (
             <CardBoard
               className="col-span-6 xl:col-span-3"
@@ -298,27 +327,45 @@ export default function RegionalBusinessPerformancePage() {
               children={<ClientInfo clientData={branchClientInfo.data} />}
             />
           )}
-          <br></br>
-          {branchDepositWithdrawDetailsInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3"
-              title={"Deposit & Withdraw Details"}
-              children={
-                <DepositWithdrawInfo
-                  depositWithdraw={branchDepositWithdrawDetailsInfo.data}
-                />
-              }
-            />
-          )}
-          <br></br>
-          {branchExposureInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3"
-              title={"Exposure Information as on Date"}
-              children={<ExposureInfo exposureInfo={branchExposureInfo.data} />}
-            />
-          )}
         </div>
+        {branchPartyTurnoverCommissionInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Busi. Aggregator Details Information"}
+            children={
+              <ThirdPartyInfo
+                thirdPartyInfo={branchPartyTurnoverCommissionInfo.data}
+              />
+            }
+          />
+        )}
+        {/* Col 5 */}
+        {branchEkycInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"eKYC"}
+            children={<EkycInfo eKYC={branchEkycInfo.data} />}
+          />
+        )}
+
+        {branchDepositWithdrawDetailsInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Deposit & Withdraw Details"}
+            children={
+              <DepositWithdrawInfo
+                depositWithdraw={branchDepositWithdrawDetailsInfo.data}
+              />
+            }
+          />
+        )}
+        {branchExposureInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Exposure Information as on Date"}
+            children={<ExposureInfo exposureInfo={branchExposureInfo.data} />}
+          />
+        )}
       </div>
     </div>
   );
