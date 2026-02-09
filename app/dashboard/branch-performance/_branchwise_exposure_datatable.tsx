@@ -21,7 +21,7 @@ interface Props {
 
 export default function BranchWiseExposureDataTable({ records }: Props) {
   return (
-    <Card className="col-span-1  shadow-md lg:col-span-2 bg-[#033e4a] max-h-[907px] overflow-auto">
+    <Card className="col-span-1  shadow-md lg:col-span-2 bg-[#033e4a] overflow-auto">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           Branch Wise Exposure Status
@@ -30,9 +30,9 @@ export default function BranchWiseExposureDataTable({ records }: Props) {
               shows the grid for exposure status
             </CardDescription> */}
       </CardHeader>
-      <CardContent className="mt-3">
-        <Table className="border border-gray-300 rounded-md overflow-hidden">
-          <TableHeader>
+      <CardContent className="mt-16">
+        <Table  wrapperClassName="max-h-[720px] overflow-y-auto rounded-md">
+          <TableHeader className="sticky top-0 z-10">
             <TableRow className="text-center bg-table-header hover:bg-table-header text-black font-bold">
               <TableHead rowSpan={2} className="border text-black font-bold">
                 Branch

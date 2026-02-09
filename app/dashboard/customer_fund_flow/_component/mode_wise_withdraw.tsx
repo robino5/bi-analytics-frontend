@@ -15,7 +15,7 @@ interface ModeWiseWithdrawProps {
   data: {
     cashWithdrawal: number;
     chequeWithdrawal: number;
-    onlineRequisition: number;
+    online: number;
     rtsg: number;
     cashDividendDeduction: number;
     payOrder: number;
@@ -35,19 +35,20 @@ const ModeWiseWithdraw: React.FC<ModeWiseWithdrawProps> = ({
     .map(([key, value]) => ({ name: key, value }))
     .filter((item) => item.value > 0 && item.name !== "totalWithdrawal");
 
-  // Format camelCase keys to readable labels
- const formatName = (key: string) =>
-  key
-    .replace(/Withdrawal/gi, "")              // remove 'Deposit' (case-insensitive)
-    .replace(/([A-Z])/g, " $1")            // add space before capital letters
-    .replace(/^./, (str) => str.toUpperCase()) // capitalize first letter
-    .trim();                               // remove extra spaces
+  const totalAmount = rows.reduce((sum, row) => sum + row.value, 0);
 
+  // Format camelCase keys to readable labels
+  const formatName = (key: string) =>
+    key
+      .replace(/Withdrawal/gi, "") // remove 'Deposit' (case-insensitive)
+      .replace(/([A-Z])/g, " $1") // add space before capital letters
+      .replace(/^./, (str) => str.toUpperCase()) // capitalize first letter
+      .trim(); // remove extra spaces
 
   return (
     <Card className={`border-[2px] border-${color} shadow-md bg-[#033e4a]`}>
       <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3">
-        <CardTitle className="text-lg font-semibold text-white">
+        <CardTitle className="text-sm sm:text-lg font-semibold text-white">
           {title}
         </CardTitle>
       </CardHeader>
@@ -71,8 +72,9 @@ const ModeWiseWithdraw: React.FC<ModeWiseWithdrawProps> = ({
               {rows.map((row, index) => (
                 <TableRow
                   key={row.name}
-             className={`${index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
-                    } hover:bg-yellow-300 transition-all duration-300`}
+                  className={`${
+                    index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
+                  } hover:bg-yellow-300 transition-all duration-300`}
                 >
                   <TableCell className=" font-medium">
                     {formatName(row.name)}
@@ -82,7 +84,14 @@ const ModeWiseWithdraw: React.FC<ModeWiseWithdrawProps> = ({
                   </TableCell>
                 </TableRow>
               ))}
-
+              {rows.length > 0 && (
+                <TableRow className="bg-yellow-200 border-t-2 border-yellow-600 hover:bg-yellow-200">
+                  <TableCell className="font-bold text-black">Total</TableCell>
+                  <TableCell className="text-right font-bold text-black">
+                    {numberToMillionsString(totalAmount)}
+                  </TableCell>
+                </TableRow>
+              )}
               {rows.length === 0 && (
                 <TableRow className="bg-yellow-100">
                   <TableCell

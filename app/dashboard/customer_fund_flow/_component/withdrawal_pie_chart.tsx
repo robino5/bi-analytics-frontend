@@ -104,7 +104,7 @@ const WithdrawalPieChart: React.FC<PieChartProps> = ({ data }) => {
   return (
     <div
       ref={chartRef}
-      className="w-full h-[370px] flex items-center justify-center"
+      className="w-full h-[260px] sm:h-[320px] lg:h-[370px] flex items-center justify-center"
     />
   );
 };

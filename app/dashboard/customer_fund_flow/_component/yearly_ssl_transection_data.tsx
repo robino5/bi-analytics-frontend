@@ -13,11 +13,17 @@ import { format } from "date-fns";
 
 const YearlySSLTransactionDataTable: React.FC<{ data: any[] }> = ({ data }) => {
   console.log("Yearly SSL Transaction Data:", data);
+  const totalTransactions = data.reduce(
+    (sum, row) => sum + (row.noOfTransactions || 0),
+    0,
+  );
+
+  const totalAmount = data.reduce((sum, row) => sum + (row.amount || 0), 0);
   return (
     <Card className={`border-2 border-cyan-500 shadow-lg bg-[#033e4a]`}>
       <CardHeader className="relative z-10 bg-gradient-to-r from-teal-700 via-cyan-600 to-sky-700 p-3 rounded-t-md ">
         <CardTitle className="text-lg font-semibold text-white tracking-wide">
-          Yearly SSL Transaction-(
+          Yearly Channel Wise Transaction-(
           {data?.[0]?.year && data?.[0]?.year})
         </CardTitle>
       </CardHeader>
@@ -30,7 +36,7 @@ const YearlySSLTransactionDataTable: React.FC<{ data: any[] }> = ({ data }) => {
                   Channel
                 </TableHead>
                 <TableHead className="text-center font-semibold text-black">
-                  Number of Transactions
+                  No. of Transactions
                 </TableHead>
                 <TableHead className="text-right font-semibold text-black">
                   Amount
@@ -54,6 +60,16 @@ const YearlySSLTransactionDataTable: React.FC<{ data: any[] }> = ({ data }) => {
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow className="bg-yellow-200 hover:bg-yellow-200">
+                <TableCell className="font-medium">Total</TableCell>
+                <TableCell className="text-center  font-medium">
+                  {" "}
+                  {totalTransactions}{" "}
+                </TableCell>
+                <TableCell className="text-right  font-medium">
+                  {numberToMillionsString(totalAmount)}
+                </TableCell>
+              </TableRow>
               {data.length === 0 && (
                 <TableRow className="bg-yellow-100">
                   <TableCell

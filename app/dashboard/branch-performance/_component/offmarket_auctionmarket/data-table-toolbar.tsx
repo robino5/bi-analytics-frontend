@@ -20,14 +20,14 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter branch..."
+          placeholder="Filter RM..."
           value={
-            (table.getColumn("branchName")?.getFilterValue() as string) ?? ""
+            (table.getColumn("rmName")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("branchName")?.setFilterValue(event.target.value)
+            table.getColumn("rmName")?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[120px] sm:w-[150px] lg:w-[250px] bg-white"
+          className="h-8 w-[150px] lg:w-[250px] bg-white"
         />
         {isFiltered && (
           <Button
@@ -40,7 +40,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      {/* <DataTableViewOptions table={table} /> */}
+      <DataTableViewOptions table={table} />
     </div>
   );
 }

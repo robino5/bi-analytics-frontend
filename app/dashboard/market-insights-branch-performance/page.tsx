@@ -47,9 +47,36 @@ export default function RegionalBusinessPerformancePage() {
     queryFn: () => regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(branch, region),
   });
 
+  const getBusinessDate = () => {
+  const date = new Date();
+  const day = date.getDay(); 
+  // 0 = Sunday, 5 = Friday, 6 = Saturday
+
+  if (day === 0) {
+    // Sunday → go back to Thursday
+    date.setDate(date.getDate() - 3);
+  } else if (day === 5) {
+    // Friday → go back to Thursday
+    date.setDate(date.getDate() - 1);
+  } else if (day === 6) {
+    // Saturday → go back to Thursday
+    date.setDate(date.getDate() - 2);
+  } else {
+    // Normal day → yesterday
+    date.setDate(date.getDate() - 1);
+  }
+
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+
   return (
     <div className="p-6">
-      <PageHeader name="Regional Business Performance" period={"Oct-2025 to Dec-2025 (QTR-4)"} />
+      <PageHeader name="Regional Business Performance" period={`As on Date: ${getBusinessDate()}`} />
 
 
       <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">

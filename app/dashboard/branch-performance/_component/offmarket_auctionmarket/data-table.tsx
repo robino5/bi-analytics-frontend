@@ -19,6 +19,7 @@ import {
 import {
   Table,
   TableBody,
+  TableFooter,
   TableCell,
   TableHead,
   TableHeader,
@@ -36,6 +37,7 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { cn } from "@/lib/utils";
+import { numberToMillionsString } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   title: string;
@@ -43,14 +45,18 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   className?: string;
+  setYear?: (year: number) => void;
+  year?: number;
 }
 
-export function DataTableCardTurnover<TData, TValue>({
+export function DataTableCard<TData, TValue>({
   title,
   subtitle,
   columns,
   data,
   className,
+  setYear,
+  year,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -69,14 +75,14 @@ export function DataTableCardTurnover<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
-      pagination
+      pagination,
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -85,24 +91,54 @@ export function DataTableCardTurnover<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const tableCellColorEffect = (Rowindex :number,cellindex: number) => {
-    if (cellindex == 1) {
+  // determine numeric keys to total (common patterns: Fund, Income, Turnover)
+  const accessorKeys: string[] = columns
+    .map((c: any) => (c as any).accessorKey)
+    .filter((k) => typeof k === "string") as string[];
+
+  const totalKeys = accessorKeys.filter((k) => /fund|income|turnover/i.test(k));
+
+  const totals: Record<string, number> = React.useMemo(() => {
+    const t: Record<string, number> = {};
+    totalKeys.forEach((key) => {
+      t[key] = data.reduce((sum, item) => sum + (Number((item as any)[key]) || 0), 0);
+    });
+    return t;
+  }, [data, totalKeys]);
+
+    const tableCellColorEffect = (Rowindex :number,cellindex: number) => {
+    if (cellindex == 2) {
       return Rowindex % 2 === 0 ? "bg-blue-200" : "bg-blue-100";
-    } else if (cellindex == 2) {
-      return Rowindex % 2 === 0 ? "bg-green-200" : "bg-green-100"
     } else if (cellindex == 3) {
-      return Rowindex % 2 === 0 ? "bg-orange-200" : "bg-orange-100"
-    } else if (cellindex == 4) {
-      return Rowindex % 2 === 0 ? "bg-yellow-200" : "bg-yellow-100"
+      return Rowindex % 2 === 0 ? "bg-green-200" : "bg-green-100"
     }
   }
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
-      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
-        {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
-      </CardHeader>
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+          <div className="w-full flex items-center justify-between">
+            <div>
+              <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
+              {/* <CardDescription className="text-white">{subtitle}</CardDescription> */}
+            </div>
+            <div className="flex items-center gap-2">
+              <select
+                value={year ?? ""}
+                onChange={(e) => {
+                  const v = Number(e.target.value);
+                  if (setYear) setYear(v);
+                }}
+                className="rounded border px-2 py-1 text-sm"
+              >
+                <option value="">Select</option>
+                <option value={2023}>2023</option>
+                <option value={2024}>2024</option>
+                <option value={2025}>2025</option>
+              </select>
+            </div>
+          </div>
+        </CardHeader>
       <CardContent className="mt-3">
         <div className="space-y-4">
           <DataTableToolbar table={table} />
@@ -112,7 +148,7 @@ export function DataTableCardTurnover<TData, TValue>({
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}
-                      className="bg-blue-500 hover:bg-blue-700"
+                    className="bg-blue-500 hover:bg-blue-700"
                   >
                     {headerGroup.headers.map((header) => {
                       return (
@@ -133,29 +169,26 @@ export function DataTableCardTurnover<TData, TValue>({
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody>
+              <TableBody className="border border-gray-200">
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row, index) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className={`${
-                        index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
-                      } hover:bg-green-300 transition-all duration-300`}
+                      className={`${index % 2 === 0 ? "bg-table-odd-row" : "bg-table-even-row"
+                        } hover:bg-green-300 transition-all duration-300`}
                     >
-                      {row.getVisibleCells().map((cell, cellindex) => {
-                        return (
-                          <TableCell
-                            className={`${tableCellColorEffect(index,cellindex)} py-1 px-4 text-start text-[0.8rem] border"`}
-                            key={cell.id}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        );
-                      })}
+                      {row.getVisibleCells().map((cell,cellindex) => (
+                        <TableCell
+                          className={`${tableCellColorEffect(index,cellindex)} py-1 px-4 text-start text-[0.8rem] border"`}
+                          key={cell.id}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
                     </TableRow>
                   ))
                 ) : (
@@ -169,6 +202,28 @@ export function DataTableCardTurnover<TData, TValue>({
                   </TableRow>
                 )}
               </TableBody>
+              <TableFooter className="border border-gray-200">
+                <TableRow className="bg-table-footer hover:bg-table-footer transition-all duration-300">
+                  {/* first column label */}
+                  <TableCell className="font-bold">Total</TableCell>
+                  {/* render totals aligned with visible columns */}
+                  {table
+                    .getHeaderGroups()[0]
+                    .headers.slice(1)
+                    .map((header) => {
+                      const key = (header.column.columnDef as any).accessorKey as string | undefined;
+                      if (key && totals[key] !== undefined) {
+                        return (
+                          <TableCell key={header.id} className="text-right">
+                            {numberToMillionsString(totals[key])}
+                          </TableCell>
+                        );
+                      }
+
+                      return <TableCell key={header.id} />;
+                    })}
+                </TableRow>
+              </TableFooter>
             </Table>
           </div>
           <DataTablePagination table={table} />
