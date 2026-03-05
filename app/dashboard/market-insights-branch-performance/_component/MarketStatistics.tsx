@@ -28,7 +28,7 @@ export default function MarketStatistics({ exchangeWiseMarketStatistics, branchW
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg text-white">
                         <CardTitle className="text-base font-semibold">
                             Average Daily Turnover (mn)
-                        </CardTitle>
+                        </CardTitle> 
                     </CardHeader>
 
                     <CardContent className="p-0">
@@ -58,7 +58,7 @@ export default function MarketStatistics({ exchangeWiseMarketStatistics, branchW
                         </table>
                     </CardContent>
                     <CardFooter className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-bl-lg rounded-br-lg">
-                        <div className="text-sm text-white text-center font-semibold text-lg">
+                        <div className=" text-white text-center font-semibold text-lg">
                             Total Trading Days:&nbsp;{exchangeWiseMarketStatistics?.rows?.[0].tradeDay}
                         </div>
                     </CardFooter>

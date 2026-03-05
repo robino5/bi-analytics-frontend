@@ -27,6 +27,8 @@ const DepositPieChart: React.FC<PieChartProps> = ({ data }) => {
       "Pay-Order": "#d863ecff",       // Purple
       "Cash-Dividend": "#4CAF50",   // Red
       "IPO": "#8BC34A",             // Cyan
+      "Transfer": "#FF5722",        // Magenta
+      "Online": "#9C27B0",          // Yellow
     };
 
     const chartData = [
@@ -36,6 +38,8 @@ const DepositPieChart: React.FC<PieChartProps> = ({ data }) => {
       { name: "Pay-Order", value: data.payOrder },
       { name: "Cash-Dividend", value: data.cashDividend },
       { name: "IPO", value: data.ipoMode },
+      { name: "Transfer", value: data.transferDeposit },
+      { name: "Online", value: data.onlineReceive },
     ];
 
     const validData = chartData.filter((d) => d.value > 0);
