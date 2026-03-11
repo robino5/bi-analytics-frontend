@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ManagementInsightsAPI } from "./api/management-insights";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
 import FilterSection from "./_component/FilterSection";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,56 +24,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-
-/* Return current fiscal quarter range like "Oct-2025 to Dec-2025" */
-const getFiscalQuarterRange = (): string => {
-  const now = new Date();
-  const month = now.getMonth();
-  const year = now.getFullYear();
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  let start = 0;
-  let end = 2;
-  let startYear = year;
-  let endYear = year;
-
-  if (month >= 9) {
-    // Oct - Dec
-    start = 9;
-    end = 11;
-  } else if (month <= 2) {
-    // Jan - Mar
-    start = 0;
-    end = 2;
-  } else if (month <= 5) {
-    // Apr - Jun
-    start = 3;
-    end = 5;
-  } else {
-    // Jul - Sep
-    start = 6;
-    end = 8;
-  }
-
-  return `${monthNames[start]}-${startYear} to ${monthNames[end]}-${endYear}`;
-};
+import { format, parseISO } from "date-fns";
 
 export default function RegionalBusinessPerformancePage() {
   const [region, setRegion] = useState("");
   const [branch, setBranch] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const {
     data: regionsBranch,
@@ -102,7 +59,7 @@ export default function RegionalBusinessPerformancePage() {
       : [];
   }, [region, regionsBranch]);
 
-  const { data: branchClientInfo, isPending: branchClientInfoPending } =
+  const { data: branchClientInfo, isPending: branchClientInfoPending,refetch: refetchBranchClientInfo } =
     useQuery({
       queryKey: ["branchClientInfo", branch, region],
       queryFn: () =>
@@ -111,19 +68,19 @@ export default function RegionalBusinessPerformancePage() {
           region,
         ),
     });
-  const { data: branchEmployeeInfo, isPending: branchEmployeeInfoPending } =
+  const { data: branchEmployeeInfo, isPending: branchEmployeeInfoPending,refetch: refetchBranchEmployeeInfo } =
     useQuery({
       queryKey: ["branchEmployeeInfo", branch, region],
       queryFn: () =>
         ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
     });
 
-  const { data: branchEcrmInfo, isPending: branchEcrmInfoPending } = useQuery({
+  const { data: branchEcrmInfo, isPending: branchEcrmInfoPending,refetch: refetchBranchEcrmInfo } = useQuery({
     queryKey: ["branchEcrmInfo", branch, region],
     queryFn: () => ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
   });
 
-  const { data: branchEkycInfo, isPending: branchEkycInfoPending } = useQuery({
+  const { data: branchEkycInfo, isPending: branchEkycInfoPending,refetch: refetchBranchEkycInfo } = useQuery({
     queryKey: ["branchEkycInfo", branch, region],
     queryFn: () => ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
   });
@@ -131,6 +88,7 @@ export default function RegionalBusinessPerformancePage() {
   const {
     data: branchChannelWiseTradeInfo,
     isPending: branchChannelWiseTradeInfoPending,
+    refetch: refetchBranchChannelWiseTradeInfo
   } = useQuery({
     queryKey: ["branchChannelWiseTradeInfo", branch, region],
     queryFn: () =>
@@ -140,6 +98,7 @@ export default function RegionalBusinessPerformancePage() {
   const {
     data: branchDepositWithdrawDetailsInfo,
     isPending: branchDepositWithdrawDetailsInfoPending,
+    refetch: refetchBranchDepositWithdrawDetailsInfo
   } = useQuery({
     queryKey: ["branchDepositWithdrawDetailsInfo", branch, region],
     queryFn: () =>
@@ -149,13 +108,14 @@ export default function RegionalBusinessPerformancePage() {
   const {
     data: branchPartyTurnoverCommissionInfo,
     isPending: branchPartyTurnoverCommissionInfoPending,
+    refetch: refetchBranchPartyTurnoverCommissionInfo
   } = useQuery({
     queryKey: ["branchPartyTurnoverCommissionInfo", branch, region],
     queryFn: () =>
       ManagementInsightsAPI.getRegionalPartyTurnoverCommission(branch, region),
   });
 
-  const { data: branchExposureInfo, isPending: branchExposureInfoPending } =
+  const { data: branchExposureInfo, isPending: branchExposureInfoPending,refetch: refetchBranchExposureInfo } =
     useQuery({
       queryKey: ["branchExposureInfo", branch, region],
       queryFn: () =>
@@ -165,9 +125,40 @@ export default function RegionalBusinessPerformancePage() {
   const {
     data: branchOfficeSpaceInfo,
     isPending: branchOfficeSpaceInfoPending,
+    refetch: refetchBranchOfficeSpaceInfo
   } = useQuery({
     queryKey: ["branchOfficeSpaceInfo", branch, region],
     queryFn: () => ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
+  });
+
+  const { data: branchPerformanceProcess,refetch: refetchBranchPerformanceProcess } = useQuery({
+    queryKey: ["branchPerformanceProcess"],
+    queryFn: () => ManagementInsightsAPI.getBranchPerformanceProcess(),
+  });
+
+  
+    const { mutate: processBranchPerformance, isPending } = useMutation({
+    mutationFn: () =>
+      ManagementInsightsAPI.processBranchPerformanceWithDates(
+        startDate,
+        endDate
+      ),
+
+    onSuccess: async () => {
+     await refetchBranchClientInfo();
+     await refetchBranchEmployeeInfo();
+      await refetchBranchEcrmInfo();
+      await refetchBranchEkycInfo();
+      await refetchBranchChannelWiseTradeInfo();
+      await refetchBranchDepositWithdrawDetailsInfo();
+      await refetchBranchExposureInfo();
+      await refetchBranchPartyTurnoverCommissionInfo();
+      await refetchBranchOfficeSpaceInfo();
+    },
+
+    onError: (error) => {
+      console.error("Process branch performance failed", error);
+    },
   });
 
   const data = Array.isArray(branchOfficeSpaceInfo?.data)
@@ -180,37 +171,25 @@ export default function RegionalBusinessPerformancePage() {
   );
   const [officeSpaceOpen, setOfficeSpaceOpen] = useState(false);
 
-  const getBusinessDate = () => {
-    const date = new Date();
-    const day = date.getDay();
-    // 0 = Sunday, 5 = Friday, 6 = Saturday
-
-    if (day === 0) {
-      // Sunday → go back to Thursday
-      date.setDate(date.getDate() - 3);
-    } else if (day === 5) {
-      // Friday → go back to Thursday
-      date.setDate(date.getDate() - 1);
-    } else if (day === 6) {
-      // Saturday → go back to Thursday
-      date.setDate(date.getDate() - 2);
-    } else {
-      // Normal day → yesterday
-      date.setDate(date.getDate() - 1);
-    }
-
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   return (
     <div className="p-6">
       <PageHeader
-        name="Management Insights"
-        period={`As on Date: ${getBusinessDate()}`}
+        name="Regional Business Performance"
+        period={`From: ${
+          branchPerformanceProcess?.data?.dateFrom
+            ? format(
+                parseISO(branchPerformanceProcess.data.dateFrom),
+                "dd-MMM-yyyy",
+              )
+            : ""
+        } to ${
+          branchPerformanceProcess?.data?.dateTo
+            ? format(
+                parseISO(branchPerformanceProcess.data.dateTo),
+                "dd-MMM-yyyy",
+              )
+            : ""
+        }`}
       />
       <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
         <CardContent className="p-6">
@@ -221,6 +200,13 @@ export default function RegionalBusinessPerformancePage() {
             branchList={branchList}
             setRegion={setRegion}
             setBranch={setBranch}
+            setBranchName={setBranch}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            processBranchPerformance={processBranchPerformance}
+            isPending={isPending}
+            startDate={startDate}
+            endDate={endDate}
           />
         </CardContent>
       </Card>
@@ -291,25 +277,25 @@ export default function RegionalBusinessPerformancePage() {
 
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {/* Col 4 */}
-          {branchChannelWiseTradeInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3 overflow-hidden"
-              title={"Channel Wise Clients & Trades"}
-              children={
-                <ClientTradesDataTable
-                  records={branchChannelWiseTradeInfo.data}
-                />
-              }
-            />
-          )}
-          
-          {branchEcrmInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3 overflow-hidden"
-              title={"eCRM"}
-              children={<EcrmInfo eCRM={branchEcrmInfo.data} />}
-            />
-          )}
+        {branchChannelWiseTradeInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3 overflow-hidden"
+            title={"Channel Wise Clients & Trades"}
+            children={
+              <ClientTradesDataTable
+                records={branchChannelWiseTradeInfo.data}
+              />
+            }
+          />
+        )}
+
+        {branchEcrmInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3 overflow-hidden"
+            title={"eCRM"}
+            children={<EcrmInfo eCRM={branchEcrmInfo.data} />}
+          />
+        )}
         <div className="rounded-md col-span-3 xl:col-span-3">
           {branchEmployeeInfo && (
             <CardBoard

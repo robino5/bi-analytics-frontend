@@ -7,7 +7,7 @@ import ModeWiseDeposite from "./_component/mode_wise_deposit";
 import ModeWiseWithdraw from "./_component/mode_wise_withdraw";
 import MonthlyLineChart from "./_component/deposit_monthly";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import DepositPieChart from "./_component/deposit_pie_chart";
+import DepositBarChart from "./_component/deposit_pie_chart";
 import WithdrawalPieChart from "./_component/withdrawal_pie_chart";
 import { DataTableCard } from "./_component/_branch_wise_total_fund/data-table";
 import { branchWisetotalFundColumns } from "./_component/_branch_wise_total_fund/columns";
@@ -220,7 +220,7 @@ export default function CustomerFundFlowDashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4">
-                <DepositPieChart data={depositToday?.data?.detail ?? {}} />
+                <DepositBarChart data={depositToday?.data?.detail ?? {}} />
               </CardContent>
             </Card>
 
