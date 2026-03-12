@@ -29,6 +29,7 @@ import { format, parseISO } from "date-fns";
 export default function RegionalBusinessPerformancePage() {
   const [region, setRegion] = useState("");
   const [branch, setBranch] = useState("");
+    const [branchName, setBranchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -137,9 +138,9 @@ export default function RegionalBusinessPerformancePage() {
   });
 
   
-    const { mutate: processBranchPerformance, isPending } = useMutation({
+    const { mutate: processRegionWiseManagement, isPending, } = useMutation({
     mutationFn: () =>
-      ManagementInsightsAPI.processBranchPerformanceWithDates(
+      ManagementInsightsAPI.processRegionWiseManagement(
         startDate,
         endDate
       ),
@@ -154,6 +155,7 @@ export default function RegionalBusinessPerformancePage() {
       await refetchBranchExposureInfo();
       await refetchBranchPartyTurnoverCommissionInfo();
       await refetchBranchOfficeSpaceInfo();
+      await refetchBranchPerformanceProcess();
     },
 
     onError: (error) => {
@@ -200,10 +202,10 @@ export default function RegionalBusinessPerformancePage() {
             branchList={branchList}
             setRegion={setRegion}
             setBranch={setBranch}
-            setBranchName={setBranch}
+            setBranchName={setBranchName}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
-            processBranchPerformance={processBranchPerformance}
+            processRegionWiseManagement={processRegionWiseManagement}
             isPending={isPending}
             startDate={startDate}
             endDate={endDate}

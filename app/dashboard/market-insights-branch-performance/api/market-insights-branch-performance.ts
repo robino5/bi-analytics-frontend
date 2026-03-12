@@ -50,7 +50,7 @@ class MarketInsightsBranchPerformance extends Common {
 }
 
    getBranchPerformanceProcess() {
-        return this.http.get<IResponse<BranchPerformanceRunLog>>("dashboards/branch-performance-process/")
+        return this.http.get<IResponse<BranchPerformanceRunLog>>("dashboards/branch-performance-process/?procedure_name=BIAnalytics_Region_Wise_MarketInsight_BranchPerformance_Date_Duration")
     }
 
   

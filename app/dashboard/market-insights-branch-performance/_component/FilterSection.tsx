@@ -77,7 +77,7 @@ export default function FilterSection({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] gap-6">
         {/* FROM DATE */}
         <div>
-          <Label className="text-white mb-1 block">From Date</Label>
+          <Label className="text-white mb-1 block text-lg">From Date</Label>
           <input
             type="date"
             value={startDate}
@@ -89,7 +89,7 @@ export default function FilterSection({
 
         {/* TO DATE */}
         <div>
-          <Label className="text-white mb-1 block">To Date</Label>
+          <Label className="text-white mb-1 block text-lg">To Date</Label>
           <input
             type="date"
             value={endDate}
@@ -134,7 +134,7 @@ export default function FilterSection({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] gap-6">
         {/* REGION */}
         <div>
-          <Label className="text-white mb-1 block">Region</Label>
+          <Label className="text-white mb-1 block text-lg">Region</Label>
 
           <Select
             onValueChange={(value) => {
@@ -172,7 +172,7 @@ export default function FilterSection({
 
         {/* BRANCH */}
         <div>
-          <Label className="text-white mb-1 block">Branch</Label>
+          <Label className="text-white mb-1 block text-lg">Branch</Label>
 
           <Select
             onValueChange={(value) => {

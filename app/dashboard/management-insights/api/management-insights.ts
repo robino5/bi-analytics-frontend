@@ -132,15 +132,15 @@ class ManagementInsights extends Common {
 
   getBranchPerformanceProcess() {
     return this.http.get<IResponse<BranchPerformanceRunLog>>(
-      "dashboards/branch-performance-process/",
+      "dashboards/branch-performance-process/?procedure_name=BIAnalytics_Region_Wise_Management_data_AsonDate",
     );
   }
 
-  async processBranchPerformanceWithDates(
+  async processRegionWiseManagement(
     startDate?: string,
     endDate?: string,
   ): Promise<IResponse<any>> {
-    const apiPath = `dashboards/sp/branch-performance/`;
+    const apiPath = `dashboards/sp/region-wise-management/`;
     const requestURL = `${config.apiURL}/${apiPath}`;
 
     const token = authService.getToken?.();

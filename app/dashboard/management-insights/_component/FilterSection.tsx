@@ -28,7 +28,7 @@ interface FilterSectionProps {
   setBranch: (value: string) => void;
   setStartDate: (value: string) => void;
   setEndDate: (value: string) => void;
-  processBranchPerformance: () => void;
+  processRegionWiseManagement: () => void;
   isPending: boolean;
 }
 
@@ -44,7 +44,7 @@ export default function FilterSection({
   setBranchName,
   setStartDate,
   setEndDate,
-  processBranchPerformance,
+  processRegionWiseManagement,
   isPending,
 }: FilterSectionProps) {
   const { data: session } = useSession();
@@ -62,7 +62,7 @@ export default function FilterSection({
   /* PROCESS MUTATION */
 
   const handleProcess = () => {
-    processBranchPerformance();
+    processRegionWiseManagement();
   };
 
   const handleClear = () => {
@@ -74,12 +74,67 @@ export default function FilterSection({
   return (
     <div className="space-y-6">
       {/* DATE SECTION */}
-     
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] gap-6">
+        {/* FROM DATE */}
+        <div>
+          <Label className="text-white mb-1 block text-lg">From Date</Label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="w-full h-10 px-3 rounded-lg
+            bg-gradient-to-br from-[#0c5d68] to-[#0c5d68] text-white border border-teal-800"
+          />
+        </div>
+
+        {/* TO DATE */}
+        <div>
+          <Label className="text-white mb-1 block text-lg">To Date</Label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="w-full h-10 px-3 rounded-lg
+            bg-gradient-to-br from-[#0c5d68] to-[#0c5d68] text-white border border-teal-800"
+          />
+        </div>
+
+        {/* PROCESS BUTTON */}
+        {!isClusterManager && (
+          <div className="flex items-end">
+            <button
+              onClick={handleProcess}
+              disabled={!startDate || !endDate || isPending}
+              className="h-10 px-5 flex items-center justify-center gap-2 rounded-lg
+    bg-emerald-500
+    text-white text-sm font-semibold
+    shadow-md shadow-emerald-900/30
+    hover:from-emerald-600 hover:to-teal-700
+    hover:shadow-lg hover:shadow-emerald-900/40
+    active:scale-[0.97]
+    disabled:opacity-40 disabled:cursor-not-allowed
+    transition-all duration-200"
+            >
+              {isPending ? (
+                <>
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                  Processing...
+                </>
+              ) : (
+                <>Process</>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <hr />
+
       {/* REGION + BRANCH SECTION */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] gap-6">
         {/* REGION */}
         <div>
-          <Label className="text-white mb-1 block">Region</Label>
+          <Label className="text-white mb-1 block text-lg">Region</Label>
 
           <Select
             onValueChange={(value) => {
@@ -117,7 +172,7 @@ export default function FilterSection({
 
         {/* BRANCH */}
         <div>
-          <Label className="text-white mb-1 block">Branch</Label>
+          <Label className="text-white mb-1 block text-lg">Branch</Label>
 
           <Select
             onValueChange={(value) => {
