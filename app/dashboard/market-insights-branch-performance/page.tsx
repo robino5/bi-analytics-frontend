@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import PageHeader from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { regionalBusinessPerformanceAPI } from "./api/market-insights-branch-performance";
@@ -9,6 +9,7 @@ import FilterSection from "./_component/FilterSection";
 import MarketStatistics from "./_component/MarketStatistics";
 import BusinessPerformance from "./_component/BusinessPerformance";
 import { format, parseISO } from "date-fns";
+import { toast } from "@/components/ui/use-toast";
 
 export default function RegionalBusinessPerformancePage() {
   const [region, setRegion] = useState("");
@@ -16,6 +17,17 @@ export default function RegionalBusinessPerformancePage() {
   const [branchName, setBranchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [exchangeWiseMarketStatistics, setExchangeWiseMarketStatistics] =
+    useState<any>(null);
+  const [branchWiseMarketStatistics, setBranchWiseMarketStatistics] =
+    useState<any>(null);
+  const [
+    branchWiseRegionalBusinessPerformance,
+    setBranchWiseRegionalBusinessPerformance,
+  ] = useState<any>(null);
+  const [branchPerformanceProcess, setBranchPerformanceProcess] =
+    useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     data: regionsBranch,
@@ -24,6 +36,9 @@ export default function RegionalBusinessPerformancePage() {
   } = useQuery({
     queryKey: ["regionsBranch"],
     queryFn: () => regionalBusinessPerformanceAPI.getRegionsBranch(),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   // Unique regions
@@ -44,53 +59,124 @@ export default function RegionalBusinessPerformancePage() {
       : [];
   }, [region, regionsBranch]);
 
-  const { data: exchangeWiseMarketStatistics,refetch: refetchExchangeWiseMarketStatistics } = useQuery({
-    queryKey: ["exchangeWiseMarketStatistics"],
-    queryFn: () =>
-      regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
-  });
+  // const { data: exchangeWiseMarketStatistics,refetch: refetchExchangeWiseMarketStatistics } = useQuery({
+  //   queryKey: ["exchangeWiseMarketStatistics"],
+  //   queryFn: () =>
+  //     regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
+  // });
 
-  const { data: branchWiseMarketStatistics,refetch: refetchBranchWiseMarketStatistics } = useQuery({
-    queryKey: ["branchWiseMarketStatistics", branch, region],
-    queryFn: () =>
-      regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(
-        branch,
-        region,
-      ),
-  });
+  // const { data: branchWiseMarketStatistics,refetch: refetchBranchWiseMarketStatistics } = useQuery({
+  //   queryKey: ["branchWiseMarketStatistics", branch, region],
+  //   queryFn: () =>
+  //     regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(
+  //       branch,
+  //       region,
+  //     ),
+  // });
 
-  const { data: branchWiseRegionalBusinessPerformance,refetch: refetchBranchWiseRegionalBusinessPerformance } = useQuery({
-    queryKey: ["branchWiseRegionalBusinessPerformance", branch, region],
-    queryFn: () =>
-      regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(
-        branch,
-        region,
-      ),
-  });
+  // const { data: branchWiseRegionalBusinessPerformance,refetch: refetchBranchWiseRegionalBusinessPerformance } = useQuery({
+  //   queryKey: ["branchWiseRegionalBusinessPerformance", branch, region],
+  //   queryFn: () =>
+  //     regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(
+  //       branch,
+  //       region,
+  //     ),
+  // });
 
-  const { data: branchPerformanceProcess,refetch: refetchBranchPerformanceProcess } = useQuery({
-    queryKey: ["branchPerformanceProcess"],
-    queryFn: () => regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
-  });
+  // const { data: branchPerformanceProcess,refetch: refetchBranchPerformanceProcess } = useQuery({
+  //   queryKey: ["branchPerformanceProcess"],
+  //   queryFn: () => regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
+  // });
 
-    const { mutate: processBranchPerformance, isPending } = useMutation({
+  const { mutate: processBranchPerformance, isPending } = useMutation({
     mutationFn: () =>
       regionalBusinessPerformanceAPI.processBranchPerformanceWithDates(
         startDate,
-        endDate
+        endDate,
       ),
 
-    onSuccess: async() => {
-      await refetchBranchWiseRegionalBusinessPerformance();
-      await refetchBranchWiseMarketStatistics();
-      await refetchExchangeWiseMarketStatistics();
-      await refetchBranchPerformanceProcess();
+    onSuccess: async () => {
+      const fetchMarketStatistics = async () => {
+        try {
+          setLoading(true);
+
+          const [
+            exchangeWiseData,
+            branchWiseMarketData,
+            regionalPerformanceData,
+            performanceProcessData,
+          ] = await Promise.all([
+            regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
+            regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(
+              branch,
+              region,
+            ),
+            regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(
+              branch,
+              region,
+            ),
+            regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
+          ]);
+
+          setExchangeWiseMarketStatistics(exchangeWiseData);
+          setBranchWiseMarketStatistics(branchWiseMarketData);
+          setBranchWiseRegionalBusinessPerformance(regionalPerformanceData);
+          setBranchPerformanceProcess(performanceProcessData);
+        } catch (error) {
+          console.error("Error fetching market statistics:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchMarketStatistics();
+         toast({
+          description: "Processing Completed Successfully.",
+           className: "bg-green-400 text-green-900 text-lg p-4",
+        });
     },
 
     onError: (error) => {
       console.error("Process branch performance failed", error);
     },
   });
+
+  useEffect(() => {
+    const fetchMarketStatistics = async () => {
+      try {
+        setLoading(true);
+
+        const [
+          exchangeWiseData,
+          branchWiseMarketData,
+          regionalPerformanceData,
+          performanceProcessData,
+        ] = await Promise.all([
+          regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
+          regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(
+            branch,
+            region,
+          ),
+          regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(
+            branch,
+            region,
+          ),
+          regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
+        ]);
+
+        setExchangeWiseMarketStatistics(exchangeWiseData);
+        setBranchWiseMarketStatistics(branchWiseMarketData);
+        setBranchWiseRegionalBusinessPerformance(regionalPerformanceData);
+        setBranchPerformanceProcess(performanceProcessData);
+      } catch (error) {
+        console.error("Error fetching market statistics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMarketStatistics();
+  }, [branch, region]);
 
   return (
     <div className="p-6">
@@ -113,8 +199,6 @@ export default function RegionalBusinessPerformancePage() {
         }`}
       />
 
-      <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
-        <CardContent className="p-6">
           <FilterSection
             region={region}
             branch={branch}
@@ -130,8 +214,7 @@ export default function RegionalBusinessPerformancePage() {
             startDate={startDate}
             endDate={endDate}
           />
-        </CardContent>
-      </Card>
+    
 
       {exchangeWiseMarketStatistics && branchWiseMarketStatistics && (
         <MarketStatistics
