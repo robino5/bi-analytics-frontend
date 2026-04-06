@@ -17,34 +17,16 @@ class MarketInsightsBranchPerformance extends Common {
 
     getExchangeWiseMarketStatistics(exchange?: string) {
         let url = `dashboards/exchange-wise-market-statistics/`;
-        if (exchange) {
-            url += `&region_name=${exchange}`;
-        }
         return this.http.get<IResponse<any>>(url)
     }
 
-   getBranchWiseMarketStatistics(branch?: string, region?: string) {
+   getBranchWiseMarketStatistics() {
     let url = `dashboards/branch-wise-market-statistics/`;
-
-    if (region) {
-        url += `?region_name=${region}`;
-    }
-    if (branch) {
-        url += `&branch_code=${branch}`;
-    }
-
     return this.http.get<IResponse<any>>(url);
 }
 
-   getBranchWiseRegionalBusinessPerformance(branch?: string, region?: string) {
+   getBranchWiseRegionalBusinessPerformance() {
     let url = `dashboards/branch-wise-regional-business-performance/`;
-
-    if (region) {
-        url += `?region_name=${region}`;
-    }
-    if (branch) {
-        url += `&branch_code=${branch}`;
-    }
 
     return this.http.get<IResponse<any>>(url);
 }

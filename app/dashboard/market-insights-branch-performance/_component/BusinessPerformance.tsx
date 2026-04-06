@@ -9,6 +9,16 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
   region: string;
 }) => {
   console.log("Business Performance Data:", businessPerformance);
+  const businessArray: any[] = Array.isArray(businessPerformance)
+    ? businessPerformance
+    : businessPerformance?.detail || businessPerformance?.rows || [];
+
+  const filteredBusinessPerformance = (businessArray || []).filter((item: any) => {
+    if (region && String(item.regionName).trim() !== String(region).trim()) return false;
+    // only apply branch filter when a region is selected
+    if (region && branch && String(item.branchCode) !== String(branch)) return false;
+    return true;
+  });
   return (
     <Card className="border border-gray-300 bg-[#0e5e6f] ">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
@@ -131,8 +141,7 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
             </tr>
           </thead>
           <tbody>
-            {businessPerformance?.map(
-              (item: any, index: number) => {
+            {filteredBusinessPerformance?.map((item: any, index: number) => {
                 const isEven = index % 2 === 0;
 
                 return (

@@ -107,14 +107,8 @@ export default function RegionalBusinessPerformancePage() {
             performanceProcessData,
           ] = await Promise.all([
             regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
-            regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(
-              branch,
-              region,
-            ),
-            regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(
-              branch,
-              region,
-            ),
+            regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(),
+            regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(),
             regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
           ]);
 
@@ -153,14 +147,8 @@ export default function RegionalBusinessPerformancePage() {
           performanceProcessData,
         ] = await Promise.all([
           regionalBusinessPerformanceAPI.getExchangeWiseMarketStatistics(),
-          regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(
-            branch,
-            region,
-          ),
-          regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(
-            branch,
-            region,
-          ),
+          regionalBusinessPerformanceAPI.getBranchWiseMarketStatistics(),
+          regionalBusinessPerformanceAPI.getBranchWiseRegionalBusinessPerformance(),
           regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
         ]);
 
@@ -222,6 +210,7 @@ export default function RegionalBusinessPerformancePage() {
           branchWiseMarketStatistics={branchWiseMarketStatistics?.data}
           SelectedRegion={region}
           SelectedBranch={branchName}
+          selectedBracheCode={branch}
         />
       )}
       <br></br>
