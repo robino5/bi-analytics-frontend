@@ -73,47 +73,44 @@ class BranchPerformanceAPI extends Common {
     }
   }
   getRMWiseAuctionMarket(branch: string, year?: number) {
+    if (branch && year) {
+      return this.http.get<IResponse<RMAuctionInfo[]>>(
+        `dashboards/rm-wise-auction-market/?branch=${branch}&year=${year}`,
+      );
+    }
     if (branch) {
       return this.http.get<IResponse<RMAuctionInfo[]>>(
         `dashboards/rm-wise-auction-market/?branch=${branch}`,
       );
     }
-    if (year && !branch) {
+    if (year) {
       return this.http.get<IResponse<RMAuctionInfo[]>>(
         `dashboards/rm-wise-auction-market/?year=${year}`,
       );
     }
-    if (year && branch) {
-      return this.http.get<IResponse<RMAuctionInfo[]>>(
-        `dashboards/rm-wise-auction-market/?branch=${branch}&year=${year}`,
-      );
-    } else {
-      return this.http.get<IResponse<RMAuctionInfo[]>>(
-        "dashboards/rm-wise-auction-market/",
-      );
-    }
+    return this.http.get<IResponse<RMAuctionInfo[]>>(
+      "dashboards/rm-wise-auction-market/",
+    );
   }
   getRMWiseOffMarket(branch: string, year?: number) {
+    if (branch && year) {
+      return this.http.get<IResponse<RMOffMarketInfo[]>>(
+        `dashboards/rm-wise-off-market/?branch=${branch}&year=${year}`,
+      );
+    }
     if (branch) {
       return this.http.get<IResponse<RMOffMarketInfo[]>>(
         `dashboards/rm-wise-off-market/?branch=${branch}`,
       );
     }
-    if (year && !branch) {
+    if (year) {
       return this.http.get<IResponse<RMOffMarketInfo[]>>(
         `dashboards/rm-wise-off-market/?year=${year}`,
       );
     }
-
-    if (year && branch) {
-      return this.http.get<IResponse<RMOffMarketInfo[]>>(
-        `dashboards/rm-wise-off-market/?branch=${branch}&year=${year}`,
-      );
-    } else {
-      return this.http.get<IResponse<RMOffMarketInfo[]>>(
-        "dashboards/rm-wise-off-market/",
-      );
-    }
+    return this.http.get<IResponse<RMOffMarketInfo[]>>(
+      "dashboards/rm-wise-off-market/",
+    );
   }
 }
 

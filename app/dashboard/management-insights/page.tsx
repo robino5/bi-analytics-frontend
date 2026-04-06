@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ManagementInsightsAPI } from "./api/management-insights";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
 import FilterSection from "./_component/FilterSection";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,56 +24,35 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-
-/* Return current fiscal quarter range like "Oct-2025 to Dec-2025" */
-const getFiscalQuarterRange = (): string => {
-  const now = new Date();
-  const month = now.getMonth();
-  const year = now.getFullYear();
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  let start = 0;
-  let end = 2;
-  let startYear = year;
-  let endYear = year;
-
-  if (month >= 9) {
-    // Oct - Dec
-    start = 9;
-    end = 11;
-  } else if (month <= 2) {
-    // Jan - Mar
-    start = 0;
-    end = 2;
-  } else if (month <= 5) {
-    // Apr - Jun
-    start = 3;
-    end = 5;
-  } else {
-    // Jul - Sep
-    start = 6;
-    end = 8;
-  }
-
-  return `${monthNames[start]}-${startYear} to ${monthNames[end]}-${endYear}`;
-};
+import { format, parseISO } from "date-fns";
+import { toast } from "@/components/ui/use-toast";
 
 export default function RegionalBusinessPerformancePage() {
   const [region, setRegion] = useState("");
   const [branch, setBranch] = useState("");
+  const [branchName, setBranchName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [branchClientInfo, setBranchClientInfo] = useState<any>(null);
+  const [branchEmployeeInfo, setBranchEmployeeInfo] = useState<any>(null);
+  const [branchEcrmInfo, setBranchEcrmInfo] = useState<any>(null);
+  const [branchEkycInfo, setBranchEkycInfo] = useState<any>(null);
+  const [branchChannelWiseTradeInfo, setBranchChannelWiseTradeInfo] =
+    useState<any>(null);
+  const [
+    branchDepositWithdrawDetailsInfo,
+    setBranchDepositWithdrawDetailsInfo,
+  ] = useState<any>(null);
+  const [
+    branchPartyTurnoverCommissionInfo,
+    setBranchPartyTurnoverCommissionInfo,
+  ] = useState<any>(null);
+  const [branchExposureInfo, setBranchExposureInfo] = useState<any>(null);
+  const [branchOfficeSpaceInfo, setBranchOfficeSpaceInfo] = useState<any>(null);
+  const [branchPerformanceProcess, setBranchPerformanceProcess] =
+    useState<any>(null);
+
+  const [loading, setLoading] = useState(false);
 
   const {
     data: regionsBranch,
@@ -82,6 +61,9 @@ export default function RegionalBusinessPerformancePage() {
   } = useQuery({
     queryKey: ["regionsBranch"],
     queryFn: () => ManagementInsightsAPI.getRegionsBranch(),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   // Unique regions
@@ -102,73 +84,272 @@ export default function RegionalBusinessPerformancePage() {
       : [];
   }, [region, regionsBranch]);
 
-  const { data: branchClientInfo, isPending: branchClientInfoPending } =
-    useQuery({
-      queryKey: ["branchClientInfo", branch, region],
-      queryFn: () =>
-        ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(
-          branch,
-          region,
-        ),
-    });
-  const { data: branchEmployeeInfo, isPending: branchEmployeeInfoPending } =
-    useQuery({
-      queryKey: ["branchEmployeeInfo", branch, region],
-      queryFn: () =>
-        ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
-    });
+  // const {
+  //   data: branchClientInfo,
+  //   isPending: branchClientInfoPending,
+  //   refetch: refetchBranchClientInfo,
+  // } = useQuery({
+  //   queryKey: ["branchClientInfo", branch, region],
+  //   queryFn: () =>
+  //     ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(
+  //       branch,
+  //       region,
+  //     ),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+  // const {
+  //   data: branchEmployeeInfo,
+  //   isPending: branchEmployeeInfoPending,
+  //   refetch: refetchBranchEmployeeInfo,
+  // } = useQuery({
+  //   queryKey: ["branchEmployeeInfo", branch, region],
+  //   queryFn: () =>
+  //     ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
 
-  const { data: branchEcrmInfo, isPending: branchEcrmInfoPending } = useQuery({
-    queryKey: ["branchEcrmInfo", branch, region],
-    queryFn: () => ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
+  // const {
+  //   data: branchEcrmInfo,
+  //   isPending: branchEcrmInfoPending,
+  //   refetch: refetchBranchEcrmInfo,
+  // } = useQuery({
+  //   queryKey: ["branchEcrmInfo", branch, region],
+  //   queryFn: () => ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchEkycInfo,
+  //   isPending: branchEkycInfoPending,
+  //   refetch: refetchBranchEkycInfo,
+  // } = useQuery({
+  //   queryKey: ["branchEkycInfo", branch, region],
+  //   queryFn: () => ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchChannelWiseTradeInfo,
+  //   isPending: branchChannelWiseTradeInfoPending,
+  //   refetch: refetchBranchChannelWiseTradeInfo,
+  // } = useQuery({
+  //   queryKey: ["branchChannelWiseTradeInfo", branch, region],
+  //   queryFn: () =>
+  //     ManagementInsightsAPI.getRegionalChannelWiseTrade(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchDepositWithdrawDetailsInfo,
+  //   isPending: branchDepositWithdrawDetailsInfoPending,
+  //   refetch: refetchBranchDepositWithdrawDetailsInfo,
+  // } = useQuery({
+  //   queryKey: ["branchDepositWithdrawDetailsInfo", branch, region],
+  //   queryFn: () =>
+  //     ManagementInsightsAPI.getRegionalDepositWithdrawDetails(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchPartyTurnoverCommissionInfo,
+  //   isPending: branchPartyTurnoverCommissionInfoPending,
+  //   refetch: refetchBranchPartyTurnoverCommissionInfo,
+  // } = useQuery({
+  //   queryKey: ["branchPartyTurnoverCommissionInfo", branch, region],
+  //   queryFn: () =>
+  //     ManagementInsightsAPI.getRegionalPartyTurnoverCommission(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchExposureInfo,
+  //   isPending: branchExposureInfoPending,
+  //   refetch: refetchBranchExposureInfo,
+  // } = useQuery({
+  //   queryKey: ["branchExposureInfo", branch, region],
+  //   queryFn: () =>
+  //     ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchOfficeSpaceInfo,
+  //   isPending: branchOfficeSpaceInfoPending,
+  //   refetch: refetchBranchOfficeSpaceInfo,
+  // } = useQuery({
+  //   queryKey: ["branchOfficeSpaceInfo", branch, region],
+  //   queryFn: () => ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  // const {
+  //   data: branchPerformanceProcess,
+  //   refetch: refetchBranchPerformanceProcess,
+  // } = useQuery({
+  //   queryKey: ["branchPerformanceProcess"],
+  //   queryFn: () => ManagementInsightsAPI.getBranchPerformanceProcess(),
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  //   refetchOnReconnect: false,
+  // });
+
+  const { mutate: processRegionWiseManagement, isPending } = useMutation({
+    mutationFn: () =>
+      ManagementInsightsAPI.processRegionWiseManagement(startDate, endDate),
+
+    onSuccess: async () => {
+      // await refetchBranchClientInfo();
+      // await refetchBranchEmployeeInfo();
+      // await refetchBranchEcrmInfo();
+      // await refetchBranchEkycInfo();
+      // await refetchBranchChannelWiseTradeInfo();
+      // await refetchBranchDepositWithdrawDetailsInfo();
+      // await refetchBranchExposureInfo();
+      // await refetchBranchPartyTurnoverCommissionInfo();
+      // await refetchBranchOfficeSpaceInfo();
+      // await refetchBranchPerformanceProcess();
+      const fetchAllData = async () => {
+        try {
+          setLoading(true);
+
+          const [
+            clientInfo,
+            employeeInfo,
+            ecrmInfo,
+            ekycInfo,
+            tradeInfo,
+            depositWithdrawInfo,
+            partyTurnoverInfo,
+            exposureInfo,
+            officeSpaceInfo,
+            performanceProcess,
+          ] = await Promise.all([
+            ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(
+              branch,
+              region,
+            ),
+            ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
+            ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
+            ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
+            ManagementInsightsAPI.getRegionalChannelWiseTrade(branch, region),
+            ManagementInsightsAPI.getRegionalDepositWithdrawDetails(
+              branch,
+              region,
+            ),
+            ManagementInsightsAPI.getRegionalPartyTurnoverCommission(
+              branch,
+              region,
+            ),
+            ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
+            ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
+            ManagementInsightsAPI.getBranchPerformanceProcess(),
+          ]);
+
+          setBranchClientInfo(clientInfo);
+          setBranchEmployeeInfo(employeeInfo);
+          setBranchEcrmInfo(ecrmInfo);
+          setBranchEkycInfo(ekycInfo);
+          setBranchChannelWiseTradeInfo(tradeInfo);
+          setBranchDepositWithdrawDetailsInfo(depositWithdrawInfo);
+          setBranchPartyTurnoverCommissionInfo(partyTurnoverInfo);
+          setBranchExposureInfo(exposureInfo);
+          setBranchOfficeSpaceInfo(officeSpaceInfo);
+          setBranchPerformanceProcess(performanceProcess);
+        } catch (error) {
+          console.error("Error fetching dashboard data", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAllData();
+
+      toast({
+        description: "Processing Completed Successfully.",
+        className: "bg-green-400 text-green-900",
+      });
+    },
+
+    onError: (error) => {
+      console.error("Process branch performance failed", error);
+    },
   });
 
-  const { data: branchEkycInfo, isPending: branchEkycInfoPending } = useQuery({
-    queryKey: ["branchEkycInfo", branch, region],
-    queryFn: () => ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
-  });
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
 
-  const {
-    data: branchChannelWiseTradeInfo,
-    isPending: branchChannelWiseTradeInfoPending,
-  } = useQuery({
-    queryKey: ["branchChannelWiseTradeInfo", branch, region],
-    queryFn: () =>
-      ManagementInsightsAPI.getRegionalChannelWiseTrade(branch, region),
-  });
+        const [
+          clientInfo,
+          employeeInfo,
+          ecrmInfo,
+          ekycInfo,
+          tradeInfo,
+          depositWithdrawInfo,
+          partyTurnoverInfo,
+          exposureInfo,
+          officeSpaceInfo,
+          performanceProcess,
+        ] = await Promise.all([
+          ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(
+            branch,
+            region,
+          ),
+          ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
+          ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
+          ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
+          ManagementInsightsAPI.getRegionalChannelWiseTrade(branch, region),
+          ManagementInsightsAPI.getRegionalDepositWithdrawDetails(
+            branch,
+            region,
+          ),
+          ManagementInsightsAPI.getRegionalPartyTurnoverCommission(
+            branch,
+            region,
+          ),
+          ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
+          ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
+          ManagementInsightsAPI.getBranchPerformanceProcess(),
+        ]);
 
-  const {
-    data: branchDepositWithdrawDetailsInfo,
-    isPending: branchDepositWithdrawDetailsInfoPending,
-  } = useQuery({
-    queryKey: ["branchDepositWithdrawDetailsInfo", branch, region],
-    queryFn: () =>
-      ManagementInsightsAPI.getRegionalDepositWithdrawDetails(branch, region),
-  });
+        setBranchClientInfo(clientInfo);
+        setBranchEmployeeInfo(employeeInfo);
+        setBranchEcrmInfo(ecrmInfo);
+        setBranchEkycInfo(ekycInfo);
+        setBranchChannelWiseTradeInfo(tradeInfo);
+        setBranchDepositWithdrawDetailsInfo(depositWithdrawInfo);
+        setBranchPartyTurnoverCommissionInfo(partyTurnoverInfo);
+        setBranchExposureInfo(exposureInfo);
+        setBranchOfficeSpaceInfo(officeSpaceInfo);
+        setBranchPerformanceProcess(performanceProcess);
+      } catch (error) {
+        console.error("Error fetching dashboard data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const {
-    data: branchPartyTurnoverCommissionInfo,
-    isPending: branchPartyTurnoverCommissionInfoPending,
-  } = useQuery({
-    queryKey: ["branchPartyTurnoverCommissionInfo", branch, region],
-    queryFn: () =>
-      ManagementInsightsAPI.getRegionalPartyTurnoverCommission(branch, region),
-  });
-
-  const { data: branchExposureInfo, isPending: branchExposureInfoPending } =
-    useQuery({
-      queryKey: ["branchExposureInfo", branch, region],
-      queryFn: () =>
-        ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
-    });
-
-  const {
-    data: branchOfficeSpaceInfo,
-    isPending: branchOfficeSpaceInfoPending,
-  } = useQuery({
-    queryKey: ["branchOfficeSpaceInfo", branch, region],
-    queryFn: () => ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
-  });
+    fetchAllData();
+  }, [branch, region]);
 
   const data = Array.isArray(branchOfficeSpaceInfo?.data)
     ? branchOfficeSpaceInfo.data
@@ -180,50 +361,42 @@ export default function RegionalBusinessPerformancePage() {
   );
   const [officeSpaceOpen, setOfficeSpaceOpen] = useState(false);
 
-  const getBusinessDate = () => {
-    const date = new Date();
-    const day = date.getDay();
-    // 0 = Sunday, 5 = Friday, 6 = Saturday
-
-    if (day === 0) {
-      // Sunday → go back to Thursday
-      date.setDate(date.getDate() - 3);
-    } else if (day === 5) {
-      // Friday → go back to Thursday
-      date.setDate(date.getDate() - 1);
-    } else if (day === 6) {
-      // Saturday → go back to Thursday
-      date.setDate(date.getDate() - 2);
-    } else {
-      // Normal day → yesterday
-      date.setDate(date.getDate() - 1);
-    }
-
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   return (
     <div className="p-6">
       <PageHeader
-        name="Management Insights"
-        period={`As on Date: ${getBusinessDate()}`}
+        name="Regional Business Performance"
+        period={`From: ${
+          branchPerformanceProcess?.data?.dateFrom
+            ? format(
+                parseISO(branchPerformanceProcess.data.dateFrom),
+                "dd-MMM-yyyy",
+              )
+            : ""
+        } to ${
+          branchPerformanceProcess?.data?.dateTo
+            ? format(
+                parseISO(branchPerformanceProcess.data.dateTo),
+                "dd-MMM-yyyy",
+              )
+            : ""
+        }`}
       />
-      <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
-        <CardContent className="p-6">
-          <FilterSection
-            region={region}
-            branch={branch}
-            regionList={regionList}
-            branchList={branchList}
-            setRegion={setRegion}
-            setBranch={setBranch}
-          />
-        </CardContent>
-      </Card>
+
+      <FilterSection
+        region={region}
+        branch={branch}
+        regionList={regionList}
+        branchList={branchList}
+        setRegion={setRegion}
+        setBranch={setBranch}
+        setBranchName={setBranchName}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        processRegionWiseManagement={processRegionWiseManagement}
+        isPending={isPending}
+        startDate={startDate}
+        endDate={endDate}
+      />
 
       <div className="bg-yellow-400 rounded-sm mb-2 mt-3 flex items-stretch border border-black">
         {/* Left side */}
@@ -291,25 +464,25 @@ export default function RegionalBusinessPerformancePage() {
 
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {/* Col 4 */}
-          {branchChannelWiseTradeInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3 overflow-hidden"
-              title={"Channel Wise Clients & Trades"}
-              children={
-                <ClientTradesDataTable
-                  records={branchChannelWiseTradeInfo.data}
-                />
-              }
-            />
-          )}
-          
-          {branchEcrmInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3 overflow-hidden"
-              title={"eCRM"}
-              children={<EcrmInfo eCRM={branchEcrmInfo.data} />}
-            />
-          )}
+        {branchChannelWiseTradeInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3 overflow-hidden"
+            title={"Channel Wise Clients & Trades"}
+            children={
+              <ClientTradesDataTable
+                records={branchChannelWiseTradeInfo.data}
+              />
+            }
+          />
+        )}
+
+        {branchEcrmInfo && (
+          <CardBoard
+            className="col-span-6 xl:col-span-3 overflow-hidden"
+            title={"eCRM"}
+            children={<EcrmInfo eCRM={branchEcrmInfo.data} />}
+          />
+        )}
         <div className="rounded-md col-span-3 xl:col-span-3">
           {branchEmployeeInfo && (
             <CardBoard

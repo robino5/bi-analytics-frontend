@@ -8,10 +8,7 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import {
-  GrBraille,
-  GrBarChart
-} from "react-icons/gr";
+import { GrBraille, GrBarChart } from "react-icons/gr";
 import { BiBarChartAlt2 } from "react-icons/bi";
 import { CgUserList, CgPerformance } from "react-icons/cg";
 import { FaGear, FaStore } from "react-icons/fa6";
@@ -50,7 +47,7 @@ const CustomHeaderGroup = ({
     <div
       onClick={onClick}
       className={cn(
-        "flex items-center justify-between w-full px-1 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 shadow-sm mb-1 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition"
+        "flex items-center justify-between w-full px-1 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-blue-100 shadow-sm mb-1 cursor-pointer hover:from-blue-100 hover:to-blue-200 transition",
       )}
     >
       {/* Left: icon + name */}
@@ -65,7 +62,7 @@ const CustomHeaderGroup = ({
       <IoChevronForward
         className={cn(
           "text-blue-600 text-lg transition-transform duration-300",
-          { "rotate-90": isOpen }
+          { "rotate-90": isOpen },
         )}
       />
     </div>
@@ -119,7 +116,7 @@ const menuList = [
     codeName: "financial_info",
     viewName: "Financial Info",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
-    roles: ["ADMIN","MANAGEMENT"],
+    roles: ["ADMIN", "MANAGEMENT"],
     subMenus: [
       {
         id: 1,
@@ -127,8 +124,8 @@ const menuList = [
         viewName: "Customer Fund Flow",
         urlPath: "/dashboard/customer_fund_flow",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN","MANAGEMENT"],
-      }
+        roles: ["ADMIN", "MANAGEMENT"],
+      },
     ],
   },
   {
@@ -136,15 +133,15 @@ const menuList = [
     codeName: "regional_operations_analytics",
     viewName: "Regional Analytics",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
-    roles: ["ADMIN","MANAGEMENT","CLUSTER_MANAGER"],
+    roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
     subMenus: [
-         {
+      {
         id: 1,
         codeName: "management-insights",
         viewName: " Management Insights",
         urlPath: "/dashboard/management-insights",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN","MANAGEMENT","CLUSTER_MANAGER"],
+        roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
       },
       {
         id: 2,
@@ -152,8 +149,8 @@ const menuList = [
         viewName: " Market Insights & Branch Performance",
         urlPath: "/dashboard/market-insights-branch-performance",
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN","MANAGEMENT","CLUSTER_MANAGER"],
-      }
+        roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
+      },
     ],
   },
   {
@@ -316,7 +313,8 @@ export default function DashboardMenus() {
   const { push } = useRouter();
   const pathName = usePathname();
   const { data: session } = useSession();
-  const [openMenus, setOpenMenus] = useState<string[]>([]);
+  //const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   if (!session) {
     redirect(DEFAULT_LOGIN_REDIRECT);
@@ -328,7 +326,7 @@ export default function DashboardMenus() {
   let menus = menuList.filter(
     (item) =>
       item.roles.includes(userRole) ||
-      item.subMenus?.some((s) => s.roles.includes(userRole))
+      item.subMenus?.some((s) => s.roles.includes(userRole)),
   );
 
   menus = menus.map((menu) => {
@@ -357,45 +355,38 @@ export default function DashboardMenus() {
     return menu;
   });
 
-
-
-
   // ✅ Automatically open menu if current path matches any submenu URL
+  /* ⭐ Auto open when refresh */
   React.useEffect(() => {
-    const matchedMenu = menus.find((menu) =>
-      menu.subMenus?.some((sub) => sub.urlPath === pathName)
+    const matched = menus.find((m) =>
+      m.subMenus?.some((s) => s.urlPath === pathName),
     );
-    if (matchedMenu && !openMenus.includes(matchedMenu.codeName)) {
-      setOpenMenus((prev) => [...prev, matchedMenu.codeName]);
+    if (matched) {
+      setOpenMenu(matched.codeName);
     }
-  }, [pathName, menus, openMenus]);
+  }, [pathName]);
 
+  /* ⭐ Header toggle (manual open allowed) */
   const toggleMenu = (codeName: string) => {
-    setOpenMenus((prev) =>
-      prev.includes(codeName)
-        ? prev.filter((c) => c !== codeName)
-        : [...prev, codeName]
-    );
+    setOpenMenu((prev) => (prev === codeName ? null : codeName));
   };
 
-  const visitUrl = (url: string) => {
+  /* ⭐ IMPORTANT: submenu click closes previous */
+  const onSubmenuClick = (url: string, parentCode: string) => {
+    setOpenMenu(parentCode); // close others
     push(url);
   };
 
   return (
-    <aside
-      className={cn(
-        "min-h-[850px] w-68 shadow-lg rounded-r-xl border-r border-gray-200 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100"
-      )}
-    >
+    <aside className="min-h-[750px] w-68 shadow-lg rounded-r-xl border-r overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
       <Command>
-        <CommandList className="min-h-[850px] px-1 py-1">
+        <CommandList className="min-h-[750px] px-1 py-1">
           {menus.map((menu) => {
-            const isOpen = openMenus.includes(menu.codeName);
+            const isOpen = openMenu === menu.codeName;
+
             return (
               <div key={menu.codeName} className="mb-2">
                 <CommandGroup
-                  value={menu.codeName}
                   heading={
                     <CustomHeaderGroup
                       icon={menu.icon}
@@ -407,46 +398,30 @@ export default function DashboardMenus() {
                 >
                   <div
                     className={cn(
-                      "overflow-hidden transition-all duration-300 ease-in-out",
-                      isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                      "overflow-hidden transition-all duration-300",
+                      isOpen ? "max-h-[600px]" : "max-h-0",
                     )}
                   >
-                    {menu.subMenus.map((subMenu) => (
+                    {menu.subMenus.map((sub) => (
                       <CommandItem
-                        onSelect={() => visitUrl(subMenu.urlPath)}
-                        key={subMenu.id}
-                        value={subMenu.urlPath}
+                        key={sub.id}
+                        onSelect={() =>
+                          onSubmenuClick(sub.urlPath, menu.codeName)
+                        }
                         className={cn(
-                          "ml-2 flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:bg-blue-200 hover:scale-[1.02] group",
+                          "ml-3 flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-200 transition",
                           {
-                            "bg-gradient-to-r from-blue-500 to-indigo-500 shadow-md":
-                              subMenu.urlPath === pathName,
-                          }
+                            "bg-blue-500 text-white": sub.urlPath === pathName,
+                          },
                         )}
                       >
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={cn("transition-colors duration-200", {
-                              "text-white": subMenu.urlPath === pathName,
-                            })}
-                          >
-                            {subMenu.icon}
-                          </span>
-                          <span
-                            className={cn(
-                              "text-sm font-medium transition-colors duration-200",
-                              {
-                                "text-white": subMenu.urlPath === pathName,
-                              }
-                            )}
-                          >
-                            {subMenu.viewName}
-                          </span>
-                        </div>
+                        {sub.icon}
+                        {sub.viewName}
                       </CommandItem>
                     ))}
                   </div>
                 </CommandGroup>
+
                 <CommandSeparator className="my-2" />
               </div>
             );

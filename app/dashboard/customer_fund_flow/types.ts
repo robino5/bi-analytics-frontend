@@ -9,6 +9,8 @@ export interface DepositData {
     payOrder: number;
     cashDividend: number;
     ipoMode: number;
+    transferDeposit: number;
+    onlineReceive: number;
   };
   rows: BranchDeposit[];
 };
@@ -23,6 +25,8 @@ export interface BranchDeposit {
   payOrder: number;
   cashDividend: number;
   ipoMode: number;
+  transferDeposit: number;
+  onlineReceive: number;
 }
 
 

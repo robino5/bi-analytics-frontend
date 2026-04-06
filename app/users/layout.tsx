@@ -26,7 +26,7 @@ export default function DashboardLayout({
       <div className="flex-grow h-full transition-all duration-300">
         {children}
       </div>
-      <Toaster/>
+      <Toaster />
     </section>
   );
 }
