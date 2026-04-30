@@ -1,9 +1,50 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { numberToMillionsString } from "@/lib/utils";
 
-export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdraw: any }) {
+type DepositWithdrawInfoProps = {
+  depositWithdraw: any;
+  region: string;
+  branch: string;
+};
+
+export default function DepositWithdrawInfo({ depositWithdraw, region, branch }: DepositWithdrawInfoProps) {
+  const isArray = Array.isArray(depositWithdraw);
+
+  const get = (obj: any, path: string) => {
+    return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+  };
+
+  const filteredList = (() => {
+    if (!isArray) return Array.isArray(depositWithdraw?.data) ? depositWithdraw.data : [];
+    return depositWithdraw.filter((item: any) => {
+      if (region && region !== '' && region !== 'All') {
+        if (String(item.regionName).trim() !== String(region).trim()) return false;
+      }
+      if (region && branch && branch !== '' && branch !== 'All') {
+        if (String(item.branchCode || item.branch_code || item.branch).trim() !== String(branch).trim()) return false;
+      }
+      return true;
+    });
+  })();
+
+  const sumField = (arr: any[], path: string) => {
+    return arr.reduce((s, it) => {
+      const v = get(it, path);
+      const n = typeof v === 'number' ? v : Number(v || 0);
+      return s + (isNaN(n) ? 0 : n);
+    }, 0);
+  };
+
+  const totals = {
+    totalPortfolio: isArray || Array.isArray(depositWithdraw?.data) ? sumField(filteredList, 'totalPortfolio') : depositWithdraw?.totalPortfolio || 0,
+    cashAvailable: isArray || Array.isArray(depositWithdraw?.data) ? sumField(filteredList, 'cashAvailable') : depositWithdraw?.cashAvailable || 0,
+    marginNegative: isArray || Array.isArray(depositWithdraw?.data) ? sumField(filteredList, 'marginNegative') : depositWithdraw?.marginNegative || 0,
+    totalDeposit: isArray || Array.isArray(depositWithdraw?.data) ? sumField(filteredList, 'totalDeposit') : depositWithdraw?.totalDeposit || 0,
+    totalWithdrawal: isArray || Array.isArray(depositWithdraw?.data) ? sumField(filteredList, 'totalWithdrawal') : depositWithdraw?.totalWithdrawal || 0,
+  };
+
   return (
-    
+
         <table className="w-full border-collapse rounded-lg overflow-hidden">
 
           {/* Main Table Header */}
@@ -25,9 +66,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
                 Portfolio Size (as on Date)
               </td>
               <td className="text-center py-2 border border-teal-700">
-                {numberToMillionsString(
-                  depositWithdraw?.totalPortfolio|| 0
-                )}
+                {numberToMillionsString(totals.totalPortfolio || 0)}
               </td>
             </tr>
             <tr className="bg-yellow-50">
@@ -35,9 +74,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
                 Cash Balance (as on Date)
               </td>
               <td className="text-center py-2 border border-teal-700">
-                {numberToMillionsString(
-                  depositWithdraw?.cashAvailable || 0
-                )}
+                {numberToMillionsString(totals.cashAvailable || 0)}
               </td>
             </tr>
             <tr className="bg-yellow-100">
@@ -45,9 +82,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
                 Margin Loan (as on Date)
               </td>
               <td className="text-center py-2 border border-teal-700">
-                {numberToMillionsString(
-                  depositWithdraw?.marginNegative|| 0
-                )}
+                {numberToMillionsString(totals.marginNegative || 0)}
               </td>
             </tr>
             <tr className="bg-yellow-50">
@@ -56,9 +91,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
                 Total Deposit
               </td>
               <td className="text-center py-2 border border-teal-700">
-                {numberToMillionsString(
-                  depositWithdraw?.totalDeposit || 0
-                )}
+                {numberToMillionsString(totals.totalDeposit || 0)}
               </td>
             </tr>
             <tr className="bg-yellow-100">
@@ -67,9 +100,7 @@ export default function DepositWithdrawInfo({ depositWithdraw }: { depositWithdr
                 Total Withdraw
               </td>
               <td className="text-center py-2 border border-teal-700">
-                {numberToMillionsString(
-                  depositWithdraw?.totalWithdrawal || 0
-                )}
+                {numberToMillionsString(totals.totalWithdrawal || 0)}
               </td>
             </tr>
           </tbody>

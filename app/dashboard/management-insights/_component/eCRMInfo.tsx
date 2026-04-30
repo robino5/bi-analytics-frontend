@@ -1,7 +1,48 @@
 
 import { UserCheck, UserPlus, UserX, Sparkles, Users, User } from "lucide-react";
 
-export default function EcrmInfo({ eCRM }: { eCRM: any }) {
+type ECRMInfoProps = {
+    eCRM: any;
+    region: string;
+    branch: string;
+};
+
+export default function EcrmInfo({ eCRM, region, branch }: ECRMInfoProps) {
+    const isArray = Array.isArray(eCRM);
+
+    const get = (obj: any, path: string) => {
+        return path.split(".").reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+    };
+
+    const filteredList = (() => {
+        if (!isArray) return Array.isArray(eCRM?.data) ? eCRM.data : [];
+        return eCRM.filter((item: any) => {
+            if (region && region !== "" && region !== "All") {
+                if (String(item.regionName).trim() !== String(region).trim()) return false;
+            }
+            // only apply branch filter when a region is selected (consistent with other components)
+            if (region && branch && branch !== "" && branch !== "All") {
+                if (String(item.branchCode || item.branch_code || item.branch).trim() !== String(branch).trim()) return false;
+            }
+            return true;
+        });
+    })();
+
+    const sumField = (arr: any[], path: string) => {
+        return arr.reduce((s, it) => {
+            const v = get(it, path);
+            const n = typeof v === 'number' ? v : Number(v || 0);
+            return s + (isNaN(n) ? 0 : n);
+        }, 0);
+    };
+
+    const totals = {
+        totalInProgress: isArray || Array.isArray(eCRM?.data) ? sumField(filteredList, 'totalInProgress') : eCRM?.totalInProgress || 0,
+        totalSuccess: isArray || Array.isArray(eCRM?.data) ? sumField(filteredList, 'totalSuccess') : eCRM?.totalSuccess || 0,
+        totalDiscard: isArray || Array.isArray(eCRM?.data) ? sumField(filteredList, 'totalDiscard') : eCRM?.totalDiscard || 0,
+        totalVisits: isArray || Array.isArray(eCRM?.data) ? sumField(filteredList, 'totalVisits') : eCRM?.totalVisits || 0,
+        detailExistingClientVisit: isArray || Array.isArray(eCRM?.data) ? sumField(filteredList, 'detail.totalExistingClientVisit') : eCRM?.detail?.totalExistingClientVisit || 0,
+    };
     return (
         <div className="w-full overflow-hidden">
             <div >
@@ -25,7 +66,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <UserPlus size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-green-800">  {eCRM?.totalInProgress || 0}</h4>
+                                <h4 className="text-lg font-bold text-green-800">  {totals.totalInProgress || 0}</h4>
                                 <p className="text-gray-600">In Process</p>
                             </div>
                         </div>
@@ -38,7 +79,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <UserCheck size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-yellow-800">{eCRM?.totalSuccess || 0}</h4>
+                                <h4 className="text-lg font-bold text-yellow-800">{totals.totalSuccess || 0}</h4>
                                 <p className="text-gray-600">Success</p>
                             </div>
                         </div>
@@ -51,7 +92,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <UserX size={20} />
                             </div>
                             <div className="col-span-8">
-                                <h4 className="text-lg font-bold text-red-800"> {eCRM?.totalDiscard || 0}</h4>
+                                <h4 className="text-lg font-bold text-red-800"> {totals.totalDiscard || 0}</h4>
                                 <p className="text-gray-600">Discard</p>
                             </div>
                         </div>
@@ -65,7 +106,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <User size={20} />
                             </div>
                             <div className="col-span-4">
-                                <h4 className="text-lg font-bold text-purple-800">{eCRM?.detail?.totalExistingClientVisit || 0}</h4>
+                                <h4 className="text-lg font-bold text-purple-800">{totals.detailExistingClientVisit || 0}</h4>
                                 <p className="text-gray-600">Existing Client Visits</p>
                             </div>
                         </div>
@@ -76,7 +117,7 @@ export default function EcrmInfo({ eCRM }: { eCRM: any }) {
                                 <Users size={20} />
                             </div>
                             <div className="col-span-4">
-                                <h4 className="text-lg font-bold text-teal-800">{eCRM?.totalVisits || 0}</h4>
+                                <h4 className="text-lg font-bold text-teal-800">{totals.totalVisits || 0}</h4>
                                 <p className="text-gray-600">Total Visits</p>
                             </div>
                         </div>
