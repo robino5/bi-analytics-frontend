@@ -3,16 +3,48 @@
 import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
+type EmployeeInfoProps = {
+  employeeData: any;
+  region: string;
+  branch: string;
+};
+
 export default function EmployeePieChart({
   employeeData,
-}: {
-  employeeData: any;
-}) {
+  region,
+  branch
+}: EmployeeInfoProps) {
   const chartRef = useRef<HTMLDivElement>(null);
+  const isArray = Array.isArray(employeeData);
 
-  const permanent = employeeData?.permanentTrader || 0;
-  const withSalary = employeeData?.contractualWithSalary || 0;
-  const withoutSalary = employeeData?.contractualWithoutSalary || 0;
+  const get = (obj: any, path: string) => {
+    return path.split(".").reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+  };
+
+  const filteredList = (() => {
+    if (!isArray) return Array.isArray(employeeData?.data) ? employeeData.data : [];
+    return employeeData.filter((item: any) => {
+      if (region && region !== "" && region !== "All") {
+        if (String(item.regionName).trim() !== String(region).trim()) return false;
+      }
+      if (region && branch && branch !== "" && branch !== "All") {
+        if (String(item.branchCode || item.branch_code || item.branch).trim() !== String(branch).trim()) return false;
+      }
+      return true;
+    });
+  })();
+
+  const sumField = (arr: any[], path: string) => {
+    return arr.reduce((s, it) => {
+      const v = get(it, path);
+      const n = typeof v === 'number' ? v : Number(v || 0);
+      return s + (isNaN(n) ? 0 : n);
+    }, 0);
+  };
+
+  const permanent = isArray || Array.isArray(employeeData?.data) ? sumField(filteredList, 'permanentTrader') : employeeData?.permanentTrader || 0;
+  const withSalary = isArray || Array.isArray(employeeData?.data) ? sumField(filteredList, 'contractualWithSalary') : employeeData?.contractualWithSalary || 0;
+  const withoutSalary = isArray || Array.isArray(employeeData?.data) ? sumField(filteredList, 'contractualWithoutSalary') : employeeData?.contractualWithoutSalary || 0;
   useEffect(() => {
     if (!chartRef.current) return;
 
@@ -68,7 +100,7 @@ export default function EmployeePieChart({
     return () => {
       chart.dispose();
     };
-  }, [permanent, withSalary, withoutSalary]);
+  }, [permanent, withSalary, withoutSalary, region, branch]);
 
   return (
     <div className="w-full max-w-md mx-auto bg-transparent overflow-hidden">

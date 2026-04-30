@@ -24,8 +24,8 @@ import { Download } from "lucide-react";
 
 interface BarData {
   name: string;
-  primaryValue: number;
-  secondaryValue: number;
+  DSETurnover: number;
+  LBSLTurnover: number;
 }
 
 interface BarOption {
@@ -47,8 +47,8 @@ const findRatio = (value: number, totalAmount: number, precision: number = 2) =>
 const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdown }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
-  const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
-  const totalSecondary = data.reduce((acc, obj) => acc + obj.secondaryValue, 0);
+  const totalDSE = data.reduce((acc, obj) => acc + obj.DSETurnover, 0);
+  const totalLBSL = data.reduce((acc, obj) => acc + obj.LBSLTurnover, 0);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -65,7 +65,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           trigger: "item",
           formatter: (params: any) => {
             const { name, value, seriesName } = params;
-            const total = seriesName === option.legendNames?.[0] ? totalPrimary : totalSecondary;
+            const total = seriesName === option.legendNames?.[0] ? totalDSE : totalLBSL;
             const ratio = findRatio(value, total, 2);
             return `${name} (${seriesName}): ${numberToMillionsString(value)} (${ratio}%)`;
           },
@@ -99,7 +99,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           axisLabel: {
             color: "#fff",
             fontSize: 12,
-            formatter: (value: number) => `${findRatio(value, totalPrimary + totalSecondary, 0)}%`,
+            formatter: (value: number) => `${findRatio(value, totalDSE + totalLBSL, 0)}%`,
           },
         },
         yAxis: {
@@ -123,7 +123,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
             name: option.legendNames?.[0] || "DSE",
             type: "bar",
             data: data.map((item) => ({
-              value: item.primaryValue,
+              value: item.DSETurnover,
             })),
             itemStyle: { color: option.barcolors?.[0] || "#c200fb" },
             barWidth: 10,
@@ -133,7 +133,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
               color: "#fff",
               fontSize: 12,
               formatter: ({ value }: { value: number }) => {
-                const percent = findRatio(value, totalPrimary, 2);
+                const percent = findRatio(value, totalDSE, 2);
                 return `${numberToMillionsString(value)} (${percent}%)`;
               },
             },
@@ -142,7 +142,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
             name: option.legendNames?.[1] || "LBSL",
             type: "bar",
             data: data.map((item) => ({
-              value: item.secondaryValue,
+              value: item.LBSLTurnover,
             })),
             itemStyle: { color: option.barcolors?.[1] || "#ff7a56" },
             barWidth: 10,
@@ -152,7 +152,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
               color: "#fff",
               fontSize: 12,
               formatter: ({ value }: { value: number }) => {
-                const percent = findRatio(value, totalSecondary, 2);
+                const percent = findRatio(value, totalLBSL, 2);
                 return `${numberToMillionsString(value)} (${percent}%)`;
               },
             },
@@ -182,12 +182,12 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
   const calculatedHeight = Math.max(data.length * 32, 300);
   return <div ref={chartRef} style={{ height: calculatedHeight, width: "100%" }} />;
 };
-const downloadCSV = (data: BarData[], totalPrimary: number, totalSecondary: number) => {
+const downloadCSV = (data: BarData[], totalDSE: number, totalLBSL: number) => {
   const csvContent = ["Name,DSE Value,DSE %,LBSL Value,LBSL %"];
-  data.forEach((item: { primaryValue: number; secondaryValue: number; name: any; }) => {
-    const primaryPercent = findRatio(item.primaryValue, totalPrimary);
-    const secondaryPercent = findRatio(item.secondaryValue, totalSecondary);
-    csvContent.push(`${item.name},${item.primaryValue},${primaryPercent}%,${item.secondaryValue},${secondaryPercent}%`);
+  data.forEach((item: { DSETurnover: number; LBSLTurnover: number; name: any; }) => {
+    const dsePercent = findRatio(item.DSETurnover, totalDSE);
+    const lbslPercent = findRatio(item.LBSLTurnover, totalLBSL);
+    csvContent.push(`${item.name},${item.DSETurnover},${dsePercent}%,${item.LBSLTurnover},${lbslPercent}%`);
   });
   const blob = new Blob([csvContent.join("\n")], { type: "text/csv" });
   const link = document.createElement("a");
@@ -210,9 +210,9 @@ const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ d
   const handleDownload = (format: "png" | "svg" | "csv") => {
     const chart = chartInstanceRef.current;
     if (format === "csv") {
-      const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
-      const totalSecondary = data.reduce((acc, obj) => acc + obj.secondaryValue, 0);
-      downloadCSV(data, totalPrimary, totalSecondary);
+      const totalDSE = data.reduce((acc, obj) => acc + obj.DSETurnover, 0);
+      const totalLBSL = data.reduce((acc, obj) => acc + obj.LBSLTurnover, 0);
+      downloadCSV(data, totalDSE, totalLBSL);
     } else if (chart) {
       const dataURL = chart.getDataURL({
         type: format,

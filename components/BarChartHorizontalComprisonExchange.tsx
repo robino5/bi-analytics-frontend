@@ -22,9 +22,9 @@ import { Download } from "lucide-react";
 
 interface BarData {
   name: string;
-  primaryValue: number;
-  secondaryValue: number;
-  secondaryPercent: number;
+  DSETurnover: number;
+  LBSLTurnover: number;
+  LBSLPercent: number;
 }
 
 interface BarOption {
@@ -47,8 +47,8 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.EChartsType | null>(null);
 
-  const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
-  const totalSecondary = data.reduce((acc, obj) => acc + obj.secondaryValue, 0);
+  const totalDSE = data.reduce((acc, obj) => acc + obj.DSETurnover, 0);
+  const totalLBSL = data.reduce((acc, obj) => acc + obj.LBSLTurnover, 0);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -61,10 +61,10 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           trigger: "item",
           formatter: (params: any) => {
             const { name, value, seriesName } = params;
-            const total = seriesName === option.legendNames?.[0] ? totalPrimary : totalSecondary;
+            const total = seriesName === option.legendNames?.[0] ? totalDSE : totalLBSL;
             const ratio = findRatio(value, total, 2);
             if (seriesName === (option.legendNames?.[1] || "LBSL")) {
-              return `${name} (${seriesName}): ${numberToMillionsString(value)} (${params.data.secondaryPercent}%)`;
+              return `${name} (${seriesName}): ${numberToMillionsString(value)} (${params.data.lbslPercent}%)`;
             }
             return `${name} (${seriesName}): ${numberToMillionsString(value)} (${ratio}%)`;
           },
@@ -80,7 +80,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           type: "value",
           axisLabel: {
             color: "#fff",
-            formatter: (value: number) => `${findRatio(value, totalPrimary + totalSecondary, 0)}%`,
+            formatter: (value: number) => `${findRatio(value, totalDSE + totalLBSL, 0)}%`,
           },
         },
         yAxis: {
@@ -96,28 +96,28 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
           {
             name: option.legendNames?.[0] || "DSE",
             type: "bar",
-            data: data.map((item) => ({ value: item.primaryValue })),
+            data: data.map((item) => ({ value: item.DSETurnover })),
             itemStyle: { color: option.barcolors?.[0] || "#c200fb" },
             label: {
               show: true,
               position: "right",
               color: "#fff",
-              formatter: ({ value }: { value: number }) => `${numberToMillionsString(value)} (${findRatio(value, totalPrimary, 2)}%)`,
+              formatter: ({ value }: { value: number }) => `${numberToMillionsString(value)} (${findRatio(value, totalDSE, 2)}%)`,
             },
           },
           {
             name: option.legendNames?.[1] || "LBSL",
             type: "bar",
             data: data.map((item) => ({
-              value: item.secondaryValue,
-              secondaryPercent: item.secondaryPercent,
+              value: item.LBSLTurnover,
+              lbslPercent: item.LBSLPercent,
             })),
             itemStyle: { color: option.barcolors?.[1] || "#ff7a56" },
             label: {
               show: true,
               position: "right",
               color: "#fff",
-              formatter: ({ value, data }: { value: number; data: any }) => `${numberToMillionsString(value)} (${data.secondaryPercent}%)`,
+              formatter: ({ value, data }: { value: number; data: any }) => `${numberToMillionsString(value)} (${data.lbslPercent}%)`,
             },
           },
         ],
@@ -153,11 +153,12 @@ const BarChartHorizontalComparisonExchange: FC<{ data: BarData[]; options: BarOp
   };
 
   const downloadCSV = () => {
-    const totalPrimary = data.reduce((acc, obj) => acc + obj.primaryValue, 0);
+    const totalDSE = data.reduce((acc, obj) => acc + obj.DSETurnover, 0);
+    const totalLBSL = data.reduce((acc, obj) => acc + obj.LBSLTurnover, 0);
     const csvHeader = "Company,DSE Value,DSE %,LBSL Value,LBSL %\n";
     const csvRows = data.map(
       (item) =>
-        `${item.name},${item.primaryValue},${findRatio(item.primaryValue, totalPrimary)}%,${item.secondaryValue},${item.secondaryPercent}%`
+        `${item.name},${item.DSETurnover},${findRatio(item.DSETurnover, totalDSE)}%,${item.LBSLTurnover},${item.LBSLPercent}%`
     );
     const csvContent = csvHeader + csvRows.join("\n");
 

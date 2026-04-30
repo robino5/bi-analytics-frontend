@@ -90,9 +90,9 @@ export type SectorWiseTurnover = {
 export type ExchnageSectorWiseTurnover = {
     date: string; 
     name:string;
-    primaryValue: number;
-    secondaryValue:number;
-    secondaryPercent:number;
+    DSETurnover: number;
+    LBSLTurnover:number;
+    LBSLPercent:number;
     pushDate: string;
 }
 
@@ -104,6 +104,6 @@ export type SectorWiseTurnoverBreakdown = {
 
 export type SectorWiseTurnoverComparison = { 
     name:string;
-    primaryValue: number;
-    secondaryValue: number;
+    DSETurnover: number;
+    LBSLTurnover: number;
 }

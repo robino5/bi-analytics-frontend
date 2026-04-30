@@ -3,12 +3,47 @@
 import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 
-export default function ClientInfo({ clientData }: { clientData: any }) {
+type ClientInfoProps = {
+  clientData: any;
+  region: string;
+  branch: string;
+};
+
+export default function ClientInfo({ clientData, region, branch }: ClientInfoProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
-  const total = clientData?.totalInvestor || 0;
-  const active = clientData?.performer || 0;
-  const inactive = clientData?.nonePerformer || 0;
+  const isArray = Array.isArray(clientData);
+
+  const get = (obj: any, path: string) => {
+    return path.split(".").reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
+  };
+
+  const filteredList = (() => {
+    if (!isArray) return Array.isArray(clientData?.data) ? clientData.data : [];
+    return clientData.filter((item: any) => {
+      if (region && region !== "" && region !== "All") {
+        if (String(item.regionName).trim() !== String(region).trim()) return false;
+      }
+      if (region && branch && branch !== "" && branch !== "All") {
+        if (String(item.branchCode || item.branch_code || item.branch).trim() !== String(branch).trim()) return false;
+      }
+      return true;
+    });
+  })();
+
+  const sumField = (arr: any[], path: string) => {
+    return arr.reduce((s, it) => {
+      const v = get(it, path);
+      const n = typeof v === 'number' ? v : Number(v || 0);
+      return s + (isNaN(n) ? 0 : n);
+    }, 0);
+  };
+
+  const total = isArray || Array.isArray(clientData?.data) ? sumField(filteredList, 'totalInvestor') : clientData?.totalInvestor || 0;
+  const active = isArray || Array.isArray(clientData?.data) ? sumField(filteredList, 'performer') : clientData?.performer || 0;
+  const inactive = isArray || Array.isArray(clientData?.data) ? sumField(filteredList, 'nonePerformer') : clientData?.nonePerformer || 0;
+  const ibrokerInvestor = isArray || Array.isArray(clientData?.data) ? sumField(filteredList, 'ibrokerInvestor') : clientData?.ibrokerInvestor || 0;
+  const tExpressInvestor = isArray || Array.isArray(clientData?.data) ? sumField(filteredList, 'texpressInvestor') : clientData?.texpressInvestor || 0;
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -50,7 +85,7 @@ export default function ClientInfo({ clientData }: { clientData: any }) {
     });
 
     return () => chart.dispose();
-  }, [active, inactive]);
+  }, [active, inactive, region, branch]);
 
   return (
 
@@ -95,10 +130,10 @@ export default function ClientInfo({ clientData }: { clientData: any }) {
 
             <tr className="odd:bg-green-50 even:bg-green-100">
               <td className="text-center py-2 text-lg font-semibold">
-                {clientData?.ibrokerInvestor || 0}
+                {ibrokerInvestor}
               </td>
               <td className="text-center py-2 text-lg font-semibold">
-                {clientData?.texpressInvestor || 0}
+                {tExpressInvestor}
               </td>
             </tr>
           </tbody>

@@ -5,13 +5,12 @@ import { ManagementInsightsAPI } from "./api/management-insights";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import PageHeader from "@/components/PageHeader";
 import FilterSection from "./_component/FilterSection";
-import { Card, CardContent } from "@/components/ui/card";
+
 import EmployeeInfo from "./_component/EmployeeInfo";
 import ClientInfo from "./_component/ClientInfo";
 import EcrmInfo from "./_component/eCRMInfo";
 import EkycInfo from "./_component/eKYCInfo";
 import CardBoard from "@/components/CardBoard";
-import LoadingButton from "@/components/loading";
 import ClientTradesDataTable from "./_component/clientTradesDataTable";
 import ThirdPartyInfo from "./_component/thirdPartyInfo";
 import DepositWithdrawInfo from "./_component/depositWithdraw";
@@ -22,7 +21,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { format, parseISO } from "date-fns";
 import { toast } from "@/components/ui/use-toast";
@@ -242,23 +240,14 @@ export default function RegionalBusinessPerformancePage() {
             officeSpaceInfo,
             performanceProcess,
           ] = await Promise.all([
-            ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(
-              branch,
-              region,
-            ),
-            ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
-            ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
-            ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
+            ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(),
+            ManagementInsightsAPI.getRegionalEmployeeStructure(),
+            ManagementInsightsAPI.getRegionalEcrmDetails(),
+            ManagementInsightsAPI.getRegionalEkycDetails(),
             ManagementInsightsAPI.getRegionalChannelWiseTrade(branch, region),
-            ManagementInsightsAPI.getRegionalDepositWithdrawDetails(
-              branch,
-              region,
-            ),
-            ManagementInsightsAPI.getRegionalPartyTurnoverCommission(
-              branch,
-              region,
-            ),
-            ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
+            ManagementInsightsAPI.getRegionalDepositWithdrawDetails(),
+            ManagementInsightsAPI.getRegionalPartyTurnoverCommission(),
+            ManagementInsightsAPI.getRegionalExposureDetails(),
             ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
             ManagementInsightsAPI.getBranchPerformanceProcess(),
           ]);
@@ -310,23 +299,14 @@ export default function RegionalBusinessPerformancePage() {
           officeSpaceInfo,
           performanceProcess,
         ] = await Promise.all([
-          ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(
-            branch,
-            region,
-          ),
-          ManagementInsightsAPI.getRegionalEmployeeStructure(branch, region),
-          ManagementInsightsAPI.getRegionalEcrmDetails(branch, region),
-          ManagementInsightsAPI.getRegionalEkycDetails(branch, region),
+          ManagementInsightsAPI.getRegionalClientPerformanceNonPerformance(),
+          ManagementInsightsAPI.getRegionalEmployeeStructure(),
+          ManagementInsightsAPI.getRegionalEcrmDetails(),
+          ManagementInsightsAPI.getRegionalEkycDetails(),
           ManagementInsightsAPI.getRegionalChannelWiseTrade(branch, region),
-          ManagementInsightsAPI.getRegionalDepositWithdrawDetails(
-            branch,
-            region,
-          ),
-          ManagementInsightsAPI.getRegionalPartyTurnoverCommission(
-            branch,
-            region,
-          ),
-          ManagementInsightsAPI.getRegionalExposureDetails(branch, region),
+          ManagementInsightsAPI.getRegionalDepositWithdrawDetails(),
+          ManagementInsightsAPI.getRegionalPartyTurnoverCommission(),
+          ManagementInsightsAPI.getRegionalExposureDetails(),
           ManagementInsightsAPI.getRegionalOfficeSpace(branch, region),
           ManagementInsightsAPI.getBranchPerformanceProcess(),
         ]);
@@ -480,7 +460,7 @@ export default function RegionalBusinessPerformancePage() {
           <CardBoard
             className="col-span-6 xl:col-span-3 overflow-hidden"
             title={"eCRM"}
-            children={<EcrmInfo eCRM={branchEcrmInfo.data} />}
+            children={<EcrmInfo eCRM={branchEcrmInfo.data} region={region} branch={branch} />}
           />
         )}
         <div className="rounded-md col-span-3 xl:col-span-3">
@@ -488,7 +468,7 @@ export default function RegionalBusinessPerformancePage() {
             <CardBoard
               className="col-span-6 xl:col-span-3 overflow-hidden"
               title={`Employee Structure-${branchEmployeeInfo.data?.permanentTrader + branchEmployeeInfo.data?.contractualWithSalary + branchEmployeeInfo.data?.contractualWithoutSalary} As on Date`}
-              children={<EmployeeInfo employeeData={branchEmployeeInfo.data} />}
+              children={<EmployeeInfo employeeData={branchEmployeeInfo.data} region={region} branch={branch} />}
             />
           )}
         </div>
@@ -497,7 +477,7 @@ export default function RegionalBusinessPerformancePage() {
             <CardBoard
               className="col-span-6 xl:col-span-3"
               title={"Client Overview As on Date"}
-              children={<ClientInfo clientData={branchClientInfo.data} />}
+              children={<ClientInfo clientData={branchClientInfo.data} region={region} branch={branch} />}
             />
           )}
         </div>
@@ -506,9 +486,7 @@ export default function RegionalBusinessPerformancePage() {
             className="col-span-6 xl:col-span-3"
             title={"Busi. Aggregator Details Information"}
             children={
-              <ThirdPartyInfo
-                thirdPartyInfo={branchPartyTurnoverCommissionInfo.data}
-              />
+              <ThirdPartyInfo thirdPartyInfo={branchPartyTurnoverCommissionInfo.data} region={region} branch={branch} />
             }
           />
         )}
@@ -517,7 +495,7 @@ export default function RegionalBusinessPerformancePage() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"eKYC"}
-            children={<EkycInfo eKYC={branchEkycInfo.data} />}
+            children={<EkycInfo eKYC={branchEkycInfo.data} region={region} branch={branch} />}
           />
         )}
 
@@ -527,7 +505,7 @@ export default function RegionalBusinessPerformancePage() {
             title={"Deposit & Withdraw Details"}
             children={
               <DepositWithdrawInfo
-                depositWithdraw={branchDepositWithdrawDetailsInfo.data}
+                depositWithdraw={branchDepositWithdrawDetailsInfo.data} region={region} branch={branch}
               />
             }
           />
@@ -536,7 +514,7 @@ export default function RegionalBusinessPerformancePage() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Exposure Information as on Date"}
-            children={<ExposureInfo exposureInfo={branchExposureInfo.data} />}
+            children={<ExposureInfo exposureInfo={branchExposureInfo.data} region={region} branch={branch} />}
           />
         )}
       </div>
