@@ -230,11 +230,19 @@ const RegionWiseClientChart: React.FC<Props> = ({ data }) => {
     };
   }, [data]);
 
+  const totalClient = data
+    ? data
+        .filter((item) => item.channel?.trim() === "TOTAL (DT+INTERNET)")
+        .reduce((sum, item) => sum + (item.totalClients || 0), 0)
+    : 0;
+
   return (
     <>
       <Card className="drop-shadow-md bg-[#033e4a] h-full flex flex-col justify-between cursor-pointer">
         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-          <CardTitle className="text-white text-md text-lg">Region Wise Client Participation</CardTitle>
+          <CardTitle className="text-white text-md text-lg">
+            Region Wise Client Participation - {totalClient.toLocaleString()}
+          </CardTitle>
         </CardHeader>
         <CardContent className="mt-2 flex-grow flex items-center justify-center">
           <div ref={chartRef} style={{ width: "100%", height: "300px" }} />

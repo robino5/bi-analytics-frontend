@@ -42,7 +42,7 @@ const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
     const chart = echarts.init(chartRef.current!);
 
     const dataForChart = data.map((item, index) => {
-       const regionName = item.region_Name || "Unknown";
+      const regionName = item.region_Name || "Unknown";
       return {
         value: item.lbslMarketAll,
         name: regionName,
@@ -120,10 +120,14 @@ const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
     };
   }, [data]);
 
+  const totalMarketShare = data ? data.reduce((acc, item) => acc + (item.lbslMarketAll || 0), 0) : 0;
+
   return (
     <Card className="drop-shadow-md bg-[#033e4a] h-full flex flex-col justify-between">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">Region Wise LBSL Market Share (DSE+CSE) (%)</CardTitle>
+        <CardTitle className="text-white text-md text-lg">
+          Region Wise LBSL Market Share (DSE+CSE) - {totalMarketShare.toFixed(2)}%
+        </CardTitle>
       </CardHeader>
       <CardContent className="mt-2 flex-grow flex items-center justify-center">
         <div ref={chartRef} style={{ width: "100%", height: "300px" }} />

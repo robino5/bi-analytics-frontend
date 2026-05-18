@@ -122,12 +122,14 @@ const RegionWiseMarketNetIncome: React.FC<Props> = ({ data }) => {
     };
   }, [data]);
 
-  const totalNetIncome = data.reduce((acc, item) => acc + (item.netIncome || 0), 0);
+  const totalNetIncome = data ? data.reduce((acc, item) => acc + (item.netIncome || 0), 0) : 0;
 
   return (
     <Card className="drop-shadow-md bg-[#033e4a] h-full flex flex-col justify-between">
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-        <CardTitle className="text-white text-md text-lg">Region Wise Market Net Income</CardTitle>
+        <CardTitle className="text-white text-md text-lg">
+          Region Wise Market Net Income - {numberToMillionsString(totalNetIncome, 2)}
+        </CardTitle>
       </CardHeader>
       <CardContent className="mt-2 flex-grow flex items-center justify-center min-h-[300px]">
         {totalNetIncome === 0 ? (
