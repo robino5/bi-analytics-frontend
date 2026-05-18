@@ -2,7 +2,7 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { IActiveTradingToday, IActiveTradeDayWise, IMonthWiseData,DatewiseTurnover,BranchData,SectorWiseTurnover,SectorWiseTurnoverBreakdown, SectorWiseTurnoverComparison, ExchnageSectorWiseTurnover, SectorWiseTurnoverTop20 } from "../types";
+import { IActiveTradingToday, IActiveTradeDayWise, IMonthWiseData,DatewiseTurnover,BranchData,SectorWiseTurnover,SectorWiseTurnoverBreakdown, SectorWiseTurnoverComparison, ExchnageSectorWiseTurnover, SectorWiseTurnoverTop20, TradingRecord, ChannelTradingRecord } from "../types";
 import { IResponse } from "@/types/utils";
 
 
@@ -45,6 +45,12 @@ class ActiveTradingCodeAPI extends Common {
     }
     getSectorWiseTurnoverComparison(url: string) {
         return this.http.get<IResponse<SectorWiseTurnoverComparison[]>>(url);
+    }
+      getRegionWiseMarketShare(){
+        return this.http.get<IResponse<TradingRecord[]>>("dashboards/admin-region-wise-details-market-share-lbsl/")
+    }
+    getRegionWiseOMSSummary(){
+        return this.http.get<IResponse<ChannelTradingRecord[]>>("dashboards/admin-region-wise-oms-summary/")
     }
 
 }

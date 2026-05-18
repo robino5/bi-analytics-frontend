@@ -107,3 +107,32 @@ export type SectorWiseTurnoverComparison = {
     DSETurnover: number;
     LBSLTurnover: number;
 }
+
+export type TradingRecord = {
+  tradingDate: string;          
+  llbslBuyOfDse: null | number; 
+  lbslSaleOfDse: number;        
+  lbslTotalOfDse: number;       
+  dseMarketTurnover: number;    
+  lbslShareOfDse: number;       
+  lbslBuyOfCse: number;         
+  lbslSaleOfCse: number;        
+  lbslTotalOfCse: number;       
+  cseMarketTurnover: number;    
+  lbslShareOfCse: number;       
+  lbslTotalTurnover: number;   
+  exchTotalMarket: number;    
+  lbslMarketAll: number;       
+  foreign: null | any;         
+  netIncome: number;            
+}
+
+export type ChannelTradingRecord ={
+  tradingDate: string;     
+  channel: string;         
+  totalClients: number;    
+  trades: number;          
+  totalTurnover: number;   
+  region_Name: string;     
+  pushDate: string;        
+}

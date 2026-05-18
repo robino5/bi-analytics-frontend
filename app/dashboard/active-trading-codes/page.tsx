@@ -73,9 +73,15 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getBranchwiseDtTurnover()
   });
 
+    const { data: regionWiseMarketShare, isLoading: regionWiseMarketShareLoading, isError: regionWiseMarketShareError } = useQuery({
+    queryKey: ["regionWiseMarketShare"],
+    queryFn: () => activeTradingCodeAPI.getRegionWiseMarketShare()
+  });
 
-
-
+    const { data: regionWiseOMSSummary, isLoading: regionWiseOMSSummaryLoading, isError: regionWiseOMSSummaryError } = useQuery({
+    queryKey: ["regionWiseOMSSummary"],
+    queryFn: () => activeTradingCodeAPI.getRegionWiseOMSSummary()
+  });
 
   const biaxialChartOption = {
     dataKey: "tradingDate",
@@ -90,9 +96,9 @@ const ActiveTradingCodesBoard = () => {
     cardColor: "bg-[#033e4a]"
   };
 
-  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading || branchwiseTurnoverLoadingDt;
+  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading || branchwiseTurnoverLoadingDt || regionWiseMarketShareLoading || regionWiseOMSSummaryLoading;
 
-  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError || branchwiseTurnoverErrorFt;
+  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError || branchwiseTurnoverErrorFt || regionWiseMarketShareError || regionWiseOMSSummaryError;
 
   if (isLoading) {
     return <LoadingButton text="Loading..." />
