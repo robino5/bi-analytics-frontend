@@ -62,6 +62,7 @@ export class HttpService {
                 method,
                 headers,
                 body,
+                signal: options?.signal,
             });
 
             if (response.ok) {

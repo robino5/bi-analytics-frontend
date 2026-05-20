@@ -19,14 +19,12 @@ import { cn } from "@/lib/utils";
 interface Props {
   records: any[];
   className?: string;
-  region?: string;
   branch?: string;
 }
 
 export default function ClientTradesDataTable({
   records,
   className,
-  region,
   branch,
 }: Props) {
   // ===========================================
@@ -44,10 +42,7 @@ export default function ClientTradesDataTable({
      STEP 1: Filter rows client-side by region and branch
   -------------------------------------------------- */
   const filteredRows = rows.filter((row: any) => {
-    if (region && region !== "" && region !== "All") {
-      if (String(row.regionName).trim() !== String(region).trim()) return false;
-    }
-    if (region && branch && branch !== "" && branch !== "All") {
+    if (branch && branch !== "" && branch !== "All") {
       if (String(row.branchCode || row.branch_code || row.branch || row.branchName).trim() !== String(branch).trim()) return false;
     }
     return true;

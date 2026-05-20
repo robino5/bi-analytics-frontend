@@ -29,6 +29,7 @@ import { FcSalesPerformance } from "react-icons/fc";
 import { ImProfile } from "react-icons/im";
 import { TbChartHistogram } from "react-icons/tb";
 import { IoChevronForward } from "react-icons/io5";
+import { SiPerforce } from "react-icons/si";
 import React from "react";
 
 // Header component with toggle arrow
@@ -133,7 +134,7 @@ const menuList = [
     codeName: "regional_operations_analytics",
     viewName: "Regional Analytics",
     icon: <MdAdminPanelSettings className="h-6 w-6" />,
-    roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
+    roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER",],
     subMenus: [
       {
         id: 1,
@@ -143,14 +144,14 @@ const menuList = [
         icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
         roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
       },
-      {
-        id: 2,
-        codeName: "market-insights-branch-performance",
-        viewName: " Market Insights & Branch Performance",
-        urlPath: "/dashboard/market-insights-branch-performance",
-        icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
-        roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
-      },
+      // {
+      //   id: 2,
+      //   codeName: "market-insights-branch-performance",
+      //   viewName: " Market Insights & Branch Performance",
+      //   urlPath: "/dashboard/market-insights-branch-performance",
+      //   icon: <AiOutlineDashboard className="h-5 w-5 text-orange-500" />,
+      //   roles: ["ADMIN", "MANAGEMENT", "CLUSTER_MANAGER"],
+      // },
     ],
   },
   {
@@ -198,6 +199,14 @@ const menuList = [
         viewName: "Branch Performance",
         urlPath: "/dashboard/branch-performance",
         icon: <FcSalesPerformance className="h-5 w-5" />,
+        roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
+      },
+      {
+        id: 5,
+        codeName: "branch_trader_performance_insights",
+        viewName: "Business and Trader Performance Insights ",
+        urlPath: "/dashboard/branch-trader-performance-insights",
+        icon: <SiPerforce  className="h-5 w-5 text-red-600" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
     ],

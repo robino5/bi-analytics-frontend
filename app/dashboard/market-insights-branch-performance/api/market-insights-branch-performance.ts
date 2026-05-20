@@ -10,29 +10,32 @@ class MarketInsightsBranchPerformance extends Common {
     constructor(private http: HttpAuthService) {
         super()
     }
-    getRegionsBranch() {
-        return this.http.get<IResponse<RegionType>>("dashboards/lov/regions/")
+    getRegionsBranch(signal?: AbortSignal) {
+        return this.http.get<IResponse<RegionType>>("dashboards/lov/regions/", { signal })
     }
 
 
-    getExchangeWiseMarketStatistics(exchange?: string) {
+    getExchangeWiseMarketStatistics(exchange?: string, signal?: AbortSignal) {
         let url = `dashboards/exchange-wise-market-statistics/`;
-        return this.http.get<IResponse<any>>(url)
+        return this.http.get<IResponse<any>>(url, { signal })
     }
 
-   getBranchWiseMarketStatistics() {
+   getBranchWiseMarketStatistics(signal?: AbortSignal) {
     let url = `dashboards/branch-wise-market-statistics/`;
-    return this.http.get<IResponse<any>>(url);
+    return this.http.get<IResponse<any>>(url, { signal });
 }
 
-   getBranchWiseRegionalBusinessPerformance() {
+   getBranchWiseRegionalBusinessPerformance(signal?: AbortSignal) {
     let url = `dashboards/branch-wise-regional-business-performance/`;
 
-    return this.http.get<IResponse<any>>(url);
+    return this.http.get<IResponse<any>>(url, { signal });
 }
 
-   getBranchPerformanceProcess() {
-        return this.http.get<IResponse<BranchPerformanceRunLog>>("dashboards/branch-performance-process/?procedure_name=BIAnalytics_Region_Wise_MarketInsight_BranchPerformance_Date_Duration")
+   getBranchPerformanceProcess(signal?: AbortSignal) {
+        return this.http.get<IResponse<BranchPerformanceRunLog>>(
+            "dashboards/branch-performance-process/?procedure_name=BIAnalytics_Region_Wise_MarketInsight_BranchPerformance_Date_Duration",
+            { signal }
+        )
     }
 
   

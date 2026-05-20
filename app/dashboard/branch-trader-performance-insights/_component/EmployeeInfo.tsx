@@ -5,13 +5,11 @@ import * as echarts from "echarts";
 
 type EmployeeInfoProps = {
   employeeData: any;
-  region: string;
   branch: string;
 };
 
 export default function EmployeePieChart({
   employeeData,
-  region,
   branch
 }: EmployeeInfoProps) {
   const chartRef = useRef<HTMLDivElement>(null);
@@ -24,10 +22,7 @@ export default function EmployeePieChart({
   const filteredList = (() => {
     const rawList = isArray ? employeeData : (Array.isArray(employeeData?.data) ? employeeData.data : []);
     return rawList.filter((item: any) => {
-      if (region && region !== "" && region !== "All") {
-        if (String(item.regionName).trim() !== String(region).trim()) return false;
-      }
-      if (region && branch && branch !== "" && branch !== "All") {
+      if (branch && branch !== "" && branch !== "All") {
         if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
       }
       return true;
@@ -100,7 +95,7 @@ export default function EmployeePieChart({
     return () => {
       chart.dispose();
     };
-  }, [permanent, withSalary, withoutSalary, region, branch]);
+  }, [permanent, withSalary, withoutSalary, branch]);
 
   return (
     <div className="w-full max-w-md mx-auto bg-transparent overflow-hidden">
