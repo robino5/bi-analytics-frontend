@@ -3,11 +3,10 @@ import { numberToMillionsString } from "@/lib/utils";
 
 type DepositWithdrawInfoProps = {
   depositWithdraw: any;
-  region: string;
   branch: string;
 };
 
-export default function DepositWithdrawInfo({ depositWithdraw, region, branch }: DepositWithdrawInfoProps) {
+export default function DepositWithdrawInfo({ depositWithdraw, branch }: DepositWithdrawInfoProps) {
   const isArray = Array.isArray(depositWithdraw);
 
   const get = (obj: any, path: string) => {
@@ -17,10 +16,7 @@ export default function DepositWithdrawInfo({ depositWithdraw, region, branch }:
   const filteredList = (() => {
     const rawList = isArray ? depositWithdraw : (Array.isArray(depositWithdraw?.data) ? depositWithdraw.data : []);
     return rawList.filter((item: any) => {
-      if (region && region !== '' && region !== 'All') {
-        if (String(item.regionName).trim() !== String(region).trim()) return false;
-      }
-      if (region && branch && branch !== '' && branch !== 'All') {
+      if (branch && branch !== '' && branch !== 'All') {
         if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
       }
       return true;

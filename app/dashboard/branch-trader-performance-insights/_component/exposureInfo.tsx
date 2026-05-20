@@ -1,9 +1,8 @@
 type exposureInfoProps = {
   exposureInfo: any;
-  region: string;
   branch: string;
 };
-export default function ExposureInfo({ exposureInfo, region, branch }: exposureInfoProps) {
+export default function ExposureInfo({ exposureInfo, branch }: exposureInfoProps) {
   const isArray = Array.isArray(exposureInfo);
 
   const get = (obj: any, path: string) => {
@@ -13,10 +12,7 @@ export default function ExposureInfo({ exposureInfo, region, branch }: exposureI
   const filteredList = (() => {
     const rawList = isArray ? exposureInfo : (Array.isArray(exposureInfo?.data) ? exposureInfo.data : []);
     return rawList.filter((item: any) => {
-      if (region && region !== '' && region !== 'All') {
-        if (String(item.regionName).trim() !== String(region).trim()) return false;
-      }
-      if (region && branch && branch !== '' && branch !== 'All') {
+      if (branch && branch !== '' && branch !== 'All') {
         if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
       }
       return true;

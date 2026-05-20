@@ -1,10 +1,9 @@
 import { UserCheck, UserPlus, UserX, Sparkles } from "lucide-react";
 type EkycInfoProps = {  
     eKYC: any;
-    region: string;
     branch: string;
 };
-export default function EkycInfo({ eKYC, region, branch }: EkycInfoProps) {
+export default function EkycInfo({ eKYC, branch }: EkycInfoProps) {
     const isArray = Array.isArray(eKYC);
 
     const get = (obj: any, path: string) => {
@@ -14,10 +13,7 @@ export default function EkycInfo({ eKYC, region, branch }: EkycInfoProps) {
     const filteredList = (() => {
         const rawList = isArray ? eKYC : (Array.isArray(eKYC?.data) ? eKYC.data : []);
         return rawList.filter((item: any) => {
-            if (region && region !== '' && region !== 'All') {
-                if (String(item.regionName).trim() !== String(region).trim()) return false;
-            }
-            if (region && branch && branch !== '' && branch !== 'All') {
+            if (branch && branch !== '' && branch !== 'All') {
                 if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
             }
             return true;

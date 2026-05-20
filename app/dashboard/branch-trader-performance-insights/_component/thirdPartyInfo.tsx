@@ -2,11 +2,10 @@ import { numberToMillionsString } from "@/lib/utils";
 
 type thirdPartyInfoProps = {
   thirdPartyInfo: any;
-  region: string;
   branch: string;
 };
 
-export default function ThirdPartyInfo({ thirdPartyInfo, region, branch }: thirdPartyInfoProps) {
+export default function ThirdPartyInfo({ thirdPartyInfo, branch }: thirdPartyInfoProps) {
   const isArray = Array.isArray(thirdPartyInfo);
 
   const get = (obj: any, path: string) => {
@@ -16,10 +15,7 @@ export default function ThirdPartyInfo({ thirdPartyInfo, region, branch }: third
   const filteredList = (() => {
     const rawList = isArray ? thirdPartyInfo : (Array.isArray(thirdPartyInfo?.data) ? thirdPartyInfo.data : []);
     return rawList.filter((item: any) => {
-      if (region && region !== '' && region !== 'All') {
-        if (String(item.regionName).trim() !== String(region).trim()) return false;
-      }
-      if (region && branch && branch !== '' && branch !== 'All') {
+      if (branch && branch !== '' && branch !== 'All') {
         if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
       }
       return true;

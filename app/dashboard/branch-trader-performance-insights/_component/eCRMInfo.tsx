@@ -3,11 +3,10 @@ import { UserCheck, UserPlus, UserX, Sparkles, Users, User } from "lucide-react"
 
 type ECRMInfoProps = {
     eCRM: any;
-    region: string;
     branch: string;
 };
 
-export default function EcrmInfo({ eCRM, region, branch }: ECRMInfoProps) {
+export default function EcrmInfo({ eCRM,  branch }: ECRMInfoProps) {
     const isArray = Array.isArray(eCRM);
 
     const get = (obj: any, path: string) => {
@@ -17,10 +16,7 @@ export default function EcrmInfo({ eCRM, region, branch }: ECRMInfoProps) {
     const filteredList = (() => {
         const rawList = isArray ? eCRM : (Array.isArray(eCRM?.data) ? eCRM.data : []);
         return rawList.filter((item: any) => {
-            if (region && region !== "" && region !== "All") {
-                if (String(item.regionName).trim() !== String(region).trim()) return false;
-            }
-            if (region && branch && branch !== "" && branch !== "All") {
+            if (branch && branch !== "" && branch !== "All") {
                 if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
             }
             return true;

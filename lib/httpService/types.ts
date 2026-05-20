@@ -1,5 +1,6 @@
 export type RequestOptions = {
     headers?: Record<string, string>;
+    signal?: AbortSignal;
 };
 
 export type RequestBody = string | FormData | null;

@@ -25,6 +25,9 @@ import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_co
 import { Ticker } from "@/components/ticker";
 import { DseLiveTrade } from "@/components/dse-live-trade";
 import NoDataFound from "./_components/_no_data_found";
+import RegionWiseClientChart from "./_components/_regin_wise_client_chart";
+import RegionWiseMarketShareChart from "./_components/_region_wise_market_share_chart";
+import RegionWiseMarketNetIncome from "./_components/_region_wise_market_net_income";
 
 const ActiveTradingCodesBoard = () => {
 
@@ -194,6 +197,36 @@ const ActiveTradingCodesBoard = () => {
       <NoDataFound title="Trades (Today)" />
       <NoDataFound title="Turnover (Today)" />
     </>
+  )}
+
+  {/* Region Wise Client Distribution */}
+
+  {regionWiseOMSSummary?.data ? (
+    <div className="rounded-md col-span-3 xl:col-span-2">
+      <RegionWiseClientChart data={regionWiseOMSSummary.data} />
+    </div>
+  ) : (
+    <div className="rounded-md col-span-3 xl:col-span-2">
+      <NoDataFound title="Region Wise Client Distribution" />
+    </div>
+  )}
+  {regionWiseMarketShare?.data ? (
+    <div className="rounded-md col-span-3 xl:col-span-2">
+      <RegionWiseMarketShareChart data={regionWiseMarketShare.data} />
+    </div>
+  ) : (
+    <div className="rounded-md col-span-3 xl:col-span-2">
+      <NoDataFound title="Region Wise Market Share" />
+    </div>
+  )}
+  {regionWiseMarketShare?.data ? (
+    <div className="rounded-md col-span-3 xl:col-span-2">
+      <RegionWiseMarketNetIncome data={regionWiseMarketShare.data} />
+    </div>
+  ) : (
+    <div className="rounded-md col-span-3 xl:col-span-2">
+      <NoDataFound title="Region Wise Market Net Income" />
+    </div>
   )}
 
   {/* Stack Bar Charts */}

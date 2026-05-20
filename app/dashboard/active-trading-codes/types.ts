@@ -124,7 +124,8 @@ export type TradingRecord = {
   exchTotalMarket: number;    
   lbslMarketAll: number;       
   foreign: null | any;         
-  netIncome: number;            
+  netIncome: number;   
+  region_Name?: string;          
 }
 
 export type ChannelTradingRecord ={

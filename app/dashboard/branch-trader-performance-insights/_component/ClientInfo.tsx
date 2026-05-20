@@ -5,11 +5,10 @@ import * as echarts from "echarts";
 
 type ClientInfoProps = {
   clientData: any;
-  region: string;
   branch: string;
 };
 
-export default function ClientInfo({ clientData, region, branch }: ClientInfoProps) {
+export default function ClientInfo({ clientData, branch }: ClientInfoProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
   const isArray = Array.isArray(clientData);
@@ -21,10 +20,7 @@ export default function ClientInfo({ clientData, region, branch }: ClientInfoPro
   const filteredList = (() => {
     const rawList = isArray ? clientData : (Array.isArray(clientData?.data) ? clientData.data : []);
     return rawList.filter((item: any) => {
-      if (region && region !== "" && region !== "All") {
-        if (String(item.regionName).trim() !== String(region).trim()) return false;
-      }
-      if (region && branch && branch !== "" && branch !== "All") {
+      if (branch && branch !== "" && branch !== "All") {
         if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
       }
       return true;
@@ -85,7 +81,7 @@ export default function ClientInfo({ clientData, region, branch }: ClientInfoPro
     });
 
     return () => chart.dispose();
-  }, [active, inactive, region, branch]);
+  }, [active, inactive, branch]);
 
   return (
 
