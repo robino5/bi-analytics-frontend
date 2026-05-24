@@ -227,12 +227,18 @@ export default function RegionalBusinessPerformancePage() {
     branchWiseMarketStatisticsLoading ||
     branchWiseRegionalBusinessPerformanceLoading;
 
-  const { mutate: processRegionWiseManagement, isPending } = useMutation({
+const { mutate: processRegionWiseManagement, isPending } = useMutation({
     mutationFn: () =>
       ManagementInsightsAPI.processRegionWiseManagement(startDate, endDate),
 
     onSuccess: async () => {
-      await queryClient.invalidateQueries();
+      // Invalidate all active dashboard data queries EXCEPT the region/branch list
+      await queryClient.invalidateQueries({
+        predicate: (query) => {
+          const key = query.queryKey[0];
+          return query.isActive() && key !== "regionsBranch";
+        }
+      });
 
       toast({
         description: "Processing Completed Successfully.",
@@ -244,6 +250,7 @@ export default function RegionalBusinessPerformancePage() {
       console.error("Process branch performance failed", error);
     },
   });
+  
   const filteredOfficeSpaceList = useMemo(() => {
     const rawList = Array.isArray(branchOfficeSpaceInfo?.data)
       ? branchOfficeSpaceInfo.data

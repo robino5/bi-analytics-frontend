@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { format, parseISO } from "date-fns";
 import BranchFilter from "@/components/branchFilter";
+import BusinessPerformance from "./_component/BusinessPerformance";
 
 export default function RegionalBusinessPerformancePage() {
   const branch = useBranchStore((state) => state.branch);
@@ -144,6 +145,19 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnReconnect: false,
   });
 
+    const {
+      data: branchWiseRegionalBusinessPerformance,
+      isLoading: branchWiseRegionalBusinessPerformanceLoading,
+    } = useQuery({
+      queryKey: ["branchWiseRegionalBusinessPerformance"],
+      queryFn: () =>
+        ManagementInsightsAPI.getBranchWiseRegionalBusinessPerformance(),
+      staleTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    });
+
     const loading =
     branchClientInfoLoading ||
     branchEmployeeInfoLoading ||
@@ -154,7 +168,8 @@ export default function RegionalBusinessPerformancePage() {
     branchPartyTurnoverCommissionInfoLoading ||
     branchExposureInfoLoading ||
     branchOfficeSpaceInfoLoading ||
-    branchPerformanceProcessLoading ;
+    branchPerformanceProcessLoading ||
+    branchWiseRegionalBusinessPerformanceLoading;
 
 
   const filteredOfficeSpaceList = useMemo(() => {
@@ -361,6 +376,12 @@ export default function RegionalBusinessPerformancePage() {
           />
         )}
       </div>
+         {branchWiseRegionalBusinessPerformance && (
+                <BusinessPerformance
+                  businessPerformance={branchWiseRegionalBusinessPerformance?.data}
+                  branch={branch}
+                />
+              )}
     </div>
   );
 }

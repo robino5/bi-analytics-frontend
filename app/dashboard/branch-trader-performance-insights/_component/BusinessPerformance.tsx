@@ -3,10 +3,9 @@ import { numberToMillionsString } from "@/lib/utils";
 import { Download } from "lucide-react";
 import Link from "next/link";
 
-const BusinessPerformance = ({ businessPerformance, branch, region }: {
+const BusinessPerformance = ({ businessPerformance, branch }: {
   businessPerformance: any;
   branch: string;
-  region: string;
 }) => {
   console.log("Business Performance Data:", businessPerformance);
   const businessArray: any[] = Array.isArray(businessPerformance)
@@ -14,9 +13,8 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
     : businessPerformance?.detail || businessPerformance?.rows || [];
 
   const filteredBusinessPerformance = (businessArray || []).filter((item: any) => {
-    if (region && String(item.regionName).trim() !== String(region).trim()) return false;
-    // only apply branch filter when a region is selected
-    if (region && branch && String(item.branchCode) !== String(branch)) return false;
+    // only apply branch filter when a branch is selected
+    if (branch && String(item.branchCode) !== String(branch)) return false;
     return true;
   });
   return (
@@ -33,14 +31,12 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                 const base = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/regional-business-performance-csv/`;
                 const url = new URL(base);
                 if (branch) url.searchParams.append("branch_code", branch);
-                if (region) url.searchParams.append("region_name", region);
                 return url.toString();
               } catch (e) {
                 // Fallback if URL constructor fails (malformed base)
                 let href = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/regional-business-performance-csv/`;
                 const params: string[] = [];
                 if (branch) params.push(`branch_code=${encodeURIComponent(branch)}`);
-                if (region) params.push(`region_name=${encodeURIComponent(region)}`);
                 if (params.length) href += `?${params.join("&")}`;
                 return href;
               }
