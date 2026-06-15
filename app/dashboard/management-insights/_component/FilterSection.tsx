@@ -57,7 +57,7 @@ export default function FilterSection({
     if (isClusterManager && regionList?.length > 0 && !region) {
       setRegion(regionList[0]);
     }
-  }, [isClusterManager, regionList, region, setRegion]);
+  }, [isClusterManager, regionList?.length, region, setRegion]);
 
   /* PROCESS MUTATION */
 

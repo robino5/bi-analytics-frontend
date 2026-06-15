@@ -102,6 +102,12 @@ class ManagementInsights extends Common {
     return this.http.get<IResponse<any>>(url, { signal });
   }
 
+   getBranchWiseAdminRegionalManagerRMBusinessPerformance(signal?: AbortSignal) {
+    let url = `dashboards/admin-regional-manager-rm-business-performance/`;
+
+    return this.http.get<IResponse<any>>(url, { signal });
+  }
+
   getBranchPerformanceProcess(signal?: AbortSignal) {
     return this.http.get<IResponse<BranchPerformanceRunLog>>(
       "dashboards/branch-performance-process/?procedure_name=BIAnalytics_Region_Wise_MarketInsight_BranchPerformance_Date_Duration",

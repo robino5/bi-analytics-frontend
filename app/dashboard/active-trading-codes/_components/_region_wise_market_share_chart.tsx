@@ -40,7 +40,7 @@ const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
     const option = {
       tooltip: {
         trigger: "item",
-        formatter: (params: any) => `${params.name}-${Number(params.value || 0).toFixed(2)}%`,
+        formatter: (params: any) => `${params.name}-${Number(params.value || 0).toFixed(3)}%`,
       },
       legend: { orient: 'vertical', left: 'left', top: 'top', textStyle: { color: '#ffffff' } },
       series: [{
@@ -54,7 +54,7 @@ const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
           position: "inside",
           color: "black",
           fontSize: 14,
-          formatter: (params: any) => `${Number(params.value || 0).toFixed(2)}%`,
+          formatter: (params: any) => `${Number(params.value || 0).toFixed(3)}%`,
         },
         data: dataForChart,
       }],
@@ -69,7 +69,7 @@ const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
   // 🔄 FIX: Convert each item to a 2-decimal number BEFORE adding them together
   const totalMarketShare = data 
     ? data.reduce((acc, item) => {
-        const itemValue = Number(Number(item.lbslMarketAll || 0).toFixed(2));
+        const itemValue = Number(Number(item.lbslMarketAll || 0));
         return acc + itemValue;
       }, 0)
     : 0;

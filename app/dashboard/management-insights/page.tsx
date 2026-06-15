@@ -33,7 +33,17 @@ export default function RegionalBusinessPerformancePage() {
   const [branchName, setBranchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [enableSecondaryQueries, setEnableSecondaryQueries] = useState(false);
   const queryClient = useQueryClient();
+
+  // Stagger query loading to avoid overwhelming backend
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEnableSecondaryQueries(true);
+    }, 500); // 500ms delay before secondary queries start
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const {
     data: regionsBranch,
@@ -74,6 +84,7 @@ export default function RegionalBusinessPerformancePage() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
+      enabled: enableSecondaryQueries,
     });
 
   const { data: branchEmployeeInfo, isLoading: branchEmployeeInfoLoading } =
@@ -84,6 +95,7 @@ export default function RegionalBusinessPerformancePage() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
+      enabled: enableSecondaryQueries,
     });
 
   const { data: branchEcrmInfo, isLoading: branchEcrmInfoLoading } = useQuery({
@@ -93,6 +105,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const { data: branchEkycInfo, isLoading: branchEkycInfoLoading } = useQuery({
@@ -102,6 +115,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -114,6 +128,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -126,6 +141,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -138,6 +154,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const { data: branchExposureInfo, isLoading: branchExposureInfoLoading } =
@@ -148,6 +165,7 @@ export default function RegionalBusinessPerformancePage() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
+      enabled: enableSecondaryQueries,
     });
 
   const {
@@ -160,6 +178,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -172,6 +191,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -184,6 +204,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -196,6 +217,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -209,6 +231,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const loading =
@@ -232,13 +255,20 @@ const { mutate: processRegionWiseManagement, isPending } = useMutation({
       ManagementInsightsAPI.processRegionWiseManagement(startDate, endDate),
 
     onSuccess: async () => {
-      // Invalidate all active dashboard data queries EXCEPT the region/branch list
-      await queryClient.invalidateQueries({
-        predicate: (query) => {
-          const key = query.queryKey[0];
-          return query.isActive() && key !== "regionsBranch";
-        }
-      });
+      // Only invalidate specific queries instead of all at once to avoid cascade
+      const queriesToInvalidate = [
+        "branchPerformanceProcess",
+        "exchangeWiseMarketStatistics",
+        "branchWiseMarketStatistics",
+        "branchWiseRegionalBusinessPerformance"
+      ];
+
+      for (const queryKey of queriesToInvalidate) {
+        await queryClient.invalidateQueries({
+          queryKey: [queryKey],
+          exact: true
+        });
+      }
 
       toast({
         description: "Processing Completed Successfully.",

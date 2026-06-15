@@ -250,6 +250,17 @@ export default function MarketStatistics({
                       ).toFixed(2)}
                     </td>
                   </tr>
+                    <tr className="bg-green-50 border-b">
+                    <td className="px-4 py-2 font-medium">
+                      
+                     LBSL Total
+                    </td>
+                    <td className="px-4 py-2 text-right font-semibold">
+                          {exchangeWiseMarketStatistics?.[1].totalTurnover+exchangeWiseMarketStatistics?.[0].totalTurnover > 0
+                          ? ((((exchangeWiseMarketStatistics?.[1].lbslTotalTurnover + exchangeWiseMarketStatistics?.[0].lbslTotalTurnover) / (exchangeWiseMarketStatistics?.[1].totalTurnover + exchangeWiseMarketStatistics?.[0].totalTurnover)) * 100)/2).toFixed(2)
+                          : "0.00"}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </CardContent>

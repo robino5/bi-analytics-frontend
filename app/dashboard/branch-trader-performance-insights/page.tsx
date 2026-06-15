@@ -25,6 +25,7 @@ import {
 import { format, parseISO } from "date-fns";
 import BranchFilter from "@/components/branchFilter";
 import BusinessPerformance from "./_component/BusinessPerformance";
+import RMPerformance from "./_component/RMPerformance";
 
 export default function RegionalBusinessPerformancePage() {
   const branch = useBranchStore((state) => state.branch);
@@ -145,20 +146,33 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnReconnect: false,
   });
 
-    const {
-      data: branchWiseRegionalBusinessPerformance,
-      isLoading: branchWiseRegionalBusinessPerformanceLoading,
-    } = useQuery({
-      queryKey: ["branchWiseRegionalBusinessPerformance"],
-      queryFn: () =>
-        ManagementInsightsAPI.getBranchWiseRegionalBusinessPerformance(),
-      staleTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-    });
+  const {
+    data: branchWiseRegionalBusinessPerformance,
+    isLoading: branchWiseRegionalBusinessPerformanceLoading,
+  } = useQuery({
+    queryKey: ["branchWiseRegionalBusinessPerformance"],
+    queryFn: () =>
+      ManagementInsightsAPI.getBranchWiseRegionalBusinessPerformance(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 
-    const loading =
+  const {
+    data: branchWiseAdminRegionalManagerRMBusinessPerformance,
+    isLoading: branchWiseAdminRegionalManagerRMBusinessPerformanceLoading,
+  } = useQuery({
+    queryKey: ["branchWiseAdminRegionalManagerRMBusinessPerformance"],
+    queryFn: () =>
+      ManagementInsightsAPI.getBranchWiseAdminRegionalManagerRMBusinessPerformance(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const loading =
     branchClientInfoLoading ||
     branchEmployeeInfoLoading ||
     branchEcrmInfoLoading ||
@@ -171,14 +185,12 @@ export default function RegionalBusinessPerformancePage() {
     branchPerformanceProcessLoading ||
     branchWiseRegionalBusinessPerformanceLoading;
 
-
   const filteredOfficeSpaceList = useMemo(() => {
     const rawList = Array.isArray(branchOfficeSpaceInfo?.data)
       ? branchOfficeSpaceInfo.data
       : [];
 
     return rawList.filter((item: any) => {
-
       if (
         branch &&
         branch !== "all" &&
@@ -376,12 +388,22 @@ export default function RegionalBusinessPerformancePage() {
           />
         )}
       </div>
-         {branchWiseRegionalBusinessPerformance && (
-                <BusinessPerformance
-                  businessPerformance={branchWiseRegionalBusinessPerformance?.data}
-                  branch={branch}
-                />
-              )}
+      <br></br>
+      {branchWiseRegionalBusinessPerformance && (
+        <BusinessPerformance
+          businessPerformance={branchWiseRegionalBusinessPerformance?.data}
+          branch={branch}
+        />
+      )}
+      <br></br>
+      {branchWiseAdminRegionalManagerRMBusinessPerformance && (
+        <RMPerformance
+          rmPerformance={
+            branchWiseAdminRegionalManagerRMBusinessPerformance?.data
+          }
+          branch={branch}
+        />
+      )}
     </div>
   );
 }
