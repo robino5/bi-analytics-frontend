@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 
 import {
   Table,
@@ -43,7 +38,12 @@ export default function ClientTradesDataTable({
   -------------------------------------------------- */
   const filteredRows = rows.filter((row: any) => {
     if (branch && branch !== "" && branch !== "All") {
-      if (String(row.branchCode || row.branch_code || row.branch || row.branchName).trim() !== String(branch).trim()) return false;
+      if (
+        String(
+          row.branchCode || row.branch_code || row.branch || row.branchName,
+        ).trim() !== String(branch).trim()
+      )
+        return false;
     }
     return true;
   });
@@ -54,36 +54,30 @@ export default function ClientTradesDataTable({
   -------------------------------------------------- */
   const uniqueRows = Array.from(
     new Map(
-      filteredRows.map((row) => [
-        `${row.branchCode}-${row.channel}`,
-        row,
-      ])
-    ).values()
+      filteredRows.map((row) => [`${row.branchCode}-${row.channel}`, row]),
+    ).values(),
   );
 
   /* -------------------------------------------------
      STEP 2: Aggregate channel-wise
   -------------------------------------------------- */
-  const summary = uniqueRows.reduce(
-    (acc: any, row: any) => {
-      const channel = row.channel?.toUpperCase();
+  const summary = uniqueRows.reduce((acc: any, row: any) => {
+    const channel = row.channel?.toUpperCase();
 
-      if (!acc[channel]) {
-        acc[channel] = {
-          totalClients: 0,
-          totalTrades: 0,
-          totalTurnover: 0,
-        };
-      }
+    if (!acc[channel]) {
+      acc[channel] = {
+        totalClients: 0,
+        totalTrades: 0,
+        totalTurnover: 0,
+      };
+    }
 
-      acc[channel].totalClients += Number(row.totalClients || 0);
-      acc[channel].totalTrades += Number(row.totalTrades || 0);
-      acc[channel].totalTurnover += Number(row.totalTurnover || 0);
+    acc[channel].totalClients += Number(row.totalClients || 0);
+    acc[channel].totalTrades += Number(row.totalTrades || 0);
+    acc[channel].totalTurnover += Number(row.totalTurnover || 0);
 
-      return acc;
-    },
-    {}
-  );
+    return acc;
+  }, {});
 
   /* -------------------------------------------------
      STEP 3: Channel totals
@@ -100,6 +94,12 @@ export default function ClientTradesDataTable({
     totalTurnover: 0,
   };
 
+  const dtinternet = summary["DT+INTERNET"] || {
+    totalClients: 0,
+    totalTrades: 0,
+    totalTurnover: 0,
+  };
+
   const grandTotal = {
     totalClients: dt.totalClients + internet.totalClients,
     totalTrades: dt.totalTrades + internet.totalTrades,
@@ -108,9 +108,14 @@ export default function ClientTradesDataTable({
 
   // ===========================================
   return (
-
-    
-        <Table className="border border-gray-300 rounded-md overflow-hidden mt-8">
+    <Card className={cn("drop-shadow-md col-span-6 xl:col-span-3 bg-[#033e4a]")}>
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg  items-center gap-2">
+          Channel Wise Clients & Trades
+        </CardTitle>
+      </CardHeader>
+      <CardContent className=" justify-center items-center mt-4 mb-2">
+        <Table className="border border-gray-300 rounded-md overflow-hidden mt-4">
           <TableHeader>
             <TableRow className="bg-yellow-200">
               <TableHead className="w-[200px] text-black font-bold">
@@ -156,12 +161,27 @@ export default function ClientTradesDataTable({
                 {numberToMillionsString(internet.totalTurnover)}
               </TableCell>
             </TableRow>
+            {/* DT & Internet */}
+            <TableRow className="bg-green-300 hover:bg-green-400">
+              <TableCell className="font-medium">DT & Internet Both</TableCell>
+              <TableCell className="text-right">
+                {dtinternet.totalClients.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {dtinternet.totalTrades.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {numberToMillionsString(dtinternet.totalTurnover)}
+              </TableCell>
+            </TableRow>
 
             {/* TOTAL */}
-            <TableRow className="bg-yellow-200 font-bold">
+            <TableRow className="bg-yellow-400 font-bold">
               <TableCell>Total</TableCell>
               <TableCell className="text-right">
-                {grandTotal.totalClients.toLocaleString()}
+                {(
+                  grandTotal.totalClients - dtinternet.totalClients
+                ).toLocaleString()}
               </TableCell>
               <TableCell className="text-right">
                 {grandTotal.totalTrades.toLocaleString()}
@@ -171,6 +191,10 @@ export default function ClientTradesDataTable({
               </TableCell>
             </TableRow>
           </TableBody>
-        </Table>
+        </Table>    <p className="text-red-500 text-lg mt-2 font-bold">
+          * TOTAL (DT + Internet) clients counted as distinct.
+        </p>
+      </CardContent>
+    </Card>
   );
 }

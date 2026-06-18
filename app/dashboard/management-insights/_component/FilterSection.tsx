@@ -57,7 +57,7 @@ export default function FilterSection({
     if (isClusterManager && regionList?.length > 0 && !region) {
       setRegion(regionList[0]);
     }
-  }, [isClusterManager, regionList, region, setRegion]);
+  }, [isClusterManager, regionList?.length, region, setRegion]);
 
   /* PROCESS MUTATION */
 
@@ -74,10 +74,11 @@ export default function FilterSection({
   return (
     <div className="space-y-4">
       {/* DATE SECTION */}
-      <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
+      
+      {/* <Card className="mt-6 shadow-xl bg-gradient-to-br from-[#033e4a] to-[#055b6d] rounded-xl border border-teal-900">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] gap-6">
-            {/* FROM DATE */}
+           
             <div>
               <Label className="text-white mb-1 block text-lg">From Date</Label>
               <input
@@ -89,7 +90,7 @@ export default function FilterSection({
               />
             </div>
 
-            {/* TO DATE */}
+           
             <div>
               <Label className="text-white mb-1 block text-lg">To Date</Label>
               <input
@@ -101,7 +102,7 @@ export default function FilterSection({
               />
             </div>
 
-            {/* PROCESS BUTTON */}
+        
             {!isClusterManager && (
               <div className="flex items-end">
                 <button
@@ -130,7 +131,7 @@ export default function FilterSection({
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* REGION + BRANCH SECTION */}
       <Card className="mt-6 shadow-xl bg-gradient-to-br  from-teal-600 to-teal-800 rounded-xl border border-teal-900">

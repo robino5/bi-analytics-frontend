@@ -49,10 +49,18 @@ export default function MarketStatistics({
     return true;
   });
 
+    const filteredRegionList = (branchArray || []).filter((item: any) => {
+    // Match region when SelectedRegion is provided
+    if (SelectedRegion && String(item.regionName).trim() !== String(SelectedRegion).trim())
+      return false;
+    return true;
+  });
+
   const branchAvgSum = filteredBranchList.reduce((s: number, i: any) => s + (i.avgTurnover || 0), 0);
   const branchTotalSum = filteredBranchList.reduce((s: number, i: any) => s + (i.totalTurnover || 0), 0);
+    const regionTotalSum = filteredRegionList.reduce((s: number, i: any) => s + (i.totalTurnover || 0), 0);
   const exchangeLbslSum = (exchangeWiseMarketStatistics || []).reduce((s: number, i: any) => s + (i.lbslTotalTurnover || 0), 0);
-  const regionalContributionPercent = exchangeLbslSum ? (branchTotalSum / exchangeLbslSum) * 100 : 0;
+  const regionalContributionPercent = exchangeLbslSum ? (regionTotalSum / exchangeLbslSum) * 100 : 0;
   return (
     <Card className="w-full shadow-md bg-[#0e5e6f] mt-3">
       {/* Title Bar */}
@@ -250,6 +258,17 @@ export default function MarketStatistics({
                       ).toFixed(2)}
                     </td>
                   </tr>
+                    <tr className="bg-green-50 border-b">
+                    <td className="px-4 py-2 font-medium">
+                      
+                     LBSL Total
+                    </td>
+                    <td className="px-4 py-2 text-right font-semibold">
+                          {exchangeWiseMarketStatistics?.[1].totalTurnover+exchangeWiseMarketStatistics?.[0].totalTurnover > 0
+                          ? ((((exchangeWiseMarketStatistics?.[1].lbslTotalTurnover + exchangeWiseMarketStatistics?.[0].lbslTotalTurnover) / (exchangeWiseMarketStatistics?.[1].totalTurnover + exchangeWiseMarketStatistics?.[0].totalTurnover)) * 100)/2).toFixed(2)
+                          : "0.00"}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </CardContent>
@@ -270,8 +289,7 @@ export default function MarketStatistics({
                     <td className="px-4 py-2 font-medium">
                       LBSL vs{" "}
                       {SelectedRegion
-                        ? SelectedRegion +
-                          (SelectedBranch ? " (" + SelectedBranch + ")" : "")
+                        ? SelectedRegion 
                         : "ALL"}
                     </td>
                     <td className="px-4 py-2 text-right font-semibold">

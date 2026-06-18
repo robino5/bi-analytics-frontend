@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/dialog";
 import { format, parseISO } from "date-fns";
 import BranchFilter from "@/components/branchFilter";
+import BusinessPerformance from "./_component/BusinessPerformance";
+import RMPerformance from "./_component/RMPerformance";
 
 export default function RegionalBusinessPerformancePage() {
   const branch = useBranchStore((state) => state.branch);
@@ -144,7 +146,33 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnReconnect: false,
   });
 
-    const loading =
+  const {
+    data: branchWiseRegionalBusinessPerformance,
+    isLoading: branchWiseRegionalBusinessPerformanceLoading,
+  } = useQuery({
+    queryKey: ["branchWiseRegionalBusinessPerformance"],
+    queryFn: () =>
+      ManagementInsightsAPI.getBranchWiseRegionalBusinessPerformance(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const {
+    data: branchWiseAdminRegionalManagerRMBusinessPerformance,
+    isLoading: branchWiseAdminRegionalManagerRMBusinessPerformanceLoading,
+  } = useQuery({
+    queryKey: ["branchWiseAdminRegionalManagerRMBusinessPerformance"],
+    queryFn: () =>
+      ManagementInsightsAPI.getBranchWiseAdminRegionalManagerRMBusinessPerformance(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const loading =
     branchClientInfoLoading ||
     branchEmployeeInfoLoading ||
     branchEcrmInfoLoading ||
@@ -154,8 +182,8 @@ export default function RegionalBusinessPerformancePage() {
     branchPartyTurnoverCommissionInfoLoading ||
     branchExposureInfoLoading ||
     branchOfficeSpaceInfoLoading ||
-    branchPerformanceProcessLoading ;
-
+    branchPerformanceProcessLoading ||
+    branchWiseRegionalBusinessPerformanceLoading;
 
   const filteredOfficeSpaceList = useMemo(() => {
     const rawList = Array.isArray(branchOfficeSpaceInfo?.data)
@@ -163,7 +191,6 @@ export default function RegionalBusinessPerformancePage() {
       : [];
 
     return rawList.filter((item: any) => {
-
       if (
         branch &&
         branch !== "all" &&
@@ -271,16 +298,12 @@ export default function RegionalBusinessPerformancePage() {
       {/* Cards */}
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {branchChannelWiseTradeInfo && (
-          <CardBoard
-            className="col-span-6 xl:col-span-3"
-            title="Channel Wise Clients & Trades"
-            children={
+        
               <ClientTradesDataTable
                 records={branchChannelWiseTradeInfo.data}
                 branch={branch}
               />
-            }
-          />
+            
         )}
 
         {branchEcrmInfo && (
@@ -361,6 +384,22 @@ export default function RegionalBusinessPerformancePage() {
           />
         )}
       </div>
+      <br></br>
+      {branchWiseRegionalBusinessPerformance && (
+        <BusinessPerformance
+          businessPerformance={branchWiseRegionalBusinessPerformance?.data}
+          branch={branch}
+        />
+      )}
+      <br></br>
+      {branchWiseAdminRegionalManagerRMBusinessPerformance && (
+        <RMPerformance
+          rmPerformance={
+            branchWiseAdminRegionalManagerRMBusinessPerformance?.data
+          }
+          branch={branch}
+        />
+      )}
     </div>
   );
 }

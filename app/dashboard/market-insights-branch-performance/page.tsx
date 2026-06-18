@@ -84,6 +84,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
+  
 
   const loading =
     regionsBranchLoading ||

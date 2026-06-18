@@ -33,7 +33,17 @@ export default function RegionalBusinessPerformancePage() {
   const [branchName, setBranchName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [enableSecondaryQueries, setEnableSecondaryQueries] = useState(false);
   const queryClient = useQueryClient();
+
+  // Stagger query loading to avoid overwhelming backend
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEnableSecondaryQueries(true);
+    }, 500); // 500ms delay before secondary queries start
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const {
     data: regionsBranch,
@@ -74,6 +84,7 @@ export default function RegionalBusinessPerformancePage() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
+      enabled: enableSecondaryQueries,
     });
 
   const { data: branchEmployeeInfo, isLoading: branchEmployeeInfoLoading } =
@@ -84,6 +95,7 @@ export default function RegionalBusinessPerformancePage() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
+      enabled: enableSecondaryQueries,
     });
 
   const { data: branchEcrmInfo, isLoading: branchEcrmInfoLoading } = useQuery({
@@ -93,6 +105,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const { data: branchEkycInfo, isLoading: branchEkycInfoLoading } = useQuery({
@@ -102,6 +115,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -114,6 +128,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -126,6 +141,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -138,6 +154,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const { data: branchExposureInfo, isLoading: branchExposureInfoLoading } =
@@ -148,6 +165,7 @@ export default function RegionalBusinessPerformancePage() {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,
+      enabled: enableSecondaryQueries,
     });
 
   const {
@@ -160,6 +178,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -172,6 +191,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -184,6 +204,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -196,6 +217,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const {
@@ -209,6 +231,7 @@ export default function RegionalBusinessPerformancePage() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    enabled: enableSecondaryQueries,
   });
 
   const loading =
@@ -232,7 +255,20 @@ export default function RegionalBusinessPerformancePage() {
       ManagementInsightsAPI.processRegionWiseManagement(startDate, endDate),
 
     onSuccess: async () => {
-      await queryClient.invalidateQueries();
+      // Only invalidate specific queries instead of all at once to avoid cascade
+      const queriesToInvalidate = [
+        "branchPerformanceProcess",
+        "exchangeWiseMarketStatistics",
+        "branchWiseMarketStatistics",
+        "branchWiseRegionalBusinessPerformance",
+      ];
+
+      for (const queryKey of queriesToInvalidate) {
+        await queryClient.invalidateQueries({
+          queryKey: [queryKey],
+          exact: true,
+        });
+      }
 
       toast({
         description: "Processing Completed Successfully.",
@@ -244,6 +280,7 @@ export default function RegionalBusinessPerformancePage() {
       console.error("Process branch performance failed", error);
     },
   });
+
   const filteredOfficeSpaceList = useMemo(() => {
     const rawList = Array.isArray(branchOfficeSpaceInfo?.data)
       ? branchOfficeSpaceInfo.data
@@ -376,16 +413,10 @@ export default function RegionalBusinessPerformancePage() {
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {/* Col 4 */}
         {branchChannelWiseTradeInfo && (
-          <CardBoard
-            className="col-span-6 xl:col-span-3 overflow-hidden"
-            title={"Channel Wise Clients & Trades"}
-            children={
-              <ClientTradesDataTable
-                records={branchChannelWiseTradeInfo.data}
-                region={region}
-                branch={branch}
-              />
-            }
+          <ClientTradesDataTable
+            records={branchChannelWiseTradeInfo.data}
+            region={region}
+            branch={branch}
           />
         )}
 
@@ -486,25 +517,24 @@ export default function RegionalBusinessPerformancePage() {
             }
           />
         )}
-      
       </div>
-        {exchangeWiseMarketStatistics && branchWiseMarketStatistics && (
-          <MarketStatistics
-            exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data}
-            branchWiseMarketStatistics={branchWiseMarketStatistics?.data}
-            SelectedRegion={region}
-            SelectedBranch={branchName}
-            selectedBracheCode={branch}
-          />
-        )}
-        <br></br>
-        {branchWiseRegionalBusinessPerformance && (
-          <BusinessPerformance
-            businessPerformance={branchWiseRegionalBusinessPerformance?.data}
-            branch={branch}
-            region={region}
-          />
-        )}
+      {exchangeWiseMarketStatistics && branchWiseMarketStatistics && (
+        <MarketStatistics
+          exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data}
+          branchWiseMarketStatistics={branchWiseMarketStatistics?.data}
+          SelectedRegion={region}
+          SelectedBranch={branchName}
+          selectedBracheCode={branch}
+        />
+      )}
+      <br></br>
+      {branchWiseRegionalBusinessPerformance && (
+        <BusinessPerformance
+          businessPerformance={branchWiseRegionalBusinessPerformance?.data}
+          branch={branch}
+          region={region}
+        />
+      )}
     </div>
   );
 }

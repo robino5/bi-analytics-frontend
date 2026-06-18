@@ -6,33 +6,18 @@ import * as echarts from "echarts";
 import { TradingRecord } from "../types";
 import { numberToMillionsString } from "@/lib/utils";
 
-// Dynamic fallback colors in case of unexpected regions
-const COLORS = [
-  "#FF7F50", // Coral (matches pieChart.tsx)
-  "#00BFFF", // Deep Sky Blue (matches pieChart.tsx)
-  "#32CD32", // Lime Green
-  "#BA55D3", // Medium Orchid
-];
-
-// Defined fixed color mapping region-wise for visual consistency
+const COLORS = ["#FF7F50", "#00BFFF", "#32CD32", "#BA55D3", "#FFD700"];
 const REGION_COLORS: { [key: string]: string } = {
-  "ctg_main": "#FF7F50",   // CTG_MAIN: Coral Red
-  "dhk_main": "#00BFFF",   // DHK_MAIN: Deep Sky Blue
-  "dhk_north": "#32CD32",  // DHK_NORTH: Lime Green
-  "dhk_south": "#BA55D3",  // DHK_SOUTH: Purple/Orchid
+  "ctg_main": "#FF7F50", "dhk_main": "#00BFFF", "dhk_north": "#32CD32", "dhk_south": "#BA55D3", "ft": "#FFD700"
 };
 
 const getRegionColor = (regionName: string, index: number): string => {
   const normalized = regionName?.trim().toLowerCase();
-  if (normalized && REGION_COLORS[normalized]) {
-    return REGION_COLORS[normalized];
-  }
+  if (normalized && REGION_COLORS[normalized]) return REGION_COLORS[normalized];
   return COLORS[index % COLORS.length];
 };
 
-interface Props {
-  data: TradingRecord[];
-}
+interface Props { data: TradingRecord[]; }
 
 const RegionWiseMarketNetIncome: React.FC<Props> = ({ data }) => {
   const chartRef = useRef<HTMLDivElement>(null);
@@ -43,83 +28,47 @@ const RegionWiseMarketNetIncome: React.FC<Props> = ({ data }) => {
 
     const chart = echarts.init(chartRef.current!);
 
-    const dataForChart = data.map((item, index) => {
+    // 🛠️ FILTER OUT ZERO VALUES HERE
+    const filteredData = data.filter(item => (item.netIncome || 0) > 0);
+
+    const dataForChart = filteredData.map((item, index) => {
       const regionName = item.region_Name || "Unknown";
       return {
         value: item.netIncome,
         name: regionName,
-        itemStyle: {
-          color: getRegionColor(regionName, index),
-        },
+        itemStyle: { color: getRegionColor(regionName, index) },
       };
     });
 
     const option = {
-      title: {
-        left: "center",
-        textStyle: {
-          color: "black",
-          fontSize: 18,
-        },
-      },
       tooltip: {
         trigger: "item",
-        formatter: (params: any) => {
-          const val = typeof params.value === "number" ? params.value : Number(params.value || 0);
-          return `${params.name}-${numberToMillionsString(val,2)} (${params.percent.toFixed(0)}%)`;
-        },
+        // 🔄 Changed params.percent.toFixed(0) to .toFixed(2)
+        formatter: (params: any) => `${params.name}-${numberToMillionsString(params.value, 2)} (${params.percent.toFixed(2)}%)`,
       },
-      legend: {
-        orient: 'horizontal',  
-        bottom: 0,             
-        left: 'center',
-        textStyle: {
-          color: '#ffffff'  
-        }      
-      },
-      series: [
-        {
-          name: "Region Wise Market Net Income",
-          type: "pie",
-          radius: ['20%', '80%'],
-          avoidLabelOverlap: false,
-          label: {
-            show: true,
-            position: "inside",
-            color: "black",
-            fontSize: 14,   
-            formatter: (params: any) => {
-              const val = typeof params.value === "number" ? params.value : Number(params.value || 0);
-              return `${numberToMillionsString(val,2)}\n(${params.percent.toFixed(0)}%)`;
-            },
-          },
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          },
-          data: dataForChart,
+      legend: { orient: 'vertical', left: 'left', top: 'top', textStyle: { color: '#ffffff' } },
+      series: [{
+        type: "pie",
+        radius: ['20%', '80%'],
+        center: ['55%', '55%'],
+        avoidLabelOverlap: true,
+        minAngle: 15,
+        label: {
+          show: true,
+          position: "inside",
+          color: "black",
+          fontSize: 14,
+          // 🔄 Changed params.percent.toFixed(0) to .toFixed(2)
+          formatter: (params: any) => `${numberToMillionsString(params.value, 2)}\n(${params.percent.toFixed(2)}%)`,
         },
-      ],
+        data: dataForChart,
+      }],
     };
 
     chart.setOption(option);
-    
-    // Use ResizeObserver to ensure the ECharts chart dynamically fits the parent container size
-    const resizeObserver = new ResizeObserver(() => {
-      chart.resize();
-    });
-
-    if (chartRef.current) {
-      resizeObserver.observe(chartRef.current);
-    }
-
-    return () => {
-      resizeObserver.disconnect();
-      chart.dispose();
-    };
+    const resizeObserver = new ResizeObserver(() => chart.resize());
+    resizeObserver.observe(chartRef.current!);
+    return () => { resizeObserver.disconnect(); chart.dispose(); };
   }, [data]);
 
   const totalNetIncome = data ? data.reduce((acc, item) => acc + (item.netIncome || 0), 0) : 0;
