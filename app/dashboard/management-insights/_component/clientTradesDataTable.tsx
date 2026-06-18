@@ -6,7 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { numberToMillionsString } from "@/lib/utils";
+import { cn, numberToMillionsString } from "@/lib/utils";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 
 interface Props {
   records: any[];
@@ -109,81 +110,97 @@ export default function ClientTradesDataTable({
 
   // ===========================================
   return (
-    <Table className="border border-gray-300 rounded-md overflow-hidden mt-8">
-      <TableHeader>
-        <TableRow className="bg-yellow-200">
-          <TableHead className="w-[200px] text-black font-bold">
-            Channel
-          </TableHead>
-          <TableHead className="text-right text-black font-bold">
-            Client
-          </TableHead>
-          <TableHead className="text-right text-black font-bold">
-            Trades
-          </TableHead>
-          <TableHead className="text-right text-black font-bold">
-            Turnover
-          </TableHead>
-        </TableRow>
-      </TableHeader>
+    <Card
+      className={cn("drop-shadow-md col-span-6 xl:col-span-3 bg-[#033e4a]")}
+    >
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+        <CardTitle className="text-white text-md text-lg  items-center gap-2">
+          Channel Wise Clients & Trades
+        </CardTitle>
+      </CardHeader>
+      <CardContent className=" justify-center items-center mt-4 mb-2">
+        <Table className="border border-gray-300 rounded-md overflow-hidden mt-4">
+          <TableHeader>
+            <TableRow className="bg-yellow-200">
+              <TableHead className="w-[200px] text-black font-bold">
+                Channel
+              </TableHead>
+              <TableHead className="text-right text-black font-bold">
+                Client
+              </TableHead>
+              <TableHead className="text-right text-black font-bold">
+                Trades
+              </TableHead>
+              <TableHead className="text-right text-black font-bold">
+                Turnover
+              </TableHead>
+            </TableRow>
+          </TableHeader>
 
-      <TableBody>
-        {/* DT */}
-        <TableRow className="bg-yellow-100 hover:bg-yellow-300">
-          <TableCell className="font-medium">DT</TableCell>
-          <TableCell className="text-right">
-            {dt.totalClients.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {dt.totalTrades.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {numberToMillionsString(dt.totalTurnover)}
-          </TableCell>
-        </TableRow>
+          <TableBody>
+            {/* DT */}
+            <TableRow className="bg-yellow-100 hover:bg-yellow-300">
+              <TableCell className="font-medium">DT</TableCell>
+              <TableCell className="text-right">
+                {dt.totalClients.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {dt.totalTrades.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {numberToMillionsString(dt.totalTurnover)}
+              </TableCell>
+            </TableRow>
 
-        {/* Internet */}
-        <TableRow className="bg-yellow-50 hover:bg-yellow-200">
-          <TableCell className="font-medium">Internet</TableCell>
-          <TableCell className="text-right">
-            {internet.totalClients.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {internet.totalTrades.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {numberToMillionsString(internet.totalTurnover)}
-          </TableCell>
-        </TableRow>
+            {/* Internet */}
+            <TableRow className="bg-yellow-50 hover:bg-yellow-200">
+              <TableCell className="font-medium">Internet</TableCell>
+              <TableCell className="text-right">
+                {internet.totalClients.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {internet.totalTrades.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {numberToMillionsString(internet.totalTurnover)}
+              </TableCell>
+            </TableRow>
 
-        {/* DT & Internet */}
-        <TableRow className="bg-yellow-50 hover:bg-yellow-200">
-          <TableCell className="font-medium">DT & Internet Both</TableCell>
-          <TableCell className="text-right">
-            {dtinternet.totalClients.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {dtinternet.totalTrades.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {numberToMillionsString(dtinternet.totalTurnover)}
-          </TableCell>
-        </TableRow>
+            {/* DT & Internet */}
+            <TableRow className="bg-green-300 hover:bg-green-400">
+              <TableCell className="font-medium">DT & Internet Both</TableCell>
+              <TableCell className="text-right">
+                {dtinternet.totalClients.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {dtinternet.totalTrades.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {numberToMillionsString(dtinternet.totalTurnover)}
+              </TableCell>
+            </TableRow>
 
-        {/* TOTAL */}
-        <TableRow className="bg-yellow-200 font-bold">
-          <TableCell>Total</TableCell>
-          <TableCell className="text-right">
-            {grandTotal.totalClients.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {grandTotal.totalTrades.toLocaleString()}
-          </TableCell>
-          <TableCell className="text-right">
-            {numberToMillionsString(grandTotal.totalTurnover)}
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+            {/* TOTAL */}
+            <TableRow className="bg-yellow-400 font-bold">
+              <TableCell>Total</TableCell>
+              <TableCell className="text-right">
+                {(
+                  grandTotal.totalClients - dtinternet.totalClients
+                ).toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {grandTotal.totalTrades.toLocaleString()}
+              </TableCell>
+              <TableCell className="text-right">
+                {numberToMillionsString(grandTotal.totalTurnover)}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+        <p className="text-red-500 text-lg mt-2 font-bold">
+          * TOTAL (DT + Internet) clients counted as distinct.
+        </p>
+      </CardContent>
+    </Card>
   );
 }

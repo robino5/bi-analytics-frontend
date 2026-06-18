@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 
 import {
   Table,
@@ -35,7 +30,11 @@ export default function ClientTradesDataTable({ records, className }: Props) {
   // ===========================================
   return (
     <Card
-      className={cn("overflow-hidden drop-shadow-md", className, "bg-[#033e4a] h-[308px]")}
+      className={cn(
+        "overflow-hidden drop-shadow-md",
+        className,
+        "bg-[#033e4a] h-[308px]",
+      )}
     >
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
         <CardTitle className="text-white text-md text-lg">
@@ -67,8 +66,9 @@ export default function ClientTradesDataTable({ records, className }: Props) {
             {records.map((record, index) => (
               <TableRow
                 key={record.channel}
-                className={`${index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
-                  } hover:bg-yellow-300 transition-all duration-300`}
+                className={`${
+                  index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
+                } hover:bg-yellow-300 transition-all duration-300`}
               >
                 <TableCell className="font-medium py-2">
                   {record.channel}
@@ -90,6 +90,10 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         {/* <p className="text-red-500 text-lg mt-2 font-semibold">
           * This data is updated every 15 minutes.
         </p> */}
+        {/* Note */}
+        <p className="text-red-500 text-lg mt-2 font-bold">
+          * TOTAL (DT + Internet) clients counted as distinct.
+        </p>
       </CardContent>
     </Card>
   );

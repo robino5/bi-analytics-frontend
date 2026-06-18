@@ -90,6 +90,9 @@ export default function ClientTradesDataTable({ records, className }: Props) {
         {/* <p className="text-red-500 text-lg mt-2 font-semibold">
           * This data is updated every 15 minutes.
         </p> */}
+          <p className="text-red-500 text-lg mt-2 font-bold">
+          * TOTAL (DT + Internet) clients counted as distinct.
+        </p>
       </CardContent>
     </Card>
   );

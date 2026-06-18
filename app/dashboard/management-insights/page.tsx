@@ -250,7 +250,7 @@ export default function RegionalBusinessPerformancePage() {
     branchWiseMarketStatisticsLoading ||
     branchWiseRegionalBusinessPerformanceLoading;
 
-const { mutate: processRegionWiseManagement, isPending } = useMutation({
+  const { mutate: processRegionWiseManagement, isPending } = useMutation({
     mutationFn: () =>
       ManagementInsightsAPI.processRegionWiseManagement(startDate, endDate),
 
@@ -260,13 +260,13 @@ const { mutate: processRegionWiseManagement, isPending } = useMutation({
         "branchPerformanceProcess",
         "exchangeWiseMarketStatistics",
         "branchWiseMarketStatistics",
-        "branchWiseRegionalBusinessPerformance"
+        "branchWiseRegionalBusinessPerformance",
       ];
 
       for (const queryKey of queriesToInvalidate) {
         await queryClient.invalidateQueries({
           queryKey: [queryKey],
-          exact: true
+          exact: true,
         });
       }
 
@@ -280,7 +280,7 @@ const { mutate: processRegionWiseManagement, isPending } = useMutation({
       console.error("Process branch performance failed", error);
     },
   });
-  
+
   const filteredOfficeSpaceList = useMemo(() => {
     const rawList = Array.isArray(branchOfficeSpaceInfo?.data)
       ? branchOfficeSpaceInfo.data
@@ -413,16 +413,10 @@ const { mutate: processRegionWiseManagement, isPending } = useMutation({
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {/* Col 4 */}
         {branchChannelWiseTradeInfo && (
-          <CardBoard
-            className="col-span-6 xl:col-span-3 overflow-hidden"
-            title={"Channel Wise Clients & Trades"}
-            children={
-              <ClientTradesDataTable
-                records={branchChannelWiseTradeInfo.data}
-                region={region}
-                branch={branch}
-              />
-            }
+          <ClientTradesDataTable
+            records={branchChannelWiseTradeInfo.data}
+            region={region}
+            branch={branch}
           />
         )}
 
@@ -523,25 +517,24 @@ const { mutate: processRegionWiseManagement, isPending } = useMutation({
             }
           />
         )}
-      
       </div>
-        {exchangeWiseMarketStatistics && branchWiseMarketStatistics && (
-          <MarketStatistics
-            exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data}
-            branchWiseMarketStatistics={branchWiseMarketStatistics?.data}
-            SelectedRegion={region}
-            SelectedBranch={branchName}
-            selectedBracheCode={branch}
-          />
-        )}
-        <br></br>
-        {branchWiseRegionalBusinessPerformance && (
-          <BusinessPerformance
-            businessPerformance={branchWiseRegionalBusinessPerformance?.data}
-            branch={branch}
-            region={region}
-          />
-        )}
+      {exchangeWiseMarketStatistics && branchWiseMarketStatistics && (
+        <MarketStatistics
+          exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data}
+          branchWiseMarketStatistics={branchWiseMarketStatistics?.data}
+          SelectedRegion={region}
+          SelectedBranch={branchName}
+          selectedBracheCode={branch}
+        />
+      )}
+      <br></br>
+      {branchWiseRegionalBusinessPerformance && (
+        <BusinessPerformance
+          businessPerformance={branchWiseRegionalBusinessPerformance?.data}
+          branch={branch}
+          region={region}
+        />
+      )}
     </div>
   );
 }

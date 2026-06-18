@@ -298,16 +298,12 @@ export default function RegionalBusinessPerformancePage() {
       {/* Cards */}
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {branchChannelWiseTradeInfo && (
-          <CardBoard
-            className="col-span-6 xl:col-span-3"
-            title="Channel Wise Clients & Trades"
-            children={
+        
               <ClientTradesDataTable
                 records={branchChannelWiseTradeInfo.data}
                 branch={branch}
               />
-            }
-          />
+            
         )}
 
         {branchEcrmInfo && (

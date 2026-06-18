@@ -183,7 +183,7 @@ const menuList = [
         viewName: "Portfolio Management",
         urlPath: "/dashboard/portfolio-management",
         icon: <RiProfileLine className="h-5 w-5 text-rose-500" />,
-        roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
+        roles: ["ADMIN"],
       },
       {
         id: 4,
