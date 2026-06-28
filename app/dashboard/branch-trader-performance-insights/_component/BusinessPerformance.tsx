@@ -25,7 +25,7 @@ const BusinessPerformance = ({ businessPerformance, branch }: {
             Business Performance
           </CardTitle>
 
-          <Link
+          {/* <Link
             href={(() => {
               try {
                 const base = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/regional-business-performance-csv/`;
@@ -44,7 +44,7 @@ const BusinessPerformance = ({ businessPerformance, branch }: {
             className="ml-auto flex items-center"
           >
             <Download className="h-5 w-5 text-white hover:scale-110 transition" />
-          </Link>
+          </Link> */}
         </div>
       </CardHeader>
       <CardContent className="p-3 overflow-auto ">

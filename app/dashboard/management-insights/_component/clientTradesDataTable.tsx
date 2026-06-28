@@ -167,7 +167,7 @@ export default function ClientTradesDataTable({
             </TableRow>
 
             {/* DT & Internet */}
-            <TableRow className="bg-green-300 hover:bg-green-400">
+            {/* <TableRow className="bg-green-300 hover:bg-green-400">
               <TableCell className="font-medium">DT & Internet Both</TableCell>
               <TableCell className="text-right">
                 {dtinternet.totalClients.toLocaleString()}
@@ -178,15 +178,14 @@ export default function ClientTradesDataTable({
               <TableCell className="text-right">
                 {numberToMillionsString(dtinternet.totalTurnover)}
               </TableCell>
-            </TableRow>
+            </TableRow> */}
 
             {/* TOTAL */}
             <TableRow className="bg-yellow-400 font-bold">
               <TableCell>Total</TableCell>
               <TableCell className="text-right">
                 {(
-                  grandTotal.totalClients - dtinternet.totalClients
-                ).toLocaleString()}
+                  grandTotal.totalClients).toLocaleString()}
               </TableCell>
               <TableCell className="text-right">
                 {grandTotal.totalTrades.toLocaleString()}
@@ -198,7 +197,7 @@ export default function ClientTradesDataTable({
           </TableBody>
         </Table>
         <p className="text-red-500 text-lg mt-2 font-bold">
-          * TOTAL (DT + Internet) clients counted as distinct.
+          * DT & Internet Both Traded Clients are counted {dtinternet.totalClients.toLocaleString()}.
         </p>
       </CardContent>
     </Card>
