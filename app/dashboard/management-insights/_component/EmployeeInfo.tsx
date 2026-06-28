@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import CardBoard from "@/components/CardBoard";
 
 type EmployeeInfoProps = {
   employeeData: any;
@@ -103,8 +104,14 @@ export default function EmployeePieChart({
   }, [permanent, withSalary, withoutSalary, region, branch]);
 
   return (
-    <div className="w-full max-w-md mx-auto bg-transparent overflow-hidden">
-      <div ref={chartRef} className="h-[350px] w-full" />
-    </div>
+
+    <CardBoard
+      className="col-span-6 xl:col-span-3 overflow-hidden"
+      title={`Employee Structure-${permanent + withSalary + withoutSalary} As on Date`}
+      children={
+        <div ref={chartRef} className="h-[350px] w-full" />
+      }
+    />
+
   );
 }

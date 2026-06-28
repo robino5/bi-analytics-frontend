@@ -60,19 +60,9 @@ export default function ClientTradesDataTable({
   });
 
   /* -------------------------------------------------
-     STEP 2: Remove duplicate rows
-     (branchCode + channel is unique)
-  -------------------------------------------------- */
-  const uniqueRows = Array.from(
-    new Map(
-      filteredRows.map((row) => [`${row.branchCode}-${row.channel}`, row]),
-    ).values(),
-  );
-
-  /* -------------------------------------------------
      STEP 2: Aggregate channel-wise
   -------------------------------------------------- */
-  const summary = uniqueRows.reduce((acc: any, row: any) => {
+  const summary = filteredRows.reduce((acc: any, row: any) => {
     const channel = row.channel?.toUpperCase();
 
     if (!acc[channel]) {

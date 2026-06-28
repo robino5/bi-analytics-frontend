@@ -33,38 +33,34 @@ export default function ClientTradesDataTable({
 
   const rows = records ?? [];
 
+  const normalizeValue = (value: any) => String(value ?? "").trim();
+  const isAllValue = (value: any) => {
+    const normalized = normalizeValue(value).toLowerCase();
+    return normalized === "" || normalized === "all";
+  };
+
+  const hasRegionFilter = !isAllValue(region);
+  const hasBranchFilter = !isAllValue(branch);
+
   /* -------------------------------------------------
      STEP 1: Filter rows client-side by region and branch
   -------------------------------------------------- */
   const filteredRows = rows.filter((row: any) => {
-    if (region && region !== "" && region !== "All") {
-      if (String(row.regionName).trim() !== String(region).trim()) return false;
-    }
-    if (region && branch && branch !== "" && branch !== "All") {
-      if (
-        String(
-          row.branchCode || row.branch_code || row.branch || row.branchName,
-        ).trim() !== String(branch).trim()
-      )
-        return false;
-    }
+    const rowRegion = normalizeValue(row.regionName);
+    const rowBranch = normalizeValue(
+      row.branchCode || row.branch_code || row.branch || row.branchName,
+    );
+
+    if (hasRegionFilter && rowRegion !== normalizeValue(region)) return false;
+    if (hasBranchFilter && rowBranch !== normalizeValue(branch)) return false;
+
     return true;
   });
 
   /* -------------------------------------------------
-     STEP 2: Remove duplicate rows
-     (branchCode + channel is unique)
-  -------------------------------------------------- */
-  const uniqueRows = Array.from(
-    new Map(
-      filteredRows.map((row) => [`${row.branchCode}-${row.channel}`, row]),
-    ).values(),
-  );
-
-  /* -------------------------------------------------
      STEP 2: Aggregate channel-wise
   -------------------------------------------------- */
-  const summary = uniqueRows.reduce((acc: any, row: any) => {
+  const summary = filteredRows.reduce((acc: any, row: any) => {
     const channel = row.channel?.toUpperCase();
 
     if (!acc[channel]) {

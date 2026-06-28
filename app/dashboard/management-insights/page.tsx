@@ -250,6 +250,8 @@ export default function RegionalBusinessPerformancePage() {
     branchWiseMarketStatisticsLoading ||
     branchWiseRegionalBusinessPerformanceLoading;
 
+  console.log("test", branchEmployeeInfo)
+
   const { mutate: processRegionWiseManagement, isPending } = useMutation({
     mutationFn: () =>
       ManagementInsightsAPI.processRegionWiseManagement(startDate, endDate),
@@ -307,27 +309,23 @@ export default function RegionalBusinessPerformancePage() {
   );
   const [officeSpaceOpen, setOfficeSpaceOpen] = useState(false);
 
-  console.log("branchPerformanceProcess", branchPerformanceProcess);
-
   return (
     <div className="p-6">
       <PageHeader
         name="Regional Business Performance"
-        period={`From: ${
-          branchPerformanceProcess?.data?.dateFrom
+        period={`From: ${branchPerformanceProcess?.data?.dateFrom
+          ? format(
+            parseISO(branchPerformanceProcess.data.dateFrom),
+            "dd-MMM-yyyy",
+          )
+          : ""
+          } to ${branchPerformanceProcess?.data?.dateTo
             ? format(
-                parseISO(branchPerformanceProcess.data.dateFrom),
-                "dd-MMM-yyyy",
-              )
+              parseISO(branchPerformanceProcess.data.dateTo),
+              "dd-MMM-yyyy",
+            )
             : ""
-        } to ${
-          branchPerformanceProcess?.data?.dateTo
-            ? format(
-                parseISO(branchPerformanceProcess.data.dateTo),
-                "dd-MMM-yyyy",
-              )
-            : ""
-        }`}
+          }`}
       />
 
       <FilterSection
@@ -380,7 +378,7 @@ export default function RegionalBusinessPerformancePage() {
                   </thead>
                   <tbody>
                     {Array.isArray(filteredOfficeSpaceList) &&
-                    filteredOfficeSpaceList.length ? (
+                      filteredOfficeSpaceList.length ? (
                       filteredOfficeSpaceList.map((b: any, idx: number) => (
                         <tr
                           key={idx}
@@ -435,16 +433,10 @@ export default function RegionalBusinessPerformancePage() {
         )}
         <div className="rounded-md col-span-3 xl:col-span-3">
           {branchEmployeeInfo && (
-            <CardBoard
-              className="col-span-6 xl:col-span-3 overflow-hidden"
-              title={`Employee Structure-${branchEmployeeInfo.data?.permanentTrader + branchEmployeeInfo.data?.contractualWithSalary + branchEmployeeInfo.data?.contractualWithoutSalary} As on Date`}
-              children={
-                <EmployeeInfo
-                  employeeData={branchEmployeeInfo.data}
-                  region={region}
-                  branch={branch}
-                />
-              }
+            <EmployeeInfo
+              employeeData={branchEmployeeInfo.data}
+              region={region}
+              branch={branch}
             />
           )}
         </div>

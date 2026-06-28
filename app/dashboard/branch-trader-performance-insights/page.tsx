@@ -211,21 +211,19 @@ export default function RegionalBusinessPerformancePage() {
     <div className="p-6">
       <PageHeader
         name="Business and Trader Performance Insights "
-        period={`From: ${
-          branchPerformanceProcess?.data?.dateFrom
+        period={`From: ${branchPerformanceProcess?.data?.dateFrom
+          ? format(
+            parseISO(branchPerformanceProcess.data.dateFrom),
+            "dd-MMM-yyyy",
+          )
+          : ""
+          } to ${branchPerformanceProcess?.data?.dateTo
             ? format(
-                parseISO(branchPerformanceProcess.data.dateFrom),
-                "dd-MMM-yyyy",
-              )
+              parseISO(branchPerformanceProcess.data.dateTo),
+              "dd-MMM-yyyy",
+            )
             : ""
-        } to ${
-          branchPerformanceProcess?.data?.dateTo
-            ? format(
-                parseISO(branchPerformanceProcess.data.dateTo),
-                "dd-MMM-yyyy",
-              )
-            : ""
-        }`}
+          }`}
       >
         <BranchFilter onChange={handleBranchChange} currentBranch={branch} />
       </PageHeader>
@@ -265,7 +263,7 @@ export default function RegionalBusinessPerformancePage() {
 
                   <tbody>
                     {Array.isArray(branchOfficeSpaceInfo?.data) &&
-                    branchOfficeSpaceInfo?.data?.length ? (
+                      branchOfficeSpaceInfo?.data?.length ? (
                       branchOfficeSpaceInfo.data.map((b: any, idx: number) => (
                         <tr
                           key={idx}
@@ -298,12 +296,12 @@ export default function RegionalBusinessPerformancePage() {
       {/* Cards */}
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {branchChannelWiseTradeInfo && (
-        
-              <ClientTradesDataTable
-                records={branchChannelWiseTradeInfo.data}
-                branch={branch}
-              />
-            
+
+          <ClientTradesDataTable
+            records={branchChannelWiseTradeInfo.data}
+            branch={branch}
+          />
+
         )}
 
         {branchEcrmInfo && (
@@ -315,15 +313,9 @@ export default function RegionalBusinessPerformancePage() {
         )}
 
         {branchEmployeeInfo && (
-          <CardBoard
-            className="col-span-6 xl:col-span-3"
-            title="Employee Structure"
-            children={
-              <EmployeeInfo
-                employeeData={branchEmployeeInfo.data}
-                branch={branch}
-              />
-            }
+          <EmployeeInfo
+            employeeData={branchEmployeeInfo.data}
+            branch={branch}
           />
         )}
 
