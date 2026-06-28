@@ -85,7 +85,7 @@ const RMPerformance = ({ rmPerformance, branch }: {
                 className="border border-lime-400 bg-lime-300 px-3 py-2 text-center font-semibold"
               >
                 CTC Times
-               
+
               </th>
 
             </tr>
@@ -119,73 +119,73 @@ const RMPerformance = ({ rmPerformance, branch }: {
           </thead>
           <tbody>
             {filteredRMPerformance?.map((item: any, index: number) => {
-                const isEven = index % 2 === 0;
+              const isEven = index % 2 === 0;
 
-                return (
-                  <tr
-                    key={index}
-                    className="transition-colors hover:bg-gray-100"
-                  >
-                    {/* Branch */}
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center font-medium
+              return (
+                <tr
+                  key={index}
+                  className="transition-colors hover:bg-gray-100"
+                >
+                  {/* Branch */}
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center font-medium
             ${isEven ? "bg-violet-200" : "bg-violet-300"}`}
-                    >
-                      {item.traderId}
-                    </td>
+                  >
+                    {item.traderId}
+                  </td>
 
-                    {/* Turnover */}
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
+                  {/* Turnover */}
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-yellow-100" : "bg-yellow-200"}`}
-                    >
-                      {numberToMillionsString(item.target)}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
+                  >
+                    {numberToMillionsString(item.target)}
+                  </td>
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-yellow-100" : "bg-yellow-200"}`}
-                    >
-                      {item.turnoverPercentage.toFixed(2)}
-                    </td>
+                  >
+                    {item.turnoverPercentage.toFixed(2)}
+                  </td>
 
-                    {/* Fund */}
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
+                  {/* Fund */}
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-blue-100" : "bg-blue-200"}`}
-                    >
-                      {numberToMillionsString(item.fundTarget)}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
+                  >
+                    {numberToMillionsString(item.fundTarget)}
+                  </td>
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-blue-100" : "bg-blue-200"}`}
-                    >
-                      {item.fundPercentage.toFixed(2)}
-                    </td>
+                  >
+                    {item.fundPercentage.toFixed(2)}
+                  </td>
 
-                    {/* BO */}
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
+                  {/* BO */}
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-green-100" : "bg-green-200"}`}
-                    >
-                      {item.boOpeningTarget}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
+                  >
+                    {item.boOpeningTarget.toFixed(0)}
+                  </td>
+                  <td
+                    className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-green-100" : "bg-green-200"}`}
-                    >
-                      {item.boPercentage.toFixed(2)}
-                    </td>
+                  >
+                    {item.boPercentage.toFixed(2)}
+                  </td>
 
-                    {/* Total Expenses */}
-                    <td
-                      className={`border border-lime-400 px-2 py-2 text-center font-semibold
+                  {/* Total Expenses */}
+                  <td
+                    className={`border border-lime-400 px-2 py-2 text-center font-semibold
             ${isEven ? "bg-lime-100" : "bg-lime-200"}`}
-                    >
-                      {numberToMillionsString(item.ctcDaily, 2)}
-                    </td>
-                  </tr>
-                );
-              },
+                  >
+                    {numberToMillionsString(item.ctcDaily, 2)}
+                  </td>
+                </tr>
+              );
+            },
             )}
           </tbody>
         </table>

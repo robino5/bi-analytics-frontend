@@ -13,15 +13,24 @@ export default function ThirdPartyInfo({ thirdPartyInfo, region, branch }: third
     return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj);
   };
 
+  const normalizeValue = (value: any) => String(value ?? '').trim();
+  const isAllValue = (value: any) => {
+    const normalized = normalizeValue(value).toLowerCase();
+    return normalized === '' || normalized === 'all';
+  };
+
+  const hasRegionFilter = !isAllValue(region);
+  const hasBranchFilter = !isAllValue(branch);
+
   const filteredList = (() => {
     const rawList = isArray ? thirdPartyInfo : (Array.isArray(thirdPartyInfo?.data) ? thirdPartyInfo.data : []);
     return rawList.filter((item: any) => {
-      if (region && region !== '' && region !== 'All') {
-        if (String(item.regionName).trim() !== String(region).trim()) return false;
-      }
-      if (region && branch && branch !== '' && branch !== 'All') {
-        if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) return false;
-      }
+      const itemRegion = normalizeValue(item.regionName);
+      const itemBranch = normalizeValue(item.branchCode || item.branch_code || item.branch || item.branchName);
+
+      if (hasRegionFilter && itemRegion !== normalizeValue(region)) return false;
+      if (hasBranchFilter && itemBranch !== normalizeValue(branch)) return false;
+
       return true;
     });
   })();

@@ -104,7 +104,7 @@ class ManagementInsights extends Common {
 
   getBranchPerformanceProcess(signal?: AbortSignal) {
     return this.http.get<IResponse<BranchPerformanceRunLog>>(
-      "dashboards/branch-performance-process/?procedure_name=BIAnalytics_Region_Wise_Management_data_AsonDate",
+      "dashboards/branch-performance-process/",
       { signal },
     );
   }
