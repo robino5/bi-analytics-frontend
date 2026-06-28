@@ -86,6 +86,11 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getRegionWiseOMSSummary()
   });
 
+    const { data: exchangeWiseMarketStatistics, isLoading: exchangeWiseMarketStatisticsLoading, isError: exchangeWiseMarketStatisticsError } = useQuery({
+    queryKey: ["exchangeWiseMarketStatistics"],
+    queryFn: () => activeTradingCodeAPI.getExchangeWiseMarketStatistics()
+  });
+
   const biaxialChartOption = {
     dataKey: "tradingDate",
     valueKeyA: "activeClients",
@@ -99,9 +104,11 @@ const ActiveTradingCodesBoard = () => {
     cardColor: "bg-[#033e4a]"
   };
 
-  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading || branchwiseTurnoverLoadingDt || regionWiseMarketShareLoading || regionWiseOMSSummaryLoading;
+  const isLoading = todayLoading || dayLoading || monthLoading || datewiseTurnoverLoading || branchwiseTurnoverLoading 
+  || branchwiseTurnoverLoadingDt || regionWiseMarketShareLoading || regionWiseOMSSummaryLoading || exchangeWiseMarketStatisticsLoading;
 
-  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError || branchwiseTurnoverErrorFt || regionWiseMarketShareError || regionWiseOMSSummaryError;
+  const error = todayError || dayError || monthError || DatewiseTurnoverError || branchwiseTurnoverError || branchwiseTurnoverErrorFt
+   || regionWiseMarketShareError || regionWiseOMSSummaryError || exchangeWiseMarketStatisticsError;
 
   if (isLoading) {
     return <LoadingButton text="Loading..." />
@@ -175,7 +182,7 @@ const ActiveTradingCodesBoard = () => {
 
   {/* DSE Live Trade */}
   <div className="rounded-md col-span-3 xl:col-span-3">
-    <DseLiveTrade />
+    <DseLiveTrade exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data} />
   </div>
 
   {/* Pie Charts */}

@@ -15,12 +15,14 @@ interface Props {
   records: any[];
   className?: string;
   branch?: string;
+  trader?: string;
 }
 
 export default function ClientTradesDataTable({
   records,
   className,
   branch,
+  trader,
 }: Props) {
   // ===========================================
   // Suppress recharts defaultProps warning
@@ -34,7 +36,7 @@ export default function ClientTradesDataTable({
   const rows = records ?? [];
 
   /* -------------------------------------------------
-     STEP 1: Filter rows client-side by region and branch
+     STEP 1: Filter rows client-side by branch and trader
   -------------------------------------------------- */
   const filteredRows = rows.filter((row: any) => {
     if (branch && branch !== "" && branch !== "All") {
@@ -42,8 +44,17 @@ export default function ClientTradesDataTable({
         String(
           row.branchCode || row.branch_code || row.branch || row.branchName,
         ).trim() !== String(branch).trim()
-      )
+      ) {
         return false;
+      }
+    }
+    if (trader && trader !== "" && trader !== "All") {
+      if (
+        String(row.traderId || row.trader_id || row.trader).trim() !==
+        String(trader).trim()
+      ) {
+        return false;
+      }
     }
     return true;
   });

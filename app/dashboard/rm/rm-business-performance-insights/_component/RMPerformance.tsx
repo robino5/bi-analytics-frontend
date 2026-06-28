@@ -3,20 +3,27 @@ import { numberToMillionsString } from "@/lib/utils";
 import { Download } from "lucide-react";
 import Link from "next/link";
 
-const BusinessPerformance = ({ businessPerformance, branch, region }: {
-  businessPerformance: any;
-  branch: string;
-  region: string;
+const RMPerformance = ({ rmPerformance, branch, trader }: {
+  rmPerformance: any;
+  branch?: string;
+  trader?: string;
 }) => {
-  console.log("Business Performance Data:", businessPerformance);
-  const businessArray: any[] = Array.isArray(businessPerformance)
-    ? businessPerformance
-    : businessPerformance?.detail || businessPerformance?.rows || [];
+  console.log("RM Performance Data:", rmPerformance);
+  const performanceArray: any[] = Array.isArray(rmPerformance)
+    ? rmPerformance
+    : rmPerformance?.detail || rmPerformance?.rows || [];
 
-  const filteredBusinessPerformance = (businessArray || []).filter((item: any) => {
-    if (region && String(item.regionName).trim() !== String(region).trim()) return false;
-    // only apply branch filter when a region is selected
-    if (region && branch && String(item.branchCode) !== String(branch)) return false;
+  const filteredRMPerformance = (performanceArray || []).filter((item: any) => {
+    if (branch && branch !== "" && branch !== "All") {
+      if (String(item.branchCode || item.branch_code || item.branch || item.branchName).trim() !== String(branch).trim()) {
+        return false;
+      }
+    }
+    if (trader && trader !== "" && trader !== "All") {
+      if (String(item.traderId || item.trader_id || item.trader).trim() !== String(trader).trim()) {
+        return false;
+      }
+    }
     return true;
   });
   return (
@@ -24,7 +31,7 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
         <div className="flex items-center w-full">
           <CardTitle className="text-base font-semibold text-white">
-            Business Performance
+            Trader Performance
           </CardTitle>
 
           {/* <Link
@@ -33,14 +40,12 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                 const base = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/regional-business-performance-csv/`;
                 const url = new URL(base);
                 if (branch) url.searchParams.append("branch_code", branch);
-                if (region) url.searchParams.append("region_name", region);
                 return url.toString();
               } catch (e) {
                 // Fallback if URL constructor fails (malformed base)
                 let href = `${process.env.NEXT_PUBLIC_V1_APIURL}/dashboards/regional-business-performance-csv/`;
                 const params: string[] = [];
                 if (branch) params.push(`branch_code=${encodeURIComponent(branch)}`);
-                if (region) params.push(`region_name=${encodeURIComponent(region)}`);
                 if (params.length) href += `?${params.join("&")}`;
                 return href;
               }
@@ -60,25 +65,25 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                 rowSpan={2}
                 className="border border-gray-300 bg-violet-400 px-3 py-2 text-center font-semibold"
               >
-                Branch
+                Trader Name
               </th>
 
               <th
-                colSpan={3}
+                colSpan={2}
                 className="border border-gray-300 bg-yellow-400 px-3 py-2 text-center font-semibold"
               >
                 Turnover
               </th>
 
               <th
-                colSpan={4}
+                colSpan={2}
                 className="border border-gray-300 bg-blue-400 px-3 py-2 text-center font-semibold text-white"
               >
                 Fund
               </th>
 
               <th
-                colSpan={3}
+                colSpan={2}
                 className="border border-gray-300 bg-green-400 px-3 py-2 text-center font-semibold"
               >
                 BO
@@ -88,17 +93,10 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                 rowSpan={2}
                 className="border border-lime-400 bg-lime-300 px-3 py-2 text-center font-semibold"
               >
-                Total Expenses
-                <br />
-                (mn)
+                CTC Times
+               
               </th>
 
-              <th
-                rowSpan={2}
-                className="border border-gray-300 bg-emerald-500 px-3 py-2 text-center font-semibold"
-              >
-                P/L (mn)
-              </th>
             </tr>
 
             {/* Second header row */}
@@ -106,9 +104,6 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
               {/* Turnover */}
               <th className="border border-gray-300 bg-yellow-200 px-2 py-2 text-center">
                 Target (mn)
-              </th>
-              <th className="border border-gray-300 bg-yellow-200 px-2 py-2 text-center">
-                Turnover Achieved (mn)
               </th>
               <th className="border border-gray-300 bg-yellow-200 px-2 py-2 text-center">
                 Turnover Percentage (%)
@@ -119,12 +114,6 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                 Fund Target (mn)
               </th>
               <th className="border border-gray-300 bg-blue-200 px-2 py-2 text-center">
-                Net Fund collected (mn)
-              </th>
-              <th className="border border-gray-300 bg-blue-200 px-2 py-2 text-center">
-                NetLink Share (mn)
-              </th>
-              <th className="border border-gray-300 bg-blue-200 px-2 py-2 text-center">
                 Fund Target (%)
               </th>
 
@@ -133,15 +122,12 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                 BO opening Target
               </th>
               <th className="border border-gray-300 bg-green-200 px-2 py-2 text-center">
-                BO opened
-              </th>
-              <th className="border border-gray-300 bg-green-200 px-2 py-2 text-center">
                 Percentage (%)
               </th>
             </tr>
           </thead>
           <tbody>
-            {filteredBusinessPerformance?.map((item: any, index: number) => {
+            {filteredRMPerformance?.map((item: any, index: number) => {
                 const isEven = index % 2 === 0;
 
                 return (
@@ -154,7 +140,7 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                       className={`border border-gray-300 px-2 py-2 text-center font-medium
             ${isEven ? "bg-violet-200" : "bg-violet-300"}`}
                     >
-                      {item.branchName}
+                      {item.traderId}
                     </td>
 
                     {/* Turnover */}
@@ -163,12 +149,6 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
             ${isEven ? "bg-yellow-100" : "bg-yellow-200"}`}
                     >
                       {numberToMillionsString(item.target)}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
-            ${isEven ? "bg-yellow-100" : "bg-yellow-200"}`}
-                    >
-                      {numberToMillionsString(item.turnoverAchieved)}
                     </td>
                     <td
                       className={`border border-gray-300 px-2 py-2 text-center
@@ -188,18 +168,6 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                       className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-blue-100" : "bg-blue-200"}`}
                     >
-                      {numberToMillionsString(item.totalNetFund)}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
-            ${isEven ? "bg-blue-100" : "bg-blue-200"}`}
-                    >
-                      {numberToMillionsString(item.totalNetLinkShare)}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
-            ${isEven ? "bg-blue-100" : "bg-blue-200"}`}
-                    >
                       {item.fundPercentage.toFixed(2)}
                     </td>
 
@@ -214,12 +182,6 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                       className={`border border-gray-300 px-2 py-2 text-center
             ${isEven ? "bg-green-100" : "bg-green-200"}`}
                     >
-                      {item.boOpened}
-                    </td>
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center
-            ${isEven ? "bg-green-100" : "bg-green-200"}`}
-                    >
                       {item.boPercentage.toFixed(2)}
                     </td>
 
@@ -228,23 +190,7 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
                       className={`border border-lime-400 px-2 py-2 text-center font-semibold
             ${isEven ? "bg-lime-100" : "bg-lime-200"}`}
                     >
-                      {numberToMillionsString(item.totalExpenses, 2)}
-                    </td>
-
-                    {/* P/L */}
-                    <td
-                      className={`border border-gray-300 px-2 py-2 text-center font-bold
-              ${
-                item.profitLoss >= 0
-                  ? isEven
-                    ? "bg-emerald-100 text-emerald-700"
-                    : "bg-emerald-200 text-emerald-800"
-                  : isEven
-                    ? "bg-red-100 text-red-700"
-                    : "bg-red-200 text-red-800"
-              }`}
-                    >
-                      {numberToMillionsString(item.profitLoss, 2)}
+                      {numberToMillionsString(item.ctcDaily, 2)}
                     </td>
                   </tr>
                 );
@@ -257,4 +203,4 @@ const BusinessPerformance = ({ businessPerformance, branch, region }: {
   );
 };
 
-export default BusinessPerformance;
+export default RMPerformance;

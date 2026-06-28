@@ -177,14 +177,14 @@ const menuList = [
         icon: <BsGraphUpArrow className="h-5 w-5 text-lime-500" />,
         roles: ["ADMIN", "MANAGEMENT", "BRANCH_MANAGER", "CLUSTER_MANAGER"],
       },
-      {
-        id: 3,
-        codeName: "portfolio_management",
-        viewName: "Portfolio Management",
-        urlPath: "/dashboard/portfolio-management",
-        icon: <RiProfileLine className="h-5 w-5 text-rose-500" />,
-        roles: ["ADMIN"],
-      },
+      // {
+      //   id: 3,
+      //   codeName: "portfolio_management",
+      //   viewName: "Portfolio Management",
+      //   urlPath: "/dashboard/portfolio-management",
+      //   icon: <RiProfileLine className="h-5 w-5 text-rose-500" />,
+      //   roles: ["ADMIN"],
+      // },
       {
         id: 4,
         codeName: "margin_loan_usage",
@@ -280,6 +280,20 @@ const menuList = [
           "REGIONAL_MANAGER",
         ],
       },
+      {
+        id: 4,
+        codeName: "rm_business_performance_insights",
+        viewName: "RM Business Performance Insights",
+        urlPath: "/dashboard/rm/rm-business-performance-insights",
+        icon: <ImProfile className="h-5 w-5 text-indigo-500" />,
+        roles: [
+          "ADMIN",
+          "MANAGEMENT",
+          "BRANCH_MANAGER",
+          "CLUSTER_MANAGER",
+          "REGIONAL_MANAGER",
+        ],
+      }
     ],
   },
   {

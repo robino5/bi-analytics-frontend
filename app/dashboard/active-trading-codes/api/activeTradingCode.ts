@@ -52,6 +52,10 @@ class ActiveTradingCodeAPI extends Common {
     getRegionWiseOMSSummary(){
         return this.http.get<IResponse<ChannelTradingRecord[]>>("dashboards/admin-region-wise-oms-summary/")
     }
+     getExchangeWiseMarketStatistics(){
+        return this.http.get<IResponse<any[]>>("dashboards/admin-exchange-wise-market-statistics-as-on-date/")
+    }
+
 
 }
 
