@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { successResponse } from "@/lib/utils";
-import { IClientDetail, InvestorLiveTradeInfo, ITurnoverPerformance,RMAuctionInfo,RMOffMarketInfo } from "@/types/rmPerformance";
+import { IClientDetail, InvestorLiveTradeInfo, ITurnoverPerformance, RMAuctionInfo, RMOffMarketInfo } from "@/types/rmPerformance";
 import { IResponse } from "@/types/utils";
 import { RoleType } from "@/app/schemas";
 import { InvestorLiveTopBuySaleInfo, TraderPerformance } from "../../business-and-trade-management/types";
@@ -27,7 +27,7 @@ import { useBranchStore } from "@/lib/stores/branchStore";
 import { useTraderStore } from "@/lib/stores/rmStore";
 import { useQuery } from "@tanstack/react-query";
 import { performanceReport } from "./api";
-import { RMPerformance} from "./_rmPerformanceSumm";
+import { RMPerformance } from "./_rmPerformanceSumm";
 import LiveIndicator from "@/components/ui/live-indicator";
 
 const RmPerformanceBoard = () => {
@@ -52,10 +52,10 @@ const RmPerformanceBoard = () => {
   const [investorTopBuyData, setInvestorTopBuyData] = useState<
     InvestorLiveTopBuySaleInfo[]
   >();
-    const [rmPerformaceSumm, setRMPerformanceSumm] = useState<
+  const [rmPerformaceSumm, setRMPerformanceSumm] = useState<
     TraderPerformance[]
   >();
-      const [rmAuctionMarket, setRMAuctionMarket] = useState<
+  const [rmAuctionMarket, setRMAuctionMarket] = useState<
     RMAuctionInfo[]
   >();
   const [rmOffMarket, setRMOffMarket] = useState<
@@ -70,38 +70,38 @@ const RmPerformanceBoard = () => {
     setTrader(value);
   };
 
-    const { data: traders } = useQuery({
+  const { data: traders } = useQuery({
     queryKey: ["traders", branch],
     queryFn: () => performanceReport.getTraderWithBranchId(branch)
   });
 
-    useEffect(() => {
+  useEffect(() => {
     if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
       setBranch(session.user.branchId);
     }
   }, [session, setBranch]);
 
-      useEffect(() => {
+  useEffect(() => {
     if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
       setTrader(session.user.username);
     }
   }, [session, setTrader]);
 
 
-useEffect(() => {
-  if (!branch || branch === "") {
-    handleBranchChange('11')
-  }
-}, [branch, setBranch]);
+  useEffect(() => {
+    if (!branch || branch === "") {
+      handleBranchChange('11')
+    }
+  }, [branch, setBranch]);
 
 
-useEffect(() => {
-  if (!trader || trader === "" ) {
-     if (traders?.data?.length) {
-    handleTraderChange(traders.data[0].traderId);
-  }
-  }
-}, [trader, setTrader,traders]);
+  useEffect(() => {
+    if (!trader || trader === "") {
+      if (traders?.data?.length) {
+        handleTraderChange(traders.data[0].traderId);
+      }
+    }
+  }, [trader, setTrader, traders]);
 
 
   useEffect(() => {
@@ -278,7 +278,7 @@ useEffect(() => {
           );
         }
       };
-          // RM Off Market Data
+      // RM Off Market Data
       const fetchRMOffMarketData = async () => {
         try {
           const response = await fetch(
@@ -328,11 +328,11 @@ useEffect(() => {
           <RMTurnoverPerformance records={turnoverPerformance} />
         ) : null}
         {/* Client Details */}
-             {rmPerformaceSumm && rmAuctionMarket && rmOffMarket ? (
-          <RMPerformance data={rmPerformaceSumm?.[0]||{}} auctionData={rmAuctionMarket} offMarketData={rmOffMarket} />
+        {rmPerformaceSumm && rmAuctionMarket && rmOffMarket ? (
+          <RMPerformance data={rmPerformaceSumm?.[0] || {}} auctionData={rmAuctionMarket} offMarketData={rmOffMarket} />
         ) : null}
 
-        {investorTopBuyData ? (
+        {/* {investorTopBuyData ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty buyer <LiveIndicator /></CardTitle>
@@ -344,8 +344,8 @@ useEffect(() => {
               />
             </CardContent>
           </Card>
-        ) : null}
-
+        ) : null} */}
+        {/* 
         {investorTopSaleData ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
@@ -358,9 +358,9 @@ useEffect(() => {
               />
             </CardContent>
           </Card>
-        ) : null}
+        ) : null} */}
         {/* Investor Live Trade RM Wise */}
-        {investorLiveTrade ? (
+        {/* {investorLiveTrade ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a]">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
@@ -372,8 +372,8 @@ useEffect(() => {
               />
             </CardContent>
           </Card>
-        ) : null}
-        {clients ? (
+        ) : null} */}
+        {/* {clients ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a]">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg">Client Details Information</CardTitle>
@@ -385,7 +385,7 @@ useEffect(() => {
               />
             </CardContent>
           </Card>
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   );

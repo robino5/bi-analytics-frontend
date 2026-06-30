@@ -293,7 +293,7 @@ const RmPortfolioBoard = () => {
         ) : (
           <SummarySkeletonCard className="col-span-3" />
         )}
-         {/* Zonal Marked Investors */}
+        {/* Zonal Marked Investors */}
         <Tabs defaultValue="red" className="col-span-3 ">
           <TabsList className="grid w-full grid-cols-2 bg-[#033e4a]">
             <TabsTrigger
@@ -338,12 +338,12 @@ const RmPortfolioBoard = () => {
             </Card>
           </TabsContent>
         </Tabs>
-           {fundCollections ? (
+        {fundCollections ? (
           <RMFundCollectionTable records={fundCollections} />
         ) : (
           <SummarySkeletonCard className="col-span-4" />
         )}
-       
+
         {/* Fund Collection Status */}
 
         {/* Portfolio Management Status */}
@@ -353,7 +353,7 @@ const RmPortfolioBoard = () => {
           <SummarySkeletonCard className="col-span-2" />
         )}
       </div>
-       {nonePerformClient ? (
+      {/* {nonePerformClient ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg">Non Performing clients-{nonePerformClient?.length}</CardTitle>
@@ -372,7 +372,7 @@ const RmPortfolioBoard = () => {
           <CardContent className="mt-3">
             loading......
           </CardContent>
-        </Card>}
+        </Card>} */}
     </div>
   );
 };
