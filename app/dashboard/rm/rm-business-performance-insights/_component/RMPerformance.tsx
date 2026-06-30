@@ -90,11 +90,10 @@ const RMPerformance = ({ rmPerformance, branch, trader }: {
               </th>
 
               <th
-                rowSpan={2}
+                colSpan={4}
                 className="border border-lime-400 bg-lime-300 px-3 py-2 text-center font-semibold"
               >
                 CTC Times
-               
               </th>
 
             </tr>
@@ -123,6 +122,20 @@ const RMPerformance = ({ rmPerformance, branch, trader }: {
               </th>
               <th className="border border-gray-300 bg-green-200 px-2 py-2 text-center">
                 Percentage (%)
+              </th>
+
+              {/* CTC Times */}
+              <th className="border border-gray-300 bg-lime-200 px-2 py-2 text-center">
+                Daily
+              </th>
+              <th className="border border-gray-300 bg-lime-200 px-2 py-2 text-center">
+                Monthly
+              </th>
+              <th className="border border-gray-300 bg-lime-200 px-2 py-2 text-center">
+                Quarterly
+              </th>
+              <th className="border border-gray-300 bg-lime-200 px-2 py-2 text-center">
+                Yearly
               </th>
             </tr>
           </thead>
@@ -185,12 +198,30 @@ const RMPerformance = ({ rmPerformance, branch, trader }: {
                       {item.boPercentage.toFixed(2)}
                     </td>
 
-                    {/* Total Expenses */}
+                    {/* CTC Times */}
                     <td
                       className={`border border-lime-400 px-2 py-2 text-center font-semibold
             ${isEven ? "bg-lime-100" : "bg-lime-200"}`}
                     >
                       {numberToMillionsString(item.ctcDaily, 2)}
+                    </td>
+                    <td
+                      className={`border border-lime-400 px-2 py-2 text-center font-semibold
+            ${isEven ? "bg-lime-100" : "bg-lime-200"}`}
+                    >
+                      {numberToMillionsString(item.ctcMonthly, 2)}
+                    </td>
+                    <td
+                      className={`border border-lime-400 px-2 py-2 text-center font-semibold
+            ${isEven ? "bg-lime-100" : "bg-lime-200"}`}
+                    >
+                      {numberToMillionsString(item.ctcQuarterly, 2)}
+                    </td>
+                    <td
+                      className={`border border-lime-400 px-2 py-2 text-center font-semibold
+            ${isEven ? "bg-lime-100" : "bg-lime-200"}`}
+                    >
+                      {numberToMillionsString(item.ctcYearly, 2)}
                     </td>
                   </tr>
                 );
