@@ -332,85 +332,68 @@ const RmBusinessPerformanceInsightsPage = () => {
       )}
 
       <div className="grid grid-cols-12 gap-3 mt-3">
-        {investorTopBuyData ? (
-          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty buyer <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorTopBuyData}
-                columns={investorLiveBuySaleClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-
-        {investorTopSaleData ? (
-          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorTopSaleData}
-                columns={investorLiveBuySaleClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-      </div>
-
-      <div className="grid grid-cols-1 gap-3 mt-3">
-        {investorLiveTrade ? (
-          <Card className="col-span-1 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3 overflow-auto">
-              <InvestorLiveTradeDataTable
-                data={investorLiveTrade}
-                columns={investorLiveTradeClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-
-        {clients ? (
-          <Card className="col-span-1 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Client Details Information</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3 overflow-auto">
-              <RMClientsDataTable
-                data={clients}
-                columns={rmWiseClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-      </div>
-
-      {nonePerformClient ? (
-        <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+        <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
           <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-            <CardTitle className="text-white text-md text-lg">Non Performing clients-{nonePerformClient?.length}</CardTitle>
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty buyer <LiveIndicator /></CardTitle>
           </CardHeader>
           <CardContent className="mt-3">
-            <BranchWiseNonePerformingClientDatatable
-              data={nonePerformClient}
-              columns={branchWiseNonePerformingClientColumns}
+            <InvestorLiveBuySaleDatatable
+              data={investorTopBuyData || []}
+              columns={investorLiveBuySaleClientsColumns}
             />
           </CardContent>
         </Card>
-      ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+
+        <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3">
+            <InvestorLiveBuySaleDatatable
+              data={investorTopSaleData || []}
+              columns={investorLiveBuySaleClientsColumns}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 mt-3">
+        <Card className="col-span-1 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3 overflow-auto">
+            <InvestorLiveTradeDataTable
+              data={investorLiveTrade || []}
+              columns={investorLiveTradeClientsColumns}
+            />
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg">Client Details Information</CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3 overflow-auto">
+            <RMClientsDataTable
+              data={clients || []}
+              columns={rmWiseClientsColumns}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-          <CardTitle className="text-white text-md text-lg">Non Performing clients-{ }</CardTitle>
+          <CardTitle className="text-white text-md text-lg">Non Performing clients-{nonePerformClient?.length || 0}</CardTitle>
         </CardHeader>
         <CardContent className="mt-3">
-          loading......
+          <BranchWiseNonePerformingClientDatatable
+            data={nonePerformClient || []}
+            columns={branchWiseNonePerformingClientColumns}
+          />
         </CardContent>
-      </Card>}
+      </Card>
 
     </div>
   );
