@@ -41,7 +41,7 @@ export default function DailyTradePerformance() {
   };
   // ===========================================
   const { data: session } = useSession();
-  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER || session?.user.role.toString() === RoleType.BRANCH_MANGAER;
   const defaultBranch = isRM ? session?.user?.branchId : "";
   const defaultTrader = isRM ? session?.user.username : "";
   const turnoverChartOptions = [
@@ -98,13 +98,13 @@ export default function DailyTradePerformance() {
   };
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER || session?.user?.role?.toString() === RoleType.BRANCH_MANGAER) {
       setBranch(session.user.branchId);
     }
   }, [session, setBranch]);
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER || session?.user?.role?.toString() === RoleType.BRANCH_MANGAER) {
       setTrader(session.user.username);
     }
   }, [session, setTrader]);

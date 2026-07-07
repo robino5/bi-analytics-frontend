@@ -50,7 +50,7 @@ const RmPortfolioBoard = () => {
   // ===========================================
   const { data: session } = useSession();
 
-  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER || session?.user.role.toString() === RoleType.BRANCH_MANGAER;
   // TODO : Need to inject BranchCode in the session object
   const defaultBranch = isRM ? "12" : "";
   const defaultTrader = isRM ? session.user.username : "";
@@ -92,13 +92,13 @@ const RmPortfolioBoard = () => {
 
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER || session?.user?.role?.toString() === RoleType.BRANCH_MANGAER) {
       setBranch(session.user.branchId);
     }
   }, [session, setBranch]);
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER || session?.user?.role?.toString() === RoleType.BRANCH_MANGAER) {
       setTrader(session.user.username);
     }
   }, [session, setTrader]);

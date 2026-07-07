@@ -91,6 +91,11 @@ const ActiveTradingCodesBoard = () => {
     queryFn: () => activeTradingCodeAPI.getExchangeWiseMarketStatistics()
   });
 
+    const { data: summarydata } = useQuery({
+      queryKey: ["summarydata"],
+      queryFn: () => activeTradingCodeAPI.getSummary()
+    });
+
   const biaxialChartOption = {
     dataKey: "tradingDate",
     valueKeyA: "activeClients",
@@ -177,7 +182,7 @@ const ActiveTradingCodesBoard = () => {
   <div className="grid grid-cols-1 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
   {/* Client Trades Table */}
   <div className="rounded-md col-span-3 xl:col-span-3">
-    <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} />
+    <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} activeClient={summarydata?.data as  any} />
   </div>
 
   {/* DSE Live Trade */}
