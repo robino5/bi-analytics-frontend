@@ -16,9 +16,14 @@ import { IActiveTradingToday } from "../types";
 interface Props {
   records: IActiveTradingToday[];
   className?: string;
+  activeClient: any;
 }
 
-export default function ClientTradesDataTable({ records, className }: Props) {
+export default function ClientTradesDataTable({
+  records,
+  className,
+  activeClient,
+}: Props) {
   // Override console.error
   // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
   // @link https://github.com/recharts/recharts/issues/3615
@@ -28,15 +33,17 @@ export default function ClientTradesDataTable({ records, className }: Props) {
     error(...args);
   };
   // ===========================================
+
+  console.log("activeClient", activeClient);
   return (
     <Card
       className={cn(
-        "overflow-hidden drop-shadow-md",
+        "drop-shadow-md",
         className,
-        "bg-[#033e4a] h-[308px]",
+        "bg-[#033e4a]",
       )}
     >
-      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-3 rounded-t-sm">
         <CardTitle className="text-white text-md text-lg">
           Channel Wise Clients & Trades (Today)
         </CardTitle>
@@ -44,8 +51,8 @@ export default function ClientTradesDataTable({ records, className }: Props) {
           short summary of todays clients and trades
         </CardDescription> */}
       </CardHeader>
-      <CardContent className="mt-3">
-        <Table className="border border-gray-300 rounded-md overflow-hidden mt-8">
+      <CardContent className="mt-2">
+        <Table className="border border-gray-300 rounded-md overflow-hidden mt-3">
           <TableHeader>
             <TableRow className="bg-yellow-200 hover:bg-yellow-200">
               <TableHead className="w-[200px] text-black font-bold py-2">
@@ -91,7 +98,14 @@ export default function ClientTradesDataTable({ records, className }: Props) {
           * This data is updated every 15 minutes.
         </p> */}
         {/* Note */}
-        <p className="text-red-500 text-lg mt-2 font-bold">
+        <p className="text-green-500 text-lg mt-2 font-bold">
+          Total Clients: {activeClient?.shortSummary?.totalClients?.value?.toLocaleString()} | Active Participation: {Math.round(
+            (activeClient?.shortSummary?.totalActiveClients?.value /
+              activeClient?.shortSummary?.totalClients?.value) *
+              100,
+          )}%
+        </p>
+        <p className="text-red-500 text-md mt-3 font-bold">
           * TOTAL (DT + Internet) clients counted as distinct.
         </p>
       </CardContent>

@@ -28,27 +28,37 @@ import { IClientDetail, InvestorLiveTradeInfo } from "@/types/rmPerformance";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
 import { successResponse } from "@/lib/utils";
 import { IResponse } from "@/types/utils";
+import { format, parseISO } from "date-fns";
 import { BranchWiseNonePerformClient } from "@/types/dailyTurnoverPerformance";
 import { branchWiseNonePerformingClientColumns } from ".//brach_wise_none_performing_client/_branchWiseNonePerformingClientColumns";
 import { DataTable as BranchWiseNonePerformingClientDatatable } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientTable";
+import { regionalBusinessPerformanceAPI } from "../../market-insights-branch-performance/api/market-insights-branch-performance";
+import { Skeleton } from "@/components/ui/skeleton";
+import DepositWithdrawInfo from "./_component/depositWithdraw";
 
 const RmBusinessPerformanceInsightsPage = () => {
   const { data: session } = useSession();
 
-  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  const isRM =
+    session?.user.role.toString() === RoleType.REGIONAL_MANAGER ||
+    session?.user.role.toString() === RoleType.BRANCH_MANGAER;
   const defaultBranch = isRM ? session?.user?.branchId : "";
   const defaultTrader = isRM ? session?.user.username : "";
 
   const branch = useBranchStore((state) => state.branch);
   const setBranch = useBranchStore((state) => state.setBranch);
-  const trader = useTraderStore((state) => state.trader)
+  const trader = useTraderStore((state) => state.trader);
   const setTrader = useTraderStore((state) => state.setTrader);
 
-  const [investorTopSaleData, setInvestorTopSaleData] = useState<InvestorLiveTopBuySaleInfo[]>();
-  const [investorTopBuyData, setInvestorTopBuyData] = useState<InvestorLiveTopBuySaleInfo[]>();
-  const [investorLiveTrade, setInvestorLiveTrade] = useState<InvestorLiveTradeInfo[]>();
+  const [investorTopSaleData, setInvestorTopSaleData] =
+    useState<InvestorLiveTopBuySaleInfo[]>();
+  const [investorTopBuyData, setInvestorTopBuyData] =
+    useState<InvestorLiveTopBuySaleInfo[]>();
+  const [investorLiveTrade, setInvestorLiveTrade] =
+    useState<InvestorLiveTradeInfo[]>();
   const [clients, setClients] = useState<IClientDetail[]>();
-  const [nonePerformClient, setNonePerformClient] = useState<BranchWiseNonePerformClient[]>();
+  const [nonePerformClient, setNonePerformClient] =
+    useState<BranchWiseNonePerformClient[]>();
 
   const traceBranchChange = async (branchId: string) => {
     setBranch(branchId);
@@ -60,13 +70,19 @@ const RmBusinessPerformanceInsightsPage = () => {
   };
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (
+      session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER ||
+      session?.user?.role?.toString() === RoleType.BRANCH_MANGAER
+    ) {
       setBranch(session.user.branchId);
     }
   }, [session, setBranch]);
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (
+      session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER ||
+      session?.user?.role?.toString() === RoleType.BRANCH_MANGAER
+    ) {
       setTrader(session.user.username);
     }
   }, [session, setTrader]);
@@ -74,18 +90,16 @@ const RmBusinessPerformanceInsightsPage = () => {
   useEffect(() => {
     if (!branch || branch === "") {
       if (isRM) {
-        traceBranchChange(session?.user?.branchId || "")
+        traceBranchChange(session?.user?.branchId || "");
+      } else {
+        traceBranchChange("11");
       }
-      else {
-        traceBranchChange('11')
-      }
-
     }
   }, [branch, setBranch]);
 
   const { data: traders } = useQuery({
     queryKey: ["traders", branch],
-    queryFn: () => rmBusinessPerformanceInsights.getTraderWithBranchId(branch)
+    queryFn: () => rmBusinessPerformanceInsights.getTraderWithBranchId(branch),
   });
 
   const { data: rmWiseEcrmInfo, isLoading: rmWiseEcrmInfoLoading } = useQuery({
@@ -100,6 +114,19 @@ const RmBusinessPerformanceInsightsPage = () => {
   const { data: rmWiseEkycInfo, isLoading: rmWiseEkycInfoLoading } = useQuery({
     queryKey: ["rmWiseEkycInfo"],
     queryFn: () => rmBusinessPerformanceInsights.getRegionalEkycDetails(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const {
+    data: branchDepositWithdrawDetailsInfo,
+    isLoading: branchDepositWithdrawDetailsInfoLoading,
+  } = useQuery({
+    queryKey: ["branchDepositWithdrawDetailsInfo"],
+    queryFn: () =>
+      rmBusinessPerformanceInsights.getRegionalDepositWithdrawDetails(),
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -153,17 +180,14 @@ const RmBusinessPerformanceInsightsPage = () => {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<IClientDetail[]>;
           if (successResponse(result.status)) {
             setClients(result.data);
           }
         } catch (error) {
-          console.error(
-            `Error Happened while fetching Client Details`,
-            error
-          );
+          console.error(`Error Happened while fetching Client Details`, error);
         }
       };
 
@@ -176,16 +200,18 @@ const RmBusinessPerformanceInsightsPage = () => {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
-          const result = (await response.json()) as IResponse<InvestorLiveTradeInfo[]>;
+          const result = (await response.json()) as IResponse<
+            InvestorLiveTradeInfo[]
+          >;
           if (successResponse(result.status)) {
             setInvestorLiveTrade(result.data);
           }
         } catch (error) {
           console.error(
             `Error Happened while fetching Investor Live Trade Details`,
-            error
+            error,
           );
         }
       };
@@ -199,7 +225,7 @@ const RmBusinessPerformanceInsightsPage = () => {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             InvestorLiveTopBuySaleInfo[]
@@ -210,7 +236,7 @@ const RmBusinessPerformanceInsightsPage = () => {
         } catch (error) {
           console.error(
             `Error Happened while fetching top investor sale data`,
-            error
+            error,
           );
         }
       };
@@ -224,7 +250,7 @@ const RmBusinessPerformanceInsightsPage = () => {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
           const result = (await response.json()) as IResponse<
             InvestorLiveTopBuySaleInfo[]
@@ -235,7 +261,7 @@ const RmBusinessPerformanceInsightsPage = () => {
         } catch (error) {
           console.error(
             `Error Happened while fetching top investor buy data`,
-            error
+            error,
           );
         }
       };
@@ -249,16 +275,18 @@ const RmBusinessPerformanceInsightsPage = () => {
                 Authorization: `Bearer ${session?.user.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
-          const result = (await response.json()) as IResponse<BranchWiseNonePerformClient[]>;
+          const result = (await response.json()) as IResponse<
+            BranchWiseNonePerformClient[]
+          >;
           if (successResponse(result.status)) {
             setNonePerformClient(result.data);
           }
         } catch (error) {
           console.error(
             `Error Happened while fetching Non Performing clients`,
-            error
+            error,
           );
         }
       };
@@ -271,11 +299,38 @@ const RmBusinessPerformanceInsightsPage = () => {
     }
   }, [branch, trader, session?.user?.accessToken]);
 
-
+  const {
+    data: branchPerformanceProcess,
+    isLoading: branchPerformanceProcessLoading,
+  } = useQuery({
+    queryKey: ["branchPerformanceProcess"],
+    queryFn: () => regionalBusinessPerformanceAPI.getBranchPerformanceProcess(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
 
   return (
     <div className="mx-4">
-      <PageHeader name="RM Business and Performance Insight">
+      <PageHeader
+        name="RM Business and Performance Insight"
+        period={`From: ${
+          branchPerformanceProcess?.data?.dateFrom
+            ? format(
+                parseISO(branchPerformanceProcess.data.dateFrom),
+                "dd-MMM-yyyy",
+              )
+            : ""
+        } to ${
+          branchPerformanceProcess?.data?.dateTo
+            ? format(
+                parseISO(branchPerformanceProcess.data.dateTo),
+                "dd-MMM-yyyy",
+              )
+            : ""
+        }`}
+      >
         <BranchFilter onChange={traceBranchChange} currentBranch={branch} />
         <TraderFilter
           traders={traders?.data || []}
@@ -285,20 +340,24 @@ const RmBusinessPerformanceInsightsPage = () => {
       </PageHeader>
       <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
         {rmWiseChannelWiseTradeInfo && (
-
           <ClientTradesDataTable
             records={rmWiseChannelWiseTradeInfo.data}
             branch={branch}
             trader={trader}
           />
-
         )}
 
         {rmWiseEcrmInfo && (
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title="eCRM"
-            children={<EcrmInfo eCRM={rmWiseEcrmInfo.data} branch={branch} trader={trader} />}
+            children={
+              <EcrmInfo
+                eCRM={rmWiseEcrmInfo.data}
+                branch={branch}
+                trader={trader}
+              />
+            }
           />
         )}
 
@@ -307,7 +366,11 @@ const RmBusinessPerformanceInsightsPage = () => {
             className="col-span-6 xl:col-span-3"
             title="Client Overview As on Date"
             children={
-              <ClientInfo clientData={branchClientInfo.data} branch={branch} trader={trader} />
+              <ClientInfo
+                clientData={branchClientInfo.data}
+                branch={branch}
+                trader={trader}
+              />
             }
           />
         )}
@@ -316,102 +379,126 @@ const RmBusinessPerformanceInsightsPage = () => {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title="eKYC"
-            children={<EkycInfo eKYC={rmWiseEkycInfo.data} branch={branch} trader={trader} />}
+            children={
+              <EkycInfo
+                eKYC={rmWiseEkycInfo.data}
+                branch={branch}
+                trader={trader}
+              />
+            }
+          />
+        )}
+
+        {branchDepositWithdrawDetailsInfoLoading ||
+        !branchDepositWithdrawDetailsInfo ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Deposit & Withdraw Details"}
+          >
+            <div className="w-full space-y-3">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </CardBoard>
+        ) : (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Deposit & Withdraw Details"}
+            children={
+              <DepositWithdrawInfo
+                depositWithdraw={branchDepositWithdrawDetailsInfo.data}
+                branch={branch}
+                trader={trader}
+              />
+            }
           />
         )}
       </div>
       <br></br>
       {regionalManagerRMBusinessPerformance && (
         <RMPerformance
-          rmPerformance={
-            regionalManagerRMBusinessPerformance?.data
-          }
+          rmPerformance={regionalManagerRMBusinessPerformance?.data}
           branch={branch}
           trader={trader}
         />
       )}
 
       <div className="grid grid-cols-12 gap-3 mt-3">
-        {investorTopBuyData ? (
-          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty buyer <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorTopBuyData}
-                columns={investorLiveBuySaleClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-
-        {investorTopSaleData ? (
-          <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorTopSaleData}
-                columns={investorLiveBuySaleClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-      </div>
-
-      <div className="grid grid-cols-1 gap-3 mt-3">
-        {investorLiveTrade ? (
-          <Card className="col-span-1 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3 overflow-auto">
-              <InvestorLiveTradeDataTable
-                data={investorLiveTrade}
-                columns={investorLiveTradeClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-
-        {clients ? (
-          <Card className="col-span-1 shadow-xl bg-[#033e4a]">
-            <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-              <CardTitle className="text-white text-md text-lg">Client Details Information</CardTitle>
-            </CardHeader>
-            <CardContent className="mt-3 overflow-auto">
-              <RMClientsDataTable
-                data={clients}
-                columns={rmWiseClientsColumns}
-              />
-            </CardContent>
-          </Card>
-        ) : null}
-      </div>
-
-      {nonePerformClient ? (
-        <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+        <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
           <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-            <CardTitle className="text-white text-md text-lg">Non Performing clients-{nonePerformClient?.length}</CardTitle>
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">
+              Top Twenty buyer <LiveIndicator />
+            </CardTitle>
           </CardHeader>
           <CardContent className="mt-3">
-            <BranchWiseNonePerformingClientDatatable
-              data={nonePerformClient}
-              columns={branchWiseNonePerformingClientColumns}
+            <InvestorLiveBuySaleDatatable
+              data={investorTopBuyData || []}
+              columns={investorLiveBuySaleClientsColumns}
             />
           </CardContent>
         </Card>
-      ) : <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
+
+        <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">
+              Top Twenty Seller <LiveIndicator />
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3">
+            <InvestorLiveBuySaleDatatable
+              data={investorTopSaleData || []}
+              columns={investorLiveBuySaleClientsColumns}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 mt-3">
+        <Card className="col-span-1 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg flex items-center gap-2">
+              Investor Live Trade RM Wise <LiveIndicator />
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3 overflow-auto">
+            <InvestorLiveTradeDataTable
+              data={investorLiveTrade || []}
+              columns={investorLiveTradeClientsColumns}
+            />
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1 shadow-xl bg-[#033e4a]">
+          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+            <CardTitle className="text-white text-md text-lg">
+              Client Details Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-3 overflow-auto">
+            <RMClientsDataTable
+              data={clients || []}
+              columns={rmWiseClientsColumns}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a] mt-2">
         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-          <CardTitle className="text-white text-md text-lg">Non Performing clients-{ }</CardTitle>
+          <CardTitle className="text-white text-md text-lg">
+            Non Performing clients-{nonePerformClient?.length || 0}
+          </CardTitle>
         </CardHeader>
         <CardContent className="mt-3">
-          loading......
+          <BranchWiseNonePerformingClientDatatable
+            data={nonePerformClient || []}
+            columns={branchWiseNonePerformingClientColumns}
+          />
         </CardContent>
-      </Card>}
-
+      </Card>
     </div>
   );
 };

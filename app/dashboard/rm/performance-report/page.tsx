@@ -32,7 +32,7 @@ import LiveIndicator from "@/components/ui/live-indicator";
 
 const RmPerformanceBoard = () => {
   const { data: session } = useSession();
-  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER;
+  const isRM = session?.user.role.toString() === RoleType.REGIONAL_MANAGER || session?.user.role.toString() === RoleType.BRANCH_MANGAER;
   const defaultBranch = isRM ? "12" : "";
   const defaultTrader = isRM ? session.user.username : "";
   const branch = useBranchStore((state) => state.branch);
@@ -76,13 +76,13 @@ const RmPerformanceBoard = () => {
   });
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER || session?.user?.role?.toString() === RoleType.BRANCH_MANGAER) {
       setBranch(session.user.branchId);
     }
   }, [session, setBranch]);
 
   useEffect(() => {
-    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER) {
+    if (session?.user?.role?.toString() === RoleType.REGIONAL_MANAGER || session?.user?.role?.toString() === RoleType.BRANCH_MANGAER) {
       setTrader(session.user.username);
     }
   }, [session, setTrader]);

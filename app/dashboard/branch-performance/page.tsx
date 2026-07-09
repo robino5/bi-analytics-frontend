@@ -103,7 +103,7 @@ export default function BranchPerformance() {
       </PageHeader>
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">
         {/* RM Wise Auction Market Data Table */}
-        <ActonAndOffMarketDataTale
+        {/* <ActonAndOffMarketDataTale
           className="col-span-2 mb-2"
           title="Auction Market (Gsec)"
           subtitle="summary of fund status branch wise"
@@ -111,10 +111,10 @@ export default function BranchPerformance() {
           data={rmWiseAuctionMarket?.data || []}
           setYear={setYearActionMarket}
           year={yearAuctionMarket}
-        />
+        /> */}
 
         {/* RM Wise Off Market Data Table */}
-        <ActonAndOffMarketDataTale
+        {/* <ActonAndOffMarketDataTale
           className="col-span-2 mb-2"
           title="Off Market (Gsec)"
           subtitle="summary of fund status branch wise"
@@ -122,7 +122,7 @@ export default function BranchPerformance() {
           data={rmWiseOffMarket?.data || []}
            setYear={setYearOffMarket}
           year={yearOffMarket}
-        />
+        /> */}
 
         {/* Branch Wise Turnover Status */}
         <DataTableCardTurnover
