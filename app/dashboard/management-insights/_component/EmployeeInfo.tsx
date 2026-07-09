@@ -43,9 +43,13 @@ export default function EmployeePieChart({
     }, 0);
   };
 
-  const permanent = isArray || Array.isArray(employeeData?.data) ? sumField(filteredList, 'permanentTrader') : employeeData?.permanentTrader || 0;
-  const withSalary = isArray || Array.isArray(employeeData?.data) ? sumField(filteredList, 'contractualWithSalary') : employeeData?.contractualWithSalary || 0;
-  const withoutSalary = isArray || Array.isArray(employeeData?.data) ? sumField(filteredList, 'contractualWithoutSalary') : employeeData?.contractualWithoutSalary || 0;
+  const hasRegionFilter = region && region !== "" && region !== "All";
+  const hasBranchFilter = branch && branch !== "" && branch !== "All";
+  const useCalculatedSum = hasRegionFilter || hasBranchFilter || isArray || !Array.isArray(employeeData?.data);
+
+  const permanent = useCalculatedSum ? sumField(filteredList, 'permanentTrader') : employeeData?.permanentTrader || 0;
+  const withSalary = useCalculatedSum ? sumField(filteredList, 'contractualWithSalary') : employeeData?.contractualWithSalary || 0;
+  const withoutSalary = useCalculatedSum ? sumField(filteredList, 'contractualWithoutSalary') : employeeData?.contractualWithoutSalary || 0;
   useEffect(() => {
     if (!chartRef.current) return;
 

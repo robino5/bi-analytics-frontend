@@ -3,11 +3,13 @@ import { numberToMillionsString } from "@/lib/utils";
 
 type DepositWithdrawInfoProps = {
   depositWithdraw: any;
-  region: string;
-  branch: string;
+  region?: string;
+  branch?: string;
+  trader?: string;
 };
 
-export default function DepositWithdrawInfo({ depositWithdraw, region, branch }: DepositWithdrawInfoProps) {
+export default function DepositWithdrawInfo({ depositWithdraw, region, branch, trader }: DepositWithdrawInfoProps) {
+  console.log("DepositWithdrawInfo", { depositWithdraw });
   const isArray = Array.isArray(depositWithdraw);
 
   const get = (obj: any, path: string) => {
@@ -22,15 +24,18 @@ export default function DepositWithdrawInfo({ depositWithdraw, region, branch }:
 
   const hasRegionFilter = !isAllValue(region);
   const hasBranchFilter = !isAllValue(branch);
+  const hasTraderFilter = !isAllValue(trader);
 
   const filteredList = (() => {
     const rawList = isArray ? depositWithdraw : (Array.isArray(depositWithdraw?.data) ? depositWithdraw.data : []);
     return rawList.filter((item: any) => {
       const itemRegion = normalizeValue(item.regionName);
       const itemBranch = normalizeValue(item.branchCode || item.branch_code || item.branch || item.branchName);
+      const itemTrader = normalizeValue(item.traderId || item.trader_id || item.trader || item.traderName);
 
       if (hasRegionFilter && itemRegion !== normalizeValue(region)) return false;
       if (hasBranchFilter && itemBranch !== normalizeValue(branch)) return false;
+      if (hasTraderFilter && itemTrader !== normalizeValue(trader)) return false;
 
       return true;
     });
@@ -44,14 +49,12 @@ export default function DepositWithdrawInfo({ depositWithdraw, region, branch }:
     }, 0);
   };
 
-  const useCalculatedSum = hasRegionFilter || hasBranchFilter || isArray || !Array.isArray(depositWithdraw?.data);
-
   const totals = {
-    totalPortfolio: useCalculatedSum ? sumField(filteredList, 'totalPortfolio') : depositWithdraw?.totalPortfolio || 0,
-    cashAvailable: useCalculatedSum ? sumField(filteredList, 'cashAvailable') : depositWithdraw?.cashAvailable || 0,
-    marginNegative: useCalculatedSum ? sumField(filteredList, 'marginNegative') : depositWithdraw?.marginNegative || 0,
-    totalDeposit: useCalculatedSum ? sumField(filteredList, 'totalDeposit') : depositWithdraw?.totalDeposit || 0,
-    totalWithdrawal: useCalculatedSum ? sumField(filteredList, 'totalWithdrawal') : depositWithdraw?.totalWithdrawal || 0,
+    totalPortfolio: sumField(filteredList, 'totalPortfolio'),
+    cashAvailable: sumField(filteredList, 'cashAvailable'),
+    marginNegative: sumField(filteredList, 'marginNegative'),
+    totalDeposit: sumField(filteredList, 'totalDeposit'),
+    totalWithdrawal: sumField(filteredList, 'totalWithdrawal'),
   };
 
   return (

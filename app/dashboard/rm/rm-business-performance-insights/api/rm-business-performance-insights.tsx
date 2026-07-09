@@ -58,6 +58,11 @@ class RMBusinessPerformanceInsights extends Common {
 
         return this.http.get<IResponse<any>>(url, { signal });
     }
+    getRegionalDepositWithdrawDetails(signal?: AbortSignal) {
+    let url = `dashboards/branch-wise-regional-deposit-withdraw-details/`;
+
+    return this.http.get<IResponse<any>>(url, { signal });
+  }
 }
 
 const httpAuthService = new HttpAuthService(config.apiURL, authService);

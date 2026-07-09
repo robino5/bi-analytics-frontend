@@ -33,6 +33,8 @@ import { BranchWiseNonePerformClient } from "@/types/dailyTurnoverPerformance";
 import { branchWiseNonePerformingClientColumns } from ".//brach_wise_none_performing_client/_branchWiseNonePerformingClientColumns";
 import { DataTable as BranchWiseNonePerformingClientDatatable } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientTable";
 import { regionalBusinessPerformanceAPI } from "../../market-insights-branch-performance/api/market-insights-branch-performance";
+import { Skeleton } from "@/components/ui/skeleton";
+import DepositWithdrawInfo from "./_component/depositWithdraw";
 
 const RmBusinessPerformanceInsightsPage = () => {
   const { data: session } = useSession();
@@ -112,6 +114,19 @@ const RmBusinessPerformanceInsightsPage = () => {
   const { data: rmWiseEkycInfo, isLoading: rmWiseEkycInfoLoading } = useQuery({
     queryKey: ["rmWiseEkycInfo"],
     queryFn: () => rmBusinessPerformanceInsights.getRegionalEkycDetails(),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+
+  const {
+    data: branchDepositWithdrawDetailsInfo,
+    isLoading: branchDepositWithdrawDetailsInfoLoading,
+  } = useQuery({
+    queryKey: ["branchDepositWithdrawDetailsInfo"],
+    queryFn: () =>
+      rmBusinessPerformanceInsights.getRegionalDepositWithdrawDetails(),
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -367,6 +382,34 @@ const RmBusinessPerformanceInsightsPage = () => {
             children={
               <EkycInfo
                 eKYC={rmWiseEkycInfo.data}
+                branch={branch}
+                trader={trader}
+              />
+            }
+          />
+        )}
+
+        {branchDepositWithdrawDetailsInfoLoading ||
+        !branchDepositWithdrawDetailsInfo ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Deposit & Withdraw Details"}
+          >
+            <div className="w-full space-y-3">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </CardBoard>
+        ) : (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Deposit & Withdraw Details"}
+            children={
+              <DepositWithdrawInfo
+                depositWithdraw={branchDepositWithdrawDetailsInfo.data}
                 branch={branch}
                 trader={trader}
               />

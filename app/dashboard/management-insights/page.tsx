@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { format, parseISO } from "date-fns";
 import { toast } from "@/components/ui/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function RegionalBusinessPerformancePage() {
   const [region, setRegion] = useState("");
@@ -483,7 +484,20 @@ export default function RegionalBusinessPerformancePage() {
           />
         )}
 
-        {branchDepositWithdrawDetailsInfo && (
+        {branchDepositWithdrawDetailsInfoLoading || !branchDepositWithdrawDetailsInfo ? (
+          <CardBoard
+            className="col-span-6 xl:col-span-3"
+            title={"Deposit & Withdraw Details"}
+          >
+            <div className="w-full space-y-3">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </CardBoard>
+        ) : (
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Deposit & Withdraw Details"}
