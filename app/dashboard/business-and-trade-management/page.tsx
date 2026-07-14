@@ -89,12 +89,12 @@ export default function BusinessAndTradeManagement() {
         ) : <NoDataFound title="Details SME-ATB market share of LBSL" />}
 
         {dateWiseTopInternetTurnover?.data ? (
-          <DateWiseTopTurnoverCard title="Date wise top ten internet turnover" datalist={dateWiseTopInternetTurnover?.data} />
-        ) : <NoDataFound title="Date wise top ten internet turnover" />}
+          <DateWiseTopTurnoverCard title="Top 10 Internet Turnover" datalist={dateWiseTopInternetTurnover?.data} />
+        ) : <NoDataFound title="Top 10 Internet Turnover" />}
 
         {dateWiseTopTurnover?.data ? (
-          <DateWiseTopTurnoverCard title="Date wise top ten turnover" datalist={dateWiseTopTurnover?.data} />
-        ) : <NoDataFound title="Date wise top ten turnover" />}
+          <DateWiseTopTurnoverCard title="Top 10 Turnover" datalist={dateWiseTopTurnover?.data} />
+        ) : <NoDataFound title="Top 10 Turnover" />}
 
 
       </div>
