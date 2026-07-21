@@ -4,6 +4,7 @@ import BoardWiseTurnover from "./_components/_board_wise_turnover";
 import BoardWiseTurnoverBreakdown from "./_components/_board_wise_turnover_breakdown";
 import DetailsMarketShareLBSL from "./_components/_details_market_share_of_lbsl";
 import DetailsMarketShareSME from "./_components/_details_market_share_of_lbsl_sme_atb";
+import DateWiseTopTurnoverCard from "./_components/_date_wise_top_turnover_card";
 import { DataTableCardInvestorWiseSaleableStock } from "./_components/investor-wise-total-saleable-stock/data-table";
 import { SalableStockPercentageDataTableCard } from "./_components/salable-stock-percentage/data-table";
 import { getHeaderDate } from "@/lib/utils";
@@ -41,8 +42,17 @@ export default function BusinessAndTradeManagement() {
     queryFn: () => businessTradeManagementAPI.getMarketShareSME()
   });
 
+  const { data: dateWiseTopTurnover, isLoading: dateWiseTopTurnoverLoading } = useQuery({
+    queryKey: ["dateWiseTopTurnover"],
+    queryFn: () => businessTradeManagementAPI.getDateWiseTopTurnover()
+  });
 
-  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading;
+  const { data: dateWiseTopInternetTurnover, isLoading: dateWiseTopInternetTurnoverLoading } = useQuery({
+    queryKey: ["dateWiseTopInternetTurnover"],
+    queryFn: () => businessTradeManagementAPI.getDateWiseTopInternetTurnover()
+  });
+
+  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading || dateWiseTopTurnoverLoading || dateWiseTopInternetTurnoverLoading;
 
 
   if (isLoading) {
@@ -77,6 +87,16 @@ export default function BusinessAndTradeManagement() {
         {marketShareSME?.data ? (
           <DetailsMarketShareSME datalist={marketShareSME?.data as any} />
         ) : <NoDataFound title="Details SME-ATB market share of LBSL" />}
+
+        {dateWiseTopInternetTurnover?.data ? (
+          <DateWiseTopTurnoverCard title="Top 10 LBSL Internet Turnover" datalist={dateWiseTopInternetTurnover?.data} />
+        ) : <NoDataFound title="Top 10 LBSL Internet Turnover" />}
+
+        {dateWiseTopTurnover?.data ? (
+          <DateWiseTopTurnoverCard title="Top 10 LBSL Total Turnover" datalist={dateWiseTopTurnover?.data} />
+        ) : <NoDataFound title="Top 10 LBSL Total Turnover" />}
+
+
       </div>
 
       <div className="grid grid-cols-1 gap-3 mt-2 lg:grid-cols-4">

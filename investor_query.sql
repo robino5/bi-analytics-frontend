@@ -1,0 +1,1 @@
+SELECT * FROM trd_investor_account WHERE investor_code IN (,  

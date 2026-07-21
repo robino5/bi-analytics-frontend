@@ -100,6 +100,9 @@ export type TraderPerformance = {
   totalWithdrawal: number;
   totalNetFund: number;
   regionName: string;
-  clusterName: string;
 };
 
+export interface DateWiseTopTurnoverData {
+  tradeDate: string;
+  turnover: number;
+}
