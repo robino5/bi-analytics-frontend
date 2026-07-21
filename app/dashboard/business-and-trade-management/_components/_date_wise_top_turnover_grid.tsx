@@ -28,9 +28,9 @@ export default function DateWiseTopTurnoverGrid({ datalist }: Props) {
       <Table className="min-w-full border border-gray-300 rounded-md overflow-hidden text-sm">
         <TableHeader>
           <TableRow className="bg-table-header hover:bg-table-header">
-            <TableHead className="text-black font-bold h-8 py-1">Date</TableHead>
-            <TableHead className="text-right text-black font-bold h-8 py-1">
-              Turnover
+            <TableHead className="text-black font-bold h-8 py-1 text-right">Turnover</TableHead>
+            <TableHead className="text-center text-black font-bold h-8 py-1">
+              Date
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -45,11 +45,11 @@ export default function DateWiseTopTurnoverGrid({ datalist }: Props) {
                   "hover:bg-table-even-row-hover transition-all duration-300"
                 )}
               >
-                <TableCell className={cn("py-1", currentIsToday ? "font-bold text-green-700 text-[17px]" : "font-medium")}>
-                  {formatDate(new Date(data.tradeDate))}
-                </TableCell>
                 <TableCell className={cn("text-right py-1", currentIsToday && "font-bold text-green-700 text-[17px]")}>
                   {numberToMillionsString(data.turnover, 2, true)}
+                </TableCell>
+                 <TableCell className={cn("py-1", currentIsToday ? "font-bold text-green-700 text-[17px]" : "font-medium text-center")}>
+                  {formatDate(new Date(data.tradeDate))}
                 </TableCell>
               </TableRow>
             );
