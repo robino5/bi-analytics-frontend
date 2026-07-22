@@ -62,7 +62,7 @@ export default function NegativeEquityInvestorCodeDataTable({
                   {record.investorName}
                 </TableCell>
                 <TableCell className="py-1 text-right text-red-500">
-                  {numberToMillionsString(record.ledgerBalance, 2)}
+                  {numberToMillionsString(record.ledgerBalance, 3)}
                 </TableCell>
                 <TableCell className="py-1 text-left">{record.rmName}</TableCell>
               </TableRow>
@@ -73,8 +73,8 @@ export default function NegativeEquityInvestorCodeDataTable({
               <TableCell colSpan={2} className="text-right text-white">
                 Total:
               </TableCell>
-              <TableCell className="text-right text-red-600 text-lg font-bold">
-                {numberToMillionsString(totalLedgerBalance, 2)}
+              <TableCell className="text-right text-white text-lg font-bold">
+                ({numberToMillionsString(totalLedgerBalance, 3)})
               </TableCell>
               <TableCell />
             </TableRow>
