@@ -21,11 +21,11 @@ export default function DateWiseTopTurnoverCard({ title, datalist }: Props) {
         </CardTitle>
       </CardHeader>
       <CardContent className="mt-2">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2">
           <div className="col-span-1">
             <DateWiseTopTurnoverGrid datalist={datalist} />
           </div>
-          <div className="col-span-1 border-l border-gray-200 pl-4">
+          <div className="col-span-1 border-l border-gray-200 pl-3">
             <DateWiseTopTurnoverChart datalist={datalist} />
           </div>
         </div>

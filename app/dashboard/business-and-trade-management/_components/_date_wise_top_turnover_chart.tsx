@@ -1,22 +1,27 @@
 "use client";
 import React from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LabelList,
-  Cell,
-} from "recharts";
 import { DateWiseTopTurnoverData } from "../types";
-import { formatDate, numberToMillionsString } from "@/lib/utils";
+import { numberToMillionsString, cn } from "@/lib/utils";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface Props {
   datalist: DateWiseTopTurnoverData[];
 }
+
+const isToday = (dateString: string) => {
+  const today = new Date();
+  const date = new Date(dateString);
+  return date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
+};
 
 export default function DateWiseTopTurnoverChart({ datalist }: Props) {
   const COLORS = [
@@ -24,51 +29,54 @@ export default function DateWiseTopTurnoverChart({ datalist }: Props) {
     "#8dd1e1", "#82ca9d", "#a4de6c", "#d0ed57", "#ffc658"
   ];
 
-  const chartData = datalist.map((item) => ({
-    name: formatDate(new Date(item.tradeDate)),
-    turnover: item.turnover,
-  }));
+  // Find max turnover to scale bars, avoiding division by zero
+  const maxTurnover = Math.max(...datalist.map(d => d.turnover), 1);
 
   return (
-    <div className="w-full h-full min-h-[250px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          layout="vertical"
-          data={chartData}
-          margin={{ top: 10, right: 40, left: 0, bottom: 10 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#ffffff44" />
-          <XAxis 
-            type="number"
-            tick={{ fontSize: 12, fill: "#ffffff" }}
-            tickFormatter={(value) => numberToMillionsString(value, 0, false)}
-          />
-          <YAxis 
-            dataKey="name" 
-            type="category"
-            tick={{ fontSize: 12, fill: "#ffffff" }}
-            width={100}
-          />
-          <Tooltip 
-            formatter={(value: number) => [numberToMillionsString(value, 2, true), "Turnover"]}
-            labelStyle={{ color: "black" }}
-            itemStyle={{ color: "black" }}
-            cursor={{ fill: "transparent" }}
-          />
-          <Bar dataKey="turnover" radius={[0, 4, 4, 0]} barSize={20}>
-            {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-            <LabelList 
-              dataKey="turnover" 
-              position="right" 
-              formatter={(val: number) => numberToMillionsString(val, 2, true)} 
-              fill="#ffffff" 
-              fontSize={12} 
-            />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="w-full h-full overflow-x-auto">
+      <Table className="min-w-full border-none overflow-hidden text-sm">
+        <TableHeader>
+          {/* Use the exact same border size and padding as the grid's header but make background and border transparent to match visually while keeping dimensions */}
+          <TableRow className="bg-transparent hover:bg-transparent border-b border-transparent">
+            <TableHead className="h-8 py-1 border-transparent text-transparent"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {datalist.map((data, index) => {
+            const currentIsToday = isToday(data.tradeDate);
+            const widthPercent = (data.turnover / maxTurnover) * 100;
+            const barColor = COLORS[index % COLORS.length];
+
+            return (
+              <TableRow
+                key={data.tradeDate}
+                className="bg-transparent hover:bg-transparent transition-all duration-300 border-transparent"
+              >
+                <TableCell 
+                  className={cn("py-1 px-0 border-transparent", currentIsToday && "text-[17px]")}
+                >
+                  {/* Invisible text block that perfectly matches the height of the left grid cells */}
+                  <div className="w-full flex items-center relative">
+                    {/* Render an invisible copy of the grid's text to force the EXACT same computed height */}
+                    <span className={cn("invisible pointer-events-none", currentIsToday ? "font-bold text-[17px]" : "font-medium text-center")}>
+                      {numberToMillionsString(data.turnover, 2, true)}
+                    </span>
+                    <div className="absolute inset-0 flex items-center">
+                      <div 
+                        className="h-[22px] rounded-r-sm transition-all duration-500 shadow-sm" 
+                        style={{ width: `${widthPercent}%`, backgroundColor: barColor }}
+                      />
+                      <span className="ml-2 text-xs text-white font-medium whitespace-nowrap drop-shadow-md">
+                        {numberToMillionsString(data.turnover, 2, true)}
+                      </span>
+                    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
     </div>
   );
 }
