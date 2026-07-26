@@ -34,7 +34,7 @@ export default function NegativeEquityInvestorCodeDataTable({
     <Card className={cn("overflow-auto max-h-[815px]", className, "bg-[#033e4a]")}>
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
-          Negative Equity Investor Code
+          Negative Equity Investor Code - ({records.length})
         </CardTitle>
       </CardHeader>
       <CardContent className="mt-3">
@@ -62,7 +62,7 @@ export default function NegativeEquityInvestorCodeDataTable({
                   {record.investorName}
                 </TableCell>
                 <TableCell className="py-1 text-right text-red-500">
-                  {numberToMillionsString(record.ledgerBalance)}
+                  {numberToMillionsString(record.ledgerBalance, 3)}
                 </TableCell>
                 <TableCell className="py-1 text-left">{record.rmName}</TableCell>
               </TableRow>
@@ -73,8 +73,8 @@ export default function NegativeEquityInvestorCodeDataTable({
               <TableCell colSpan={2} className="text-right text-white">
                 Total:
               </TableCell>
-              <TableCell className="text-right text-red-500">
-                {numberToMillionsString(totalLedgerBalance)}
+              <TableCell className="text-right text-white text-lg font-bold">
+                ({numberToMillionsString(totalLedgerBalance, 3)})
               </TableCell>
               <TableCell />
             </TableRow>
