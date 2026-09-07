@@ -18,7 +18,7 @@ import {
 import { businessTradeManagementAPI } from "./api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingButton from "@/components/loading";
-import NoDataFound from "./_components/_no_data_found";
+import NoDataFound from "@/components/NoDataFound";
 
 
 export default function BusinessAndTradeManagement() {
@@ -70,31 +70,30 @@ export default function BusinessAndTradeManagement() {
         name={`Business and Trade Management`}
       />
       <div className="grid grid-cols-6 gap-3 xl:grid-cols-6 mt-2">
-        {boardTernoverData?.data ? (
+        
           <BoardWiseTurnover datalist={boardTernoverData?.data as any} />
-        ) : <NoDataFound title="Board Wise Turnover" />}
 
         {boardTernoverBreakdownData?.data ? (
           <BoardWiseTurnoverBreakdown
             datalist={boardTernoverBreakdownData?.data as any}
           />
-        ) : <NoDataFound title="Main Board Wise Turnover Breakdown" />}
+        ) : <NoDataFound title="Main Board Wise Turnover Breakdown" className="col-span-3" />}
 
         {marketShareLBSL?.data ? (
           <DetailsMarketShareLBSL datalist={marketShareLBSL?.data as any} />
-        ) : <NoDataFound title="Details market share of LBSL" />}
+        ) : <NoDataFound title="Details market share of LBSL" className="col-span-3"  />}
 
         {marketShareSME?.data ? (
           <DetailsMarketShareSME datalist={marketShareSME?.data as any} />
-        ) : <NoDataFound title="Details SME-ATB market share of LBSL" />}
+        ) : <NoDataFound title="Details SME-ATB market share of LBSL" className="col-span-3" />}
 
         {dateWiseTopInternetTurnover?.data ? (
           <DateWiseTopTurnoverCard title="Top 10 LBSL Internet Turnover" datalist={dateWiseTopInternetTurnover?.data} />
-        ) : <NoDataFound title="Top 10 LBSL Internet Turnover" />}
+        ) : <NoDataFound title="Top 10 LBSL Internet Turnover" className="col-span-3" />}
 
         {dateWiseTopTurnover?.data ? (
           <DateWiseTopTurnoverCard title="Top 10 LBSL Total Turnover" datalist={dateWiseTopTurnover?.data} />
-        ) : <NoDataFound title="Top 10 LBSL Total Turnover" />}
+        ) : <NoDataFound title="Top 10 LBSL Total Turnover" className="col-span-3"/>}
 
 
       </div>

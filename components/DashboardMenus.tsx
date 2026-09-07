@@ -281,7 +281,7 @@ const menuList = [
         ],
       },
       {
-        id: 4,
+        id: 5,
         codeName: "rm_business_performance_insights",
         viewName: "RM Business Performance Insights",
         urlPath: "/dashboard/rm/rm-business-performance-insights",

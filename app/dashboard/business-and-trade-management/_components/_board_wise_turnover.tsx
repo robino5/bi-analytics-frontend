@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PushDateTime from "@/components/push-date-time";
+import NoDataFound from "@/components/NoDataFound";
 import { numberToMillionsString } from "@/lib/utils";
 
 interface Data {
@@ -32,21 +33,27 @@ interface Props {
 
 
 export default function BoardWiseTurnover({ datalist }: Props) {
-  const totalTurnover = datalist?.reduce((acc, data) => acc + data.turnover, 0);
-  const totalDsePercentage = datalist?.reduce(
+  if (!datalist || datalist.length === 0) {
+    return (
+      <NoDataFound title="DSE Board Wise Turnover As On" className="col-span-3" />
+    );
+  }
+
+  const totalTurnover = datalist.reduce((acc, data) => acc + data.turnover, 0);
+  const totalDsePercentage = datalist.reduce(
     (acc, data) => acc + data.dsePercentage,
     0
   );
-  const totalLbslTurnover = datalist?.reduce(
+  const totalLbslTurnover = datalist.reduce(
     (acc, data) => acc + data.lbslTurnover,
     0
   );
-  const totalLbslPercentage = datalist?.reduce(
+  const totalLbslPercentage = datalist.reduce(
     (acc, data) => acc + data.lbslPercentage,
     0
   );
 
-  const pushDate = datalist.length > 0 ? datalist[0]?.pushDate : "";
+  const pushDate = datalist[0]?.pushDate ?? "";
   const pushTime = pushDate.split(" ")[1] + " " + pushDate.split(" ")[2];
 
   const isWithinTimeRange = () => {

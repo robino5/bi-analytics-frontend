@@ -37,6 +37,7 @@ import { branchWiseNonePerformingClientColumns } from "./brach_wise_none_perform
 import { DataTable as BranchWiseNonePerformingClientDatatable } from "./brach_wise_none_performing_client/_branchWiseNonePerformingClientTable";
 import { Ticker } from "@/components/ticker";
 import LiveIndicator from "@/components/ui/live-indicator";
+import NoDataFound from "@/components/NoDataFound";
 
 
 export default function DailyTradePerformance() {
@@ -253,13 +254,17 @@ export default function DailyTradePerformance() {
               <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty buyer <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorTopBuyData?.data}
-                columns={investorLiveBuySaleClientsColumns}
-              />
+              {investorTopBuyData?.data?.length > 0 ? (
+                <InvestorLiveBuySaleDatatable
+                  data={investorTopBuyData?.data}
+                  columns={investorLiveBuySaleClientsColumns}
+                />
+              ) : (
+                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+              )}
             </CardContent>
           </Card>
-        ) : null}
+        ) : <NoDataFound title="Top Twenty buyer" className="col-span-12 md:col-span-3" />}
 
         {investorTopSaleData?.data ? (
           <Card className="col-span-12 md:col-span-3 shadow-xl bg-[#033e4a]">
@@ -267,13 +272,17 @@ export default function DailyTradePerformance() {
               <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorTopSaleData?.data}
-                columns={investorLiveBuySaleClientsColumns}
-              />
+              {investorTopSaleData?.data?.length > 0 ? (
+                <InvestorLiveBuySaleDatatable
+                  data={investorTopSaleData?.data}
+                  columns={investorLiveBuySaleClientsColumns}
+                />
+              ) : (
+                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+              )}
             </CardContent>
           </Card>
-        ) : null}
+        ) : <NoDataFound title="Top Twenty Seller" className="col-span-12 md:col-span-3" />}
 
         {investorLiveTrade?.data ? (
           <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a]">
@@ -281,39 +290,43 @@ export default function DailyTradePerformance() {
               <CardTitle className="text-white text-md text-lg flex items-center gap-2">Investor Live Trade RM Wise <LiveIndicator /></CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
-              <InvestorLiveBuySaleDatatable
-                data={investorLiveTrade?.data}
-                columns={investorLiveTradeClientsColumns}
-              />
+              {investorLiveTrade?.data?.length > 0 ? (
+                <InvestorLiveBuySaleDatatable
+                  data={investorLiveTrade?.data}
+                  columns={investorLiveTradeClientsColumns}
+                />
+              ) : (
+                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+              )}
             </CardContent>
           </Card>
-        ) : null}
+        ) : <NoDataFound title="Investor Live Trade RM Wise" className="col-span-6 mb-2" />}
         {branchWiseNonePerforminigClients?.data ? (
           <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
             <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
               <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
-              <BranchWiseNonePerformingClientDatatable
-                data={branchWiseNonePerforminigClients?.data}
-                columns={branchWiseNonePerformingClientColumns}
-              />
+              {branchWiseNonePerforminigClients?.data?.length > 0 ? (
+                <BranchWiseNonePerformingClientDatatable
+                  data={branchWiseNonePerforminigClients?.data}
+                  columns={branchWiseNonePerformingClientColumns}
+                />
+              ) : (
+                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+              )}
             </CardContent>
           </Card>
-        ) : <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
-          <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-            <CardTitle className="text-white text-md text-lg">Non Performing clients-{branchWiseNonePerforminigClients?.data?.length}</CardTitle>
-          </CardHeader>
-          <CardContent className="mt-3">
-            loading......
-          </CardContent>
-        </Card>}
+        ) : (
+          <NoDataFound title="Non Performing clients-0" className="col-span-12 md:col-span-6" />
+        )}
 
         {/* Turnover Performance Chart */}
         {turnoverPerformance?.data ? (
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Turnover Target"}
+            isEmpty={turnoverPerformance?.data?.length === 0}
             children={
               <BarChartVerticalGrouped
                 data={turnoverPerformance?.data}
@@ -328,6 +341,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 xl:col-span-3"
             title={"Daily Margin Loan Usage"}
+            isEmpty={marginLoanUsage?.data?.length === 0}
             children={
               <BarChartVerticalGrouped
                 data={marginLoanUsage?.data as any}
@@ -343,6 +357,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
             title="Sector Exposure Margin Code"
+            isEmpty={marginCodeExposure?.data?.length === 0}
             // subtitle="Shows analytics of marginal performance for comodities"
             children={
               <BarChartHorizontal
@@ -359,6 +374,7 @@ export default function DailyTradePerformance() {
           <CardBoard
             className="col-span-6 row-span-2 xl:col-span-3"
             title="Sector Exposure Cash Code"
+            isEmpty={cashCodeExposure?.data?.length === 0}
             // subtitle="Shows analytics of marginal performance for comodities"
             children={
               <BarChartHorizontal

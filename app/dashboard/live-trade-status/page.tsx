@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query"
 import ClientTradesDataTable from "./_components/clientTradesDataTable"
 import { IActiveTradeDayWise, IActiveTradingToday } from "./types"
 import PieChart from "./_components/pieChart";
-import NoDataFound from "./_components/_no_data_found"
+import NoDataFound from "@/components/NoDataFound"
 import { removeKeyFromObjects } from "@/utils"
 import LoadingButton from "@/components/loading"
 import CardBoard from "@/components/CardBoard"
@@ -86,7 +86,7 @@ const BranchActiveTradingCodesBoard = () => {
                     <DseLiveTrade />
                 </div>
                 {/* client  */}
-                {sanitizedDayWiseSummary ? (
+                {sanitizedDayWiseSummary?.length > 0 ? (
                     <div className="rounded-md xl:col-span-2">
                         <PieChart
                             title="Clients (Today)"
@@ -95,8 +95,8 @@ const BranchActiveTradingCodesBoard = () => {
                         />
                     </div>
                 ) :
-                    <NoDataFound title="Clients (Today)" />}
-                {sanitizedDayWiseSummary ? (
+                    <NoDataFound title="Clients (Today)" className="col-span-12 xl:col-span-2" />}
+                {sanitizedDayWiseSummary?.length > 0 ? (
                     <div className="rounded-md xl:col-span-2">
                         <PieChart
                             title="Trades (Today)"
@@ -104,9 +104,9 @@ const BranchActiveTradingCodesBoard = () => {
                             data={sanitizedDayWiseSummary}
                         />
                     </div>
-                ) : <NoDataFound title="Trades (Today)" />}
+                ) : <NoDataFound title="Trades (Today)" className="col-span-12 xl:col-span-2" />}
 
-                {sanitizedDayWiseSummary ? (
+                {sanitizedDayWiseSummary?.length > 0 ? (
                     <div className="rounded-md xl:col-span-2">
                         <PieChart
                             title="Turnover (Today)"
@@ -114,12 +114,13 @@ const BranchActiveTradingCodesBoard = () => {
                             data={sanitizedDayWiseSummary}
                         />
                     </div>
-                ) : <NoDataFound title="Turnover (Today)" />}
+                ) : <NoDataFound title="Turnover (Today)" className="col-span-12 xl:col-span-2" />}
                 {sectorwiseTrunoverComparison?.data ? (
                     <CardBoard
                         className="col-span-6 row-span-2 xl:col-span-3"
                         title="DSE Live Sector Wise Turnover"
                         liveIndicator={true}
+                        isEmpty={sectorwiseTrunoverComparison?.data?.length === 0}
                         // subtitle="Shows analytics of marginal performance for comodities"
                         children={
                             <BarChartHorizontal
@@ -141,6 +142,7 @@ const BranchActiveTradingCodesBoard = () => {
                         className="col-span-6 row-span-2 xl:col-span-3"
                         title="LBSL Live Sector Wise Turnover"
                         liveIndicator={true}
+                        isEmpty={sectorwiseTrunoverComparison?.data?.length === 0}
                         // subtitle="Shows analytics of marginal performance for comodities"
                         children={
                             <BarChartHorizontal

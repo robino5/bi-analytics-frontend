@@ -27,9 +27,10 @@ interface BarChartProps {
 
 const BarChartPositiveNegative: FC<BarChartProps> = ({ data, options }) => {
   const chartRef = useRef<HTMLDivElement | null>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && hasData) {
       const chart = echarts.init(chartRef.current);
 
       const option = {
@@ -101,6 +102,10 @@ const BarChartPositiveNegative: FC<BarChartProps> = ({ data, options }) => {
       }
     };
   }, [data]);
+
+  if (!hasData) {
+    return <div className="flex h-[400px] items-center justify-center text-gray-600">No data found</div>;
+  }
 
   return <div ref={chartRef} style={{ width: "100%", height: "400px" }} />;
 };

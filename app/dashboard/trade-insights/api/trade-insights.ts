@@ -2,7 +2,7 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { AdminRealtimeTopRmTurnover } from "../types";
+import { AdminMarketRiskData, AdminRealtimeTopRmTurnover } from "../types";
 import { IResponse } from "@/types/utils";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
@@ -37,6 +37,9 @@ class TradeInsightAPI extends Common {
     }
     getCompanyPERation() {
         return this.http.get<IResponse<any[]>>("dashboards/dse-traded-company-list/")
+    }
+    getAdminMarketRiskData() {
+        return this.http.get<IResponse<AdminMarketRiskData[]>>("dashboards/admin-market-risk-data/")
     }
     getCompanyPERSI(companyID: any) {
         return this.http.get<any>(`dashboards/portal-pe-rsi-company-wise/?company_code=${companyID}`)

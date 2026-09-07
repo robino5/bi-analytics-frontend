@@ -48,10 +48,13 @@ interface BarCharHorizonalProps {
 const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
   const activeClientsChartRef = useRef<HTMLDivElement>(null);
   const turnoverChartRef = useRef<HTMLDivElement>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
   const activeClientsChartInstanceRef = useRef<echarts.ECharts | null>(null);
   const turnoverChartInstanceRef = useRef<echarts.ECharts | null>(null);
 
   useEffect(() => {
+    if (!hasData) return;
+
     if (activeClientsChartRef.current) {
       const chartInstance = echarts.init(activeClientsChartRef.current);
       activeClientsChartInstanceRef.current = chartInstance;
@@ -241,6 +244,19 @@ const BarChartBiAxis: FC<BarCharHorizonalProps> = ({ data, options }) => {
     link.click();
     URL.revokeObjectURL(url);
   };
+
+  if (!hasData) {
+    return (
+      <Card className={`col-span-3 overflow-auto ${options?.cardColor}`}>
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
+          <div className="text-white text-lg font-semibold">{options?.title}</div>
+        </CardHeader>
+        <CardContent className="flex h-[320px] items-center justify-center text-gray-600">
+          No data found
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className={`col-span-3 overflow-auto ${options?.cardColor}`}>

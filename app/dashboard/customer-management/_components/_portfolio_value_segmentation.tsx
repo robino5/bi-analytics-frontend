@@ -29,6 +29,7 @@ export default function PortfolioValueSegmentationChart({
 }: PieChartComponentProps) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<echarts.EChartsType | null>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   const colorMap: Record<string, string> = {
     Retail: "#ff6b6b",
@@ -39,7 +40,7 @@ export default function PortfolioValueSegmentationChart({
   };
 
   useEffect(() => {
-    if (!chartRef.current) return;
+    if (!chartRef.current || !hasData) return;
 
     const processedData = data.map((item) => ({
       ...item,
@@ -156,6 +157,21 @@ export default function PortfolioValueSegmentationChart({
       window.removeEventListener("resize", handleResize);
     };
   }, [data, colors, colors2]);
+
+  if (!hasData) {
+    return (
+      <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+          <CardTitle className="text-white text-md text-lg">
+            {title}-{numberToMillionsString(details?.sumOfTpvTotal || 0)}
+          </CardTitle>
+        </CardHeader>
+        <CardContent style={{ height: "500px" }} className="flex items-center justify-center">
+          <p className="text-white/80 text-center">No data found</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>

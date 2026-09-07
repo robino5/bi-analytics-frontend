@@ -25,8 +25,10 @@ interface BarChartProps {
 
 const BarChart: React.FC<BarChartProps> = ({ data, options }) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   useEffect(() => {
+    if (!chartRef.current || !hasData) return;
     if (!chartRef.current) return;
     const chartInstance = echarts.init(chartRef.current);
     const seriesData = options.map((option) => ({
@@ -114,6 +116,10 @@ const BarChart: React.FC<BarChartProps> = ({ data, options }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, [data, options]);
+  if (!hasData) {
+    return <div className="flex h-[300px] items-center justify-center text-gray-600">No data found</div>;
+  }
+
   return <div ref={chartRef} style={{ width: "100%", height: 300 }} />;
 };
 export default BarChart;

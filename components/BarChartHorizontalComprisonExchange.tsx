@@ -141,6 +141,7 @@ const BarChart: FC<BarChartProps> = ({ data, option, setSelectedBar, haveBreakdo
 const BarChartHorizontalComparisonExchange: FC<{ data: BarData[]; options: BarOption; haveBreakdown?: boolean }> = ({ data, options, haveBreakdown }) => {
   const [selectedBar, setSelectedBar] = useState<BarData | null>(null);
   const chartInstanceRef = useRef<echarts.EChartsType | null>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   const downloadImage = (type: "png" | "svg") => {
     if (chartInstanceRef.current) {
@@ -168,7 +169,7 @@ const BarChartHorizontalComparisonExchange: FC<{ data: BarData[]; options: BarOp
     link.download = "dse_lbsl_companywise_turnover_comparison.csv";
     link.click();
   };
-  return data.length ? (
+  return hasData ? (
     <>
       <div className="absolute top-2 right-2">
         <DropdownMenu>
@@ -204,8 +205,8 @@ const BarChartHorizontalComparisonExchange: FC<{ data: BarData[]; options: BarOp
       </Dialog>
     </>
   ) : (
-    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
-      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data available
+    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center h-[300px]">
+      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data found
     </div>
   );
 };
