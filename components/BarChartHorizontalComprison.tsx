@@ -206,6 +206,7 @@ interface BarChartHorizontalComparisonProps {
 const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ data, options, haveBreakdown }) => {
   const [selectedBar, setSelectedBar] = useState<BarData | null>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   const handleDownload = (format: "png" | "svg" | "csv") => {
     const chart = chartInstanceRef.current;
@@ -227,7 +228,7 @@ const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ d
       document.body.removeChild(link);
     }
   };
-  return data.length ? (
+  return hasData ? (
     <>
       <div className="absolute top-1 right-1">
         <DropdownMenu>
@@ -270,8 +271,8 @@ const BarChartHorizontalComparison: FC<BarChartHorizontalComparisonProps> = ({ d
       </Dialog>
     </>
   ) : (
-    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
-      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data available
+    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center h-[300px]">
+      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data found
     </div>
   );
 };

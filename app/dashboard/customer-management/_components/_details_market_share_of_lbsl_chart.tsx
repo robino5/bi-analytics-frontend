@@ -22,9 +22,10 @@ export default function DetailsMarketShareLBSLChart({
   details,
 }: ChartComponentProps) {
   const chartRef = useRef<HTMLDivElement>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   useEffect(() => {
-    if (!chartRef.current) return;
+    if (!chartRef.current || !hasData) return;
 
     const chartInstance = echarts.init(chartRef.current);
 
@@ -135,6 +136,19 @@ export default function DetailsMarketShareLBSLChart({
       chartInstance.dispose();
     };
   }, [data]);
+
+  if (!hasData) {
+    return (
+      <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+          <CardTitle className="text-white text-md text-lg">{title}</CardTitle>
+        </CardHeader>
+        <CardContent style={{ height: "500px" }} className="flex items-center justify-center">
+          <p className="text-white/80 text-center">No data found</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>

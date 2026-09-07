@@ -154,11 +154,13 @@ interface BarChartHorizontalProps {
 }
 
 const BarChartHorizontal: FC<BarChartHorizontalProps> = ({ data, options, colorArray }) => {
-  return data.length ? (
+  const hasData = Array.isArray(data) && data.length > 0;
+
+  return hasData ? (
     <BarChart data={data} option={options} colorArray={colorArray} />
   ) : (
-    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
-      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data available
+    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center h-[300px]">
+      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data found
     </div>
   );
 };

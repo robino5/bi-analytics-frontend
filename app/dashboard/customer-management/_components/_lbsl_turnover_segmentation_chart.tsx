@@ -26,6 +26,7 @@ export default function LBSLTurnOverSegmentationChart({
   colors,
 }: PieChartComponentProps) {
   const chartRef = useRef<HTMLDivElement>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   const colorMap: Record<string, string> = {
     Retail: "#ff6b6b",
@@ -36,7 +37,7 @@ export default function LBSLTurnOverSegmentationChart({
   };
 
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && hasData) {
       const chart = echarts.init(chartRef.current);
 
       const processedData = data.map((item, index) => ({
@@ -113,6 +114,21 @@ export default function LBSLTurnOverSegmentationChart({
       };
     }
   }, [data, colors]);
+
+  if (!hasData) {
+    return (
+      <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+          <CardTitle className="text-white text-md text-lg">
+            {title} - {numberToMillionsString(details?.sumOfTurnovers || 0)}
+          </CardTitle>
+        </CardHeader>
+        <CardContent style={{ height: "500px" }} className="flex items-center justify-center">
+          <p className="text-white/80 text-center">No data found</p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className={cn("w-full shadow-md", className, "bg-[#033e4a]")}>

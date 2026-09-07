@@ -25,6 +25,7 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { login } from "@/app/actions/login";
 import MarketSentiment from "../market-sentiment";
+import MarketStatistics from "../market-statistics";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -69,7 +70,9 @@ const LoginForm = () => {
           width={300}
           alt="logo"
         />
-        <MarketSentiment />
+        {/* <MarketSentiment /> */}
+        <MarketStatistics />
+
       </div>
       <div>
         <Separator orientation="vertical" className="mt-4 h-[350px]" />

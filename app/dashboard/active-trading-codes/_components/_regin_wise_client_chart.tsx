@@ -83,9 +83,10 @@ const RegionDetailChart: React.FC<{ region: string; data: ChannelTradingRecord[]
 const RegionWiseClientChart: React.FC<Props> = ({ data }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   useEffect(() => {
-    if (!chartRef.current || !data) return;
+    if (!chartRef.current || !data || !hasData) return;
     const chart = echarts.init(chartRef.current!);
 
     // 🛠️ FILTER OUT ZERO VALUES HERE
@@ -137,6 +138,21 @@ const RegionWiseClientChart: React.FC<Props> = ({ data }) => {
         .filter((item) => item.channel?.trim() === "TOTAL (DT+INTERNET)")
         .reduce((sum, item) => sum + (item.totalClients || 0), 0)
     : 0;
+
+  if (!hasData) {
+    return (
+      <Card className="drop-shadow-md bg-[#033e4a] h-full flex flex-col justify-between cursor-pointer">
+        <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+          <CardTitle className="text-white text-md text-lg">
+            Region Wise Client Participation - 0
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="mt-2 flex-grow flex items-center justify-center text-white/80">
+          No data found
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>

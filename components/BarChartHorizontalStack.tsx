@@ -228,6 +228,7 @@ const downloadCSV = (data: BarData[], totalBuy: number, totalSell: number) => {
 
 const BarChartHorizontalStack: FC<BarChartHorizontalStackProps> = ({ data, options, colorArray }) => {
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
   const totalBuy = data.reduce((acc, obj) => acc + obj.buy, 0);
   const totalSell = data.reduce((acc, obj) => acc + obj.sell, 0);
 
@@ -249,7 +250,7 @@ const BarChartHorizontalStack: FC<BarChartHorizontalStackProps> = ({ data, optio
     }
   };
 
-  return data.length ? (
+  return hasData ? (
     <>
        <div className="absolute top-2 right-2">
         <DropdownMenu>
@@ -274,8 +275,8 @@ const BarChartHorizontalStack: FC<BarChartHorizontalStackProps> = ({ data, optio
       <BarChart data={data} option={options} colorArray={colorArray} />
     </>
   ) : (
-    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center">
-      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data available
+    <div className="font-semibold text-lg text-gray-600 flex justify-center items-center h-[300px]">
+      <AiTwotoneAlert className="mr-2 h-6 w-5" /> No data found
     </div>
   );
 };

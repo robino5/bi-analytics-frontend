@@ -24,7 +24,7 @@ import React from "react";
 import BranchWiseTurnoverComparison from "./_components/_branch_wise_turnover_comarison";
 import { Ticker } from "@/components/ticker";
 import { DseLiveTrade } from "@/components/dse-live-trade";
-import NoDataFound from "./_components/_no_data_found";
+import NoDataFound from "@/components/NoDataFound";
 import RegionWiseClientChart from "./_components/_regin_wise_client_chart";
 import RegionWiseMarketShareChart from "./_components/_region_wise_market_share_chart";
 import RegionWiseMarketNetIncome from "./_components/_region_wise_market_net_income";

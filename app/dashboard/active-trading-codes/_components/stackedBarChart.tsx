@@ -40,6 +40,7 @@ const StackBarChart = ({
   data,
 }: StackChartPropType) => {
   const chartRef = useRef<HTMLDivElement>(null);
+  const hasData = Array.isArray(data) && data.length > 0;
 
   const exportChart = (format: "png" | "svg") => {
     if (chartRef.current) {
@@ -78,6 +79,7 @@ const StackBarChart = ({
 };
 
 useEffect(() => {
+  if (!chartRef.current || !hasData) return;
   const chartInstance = echarts.init(chartRef.current as HTMLDivElement);
 
   const chartOptions = {
@@ -183,6 +185,19 @@ useEffect(() => {
     chartInstance.dispose();
   };
 }, [data, title, xDataKey, dataKeyA, dataKeyX, dataKeyB, dataKeyY]);
+
+if (!hasData) {
+  return (
+    <Card className="bg-[#033e4a]">
+      <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg grid grid-cols-2 items-center">
+        <div className="text-white text-lg font-semibold">{title}</div>
+      </CardHeader>
+      <CardContent className="flex h-[330px] items-center justify-center text-white/80">
+        No data found
+      </CardContent>
+    </Card>
+  );
+}
 
 return (
   <Card className="bg-[#033e4a]">

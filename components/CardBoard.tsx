@@ -17,7 +17,8 @@ interface CardBoardProps {
   className?: string;
   boardIcon?: React.ReactNode;
   pushdate?: any;
-  liveIndicator?: boolean
+  liveIndicator?: boolean;
+  isEmpty?: boolean;
 }
 
 const CardBoard: React.FC<CardBoardProps> = ({
@@ -27,7 +28,8 @@ const CardBoard: React.FC<CardBoardProps> = ({
   className,
   boardIcon,
   pushdate,
-  liveIndicator
+  liveIndicator,
+  isEmpty
 }) => {
   return (
     <Card className={cn("drop-shadow-md", className, "bg-[#033e4a]")}>
@@ -42,7 +44,13 @@ const CardBoard: React.FC<CardBoardProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex justify-center items-center mt-4 mb-2">
-        {children}
+        {isEmpty ? (
+          <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">
+            No Data Found
+          </div>
+        ) : (
+          children
+        )}
       </CardContent>
     </Card>
   );

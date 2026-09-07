@@ -12,13 +12,16 @@ import { investorLiveBuySaleClientsColumns } from "./_components/investor_live_t
 import { DataTable as InvestorLiveBuySaleDatatable } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTable";
 import { DataTable as RealtimeTopRMTurnoverDataTable } from "./_components/top_rm_turnover/_topRMTurnoverTable";
 import { adminRealTimeTopTurnoverColumns } from "./_components/top_rm_turnover/_topRMTurnoverTableColumns";
-import NoDataFound from "./_components/_no_data_found";
+import NoDataFound from "@/components/NoDataFound";
 import BarChartHorizontal from "./_components/BarChartHorizontal";
 import CardBoard from "@/components/CardBoard";
 import { SkeletonStatistics } from "@/components/skeletonCard";
 import { BarColors } from "@/components/ui/utils/constants";
 import TradingSummaryBoard from "./_components/_tradingSummary";
 import CompanyPeRationBoard from "./_components/_companyPeRation";
+import { marketRiskColumns } from "./_components/market_risk/_marketRiskTableColumns";
+import { DataTable as MarketRiskDataTable } from "./_components/market_risk/_marketRiskTable";
+import { Download } from "lucide-react";
 
 const ActiveTradingCodesBoard = () => {
 
@@ -72,10 +75,15 @@ const ActiveTradingCodesBoard = () => {
         queryFn: () => tradeInsightAPI.getCompanyPERation()
     });
 
+      const { data: adminMarketRiskData, isLoading: adminMarketRiskDataLoading, isError: adminMarketRiskDataError } = useQuery({
+        queryKey: ["adminMarketRiskData"],
+        queryFn: () => tradeInsightAPI.getAdminMarketRiskData()
+    });
+
     const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
-        clientTradeSummaryByTodayLoading || sectorwiseTrunoverComparisonLoading || companyPeRationLoading || topTurnoverInvestorLoading;
+        clientTradeSummaryByTodayLoading || sectorwiseTrunoverComparisonLoading || companyPeRationLoading || topTurnoverInvestorLoading || adminMarketRiskDataLoading;
     const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError ||
-        clientTradeSummaryByTodayError || sectorwiseTrunoverComparisonError || companyPeRationError || topTurnoverInvestorError;
+        clientTradeSummaryByTodayError || sectorwiseTrunoverComparisonError || companyPeRationError || topTurnoverInvestorError || adminMarketRiskDataError;
 
 
     if (isLoading) {
@@ -144,13 +152,17 @@ const ActiveTradingCodesBoard = () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="mt-3">
-                            <InvestorLiveBuySaleDatatable
-                                data={investorLiveTopBuy?.data}
-                                columns={investorLiveBuySaleClientsColumns}
-                            />
+                            {investorLiveTopBuy?.data?.length > 0 ? (
+                                <InvestorLiveBuySaleDatatable
+                                    data={investorLiveTopBuy?.data}
+                                    columns={investorLiveBuySaleClientsColumns}
+                                />
+                            ) : (
+                                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+                            )}
                         </CardContent>
                     </Card>
-                ) : null}
+                ) : <NoDataFound title="Top Twenty Buyer" className="col-span-12 md:col-span-6 shadow-xl" />}
 
                 {investorLiveTopSale ? (
                     <Card className="col-span-12 md:col-span-6 shadow-xl bg-[#033e4a]">
@@ -158,13 +170,17 @@ const ActiveTradingCodesBoard = () => {
                             <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Twenty Seller <LiveIndicator /></CardTitle>
                         </CardHeader>
                         <CardContent className="mt-3">
-                            <InvestorLiveBuySaleDatatable
-                                data={investorLiveTopSale?.data}
-                                columns={investorLiveBuySaleClientsColumns}
-                            />
+                            {investorLiveTopSale?.data?.length > 0 ? (
+                                <InvestorLiveBuySaleDatatable
+                                    data={investorLiveTopSale?.data}
+                                    columns={investorLiveBuySaleClientsColumns}
+                                />
+                            ) : (
+                                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+                            )}
                         </CardContent>
                     </Card>
-                ) : null}
+                ) : <NoDataFound title="Top Twenty Seller" className="col-span-12 md:col-span-6 shadow-xl" />}
             </div>
 
             <div className="grid grid-cols-12 gap-3 mt-2">
@@ -177,13 +193,17 @@ const ActiveTradingCodesBoard = () => {
                     </CardDescription> */}
                         </CardHeader>
                         <CardContent className="mt-3">
-                            <RealtimeTopRMTurnoverDataTable
-                                data={realtimeTopRMTurnover?.data}
-                                columns={adminRealTimeTopTurnoverColumns}
-                            />
+                            {realtimeTopRMTurnover?.data?.length > 0 ? (
+                                <RealtimeTopRMTurnoverDataTable
+                                    data={realtimeTopRMTurnover?.data}
+                                    columns={adminRealTimeTopTurnoverColumns}
+                                />
+                            ) : (
+                                <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+                            )}
                         </CardContent>
                     </Card>
-                ) : <NoDataFound title={"Investor Live Trade RM Wise "} />}
+                ) : <NoDataFound title="Top RM Turnover" className="col-span-12 md:col-span-7" />}
                 {realtimeTopRMTurnover?.data ? (
                     <CardBoard
                         className="col-span-5 xl:col-span-5"
@@ -208,23 +228,60 @@ const ActiveTradingCodesBoard = () => {
                     <SkeletonStatistics className="col-span-6 xl:col-span-3" />
                 )}
             </div>
-
+           
+           
             {investorLiveTrade ? (
-                <Card className="col-span-6 mb-2 shadow-xl bg-[#033e4a] mt-2">
+                <Card className="col-span-6 mb-2 mt-2 bg-[#033e4a] shadow-xl">
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Investor Turnover <LiveIndicator /></CardTitle>
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Admin Market Risk Data <LiveIndicator /></CardTitle>
                         {/* <CardDescription className="text-white">
                       Client Details for Regional Managers
                     </CardDescription> */}
                     </CardHeader>
                     <CardContent className="mt-3">
-                        <InvestorLiveTradeDataTable
-                            data={investorLiveTrade?.data}
-                            columns={investorLiveTradeClientsColumns}
-                        />
+                        {investorLiveTrade?.data?.length > 0 ? (
+                            <InvestorLiveTradeDataTable
+                                data={investorLiveTrade?.data}
+                                columns={investorLiveTradeClientsColumns}
+                            />
+                        ) : (
+                            <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+                        )}
                     </CardContent>
                 </Card>
-            ) : <NoDataFound title={"Investor Live Trade RM Wise "} />}
+            ) : <NoDataFound title="Admin Market Risk Data" className="col-span-12 mb-2 mt-2 shadow-xl" />}
+
+               {adminMarketRiskData ? (
+                <Card className="col-span-12 mb-2 mt-2 w-0 min-w-full max-w-full overflow-hidden bg-[#033e4a] shadow-xl">
+                    <CardHeader className="relative bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Admin Market Risk Data <LiveIndicator /></CardTitle>
+                        <a
+                            href="https://idash.lbsbd.com:8080/api/v1/dashboards/admin-market-risk-data-csv/"
+                            download="admin-market-risk-data.csv"
+                            aria-label="Download Admin Market Risk Data"
+                            title="Download Admin Market Risk Data"
+                            className="absolute top-3 right-2 inline-flex items-center text-white transition-opacity hover:opacity-75"
+                        >
+                            <Download className="h-5 w-5" />
+                        </a>
+                        {/* <CardDescription className="text-white">
+                      Client Details for Regional Managers
+                    </CardDescription> */}
+                    </CardHeader>
+                    <CardContent className="mt-3 w-0 min-w-full max-w-full">
+                        {adminMarketRiskData?.data?.length > 0 ? (
+                            <MarketRiskDataTable
+                                data={adminMarketRiskData?.data}
+                                columns={marketRiskColumns}
+                            />
+                        ) : (
+                            <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+                        )}
+                    </CardContent>
+                </Card>
+            ) : <NoDataFound title="Admin Market Risk Data" className="col-span-12 mb-2 mt-2 shadow-xl" />}
+
+             
 
         </div>
     )
