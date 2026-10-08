@@ -13,6 +13,7 @@ export interface AdminRealtimeTopRmTurnover {
 export interface AdminMarketRiskData {
   symbol: string;
   riskLevel: string;
+  singleScripBar: number;
   lbsFreeFloatSalable: number;
   buyQty: number;
   sellQty: number;

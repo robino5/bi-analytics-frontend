@@ -191,9 +191,10 @@ export default function CustomerFundFlowDashboardPage() {
                   payOrder: 0,
                   cashDividend: 0,
                   ipoMode: 0,
+                  transferDeposit: 0,
+                  onlineReceive: 0,
                 }
               }
-              color="blue-500"
             />
 
             <ModeWiseWithdraw

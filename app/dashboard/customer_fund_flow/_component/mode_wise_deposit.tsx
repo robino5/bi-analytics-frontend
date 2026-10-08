@@ -19,15 +19,12 @@ interface ModeWiseDepositeProps {
     payOrder: number;
     cashDividend: number;
     ipoMode: number;
+    transferDeposit: number;
+    onlineReceive: number;
   };
-  color: string;
 }
 
-const ModeWiseDeposite: React.FC<ModeWiseDepositeProps> = ({
-  title,
-  data,
-  color,
-}) => {
+const ModeWiseDeposite: React.FC<ModeWiseDepositeProps> = ({ title, data }) => {
   // Convert object to array of {name, value} and filter > 0
   const rows = Object.entries(data)
     .map(([key, value]) => ({ name: key, value }))
@@ -37,7 +34,9 @@ const ModeWiseDeposite: React.FC<ModeWiseDepositeProps> = ({
 
   // Optional: format the key nicely (e.g., "cashDeposit" → "Cash Deposit")
   const formatName = (key: string) =>
-    key
+    key === "scbDeposit"
+      ? "SCB"
+      : key
       .replace(/Deposit/gi, "") // remove 'Deposit' (case-insensitive)
       .replace(/([A-Z])/g, " $1") // add space before capital letters
       .replace(/^./, (str) => str.toUpperCase()) // capitalize first letter
@@ -68,8 +67,14 @@ const ModeWiseDeposite: React.FC<ModeWiseDepositeProps> = ({
                 <TableRow
                   key={row.name}
                   className={`${
-                    index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
-                  } hover:bg-yellow-300 transition-all duration-300`}
+                    row.name === "scbDeposit"
+                      ? "bg-cyan-400 hover:bg-cyan-300"
+                      : row.name === "onlineReceive"
+                        ? "bg-purple-400 hover:bg-purple-300"
+                        : index % 2 === 0
+                          ? "bg-yellow-100 hover:bg-yellow-300"
+                          : "bg-yellow-50 hover:bg-yellow-300"
+                  } transition-all duration-300`}
                 >
                   <TableCell className=" font-medium">
                     {formatName(row.name)}

@@ -46,12 +46,14 @@ const DailySSLTransactionDataTable: React.FC<{ data: any[] }> = ({ data }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((row, index) => (
+              {data.map((row) => (
                 <TableRow
                   key={row.name}
                   className={`${
-                    index % 2 === 0 ? "bg-yellow-100" : "bg-yellow-50"
-                  } hover:bg-yellow-300 transition-all duration-300`}
+                    row.channel?.trim().toLowerCase() === "scb(npsb)"
+                      ? "bg-cyan-400 hover:bg-cyan-300"
+                      : "bg-purple-400 hover:bg-purple-300"
+                  } transition-all duration-300`}
                 >
                   <TableCell className=" font-medium">{row.channel}</TableCell>
                   <TableCell className="text-center  font-medium">

@@ -17,13 +17,14 @@ export const marketRiskColumns: ColumnDef<AdminMarketRiskData>[] = [
       <DataTableColumnHeader column={column} title="SI" />
     ),
     cell: ({ row, table }) => (
-      <div className="text-center">
+      <div className="text-right">
         {table.getSortedRowModel().rows.findIndex((sortedRow) => sortedRow.id === row.id) + 1}
       </div>
     ),
   },
   {
     accessorKey: "symbol",
+    enableSorting: true,
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Symbol" />
     ),
@@ -59,78 +60,116 @@ export const marketRiskColumns: ColumnDef<AdminMarketRiskData>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Risk Level" />
     ),
-    cell: ({ row }) => <div className="text-left">{row.original.riskLevel}</div>,
+    cell: ({ row }) => {
+      const riskLevel = row.original.riskLevel.toUpperCase();
+      const textColor =
+        riskLevel === "HIGH RISK"
+          ? "text-red-500"
+          : riskLevel === "OBSERVATION"
+            ? "text-yellow-500"
+            : "text-green-500";
+
+      return (
+        <div className={`text-left font-bold ${textColor}`}>
+          {row.original.riskLevel}
+        </div>
+      );
+    },
+  },
+    {
+    accessorKey: "lbsHoldingPercent",
+    enableSorting: true,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"LBS\nHolding (%)"} />,
+    cell: ({ row }) => (
+      <div className="text-right">{formatPercentage(row.original.lbsHoldingPercent)}</div>
+    ),
+  },
+  {
+    accessorKey: "singleScripBar",
+    enableSorting: true,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title={"Single Scrip\n Bar (%)"} />
+    ),
+    cell: ({ row }) => (
+      <div className="text-right">{formatPercentage(row.original.singleScripBar)}</div>
+    ),
   },
   {
     accessorKey: "lbsFreeFloatSalable",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title={"LBS Ledger\nQty Free Float"}
+        title={"LBS \nTradable Qty"}
       />
     ),
-    cell: ({ row }) => formatNumber(row.original.lbsFreeFloatSalable),
+    cell: ({ row }) => (
+      <div className="text-right">{formatNumber(row.original.lbsFreeFloatSalable)}</div>
+    ),
   },
   {
     accessorKey: "buyQty",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"Inn_Buy\n(live)"} />,
-    cell: ({ row }) => formatNumber(row.original.buyQty),
+    enableSorting: true,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"Buy\n(live)"} />,
+    cell: ({ row }) => <div className="text-right">{formatNumber(row.original.buyQty)}</div>,
   },
   {
     accessorKey: "sellQty",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"Inn_Sell\n(live)"} />,
-    cell: ({ row }) => formatNumber(row.original.sellQty),
+    enableSorting: true,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"Sell\n(live)"} />,
+    cell: ({ row }) => <div className="text-right">{formatNumber(row.original.sellQty)}</div>,
   },
   {
     accessorKey: "blockPbContactToday",
     header: ({ column }) => <DataTableColumnHeader column={column} title={"Block/\nPB"} />,
-    cell: ({ row }) => formatNumber(row.original.blockPbContactToday),
+    cell: ({ row }) => <div className="text-right">{formatNumber(row.original.blockPbContactToday)}</div>,
   },
   {
     accessorKey: "holdingLive",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Holding (Live)" />,
-    cell: ({ row }) => formatNumber(row.original.holdingLive),
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"Holding\n(Live)"} />,
+    cell: ({ row }) => <div className="text-right">{formatNumber(row.original.holdingLive)}</div>,
   },
   {
     accessorKey: "freeFloatSalable",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"Free Float\nShare Market"} />,
-    cell: ({ row }) => formatNumber(row.original.freeFloatSalable),
-  },
-   {
-    accessorKey: "lbsHoldingPercent",
-    enableSorting: true,
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"LBS\nHolding %"} />,
-    cell: ({ row }) => formatPercentage(row.original.lbsHoldingPercent),
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"Market\nTradable Qty "} />,
+    cell: ({ row }) => <div className="text-right">{formatNumber(row.original.freeFloatSalable)}</div>,
   },
   {
     accessorKey: "marginQtyPercentage",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"LBSHolding % in\nMargin account"} />,
-    cell: ({ row }) => formatPercentage(row.original.marginQtyPercentage),
-  },
-  {
-    accessorKey: "sectorName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Sector" />,
+    enableSorting: true,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"LBS-Margin\nHolding(%)"} />,
+    cell: ({ row }) => (
+      <div className="text-right">{formatPercentage(row.original.marginQtyPercentage)}</div>
+    ),
   },
   {
     accessorKey: "marketCategory",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"Categ\nory"} />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"Cate\ngory"} />,
   },
   {
     accessorKey: "dse30",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="DSE30" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"DSE\n30" } />,
   },
   {
     accessorKey: "mLoanListed",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"Margin/Non\nMargin Scripts"} />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={"Scripts\nType"} />,
   },
   {
     accessorKey: "thirdPartyPercentage",
+    enableSorting: true,
     header: ({ column }) => <DataTableColumnHeader column={column} title={"3rd Party\ninvolvement"} />,
-    cell: ({ row }) => formatPercentage(row.original.thirdPartyPercentage),
+    cell: ({ row }) => (
+      <div className="text-right">{formatPercentage(row.original.thirdPartyPercentage)}</div>
+    ),
   },
   {
     accessorKey: "inHouseTransaction",
     header: ({ column }) => <DataTableColumnHeader column={column} title={"In House\nTransaction"} />,
-    cell: ({ row }) => formatNumber(row.original.inHouseTransaction),
+    cell: ({ row }) => (
+      <div className="text-right">{formatNumber(row.original.inHouseTransaction)}</div>
+    ),
+  },
+    {
+    accessorKey: "sectorName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Sector" />,
   },
 ];
