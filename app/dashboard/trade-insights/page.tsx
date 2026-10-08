@@ -233,7 +233,7 @@ const ActiveTradingCodesBoard = () => {
             {investorLiveTrade ? (
                 <Card className="col-span-6 mb-2 mt-2 bg-[#033e4a] shadow-xl">
                     <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Admin Market Risk Data <LiveIndicator /></CardTitle>
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Top Investor Turnover<LiveIndicator /></CardTitle>
                         {/* <CardDescription className="text-white">
                       Client Details for Regional Managers
                     </CardDescription> */}
@@ -254,7 +254,7 @@ const ActiveTradingCodesBoard = () => {
                {adminMarketRiskData ? (
                 <Card className="col-span-12 mb-2 mt-2 w-0 min-w-full max-w-full overflow-hidden bg-[#033e4a] shadow-xl">
                     <CardHeader className="relative bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Admin Market Risk Data <LiveIndicator /></CardTitle>
+                        <CardTitle className="text-white text-md text-lg flex items-center gap-2">Monitoring of LBS Script Holding % Risk<LiveIndicator /></CardTitle>
                         <a
                             href="https://idash.lbsbd.com:8080/api/v1/dashboards/admin-market-risk-data-csv/"
                             download="admin-market-risk-data.csv"

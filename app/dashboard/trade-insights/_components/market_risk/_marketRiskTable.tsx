@@ -28,6 +28,13 @@ import {
 import { DataTablePagination } from "./_marketRiskTablePagination";
 import { DataTableToolbar } from "./_marketRiskTableToolbar";
 
+const marketRiskColumnHighlights: Record<string, string> = {
+  lbsHoldingPercent:
+    "bg-amber-100 border-x-2 border-amber-400 font-bold text-amber-950 hover:bg-amber-200",
+  singleScripBar:
+    "bg-sky-100 border-x-2 border-sky-400 font-bold text-sky-950 hover:bg-sky-200",
+};
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -39,11 +46,13 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({ sectorName: false });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "lbsHoldingPercent", desc: true },
+  ]);
   const table = useReactTable({
     data,
     columns,
@@ -79,7 +88,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar table={table} />
       <div className="w-0 min-w-full max-w-full overflow-x-auto rounded-md border">
         <Table
-          className="min-w-[1600px]"
+          className="min-w-[1300px]"
           wrapperClassName="w-max min-w-full overflow-visible"
         >
           <TableHeader className="text-md">
@@ -89,11 +98,14 @@ export function DataTable<TData, TValue>({
                    className="bg-table-header hover:bg-table-header"
               >
                 {headerGroup.headers.map((header) => {
+                  const highlightClass =
+                    marketRiskColumnHighlights[header.column.id] ?? "";
+
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
-                      className="border text-white font-bold"
+                      className={`h-10 border p-1 font-bold text-white ${highlightClass}`}
                     >
                       {header.isPlaceholder
                         ? null
@@ -119,7 +131,7 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className="p-1 text-[0.8rem] border"
+                      className={`border p-1 text-[0.8rem] ${marketRiskColumnHighlights[cell.column.id] ?? ""}`}
                       key={cell.id}
                     >
                       {flexRender(
