@@ -10,7 +10,9 @@ const formatNumber = (value: number) =>
 
 const formatPercentage = (value: number) => `${(value || 0).toFixed(2)}%`;
 
-export const marketRiskColumns: ColumnDef<AdminMarketRiskData>[] = [
+export const createMarketRiskColumns = (
+  onSymbolClick: (_symbol: string) => void
+): ColumnDef<AdminMarketRiskData>[] => [
   {
     id: "serial",
     header: ({ column }) => (
@@ -28,7 +30,26 @@ export const marketRiskColumns: ColumnDef<AdminMarketRiskData>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Symbol" />
     ),
-    cell: ({ row }) => <div className="text-left font-semibold">{row.original.symbol}</div>,
+    cell: ({ row }) => {
+      const riskLevel = row.original.riskLevel.trim().toUpperCase();
+      const canOpenBreakdown =
+        riskLevel === "HIGH RISK" ||
+        riskLevel === "RISK" ||
+        riskLevel === "OBSERVATION";
+
+      return canOpenBreakdown ? (
+        <button
+          type="button"
+          className="cursor-pointer appearance-none border-0 bg-transparent p-0 text-left font-bold text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+          onClick={() => onSymbolClick(row.original.symbol)}
+          aria-label={`View investor breakdown for ${row.original.symbol}`}
+        >
+          {row.original.symbol}
+        </button>
+      ) : (
+        <div className="text-left font-semibold">{row.original.symbol}</div>
+      );
+    },
   },
   {
     id: "action",

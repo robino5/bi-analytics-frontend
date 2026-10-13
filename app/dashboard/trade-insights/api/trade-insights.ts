@@ -2,7 +2,11 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { AdminMarketRiskData, AdminRealtimeTopRmTurnover } from "../types";
+import {
+    AdminMarketRiskData,
+    AdminMarketRiskInvestorDrilldown,
+    AdminRealtimeTopRmTurnover,
+} from "../types";
 import { IResponse } from "@/types/utils";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 import { InvestorLiveTopBuySaleInfo } from "../../business-and-trade-management/types";
@@ -40,6 +44,11 @@ class TradeInsightAPI extends Common {
     }
     getAdminMarketRiskData() {
         return this.http.get<IResponse<AdminMarketRiskData[]>>("dashboards/admin-market-risk-data/")
+    }
+    getAdminMarketRiskInvestorDrilldown(symbol: string) {
+        return this.http.get<IResponse<AdminMarketRiskInvestorDrilldown[]>>(
+            `dashboards/admin-market-risk-data-investor-drilldown/?symbol=${encodeURIComponent(symbol)}`
+        )
     }
     getCompanyPERSI(companyID: any) {
         return this.http.get<any>(`dashboards/portal-pe-rsi-company-wise/?company_code=${companyID}`)
