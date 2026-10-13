@@ -19,7 +19,6 @@ import { SkeletonStatistics } from "@/components/skeletonCard";
 import { BarColors } from "@/components/ui/utils/constants";
 import TradingSummaryBoard from "./_components/_tradingSummary";
 import CompanyPeRationBoard from "./_components/_companyPeRation";
-import { marketRiskColumns } from "./_components/market_risk/_marketRiskTableColumns";
 import { DataTable as MarketRiskDataTable } from "./_components/market_risk/_marketRiskTable";
 import { Download } from "lucide-react";
 
@@ -272,7 +271,6 @@ const ActiveTradingCodesBoard = () => {
                         {adminMarketRiskData?.data?.length > 0 ? (
                             <MarketRiskDataTable
                                 data={adminMarketRiskData?.data}
-                                columns={marketRiskColumns}
                             />
                         ) : (
                             <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>

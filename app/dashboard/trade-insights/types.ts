@@ -29,3 +29,11 @@ export interface AdminMarketRiskData {
   thirdPartyPercentage: number;
   inHouseTransaction: number;
 }
+
+export interface AdminMarketRiskInvestorDrilldown {
+  symbol: string;
+  investorCode: string;
+  investorName: string;
+  holdingQty: number;
+  holdingPercentage: number;
+}
