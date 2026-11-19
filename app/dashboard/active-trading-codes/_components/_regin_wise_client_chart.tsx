@@ -26,7 +26,7 @@ const getRegionColor = (regionName: string, index: number): string => {
   return COLORS[index % COLORS.length];
 };
 
-interface Props { data: ChannelTradingRecord[]; }
+interface Props { data: ChannelTradingRecord[]; date?: string; }
 
 const RegionDetailChart: React.FC<{ region: string; data: ChannelTradingRecord[] }> = ({ region, data }) => {
   const detailChartRef = useRef<HTMLDivElement>(null);
@@ -80,7 +80,7 @@ const RegionDetailChart: React.FC<{ region: string; data: ChannelTradingRecord[]
   return <div ref={detailChartRef} style={{ width: "100%", height: "300px" }} />;
 };
 
-const RegionWiseClientChart: React.FC<Props> = ({ data }) => {
+const RegionWiseClientChart: React.FC<Props> = ({ data,date }) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const hasData = Array.isArray(data) && data.length > 0;
@@ -145,6 +145,7 @@ const RegionWiseClientChart: React.FC<Props> = ({ data }) => {
         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
           <CardTitle className="text-white text-md text-lg">
             Region Wise Client Participation - 0
+             {date && <span className="block">({date.split(" ")[0]})</span>}
           </CardTitle>
         </CardHeader>
         <CardContent className="mt-2 flex-grow flex items-center justify-center text-white/80">
@@ -160,6 +161,7 @@ const RegionWiseClientChart: React.FC<Props> = ({ data }) => {
         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
           <CardTitle className="text-white text-md text-lg">
             Region Wise Client Participation - {totalClient.toLocaleString()}
+             {date && <span className="block">({date.split(" ")[0]})</span>}
           </CardTitle>
         </CardHeader>
         <CardContent className="mt-2 flex-grow flex items-center justify-center">

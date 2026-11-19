@@ -5,6 +5,7 @@ import { authService } from "@/lib/auth";
 import {
     AdminMarketRiskData,
     AdminMarketRiskInvestorDrilldown,
+    MarketSpotDataInvestorDrilldown,
     AdminRealtimeTopRmTurnover,
 } from "../types";
 import { IResponse } from "@/types/utils";
@@ -48,6 +49,11 @@ class TradeInsightAPI extends Common {
     getAdminMarketRiskInvestorDrilldown(symbol: string) {
         return this.http.get<IResponse<AdminMarketRiskInvestorDrilldown[]>>(
             `dashboards/admin-market-risk-data-investor-drilldown/?symbol=${encodeURIComponent(symbol)}`
+        )
+    }
+    getMarketSpotDataInvestorDrilldown() {
+        return this.http.get<IResponse<MarketSpotDataInvestorDrilldown[]>>(
+            "dashboards/market-spot-data-investor-drilldown/"
         )
     }
     getCompanyPERSI(companyID: any) {

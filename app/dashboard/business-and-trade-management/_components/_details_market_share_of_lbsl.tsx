@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/table";
 import { numberToMillionsString } from "@/lib/utils";
 import { useState } from "react";
+import { BlockMarketShareData } from "../types";
 
 interface MarketShareLBSl {
   tradingDate: string;
@@ -39,9 +40,15 @@ interface MarketShareLBSl {
 
 interface Props {
   datalist: MarketShareLBSl;
+  blockMarketShare: BlockMarketShareData;
 }
 
-export default function DetailsMarketShareLBSL({ datalist }: Props) {
+const formatPercentage = (value: number | null | undefined) =>
+  typeof value === "number" && Number.isFinite(value)
+    ? `${value.toFixed(2)}%`
+    : "N/A";
+
+export default function DetailsMarketShareLBSL({ datalist,blockMarketShare  }: Props) {
   const [showSummary, setShowSummary] = useState(false);
   const summaryRows = [
     { label: "LBSL Total Turnover", value: datalist.lbslTotalTurnover },
@@ -168,6 +175,11 @@ export default function DetailsMarketShareLBSL({ datalist }: Props) {
             )}
           </TableBody>
         </Table>
+        <CardDescription className="text-green-500 text-lg mt-2 font-bold">
+          Block Market Share DSE:{" "}
+          {formatPercentage(blockMarketShare?.dseBlMarketPercentage)} and CSE:{" "}
+          {formatPercentage(blockMarketShare?.cseBlMarketPercentage)}
+        </CardDescription>
       </CardContent>
     </Card>
   );

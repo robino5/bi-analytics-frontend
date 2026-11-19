@@ -17,12 +17,14 @@ interface Props {
   records: IActiveTradingToday[];
   className?: string;
   activeClient: any;
+  date?: string;
 }
 
 export default function ClientTradesDataTable({
   records,
   className,
   activeClient,
+  date
 }: Props) {
   // Override console.error
   // This is a hack to suppress the warning about missing defaultProps in recharts library as of version 2.12
@@ -34,7 +36,7 @@ export default function ClientTradesDataTable({
   };
   // ===========================================
 
-  console.log("activeClient", activeClient);
+  console.log("date", date);
   return (
     <Card
       className={cn(
@@ -45,7 +47,7 @@ export default function ClientTradesDataTable({
     >
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-3 rounded-t-sm">
         <CardTitle className="text-white text-md text-lg">
-          Channel Wise Clients & Trades (Today)
+          Channel Wise Clients & Trades{date && ` (${date.split(" ")[0]})`}
         </CardTitle>
         {/* <CardDescription className="text-white">
           short summary of todays clients and trades

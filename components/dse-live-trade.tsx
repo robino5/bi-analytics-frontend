@@ -10,8 +10,10 @@ import { SkeletonStatistics } from "./skeletonCard";
 
 export function DseLiveTrade({
   exchangeWiseMarketStatistics,
+  date
 }: {
   exchangeWiseMarketStatistics?: any;
+  date?: string;
 }) {
   const {
     data: liveTradeData,
@@ -59,7 +61,7 @@ export function DseLiveTrade({
         <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2">
           <div className="flex items-center justify-between w-full">
             <CardTitle className="text-white text-md">
-              Live DSE Trade Statistics
+              Live DSE Trade Statistics{date && ` (${date.split(" ")[0]})`}
             </CardTitle>
 
             <TabsList className="flex space-x-1 bg-gray-200 text-black">

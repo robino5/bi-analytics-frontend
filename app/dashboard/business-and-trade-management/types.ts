@@ -106,3 +106,9 @@ export interface DateWiseTopTurnoverData {
   tradeDate: string;
   turnover: number;
 }
+
+export interface BlockMarketShareData {
+  dseBlMarketPercentage: number;
+  cseBlMarketPercentage: number;
+}
+

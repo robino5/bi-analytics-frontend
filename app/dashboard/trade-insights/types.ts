@@ -37,3 +37,20 @@ export interface AdminMarketRiskInvestorDrilldown {
   holdingQty: number;
   holdingPercentage: number;
 }
+
+export interface MarketSpotDataInvestorDrilldown {
+  symbol: string;
+  investorCode: string;
+  investorName: string;
+  accountType: string;
+  currentBalance: number;
+  ledgerBalance: number;
+  spotBuyQty: number;
+  spotBuyAmount: number;
+  cashDeposit: number;
+  nonCashDeposit: number;
+  usedExcessLbslFund: number;
+  fundUsingLevel: string;
+  rmBranch: string;
+  rmName: string;
+}
