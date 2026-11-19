@@ -52,7 +52,12 @@ export default function BusinessAndTradeManagement() {
     queryFn: () => businessTradeManagementAPI.getDateWiseTopInternetTurnover()
   });
 
-  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading || dateWiseTopTurnoverLoading || dateWiseTopInternetTurnoverLoading;
+    const { data: blockMarketShare, isLoading: blockMarketShareLoading } = useQuery({
+    queryKey: ["blockMarketShare"],
+    queryFn: () => businessTradeManagementAPI.getBlockMarketShare()
+  });
+
+  const isLoading = boardTernoverDataLoading || boardTernoverBreakdownDataLoading || marketShareLBSLLoading || marketShareSMELoading || dateWiseTopTurnoverLoading || dateWiseTopInternetTurnoverLoading || blockMarketShareLoading;
 
 
   if (isLoading) {
@@ -79,8 +84,8 @@ export default function BusinessAndTradeManagement() {
           />
         ) : <NoDataFound title="Main Board Wise Turnover Breakdown" className="col-span-3" />}
 
-        {marketShareLBSL?.data ? (
-          <DetailsMarketShareLBSL datalist={marketShareLBSL?.data as any} />
+        {marketShareLBSL?.data && blockMarketShare?.data ? (
+          <DetailsMarketShareLBSL datalist={marketShareLBSL.data as any} blockMarketShare={blockMarketShare.data} />
         ) : <NoDataFound title="Details market share of LBSL" className="col-span-3"  />}
 
         {marketShareSME?.data ? (

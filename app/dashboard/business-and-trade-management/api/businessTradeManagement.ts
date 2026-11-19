@@ -2,7 +2,7 @@ import config from "@/config";
 import { Common } from "@/lib/api/common";
 import { HttpAuthService } from "@/lib/httpService";
 import { authService } from "@/lib/auth";
-import { BoardWiseTurnoverData,BoardWiseTurnoverBreakdownData,MarketShareSME,MarketShareLBSl,InvestorLiveTopBuySaleInfo, DateWiseTopTurnoverData} from "../types";
+import { BoardWiseTurnoverData,BoardWiseTurnoverBreakdownData,MarketShareSME,MarketShareLBSl,InvestorLiveTopBuySaleInfo, DateWiseTopTurnoverData, BlockMarketShareData} from "../types";
 import { IResponse } from "@/types/utils";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
 
@@ -29,6 +29,9 @@ class BusinessTradeManagementAPI extends Common {
     }
     getDateWiseTopInternetTurnover() {
         return this.http.get<IResponse<DateWiseTopTurnoverData[]>>("/dashboards/admin/date-wise-top-ten-internet-turnover/")
+    }
+    getBlockMarketShare() {
+        return this.http.get<IResponse<BlockMarketShareData>>("/dashboards/admin/block-market-share/")
     }
 }
 

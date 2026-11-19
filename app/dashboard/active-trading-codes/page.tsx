@@ -125,6 +125,7 @@ const ActiveTradingCodesBoard = () => {
   }
 
   const dayWiseSummary = dayWiseSummaryResponse?.data
+  const summaryDate = dayWiseSummary?.[0]?.pushDate?.split(" ")[0] ?? "";
   const dayWiseData = dayWiseDataResponse?.data
   const monthWiseData = monthWiseDataResponse?.data
 
@@ -182,32 +183,34 @@ const ActiveTradingCodesBoard = () => {
   <div className="grid grid-cols-1 gap-3 mt-3 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-6">
   {/* Client Trades Table */}
   <div className="rounded-md col-span-3 xl:col-span-3">
-    <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} activeClient={summarydata?.data as  any} />
+    <ClientTradesDataTable records={dayWiseSummary as IActiveTradingToday[]} activeClient={summarydata?.data as  any}
+    date={dayWiseSummaryResponse?.data?.[0]?.pushDate?? ''}/>
   </div>
 
   {/* DSE Live Trade */}
   <div className="rounded-md col-span-3 xl:col-span-3">
-    <DseLiveTrade exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data} />
+    <DseLiveTrade exchangeWiseMarketStatistics={exchangeWiseMarketStatistics?.data}
+    date={dayWiseSummaryResponse?.data?.[0]?.pushDate?? ''} />
   </div>
 
   {/* Pie Charts */}
   {sanitizedDayWiseSummary ? (
     <>
       <div className="rounded-md col-span-3 xl:col-span-2">
-        <PieChart title="Clients (Today)" dataKey="totalClients" data={sanitizedDayWiseSummary} />
+        <PieChart title={`Clients (${summaryDate})`} dataKey="totalClients" data={sanitizedDayWiseSummary} />
       </div>
       <div className="rounded-md col-span-3 xl:col-span-2">
-        <PieChart title="Trades (Today)" dataKey="trades" data={sanitizedDayWiseSummary} />
+        <PieChart title={`Trades (${summaryDate})`} dataKey="trades" data={sanitizedDayWiseSummary} />
       </div>
       <div className="rounded-md col-span-3 xl:col-span-2">
-        <PieChart title="Turnover (Today)" dataKey="totalTurnover" data={sanitizedDayWiseSummary} />
+        <PieChart title={`Turnover (${summaryDate})`} dataKey="totalTurnover" data={sanitizedDayWiseSummary} />
       </div>
     </>
   ) : (
     <>
-      <NoDataFound title="Clients (Today)" />
-      <NoDataFound title="Trades (Today)" />
-      <NoDataFound title="Turnover (Today)" />
+      <NoDataFound title={`Clients (${summaryDate})`} />
+      <NoDataFound title={`Trades (${summaryDate})`} />
+      <NoDataFound title={`Turnover (${summaryDate})`} />
     </>
   )}
 
@@ -215,7 +218,10 @@ const ActiveTradingCodesBoard = () => {
 
   {regionWiseOMSSummary?.data ? (
     <div className="rounded-md col-span-3 xl:col-span-2">
-      <RegionWiseClientChart data={regionWiseOMSSummary.data} />
+      <RegionWiseClientChart
+        data={regionWiseOMSSummary.data}
+        date={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? ""}
+      />
     </div>
   ) : (
     <div className="rounded-md col-span-3 xl:col-span-2">
@@ -224,7 +230,8 @@ const ActiveTradingCodesBoard = () => {
   )}
   {regionWiseMarketShare?.data ? (
     <div className="rounded-md col-span-3 xl:col-span-2">
-      <RegionWiseMarketShareChart data={regionWiseMarketShare.data} />
+      <RegionWiseMarketShareChart data={regionWiseMarketShare.data} 
+        date={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? ""}/>
     </div>
   ) : (
     <div className="rounded-md col-span-3 xl:col-span-2">
@@ -233,7 +240,8 @@ const ActiveTradingCodesBoard = () => {
   )}
   {regionWiseMarketShare?.data ? (
     <div className="rounded-md col-span-3 xl:col-span-2">
-      <RegionWiseMarketNetIncome data={regionWiseMarketShare.data} />
+      <RegionWiseMarketNetIncome data={regionWiseMarketShare.data} 
+        date={dayWiseSummaryResponse?.data?.[0]?.pushDate ?? ""}/>
     </div>
   ) : (
     <div className="rounded-md col-span-3 xl:col-span-2">
@@ -327,4 +335,3 @@ const ActiveTradingCodesBoard = () => {
 };
 
 export default ActiveTradingCodesBoard;
-

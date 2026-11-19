@@ -17,9 +17,9 @@ const getRegionColor = (regionName: string, index: number): string => {
   return COLORS[index % COLORS.length];
 };
 
-interface Props { data: TradingRecord[]; }
+interface Props { data: TradingRecord[]; date?: string; }
 
-const RegionWiseMarketNetIncome: React.FC<Props> = ({ data }) => {
+const RegionWiseMarketNetIncome: React.FC<Props> = ({ data, date }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -78,6 +78,7 @@ const RegionWiseMarketNetIncome: React.FC<Props> = ({ data }) => {
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
           Region Wise Net Income - {numberToMillionsString(totalNetIncome, 2)}
+           {date && <span className="block">({date.split(" ")[0]})</span>}
         </CardTitle>
       </CardHeader>
       <CardContent className="mt-2 flex-grow flex items-center justify-center min-h-[300px]">

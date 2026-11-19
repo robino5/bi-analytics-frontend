@@ -17,7 +17,13 @@ export interface IMarkedClient {
     exposure:number;
     equity:number
     rmName: string;
-    loanRatio:string
+    loanRatio:string,
+    marginableExposure?: number;
+    marginableEquity?: number;
+    marginableLoanRatio?: string;
+    stockValue?: number;
+    lastTradingDt?: string;
+    accType?: string;
 }
 
 export interface INetTradeClient {

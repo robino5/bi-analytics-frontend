@@ -50,7 +50,7 @@ export default function ExposureControllingDataTable({
     <Card className={cn("overflow-auto", className, "bg-[#033e4a]")}>
       <CardHeader className="bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
         <CardTitle className="text-white text-md text-lg">
-          Exposure Controlling & Management
+          Exposure Controlling & Management (RM Branch Wise)
         </CardTitle>
         {/* <CardDescription className="text-white">
           excluding negative equity clients

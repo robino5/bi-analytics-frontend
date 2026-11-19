@@ -1,12 +1,15 @@
 "use client"
 
 import PageHeader from "@/components/PageHeader";
+import config from "@/config";
+import Link from "next/link";
 import { tradeInsightAPI } from "./api";
 import { useQuery } from "@tanstack/react-query";
 import LoadingButton from "@/components/loading";
 import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card";
 import { DataTable as InvestorLiveTradeDataTable } from "./_components/investor_live_trade/_investorLiveTradeTable";
 import { investorLiveTradeClientsColumns } from "./_components/investor_live_trade/_investorLiveTradeTableColumns";
+import { MarketSpotInvestorDrilldownDataTable } from "./_components/market_spot_investor_drilldown/_marketSpotInvestorDrilldownTable";
 import LiveIndicator from "@/components/ui/live-indicator";
 import { investorLiveBuySaleClientsColumns } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
 import { DataTable as InvestorLiveBuySaleDatatable } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTable";
@@ -21,8 +24,10 @@ import TradingSummaryBoard from "./_components/_tradingSummary";
 import CompanyPeRationBoard from "./_components/_companyPeRation";
 import { DataTable as MarketRiskDataTable } from "./_components/market_risk/_marketRiskTable";
 import { Download } from "lucide-react";
+import { numberToMillionsString } from "@/lib/utils";
 
 const ActiveTradingCodesBoard = () => {
+    const apiBaseUrl = config.apiURL.replace(/\/+$/, "");
 
     const sectorMarginCodeExposureOption = {
         legendName: "Quantity",
@@ -38,6 +43,15 @@ const ActiveTradingCodesBoard = () => {
         queryKey: ["investorLiveTrade"],
         queryFn: () => tradeInsightAPI.getInvestorLiveTrade()
     });
+
+    const { data: marketSpotInvestorDrilldown, isLoading: marketSpotInvestorDrilldownLoading, isError: marketSpotInvestorDrilldownError } = useQuery({
+        queryKey: ["marketSpotInvestorDrilldown"],
+        queryFn: () => tradeInsightAPI.getMarketSpotDataInvestorDrilldown()
+    });
+    const totalUsedExcessLbslFund = marketSpotInvestorDrilldown?.data?.reduce(
+        (total, investor) => total + investor.usedExcessLbslFund,
+        0
+    ) ?? 0;
 
       const { data: topTurnoverInvestor, isLoading: topTurnoverInvestorLoading, isError: topTurnoverInvestorError } = useQuery({
         queryKey: ["topTurnoverInvestor"],
@@ -79,10 +93,10 @@ const ActiveTradingCodesBoard = () => {
         queryFn: () => tradeInsightAPI.getAdminMarketRiskData()
     });
 
-    const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
-        clientTradeSummaryByTodayLoading || sectorwiseTrunoverComparisonLoading || companyPeRationLoading || topTurnoverInvestorLoading || adminMarketRiskDataLoading;
+    const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || marketSpotInvestorDrilldownLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
+        clientTradeSummaryByTodayLoading   || topTurnoverInvestorLoading || adminMarketRiskDataLoading;
     const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError ||
-        clientTradeSummaryByTodayError || sectorwiseTrunoverComparisonError || companyPeRationError || topTurnoverInvestorError || adminMarketRiskDataError;
+        marketSpotInvestorDrilldownError || clientTradeSummaryByTodayError   || topTurnoverInvestorError || adminMarketRiskDataError;
 
 
     if (isLoading) {
@@ -250,12 +264,44 @@ const ActiveTradingCodesBoard = () => {
                 </Card>
             ) : <NoDataFound title="Admin Market Risk Data" className="col-span-12 mb-2 mt-2 shadow-xl" />}
 
+            {marketSpotInvestorDrilldown ? (
+                <Card className="col-span-12 mb-2 mt-2 w-full min-w-0 max-w-full overflow-hidden bg-[#033e4a] shadow-xl">
+                    <CardHeader className="relative bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 pr-10 rounded-tl-lg rounded-tr-lg">
+                        <CardTitle className="flex items-center gap-2 text-white text-lg">
+                            Monitoring of LBS Spot buy and fund using <LiveIndicator />
+                        </CardTitle>
+                        <p className="text-lg font-bold text-red-500 ">
+                            Total Client: {marketSpotInvestorDrilldown?.data?.length ?? 0}
+                            {" | "}Total LBSL Fund: {numberToMillionsString(totalUsedExcessLbslFund)}
+                        </p>
+                        <Link
+                            href={`${apiBaseUrl}/dashboards/market-spot-data-investor-drilldown-csv/`}
+                            download="market-spot-data-investor-drilldown.csv"
+                            aria-label="Download Market Spot Investor Drilldown CSV"
+                            title="Download Market Spot Investor Drilldown CSV"
+                            className="absolute top-3 right-2 inline-flex items-center text-white transition-opacity hover:opacity-75"
+                        >
+                            <Download className="h-5 w-5" />
+                        </Link>
+                    </CardHeader>
+                    <CardContent className="mt-3 w-full min-w-0 max-w-full overflow-hidden">
+                        {marketSpotInvestorDrilldown?.data?.length > 0 ? (
+                            <MarketSpotInvestorDrilldownDataTable
+                                data={marketSpotInvestorDrilldown.data}
+                            />
+                        ) : (
+                            <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
+                        )}
+                    </CardContent>
+                </Card>
+            ) : <NoDataFound title="Monitoring of LBS Spot buy and fund using" className="col-span-12 mb-2 mt-2 shadow-xl" />}
+
                {adminMarketRiskData ? (
                 <Card className="col-span-12 mb-2 mt-2 w-0 min-w-full max-w-full overflow-hidden bg-[#033e4a] shadow-xl">
                     <CardHeader className="relative bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 rounded-tl-lg rounded-tr-lg">
                         <CardTitle className="text-white text-md text-lg flex items-center gap-2">Monitoring of LBS Script Holding % Risk<LiveIndicator /></CardTitle>
                         <a
-                            href="https://idash.lbsbd.com:8080/api/v1/dashboards/admin-market-risk-data-csv/"
+                            href={`${apiBaseUrl}/dashboards/admin-market-risk-data-csv/`}
                             download="admin-market-risk-data.csv"
                             aria-label="Download Admin Market Risk Data"
                             title="Download Admin Market Risk Data"

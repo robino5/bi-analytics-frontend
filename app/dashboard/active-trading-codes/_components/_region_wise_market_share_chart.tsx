@@ -23,9 +23,10 @@ const getRegionColor = (regionName: string, index: number): string => {
 
 interface Props {
   data: TradingRecord[];
+  date?: string;
 }
 
-const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
+const RegionWiseMarketShareChart: React.FC<Props> = ({ data, date }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -123,6 +124,7 @@ const RegionWiseMarketShareChart: React.FC<Props> = ({ data }) => {
         <CardTitle className="text-white text-md text-lg">
           Region Wise LBSL Market Share (DSE+CSE) -{" "}
           {totalMarketShare.toFixed(2)}%
+          {date && <span className="block">({date.split(" ")[0]})</span>}
         </CardTitle>
       </CardHeader>
 
