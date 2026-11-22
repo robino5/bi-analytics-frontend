@@ -139,11 +139,11 @@ export const createMarketRiskColumns = (
     header: ({ column }) => <DataTableColumnHeader column={column} title={"Sell\n(live)"} />,
     cell: ({ row }) => <div className="text-right">{formatNumber(row.original.sellQty)}</div>,
   },
-  {
-    accessorKey: "blockPbContactToday",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"Block/\nPB"} />,
-    cell: ({ row }) => <div className="text-right">{formatNumber(row.original.blockPbContactToday)}</div>,
-  },
+  // {
+  //   accessorKey: "blockPbContactToday",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title={"Block/\nPB"} />,
+  //   cell: ({ row }) => <div className="text-right">{formatNumber(row.original.blockPbContactToday)}</div>,
+  // },
   {
     accessorKey: "holdingLive",
     header: ({ column }) => <DataTableColumnHeader column={column} title={"Holding\n(Live)"} />,
@@ -166,10 +166,10 @@ export const createMarketRiskColumns = (
     accessorKey: "marketCategory",
     header: ({ column }) => <DataTableColumnHeader column={column} title={"Cate\ngory"} />,
   },
-  {
-    accessorKey: "dse30",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"DSE\n30" } />,
-  },
+  // {
+  //   accessorKey: "dse30",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title={"DSE\n30" } />,
+  // },
   {
     accessorKey: "mLoanListed",
     header: ({ column }) => <DataTableColumnHeader column={column} title={"Scripts\nType"} />,
@@ -182,13 +182,13 @@ export const createMarketRiskColumns = (
       <div className="text-right">{formatPercentage(row.original.thirdPartyPercentage)}</div>
     ),
   },
-  {
-    accessorKey: "inHouseTransaction",
-    header: ({ column }) => <DataTableColumnHeader column={column} title={"In House\nTransaction"} />,
-    cell: ({ row }) => (
-      <div className="text-right">{formatNumber(row.original.inHouseTransaction)}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "inHouseTransaction",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title={"In House\nTransaction"} />,
+  //   cell: ({ row }) => (
+  //     <div className="text-right">{formatNumber(row.original.inHouseTransaction)}</div>
+  //   ),
+  // },
     {
     accessorKey: "sectorName",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Sector" />,
