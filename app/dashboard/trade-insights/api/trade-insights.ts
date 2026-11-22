@@ -7,6 +7,8 @@ import {
     AdminMarketRiskInvestorDrilldown,
     MarketSpotDataInvestorDrilldown,
     AdminRealtimeTopRmTurnover,
+    MarketZGroupDataInvestorDrilldown,
+    EventTypeCount,
 } from "../types";
 import { IResponse } from "@/types/utils";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
@@ -56,8 +58,17 @@ class TradeInsightAPI extends Common {
             "dashboards/market-spot-data-investor-drilldown/"
         )
     }
+    getMarketZGroupDataInvestorDrilldown() {
+        return this.http.get<IResponse<MarketZGroupDataInvestorDrilldown[]>>(
+            "dashboards/market-zgroup-data-investor-drilldown/"
+        )
+    }
     getCompanyPERSI(companyID: any) {
         return this.http.get<any>(`dashboards/portal-pe-rsi-company-wise/?company_code=${companyID}`)
+    }
+
+    getAdminEventCountData() {
+        return this.http.get<EventTypeCount[]>("dashboards/portal-live-event-types-count/")
     }
 }
 

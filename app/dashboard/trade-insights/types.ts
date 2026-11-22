@@ -54,3 +54,26 @@ export interface MarketSpotDataInvestorDrilldown {
   rmBranch: string;
   rmName: string;
 }
+
+export interface MarketZGroupDataInvestorDrilldown {
+  symbol: string;
+  investorCode: string;
+  investorName: string;
+  accountType: string;
+  currentBalance: number;
+  ledgerBalance: number;
+  zBuyQty: number;
+  zBuyAmount: number;
+  cashDeposit: number;
+  nonCashDeposit: number;
+  usedExcessLbslFund: number;
+  fundUsingLevel: string;
+  rmBranch: string;
+  rmName: string;
+}
+
+export interface EventTypeCount {
+  id: number;
+  eventType: string;
+  eventCount: string;
+}
