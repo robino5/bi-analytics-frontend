@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MarketZGroupDataInvestorDrilldown } from "../../types";
+import { MarketZGroupDataInvestorDrilldown } from "../../../trade-insights/types";
 import { marketZGroupInvestorDrilldownColumns } from "./_marketZGroupInvestorDrilldownTableColumns";
 import { DataTablePagination } from "./_marketZGroupInvestorDrilldownTablePagination";
 import { DataTableToolbar } from "./_marketZGroupInvestorDrilldownTableToolbar";

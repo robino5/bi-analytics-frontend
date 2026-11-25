@@ -5,10 +5,7 @@ import { authService } from "@/lib/auth";
 import {
     AdminMarketRiskData,
     AdminMarketRiskInvestorDrilldown,
-    MarketSpotDataInvestorDrilldown,
     AdminRealtimeTopRmTurnover,
-    MarketZGroupDataInvestorDrilldown,
-    EventTypeCount,
 } from "../types";
 import { IResponse } from "@/types/utils";
 import { InvestorLiveTradeInfo } from "@/types/rmPerformance";
@@ -53,23 +50,10 @@ class TradeInsightAPI extends Common {
             `dashboards/admin-market-risk-data-investor-drilldown/?symbol=${encodeURIComponent(symbol)}`
         )
     }
-    getMarketSpotDataInvestorDrilldown() {
-        return this.http.get<IResponse<MarketSpotDataInvestorDrilldown[]>>(
-            "dashboards/market-spot-data-investor-drilldown/"
-        )
-    }
-    getMarketZGroupDataInvestorDrilldown() {
-        return this.http.get<IResponse<MarketZGroupDataInvestorDrilldown[]>>(
-            "dashboards/market-zgroup-data-investor-drilldown/"
-        )
-    }
     getCompanyPERSI(companyID: any) {
         return this.http.get<any>(`dashboards/portal-pe-rsi-company-wise/?company_code=${companyID}`)
     }
 
-    getAdminEventCountData() {
-        return this.http.get<EventTypeCount[]>("dashboards/portal-live-event-types-count/")
-    }
 }
 
 const httpAuthService = new HttpAuthService(config.apiURL, authService);

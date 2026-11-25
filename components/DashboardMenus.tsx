@@ -21,7 +21,7 @@ import {
   AiOutlineDashboard,
   AiOutlineShop,
 } from "react-icons/ai";
-import { MdAdminPanelSettings } from "react-icons/md";
+import { MdAdminPanelSettings,MdInsights  } from "react-icons/md";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { RiProfileLine } from "react-icons/ri";
 import { GiTakeMyMoney, GiTrade } from "react-icons/gi";
@@ -103,7 +103,15 @@ const menuList = [
         roles: ["ADMIN", "MANAGEMENT"],
       },
       {
-        id: 3,
+        id: 2,
+        codeName: "market-and-portfolio-insight",
+        viewName: "Market and Portfolio Insight",
+        urlPath: "/dashboard/market-and-portfolio-insight",
+        icon: <MdInsights className="h-6 w-6 text-rose-400" />,
+        roles: ["ADMIN"],
+      },
+      {
+        id: 4,
         codeName: "customer_management",
         viewName: "Customer Management",
         urlPath: "/dashboard/customer-management",
