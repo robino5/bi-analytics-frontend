@@ -9,8 +9,6 @@ import LoadingButton from "@/components/loading";
 import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card";
 import { DataTable as InvestorLiveTradeDataTable } from "./_components/investor_live_trade/_investorLiveTradeTable";
 import { investorLiveTradeClientsColumns } from "./_components/investor_live_trade/_investorLiveTradeTableColumns";
-import { MarketSpotInvestorDrilldownDataTable } from "./_components/market_spot_investor_drilldown/_marketSpotInvestorDrilldownTable";
-import { MarketZGroupInvestorDrilldownDataTable } from "./_components/market_z_group_investor_drilldown/_marketZGroupInvestorDrilldownTable";
 import LiveIndicator from "@/components/ui/live-indicator";
 import { investorLiveBuySaleClientsColumns } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTableColumns";
 import { DataTable as InvestorLiveBuySaleDatatable } from "./_components/investor_live_top_buya_sale/_investorLiveBuySaleTable";
@@ -25,7 +23,7 @@ import TradingSummaryBoard from "./_components/_tradingSummary";
 import CompanyPeRationBoard from "./_components/_companyPeRation";
 import { DataTable as MarketRiskDataTable } from "./_components/market_risk/_marketRiskTable";
 import { Download } from "lucide-react";
-import { numberToMillionsString } from "@/lib/utils";
+
 
 const ActiveTradingCodesBoard = () => {
     const apiBaseUrl = config.apiURL.replace(/\/+$/, "");
@@ -44,26 +42,6 @@ const ActiveTradingCodesBoard = () => {
         queryKey: ["investorLiveTrade"],
         queryFn: () => tradeInsightAPI.getInvestorLiveTrade()
     });
-
-    const { data: marketSpotInvestorDrilldown, isLoading: marketSpotInvestorDrilldownLoading, isError: marketSpotInvestorDrilldownError } = useQuery({
-        queryKey: ["marketSpotInvestorDrilldown"],
-        queryFn: () => tradeInsightAPI.getMarketSpotDataInvestorDrilldown()
-    });
-    const totalUsedExcessLbslFund = marketSpotInvestorDrilldown?.data?.reduce(
-        (total, investor) => total + investor.usedExcessLbslFund,
-        0
-    ) ?? 0;
-        const { data: marketZGroupInvestorDrilldown } = useQuery({
-        queryKey: ["marketZGroupInvestorDrilldown"],
-        queryFn: () => tradeInsightAPI.getMarketZGroupDataInvestorDrilldown()
-    });
-    const totalZGroupUsedExcessLbslFund = marketZGroupInvestorDrilldown?.data?.reduce(
-        (total, investor) => total + investor.usedExcessLbslFund,
-        0
-    ) ?? 0;
-    const totalZGroupInvestorCompanies = new Set(
-        marketZGroupInvestorDrilldown?.data?.map((investor) => investor.symbol) ?? []
-    ).size;
 
       const { data: topTurnoverInvestor, isLoading: topTurnoverInvestorLoading, isError: topTurnoverInvestorError } = useQuery({
         queryKey: ["topTurnoverInvestor"],
@@ -105,19 +83,11 @@ const ActiveTradingCodesBoard = () => {
         queryFn: () => tradeInsightAPI.getAdminMarketRiskData()
     });
 
-    const { data: adminEventCountData, isLoading: adminEventCountDataLoading, isError: adminEventCountDataError } = useQuery({
-        queryKey: ["adminEventCountData"],
-        queryFn: () => tradeInsightAPI.getAdminEventCountData()
-    });
-    const totalSpotInvestorCompanies =
-        adminEventCountData?.find((event) => event.eventType === "Spot")
-            ?.eventCount ?? 0;
 
 
-    const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading || marketSpotInvestorDrilldownLoading || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
+    const isLoading = realtimeTopRMTurnoverLoading || investorLiveTradeLoading  || investorLiveTopBuyLoading || investorLiveTopSaleLoading ||
         clientTradeSummaryByTodayLoading   || topTurnoverInvestorLoading || adminMarketRiskDataLoading;
-    const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError ||
-        marketSpotInvestorDrilldownError || clientTradeSummaryByTodayError   || topTurnoverInvestorError || adminMarketRiskDataError;
+    const error = realtimeTopRMTurnoverError || investorLiveTopSaleError || investorLiveTopBuyError || investorLiveTradeError  || clientTradeSummaryByTodayError   || topTurnoverInvestorError || adminMarketRiskDataError;
 
 
     if (isLoading) {
@@ -284,72 +254,6 @@ const ActiveTradingCodesBoard = () => {
                     </CardContent>
                 </Card>
             ) : <NoDataFound title="Admin Market Risk Data" className="col-span-12 mb-2 mt-2 shadow-xl" />}
-
-            {marketSpotInvestorDrilldown ? (
-                <Card className="col-span-12 mb-2 mt-2 w-full min-w-0 max-w-full overflow-hidden bg-[#033e4a] shadow-xl">
-                    <CardHeader className="relative bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 pr-10 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="flex items-center gap-2 text-white text-lg">
-                            Monitoring of LBS Spot buy and fund using <LiveIndicator />
-                        </CardTitle>
-                        <p className="text-lg font-bold text-red-500 ">
-                            Total Client: {marketSpotInvestorDrilldown?.data?.length ?? 0}
-                            {" | "}Total Company: {totalSpotInvestorCompanies}
-                            {" | "}Total LBSL Fund: {numberToMillionsString(totalUsedExcessLbslFund)}
-                        </p>
-                        <Link
-                            href={`${apiBaseUrl}/dashboards/market-spot-data-investor-drilldown-csv/`}
-                            download="market-spot-data-investor-drilldown.csv"
-                            aria-label="Download Market Spot Investor Drilldown CSV"
-                            title="Download Market Spot Investor Drilldown CSV"
-                            className="absolute top-3 right-2 inline-flex items-center text-white transition-opacity hover:opacity-75"
-                        >
-                            <Download className="h-5 w-5" />
-                        </Link>
-                    </CardHeader>
-                    <CardContent className="mt-3 w-full min-w-0 max-w-full overflow-hidden">
-                        {marketSpotInvestorDrilldown?.data?.length > 0 ? (
-                            <MarketSpotInvestorDrilldownDataTable
-                                data={marketSpotInvestorDrilldown.data}
-                            />
-                        ) : (
-                            <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
-                        )}
-                    </CardContent>
-                </Card>
-            ) : <NoDataFound title="Monitoring of LBS Spot buy and fund using" className="col-span-12 mb-2 mt-2 shadow-xl" />}
-
-            {marketZGroupInvestorDrilldown ? (
-                <Card className="col-span-12 mb-2 mt-2 w-full min-w-0 max-w-full overflow-hidden bg-[#033e4a] shadow-xl">
-                    <CardHeader className="relative bg-gradient-to-r from-teal-900 via-teal-600 to-teal-800 p-2 pr-10 rounded-tl-lg rounded-tr-lg">
-                        <CardTitle className="flex items-center gap-2 text-white text-lg">
-                            Monitoring of LBS Z-Group buy and fund using <LiveIndicator />
-                        </CardTitle>
-                        <p className="text-lg font-bold text-red-500">
-                            Total Client: {marketZGroupInvestorDrilldown?.data?.length ?? 0}
-                            {" | "}Total Company: {totalZGroupInvestorCompanies}
-                            {" | "}Total LBSL Fund: {numberToMillionsString(totalZGroupUsedExcessLbslFund)}
-                        </p>
-                               <Link
-                            href={`${apiBaseUrl}/dashboards/market-zgroup-data-investor-drilldown-csv/`}
-                            download="market-zgroup-data-investor-drilldown.csv"
-                            aria-label="Download Market Z-Group Investor Drilldown CSV"
-                            title="Download Market Z-Group Investor Drilldown CSV"
-                            className="absolute top-3 right-2 inline-flex items-center text-white transition-opacity hover:opacity-75"
-                        >
-                            <Download className="h-5 w-5" />
-                        </Link>
-                    </CardHeader>
-                    <CardContent className="mt-3 w-full min-w-0 max-w-full overflow-hidden">
-                        {marketZGroupInvestorDrilldown?.data?.length > 0 ? (
-                            <MarketZGroupInvestorDrilldownDataTable
-                                data={marketZGroupInvestorDrilldown.data}
-                            />
-                        ) : (
-                            <div className="text-white text-center py-6 w-full h-full flex items-center justify-center">No Data Found</div>
-                        )}
-                    </CardContent>
-                </Card>
-            ) : <NoDataFound title="Monitoring of LBS Z-Group buy and fund using" className="col-span-12 mb-2 mt-2 shadow-xl" />}
 
                {adminMarketRiskData ? (
                 <Card className="col-span-12 mb-2 mt-2 w-0 min-w-full max-w-full overflow-hidden bg-[#033e4a] shadow-xl">

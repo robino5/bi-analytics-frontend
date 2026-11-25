@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { MarketZGroupDataInvestorDrilldown } from "../../types";
+import { MarketZGroupDataInvestorDrilldown } from "../../../trade-insights/types";
 import { DataTableColumnHeader } from "./_marketZGroupInvestorDrilldownTableHeader";
 
 const formatNumber = (value: number) =>
